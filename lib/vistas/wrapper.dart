@@ -16,9 +16,9 @@ class Wrapper extends StatelessWidget {
 
     //retorna ya sea el widget de autenticar o el de inicio
     log("Wrapper usuario uid: ${usuario?.uid}");
-    if (usuario?.uid == "OigbJD7AQFcvIfjd6r0wBN2AuCK2")
+    if (usuario?.uid == "gHMt8BxVC3hmLWiil5B9JAs4bfH2")
       return PrincipalAdmin();
-    else if (usuario!=null) {
+    else if (usuario != null) {
       return PrincipalUsuarios();
     } else {
       return IniciarSesion();
