@@ -27,15 +27,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for linux - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return linux;
       default:
         throw UnsupportedError(
           'DefaultFirebaseOptions are not supported for this platform.',
@@ -44,6 +38,26 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyA6Y10Nv90WkBdO2Am-gx9wPgFTk-dl55k',
+    appId: '1:199131897060:web:c8010510ae6f2356f1a0f1',
+    messagingSenderId: '199131897060',
+    projectId: 'app-prestamo-e-inventario',
+    authDomain: 'app-prestamo-e-inventario.firebaseapp.com',
+    storageBucket: 'app-prestamo-e-inventario.appspot.com',
+    measurementId: 'G-LE3J602G2P',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyA6Y10Nv90WkBdO2Am-gx9wPgFTk-dl55k',
+    appId: '1:199131897060:web:c8010510ae6f2356f1a0f1',
+    messagingSenderId: '199131897060',
+    projectId: 'app-prestamo-e-inventario',
+    authDomain: 'app-prestamo-e-inventario.firebaseapp.com',
+    storageBucket: 'app-prestamo-e-inventario.appspot.com',
+    measurementId: 'G-LE3J602G2P',
+  );
+
+  static const FirebaseOptions linux = FirebaseOptions(
     apiKey: 'AIzaSyA6Y10Nv90WkBdO2Am-gx9wPgFTk-dl55k',
     appId: '1:199131897060:web:c8010510ae6f2356f1a0f1',
     messagingSenderId: '199131897060',
@@ -67,7 +81,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '199131897060',
     projectId: 'app-prestamo-e-inventario',
     storageBucket: 'app-prestamo-e-inventario.appspot.com',
-    iosClientId: '199131897060-n5k2j4mvldu2ru8efsh68nvhsk6an23i.apps.googleusercontent.com',
+    iosClientId:
+        '199131897060-n5k2j4mvldu2ru8efsh68nvhsk6an23i.apps.googleusercontent.com',
     iosBundleId: 'com.example.appGestionPrestamoInventario',
   );
 
@@ -77,7 +92,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '199131897060',
     projectId: 'app-prestamo-e-inventario',
     storageBucket: 'app-prestamo-e-inventario.appspot.com',
-    iosClientId: '199131897060-n5k2j4mvldu2ru8efsh68nvhsk6an23i.apps.googleusercontent.com',
+    iosClientId:
+        '199131897060-n5k2j4mvldu2ru8efsh68nvhsk6an23i.apps.googleusercontent.com',
     iosBundleId: 'com.example.appGestionPrestamoInventario',
   );
 }
