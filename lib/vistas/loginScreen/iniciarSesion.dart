@@ -6,6 +6,7 @@ import 'package:app_gestion_prestamo_inventario/vistas/CommonWidgets/loading.dar
 import 'package:app_gestion_prestamo_inventario/vistas/home/principalAdmin.dart';
 import 'package:app_gestion_prestamo_inventario/vistas/home/principalUsuarios.dart';
 import '../CommonWidgets/customTextField.dart';
+import '../../assets/constantes.dart' as constantes;
 
 class IniciarSesion extends StatefulWidget {
   const IniciarSesion([Key? key]) : super(key: key);
@@ -170,7 +171,7 @@ class _IniciarSesionState extends State<IniciarSesion> {
         } else {
           log(authService.usuarioDeFirebase(resultado)!.uid);
           if (authService.usuarioDeFirebase(resultado)!.uid ==
-              "OigbJD7AQFcvIfjd6r0wBN2AuCK2") {
+              constantes.ADMIN_UID) {
             // ignore: use_build_context_synchronously
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (_) => PrincipalAdmin()));
