@@ -1,12 +1,18 @@
 import 'dart:developer';
 
+import 'package:desktop_webview_auth/google.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/auth.dart';
 import 'package:app_gestion_prestamo_inventario/vistas/CommonWidgets/loading.dart';
 import 'package:app_gestion_prestamo_inventario/vistas/home/principalAdmin.dart';
 import 'package:app_gestion_prestamo_inventario/vistas/home/principalUsuarios.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
+import '../CommonWidgets/animated_error_widget.dart';
 import '../CommonWidgets/customTextField.dart';
 import '../../assets/constantes.dart' as constantes;
+import 'package:desktop_webview_auth/desktop_webview_auth.dart';
+import 'package:desktop_webview_auth/github.dart';
 
 class IniciarSesion extends StatefulWidget {
   const IniciarSesion([Key? key]) : super(key: key);
@@ -17,6 +23,22 @@ class IniciarSesion extends StatefulWidget {
 }
 
 class _IniciarSesionState extends State<IniciarSesion> {
+GlobalKey<FormState> formKey = GlobalKey<FormState>();
+bool isLoading = false;
+void setIsLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
+  void resetError() {
+    if (error.isNotEmpty) {
+      setState(() {
+        error = '';
+      });
+    }
+  }
+
   List<String> credenciales = [];
   bool loading = true;
   late TextEditingController usernameController;
@@ -106,6 +128,61 @@ class _IniciarSesionState extends State<IniciarSesion> {
                         style: TextStyle(fontSize: 25),
                       )),
                 ),
+                Padding(
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child: SizedBox(
+                width: 400,
+                child: Form(
+                  key: formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AnimatedError(text: error, show: error.isNotEmpty),
+                      const SizedBox(height: 20),
+                      const SizedBox(height: 20),
+                      const SizedBox(height: 20),
+                      ...AppOAuthProvider.values.map((provider) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: SignInButton(
+                              provider.button,
+                              onPressed: () {
+                                if (!isLoading) {
+                                  switch (provider) {
+                                    case AppOAuthProvider.google:
+                                      _googleSignIn();
+                                      break;
+                                    
+                                  }
+                                }
+                              },
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: isLoading
+                ? Container(
+                    color: Colors.black.withOpacity(0.8),
+                    child: const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                  )
+                : const SizedBox(),
+          ),
                 const Padding(
                   padding: EdgeInsets.only(top: 15.0),
                   child: FittedBox(
@@ -136,6 +213,46 @@ class _IniciarSesionState extends State<IniciarSesion> {
       ),
     );
     return loading ? scafold : const Loading();
+  }
+
+  inicioSesionGoogle() async {
+    var _googleClientId;
+    var _githubClientSecret;
+    var _redirectUri;
+    final result = await DesktopWebviewAuth.signIn(
+      GoogleSignInArgs(
+        clientId: _googleClientId,
+        redirectUri: _redirectUri,
+      ),
+    );
+
+    if (result?.accessToken != null) {
+      // Create a new Google credential.
+      final credential = GoogleAuthProvider.credential();
+
+      // Once signed in, return the UserCredential.
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      log("Logeado con google");
+    } else {
+      log("No se pudo logear con google");
+      return;
+    }
+  }
+
+  Future<void> _googleSignIn() async {
+    AuthService authService = AuthService();
+    resetError();
+
+    try {
+      setIsLoading();
+      await authService.googleSignIn();
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        error = '${e.message}';
+      });
+    } finally {
+      setIsLoading();
+    }
   }
 
   inicioSesion(BuildContext context, TextEditingController controladorNombre,
