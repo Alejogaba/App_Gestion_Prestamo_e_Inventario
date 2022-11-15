@@ -1,17 +1,19 @@
 import 'dart:developer';
 import 'package:desktop_webview_auth/desktop_webview_auth.dart';
 import 'package:desktop_webview_auth/google.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:flutter/material.dart';
+import 'package:supabase/supabase.dart';
+import '../../assets/constantes.dart' as constantes;
 
 const _redirectUri = 'https://accounts.google.com/o/oauth2/auth';
-const _googleClientId = '199131897060-0p2gu71h9ap9avuecpp6bj7bspo4icqp.apps.googleusercontent.com';
+const _googleClientId =
+    '199131897060-0p2gu71h9ap9avuecpp6bj7bspo4icqp.apps.googleusercontent.com';
 
-enum AppOAuthProvider {
-  google
-}
+
+enum AppOAuthProvider { google }
 
 extension Button on AppOAuthProvider {
   Buttons get button {
@@ -23,105 +25,53 @@ extension Button on AppOAuthProvider {
 }
 
 class AuthService {
+  final client = SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-//retorna un usuario con atributos personalizados basado en un objeto FirebaseUser
+  //retorna un usuario con atributos personalizados basado en un objeto FirebaseUser
   Usuario? usuarioDeFirebase(User? usuario) {
-    return (usuario != null) ? Usuario('Anonimo', ' ', usuario.uid) : null;
+    return (usuario != null) ? Usuario('Anonimo', ' ', usuario.id) : null;
   }
 
 //Stream con mapeo de usuario
-  Stream<Usuario?> get usuario {
-    return _auth.authStateChanges().map(usuarioDeFirebase);
+  String? get usuarioID {
+    return client.auth.currentUser?.id;
   }
 
-//inicio de secion como usuario anonimo
-  Future inicioSesionAnonimo() async {
-    try {
-      UserCredential result = await _auth.signInAnonymously();
-      User? user = result.user;
-      return user;
-    } on FirebaseAuthException catch (e) {
-      log('Fallo con el código: ${e.code}');
-      log(e.message.toString());
+//Registrarse con usuario y contraseña
+  Future<void> registroUsuarioContrasena(context, String correo, String contrasena) async {
+    debugPrint("email:$correo password:$contrasena");
+    final result =
+        await client.auth.signUp(email: correo, password: contrasena, emailRedirectTo:
+            kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/');
+
+    debugPrint(result.toString());
+
+    if (result.user != null) {
+      log('Registration Success');
+    } else {
+      log('Error al registrar');
     }
   }
 
 //inicio de sesion con email y contraseña
-  Future inicioSesionUarioContrasena(String email, String password) async {
-    try {
-      UserCredential result = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      User? user = result.user;
-      return user;
-    } on FirebaseAuthException catch (error) {
-      log('Error: No se puede iniciar sesión: ${error.message}');
-    }
-  }
+  Future<User?> inicioSesionUarioContrasena(context, String email, String? password) async {
+    debugPrint("email:$email password:$password");
+    final result = await client.auth
+        .signInWithPassword(email: email, password: password!);
+    debugPrint(result.session?.toJson().toString());
 
-//inicio de sesion con Google
-  Future<void> googleSignIn() async {
-    String? accessToken;
-    String? idToken;
-
-    try {
-      // Handle login by a third-party provider based on the platform.
-      switch (defaultTargetPlatform) {
-        case TargetPlatform.iOS:
-        case TargetPlatform.android:
-          break;
-        case TargetPlatform.macOS:
-        case TargetPlatform.linux:
-        case TargetPlatform.windows:
-          {
-            final result = await DesktopWebviewAuth.signIn(
-              GoogleSignInArgs(
-                clientId: _googleClientId,
-                redirectUri: _redirectUri,
-                scope: 'https://www.googleapis.com/auth/userinfo.email',
-              ),
-            );
-
-            idToken = result?.idToken;
-            accessToken = result?.accessToken;
-          }
-          break;
-        default:
-      }
-
-      if (accessToken != null && idToken != null) {
-        // Create a new credential
-        final credential = GoogleAuthProvider.credential(
-          idToken: idToken,
-          accessToken: accessToken,
-        );
-
-        // Once signed in, return the UserCredential
-        await _auth.signInWithCredential(credential);
-      } else {
-        return;
-      }
-    } on FirebaseAuthException catch (_) {
-      rethrow;
-    }
-  }
-
-//Registrarse con usuario y contraseña
-  Future registroConUsuarioyContrasena(String email, String password) async {
-    try {
-      UserCredential result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      return usuarioDeFirebase(result.user);
-    } on FirebaseException catch (error) {
-      log('Error al crear el usuario: ${error.message}');
+    if (result.session != null) {
+      log('Login Success');
+      return result.user;
+    } else {
+      return null;
     }
   }
 
 //Cerrar sesión
   Future cerrarSesion() async {
     try {
-      return _auth.signOut();
+      await client.auth.signOut();
     } catch (e) {
       log(e.toString());
       return null;
