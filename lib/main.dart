@@ -1,5 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
+import 'package:app_gestion_prestamo_inventario/servicios/auth.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/CommonWidgets/themeData.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/wrapper.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../assets/constantes.dart' as constantes;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
@@ -7,11 +14,16 @@ import 'flutter_flow/internationalization.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 
+
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: constantes.SUPABASE_URL,
+    anonKey: constantes.SUPABASE_ANNON_KEY,
+  );
   WidgetsFlutterBinding.ensureInitialized();
 
   await FlutterFlowTheme.initialize();
-
   runApp(MyApp());
 }
 
@@ -62,6 +74,8 @@ class _MyAppState extends State<MyApp> {
       themeMode: _themeMode,
       routeInformationParser: _router.routeInformationParser,
       routerDelegate: _router.routerDelegate,
+      
+      
     );
   }
 }
