@@ -1,2 +1,2 @@
 // Export pages
-export 'home_page/home_page_widget.dart' show HomePageWidget;
+export 'package:app_gestion_prestamo_inventario/vistas/wrapper.dart' show HomePageWidget;

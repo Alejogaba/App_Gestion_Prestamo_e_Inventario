@@ -2,12 +2,16 @@ import 'dart:async';
 
 import 'package:app_gestion_prestamo_inventario/vistas/wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
+import '../../lista/lista_widget.dart';
+import '../../login_page/login_page_widget.dart';
+import '../../principal/principal_widget.dart';
 import '../flutter_flow_theme.dart';
 
-import '../../index.dart';
-import '../../main.dart';
+
+import '../../../main.dart';
 import '../lat_lng.dart';
 import '../place.dart';
 import 'serialization_util.dart';
@@ -17,7 +21,7 @@ export 'serialization_util.dart';
 
 const kTransitionInfoKey = '__transition_info__';
 
-class AppStateNotifier extends ChangeNotifier {
+class nav extends ChangeNotifier {
   bool showSplashImage = true;
 
   void stopShowingSplashImage() {
@@ -26,7 +30,7 @@ class AppStateNotifier extends ChangeNotifier {
   }
 }
 
-GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
+GoRouter createRouter(nav appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
@@ -38,9 +42,19 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, _) => Wrapper(),
           routes: [
             FFRoute(
-              name: 'HomePage',
-              path: 'homePage',
-              builder: (context, params) => Wrapper(),
+              name: 'principal',
+              path: 'principal',
+              builder: (context, params) => PrincipalWidget(),
+            ),
+            FFRoute(
+              name: 'lista',
+              path: 'lista',
+              builder: (context, params) => ListaWidget(),
+            ),
+            FFRoute(
+              name: 'loginPage',
+              path: 'loginPage',
+              builder: (context, params) => LoginPageWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),
@@ -141,7 +155,7 @@ class FFRoute {
   final Widget Function(BuildContext, FFParameters) builder;
   final List<GoRoute> routes;
 
-  GoRoute toRoute(AppStateNotifier appStateNotifier) => GoRoute(
+  GoRoute toRoute(nav appStateNotifier) => GoRoute(
         name: name,
         path: path,
         pageBuilder: (context, state) {
