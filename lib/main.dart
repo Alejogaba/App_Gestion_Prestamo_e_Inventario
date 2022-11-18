@@ -1,28 +1,133 @@
+import 'package:app_gestion_prestamo_inventario/vistas/lista/lista_widget.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/login_page/login_page_widget.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/principal/principal_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
-import 'package:app_gestion_prestamo_inventario/servicios/auth.dart';
-import 'package:app_gestion_prestamo_inventario/vistas/CommonWidgets/themeData.dart';
+
 import 'package:app_gestion_prestamo_inventario/vistas/wrapper.dart';
-import 'package:provider/provider.dart';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../assets/constantes.dart' as constantes;
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'flutter_flow/flutter_flow_theme.dart';
+import 'flutter_flow/flutter_flow_util.dart';
+import 'flutter_flow/internationalization.dart';
+import 'package:go_router/go_router.dart';
+import 'index.dart';
 
-Future<void> main() async {
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
     url: constantes.SUPABASE_URL,
     anonKey: constantes.SUPABASE_ANNON_KEY,
   );
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await FlutterFlowTheme.initialize();
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+final GoRouter g_router = GoRouter(
+      routes: [
+        GoRoute(
+          name: '_initialize',
+          path: '/',
+          builder: (context, params) => Wrapper(),
+          routes: [
+            GoRoute(
+              name: 'principal',
+              path: 'principal',
+              builder: (context, params) => PrincipalWidget(),
+            ),
+            GoRoute(
+              name: 'lista',
+              path: 'lista',
+              builder: (context, params) => ListaWidget(),
+            ),
+            GoRoute(
+              name: 'loginPage',
+              path: 'loginPage',
+              builder: (context, params) => LoginPageWidget(),
+            )
+          ]
+        )
+      ],
+    );
+
+final GoRouter l_router = GoRouter(
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) {
+        return const Wrapper();
+      },
+      routes: [
+        GoRoute(
+          path: 'principal',
+          builder: (BuildContext context, GoRouterState state) {
+            return const PrincipalWidget();
+          },
+        ),
+      ],
+    ),
+  ],
+);
+
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
   @override
+  State<MyApp> createState() => _MyAppState();
+
+  static _MyAppState of(BuildContext context) =>
+      context.findAncestorStateOfType<_MyAppState>()!;
+}
+
+
+
+class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+  ThemeMode _themeMode = FlutterFlowTheme.themeMode;
+
+  late AppStateNotifier _appStateNotifier;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _appStateNotifier = AppStateNotifier();
+
+  }
+
+  void setLocale(String language) =>
+      setState(() => _locale = createLocale(language));
+  void setThemeMode(ThemeMode mode) => setState(() {
+        _themeMode = mode;
+        FlutterFlowTheme.saveThemeMode(mode);
+      });
+  
+
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: MiTema().tema(),
-      home: const Wrapper(),
+    return MaterialApp.router(
+      routerConfig: g_router,
+      title: 'InventariadoApp',
+      // ignore: prefer_const_literals_to_create_immutables
+      localizationsDelegates: [
+        const FFLocalizationsDelegate(),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      locale: _locale,
+      supportedLocales: const [Locale('en', '')],
+      theme: ThemeData(brightness: Brightness.light),
+      darkTheme: ThemeData(brightness: Brightness.dark),
+      themeMode: _themeMode,
     );
   }
+
+  
 }
+
+

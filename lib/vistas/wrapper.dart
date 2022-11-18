@@ -1,4 +1,7 @@
 import 'dart:developer';
+import 'package:app_gestion_prestamo_inventario/vistas/login/login_widget.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/login_page/login_page_widget.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/principal/principal_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
 import 'package:app_gestion_prestamo_inventario/vistas/loginScreen/iniciarSesion.dart';
@@ -17,11 +20,11 @@ class Wrapper extends StatelessWidget {
     //retorna ya sea el widget de autenticar o el de inicio
     log("Wrapper usuario uid: ${usuario?.uid}");
     if (usuario?.uid == constantes.ADMIN_UID) {
-      return const PrincipalAdmin();
+      return const PrincipalWidget();
     } else if (usuario != null) {
-      return const PrincipalUsuarios();
+      return const PrincipalWidget();
     } else {
-      return const IniciarSesion();
+      return const LoginPageWidget();
     }
   }
 }

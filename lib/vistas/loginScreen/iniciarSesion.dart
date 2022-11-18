@@ -1,5 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:developer';
 
+import 'package:app_gestion_prestamo_inventario/flutter_flow/flutter_flow_util.dart';
 import 'package:desktop_webview_auth/google.dart';
 import 'package:flutter/material.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/auth.dart';
@@ -246,17 +249,20 @@ class _IniciarSesionState extends State<IniciarSesion> {
           });
         } else {
           log(authService.usuarioDeFirebase(resultado)!.uid);
-          if (authService.usuarioDeFirebase(resultado)!.uid ==
-              constantes.ADMIN_UID) {
-            // ignore: use_build_context_synchronously
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (_) => PrincipalAdmin()));
-          } else {
-            log("No es administrador");
-            // ignore: use_build_context_synchronously
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (_) => PrincipalUsuarios()));
-          }
+        
+
+        // ignore: use_build_context_synchronously
+       
+        context.go( 'principal',extra: <String,dynamic>{
+          // ignore: prefer_const_constructors
+          kTransitionInfoKey:TransitionInfo(
+          hasTransition:true,
+          transitionType:PageTransitionType.rightToLeft,),
+                                                                        },
+                                                                      );
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => PrincipalAdmin()));
+          
+          
         }
       }
     }
