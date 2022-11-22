@@ -120,6 +120,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  dart_internal:
+    dependency: transitive
+    description:
+      name: dart_internal
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.6"
   desktop_webview_auth:
     dependency: "direct main"
     description:
@@ -286,7 +293,7 @@ packages:
       name: gotrue
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1"
+    version: "1.2.0"
   hive:
     dependency: transitive
     description:
@@ -427,6 +434,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  modern_form_esys_flutter_share:
+    dependency: "direct main"
+    description:
+      name: modern_form_esys_flutter_share
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.2"
   nested:
     dependency: transitive
     description:
@@ -434,6 +448,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  network_image_search:
+    dependency: "direct main"
+    description:
+      name: network_image_search
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
+  observable:
+    dependency: "direct main"
+    description:
+      name: observable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.24.0"
   octo_image:
     dependency: transitive
     description:
@@ -567,6 +595,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.4"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.0"
   realtime_client:
     dependency: transitive
     description:
@@ -574,6 +609,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  retry:
+    dependency: transitive
+    description:
+      name: retry
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.0"
   rfc_6901:
     dependency: transitive
     description:
@@ -587,7 +629,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.27.6"
+    version: "0.27.7"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -683,7 +725,7 @@ packages:
       name: storage_client
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   stream_channel:
     dependency: transitive
     description:
@@ -718,14 +760,14 @@ packages:
       name: supabase
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.2"
+    version: "1.2.0"
   supabase_flutter:
     dependency: "direct main"
     description:
       name: supabase_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   synchronized:
     dependency: transitive
     description:
@@ -860,5 +902,5 @@ packages:
     source: hosted
     version: "0.2.0+2"
 sdks:
-  dart: ">=2.18.2 <3.0.0"
+  dart: ">=2.18.2 <2.20.0"
   flutter: ">=3.3.0"

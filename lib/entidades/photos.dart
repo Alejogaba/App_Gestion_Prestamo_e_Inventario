@@ -15,17 +15,17 @@ class Photos {
 
   String toRawJson() => json.encode(toJson());
 
-  factory Photos.fromJson(Map<String, dynamic> json) => new Photos(
+  factory Photos.fromJson(Map<String, dynamic> json) => Photos(
         total: json["total"],
         totalPages: json["total_pages"],
-        results: new List<Result>.from(
+        results: List<Result>.from(
             json["results"].map((x) => Result.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "total": total,
         "total_pages": totalPages,
-        "results": new List<dynamic>.from(results!.map((x) => x.toJson())),
+        "results": List<dynamic>.from(results!.map((x) => x.toJson())),
       };
 }
 
@@ -42,8 +42,8 @@ class Result {
   ResultLinks? links;
   List<dynamic>? categories;
   bool? sponsored;
-  dynamic? sponsoredBy;
-  dynamic? sponsoredImpressionsId;
+  dynamic sponsoredBy;
+  dynamic sponsoredImpressionsId;
   int? likes;
   bool? likedByUser;
   List<dynamic>? currentUserCollections;
@@ -101,15 +101,15 @@ class Result {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
+        "created_at": createdAt!.toIso8601String(),
+        "updated_at": updatedAt!.toIso8601String(),
         "width": width,
         "height": height,
         "color": color,
         "description": description == null ? null : description,
         "alt_description": altDescription,
-        "urls": urls?.toJson(),
-        "links": links?.toJson(),
+        "urls": urls!.toJson(),
+        "links": links!.toJson(),
         "categories": new List<dynamic>.from(categories!.map((x) => x)),
         "sponsored": sponsored,
         "sponsored_by": sponsoredBy,
@@ -231,7 +231,7 @@ class User {
   int? totalPhotos;
   bool? acceptedTos;
 
-  User([
+  User({
     this.id,
     this.updatedAt,
     this.username,
@@ -249,16 +249,39 @@ class User {
     this.totalLikes,
     this.totalPhotos,
     this.acceptedTos,
-  ]);
+  });
 
   factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  // ignore: unnecessary_new
+  factory User.fromJson(Map<String, dynamic> json) => new User(
+        id: json["id"],
+        updatedAt: DateTime.parse(json["updated_at"]),
+        username: json["username"],
+        name: json["name"],
+        firstName: json["first_name"],
+        lastName: json["last_name"],
+        twitterUsername:
+            json["twitter_username"] == null ? null : json["twitter_username"],
+        portfolioUrl:
+            json["portfolio_url"] == null ? null : json["portfolio_url"],
+        bio: json["bio"],
+        location: json["location"] == null ? null : json["location"],
+        links: UserLinks.fromJson(json["links"]),
+        profileImage: ProfileImage.fromJson(json["profile_image"]),
+        instagramUsername: json["instagram_username"] == null
+            ? null
+            : json["instagram_username"],
+        totalCollections: json["total_collections"],
+        totalLikes: json["total_likes"],
+        totalPhotos: json["total_photos"],
+        acceptedTos: json["accepted_tos"],
+      );
+
   Map<String, dynamic> toJson() => {
         "id": id,
-        "updated_at": updatedAt?.toIso8601String(),
+        "updated_at": updatedAt!.toIso8601String(),
         "username": username,
         "name": name,
         "first_name": firstName,
@@ -267,7 +290,7 @@ class User {
         "portfolio_url": portfolioUrl == null ? null : portfolioUrl,
         "bio": bio,
         "location": location == null ? null : location,
-        "links": links?.toJson(),
+        "links": links!.toJson(),
         "profile_image": profileImage!.toJson(),
         "instagram_username":
             instagramUsername == null ? null : instagramUsername,
@@ -276,8 +299,6 @@ class User {
         "total_photos": totalPhotos,
         "accepted_tos": acceptedTos,
       };
-      
-        static fromJson(json) {}
 }
 
 class UserLinks {
@@ -326,14 +347,14 @@ class UserLinks {
 }
 
 class ProfileImage {
-  String small;
-  String medium;
-  String large;
+  String? small;
+  String? medium;
+  String? large;
 
   ProfileImage({
-    required this.small,
-    required this.medium,
-    required this.large,
+    this.small,
+    this.medium,
+    this.large,
   });
 
   factory ProfileImage.fromRawJson(String str) =>

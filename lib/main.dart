@@ -1,6 +1,7 @@
 import 'package:app_gestion_prestamo_inventario/vistas/add_item/add_item_widget.dart';
 import 'package:app_gestion_prestamo_inventario/vistas/lista/lista_widget.dart';
 import 'package:app_gestion_prestamo_inventario/vistas/login_page/login_page_widget.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/principal/home_screen.dart';
 import 'package:app_gestion_prestamo_inventario/vistas/principal/principal_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -53,7 +54,7 @@ final GoRouter g_router = GoRouter(
             GoRoute(
               name: 'addItem',
               path: 'addItem',
-              builder: (context, params) => AddItemWidget(),
+              builder: (context, params) => HomeScreen(),
             )
           ]
         )

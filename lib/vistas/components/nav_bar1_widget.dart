@@ -1,7 +1,10 @@
+import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,7 +15,61 @@ class NavBar1Widget extends StatefulWidget {
   _NavBar1WidgetState createState() => _NavBar1WidgetState();
 }
 
-class _NavBar1WidgetState extends State<NavBar1Widget> {
+class _NavBar1WidgetState extends State<NavBar1Widget>
+    with TickerProviderStateMixin {
+  final animationsMap = {
+    'iconButtonOnActionTriggerAnimation1': AnimationInfo(
+      trigger: AnimationTrigger.onActionTrigger,
+      applyInitialState: true,
+      effects: [
+        ScaleEffect(
+          curve: Curves.bounceOut,
+          delay: 50.ms,
+          duration: 600.ms,
+          begin: 0,
+          end: 2,
+        ),
+      ],
+    ),
+    'iconButtonOnActionTriggerAnimation2': AnimationInfo(
+      trigger: AnimationTrigger.onActionTrigger,
+      applyInitialState: true,
+      effects: [
+        ScaleEffect(
+          curve: Curves.bounceOut,
+          delay: 50.ms,
+          duration: 500.ms,
+          begin: 0,
+          end: 2,
+        ),
+      ],
+    ),
+    'iconButtonOnActionTriggerAnimation3': AnimationInfo(
+      trigger: AnimationTrigger.onActionTrigger,
+      applyInitialState: true,
+      effects: [
+        RotateEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 400.ms,
+          begin: 0,
+          end: 1,
+        ),
+      ],
+    ),
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
+      this,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,15 +96,11 @@ class _NavBar1WidgetState extends State<NavBar1Widget> {
                   ),
                 ),
                 child: Container(
-
                   width: double.infinity,
                   height: 80,
-                
                   decoration: BoxDecoration(
-                    
                     color: FlutterFlowTheme.of(context).primaryBackground,
                     boxShadow: [
-                      
                       BoxShadow(
                         blurRadius: 10,
                         color: Color(0x1A57636C),
@@ -88,6 +141,7 @@ class _NavBar1WidgetState extends State<NavBar1Widget> {
                       kTransitionInfoKey: TransitionInfo(
                         hasTransition: true,
                         transitionType: PageTransitionType.fade,
+                        duration: Duration(milliseconds: 200),
                       ),
                     },
                   );
@@ -132,8 +186,8 @@ class _NavBar1WidgetState extends State<NavBar1Widget> {
                         color: Colors.white,
                         size: 30,
                       ),
-                      onPressed: () {
-                       context.pushNamed(
+                      onPressed: () async {
+                        context.pushNamed(
                           'addItem',
                           extra: <String, dynamic>{
                             kTransitionInfoKey: TransitionInfo(
@@ -144,6 +198,8 @@ class _NavBar1WidgetState extends State<NavBar1Widget> {
                           },
                         );
                       },
+                    ).animateOnActionTrigger(
+                      animationsMap['iconButtonOnActionTriggerAnimation3']!,
                     ),
                   ),
                 ],

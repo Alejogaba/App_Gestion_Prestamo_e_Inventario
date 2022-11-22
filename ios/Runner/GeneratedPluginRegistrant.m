@@ -36,6 +36,12 @@
 @import image_picker_ios;
 #endif
 
+#if __has_include(<modern_form_esys_flutter_share/SwiftEsysFlutterSharePlugin.h>)
+#import <modern_form_esys_flutter_share/SwiftEsysFlutterSharePlugin.h>
+#else
+@import modern_form_esys_flutter_share;
+#endif
+
 #if __has_include(<package_info_plus/FLTPackageInfoPlusPlugin.h>)
 #import <package_info_plus/FLTPackageInfoPlusPlugin.h>
 #else
@@ -74,6 +80,7 @@
   [FilePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FilePickerPlugin"]];
   [FluttertoastPlugin registerWithRegistrar:[registry registrarForPlugin:@"FluttertoastPlugin"]];
   [FLTImagePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImagePickerPlugin"]];
+  [SwiftEsysFlutterSharePlugin registerWithRegistrar:[registry registrarForPlugin:@"SwiftEsysFlutterSharePlugin"]];
   [FLTPackageInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPackageInfoPlusPlugin"]];
   [FLTPathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPathProviderPlugin"]];
   [FLTSharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTSharedPreferencesPlugin"]];

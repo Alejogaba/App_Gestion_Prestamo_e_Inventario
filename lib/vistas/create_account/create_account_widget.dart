@@ -1,10 +1,9 @@
 
-import 'package:app_gestion_prestamo_inventario/vistas/home/principalAdmin.dart';
 
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../login/login_widget.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -126,16 +125,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                               ),
                               FFButtonWidget(
                                 onPressed: () async {
-                                  await Navigator.push(
-                                    context,
-                                    PageTransition(
-                                      type: PageTransitionType.fade,
-                                      duration: Duration(milliseconds: 200),
-                                      reverseDuration:
-                                          Duration(milliseconds: 200),
-                                      child: LoginWidget(),
-                                    ),
-                                  );
+                                  
                                 },
                                 text: 'Login',
                                 options: FFButtonOptions(
@@ -309,14 +299,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                 EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                             child: FFButtonWidget(
                               onPressed: () async {
-                                await Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        //CreateDogProfileWidget(),
-                                  const PrincipalAdmin()),
-                                  (r) => false,
-                                );
+                                
                               },
                               text: 'Create Account',
                               options: FFButtonOptions(
