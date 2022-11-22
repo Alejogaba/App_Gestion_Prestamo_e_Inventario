@@ -1,3 +1,4 @@
+import 'package:app_gestion_prestamo_inventario/vistas/add_item/add_item_widget.dart';
 import 'package:app_gestion_prestamo_inventario/vistas/lista/lista_widget.dart';
 import 'package:app_gestion_prestamo_inventario/vistas/login_page/login_page_widget.dart';
 import 'package:app_gestion_prestamo_inventario/vistas/principal/principal_widget.dart';
@@ -48,6 +49,11 @@ final GoRouter g_router = GoRouter(
               name: 'loginPage',
               path: 'loginPage',
               builder: (context, params) => LoginPageWidget(),
+            ),
+            GoRoute(
+              name: 'addItem',
+              path: 'addItem',
+              builder: (context, params) => AddItemWidget(),
             )
           ]
         )

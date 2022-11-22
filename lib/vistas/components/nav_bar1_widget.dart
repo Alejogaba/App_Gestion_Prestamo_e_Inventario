@@ -39,11 +39,15 @@ class _NavBar1WidgetState extends State<NavBar1Widget> {
                   ),
                 ),
                 child: Container(
+
                   width: double.infinity,
                   height: 80,
+                
                   decoration: BoxDecoration(
+                    
                     color: FlutterFlowTheme.of(context).primaryBackground,
                     boxShadow: [
+                      
                       BoxShadow(
                         blurRadius: 10,
                         color: Color(0x1A57636C),
@@ -129,7 +133,16 @@ class _NavBar1WidgetState extends State<NavBar1Widget> {
                         size: 30,
                       ),
                       onPressed: () {
-                        print('MiddleButton pressed ...');
+                       context.pushNamed(
+                          'addItem',
+                          extra: <String, dynamic>{
+                            kTransitionInfoKey: TransitionInfo(
+                              hasTransition: true,
+                              transitionType: PageTransitionType.bottomToTop,
+                              duration: Duration(milliseconds: 1500),
+                            ),
+                          },
+                        );
                       },
                     ),
                   ),
