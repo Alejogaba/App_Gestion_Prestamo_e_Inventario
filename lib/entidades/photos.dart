@@ -87,7 +87,6 @@ class Result {
         altDescription: json["alt_description"],
         urls: Urls.fromJson(json["urls"]),
         links: ResultLinks.fromJson(json["links"]),
-        categories: new List<dynamic>.from(json["categories"].map((x) => x)),
         sponsored: json["sponsored"],
         sponsoredBy: json["sponsored_by"],
         sponsoredImpressionsId: json["sponsored_impressions_id"],

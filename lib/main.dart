@@ -54,7 +54,7 @@ final GoRouter g_router = GoRouter(
             GoRoute(
               name: 'addItem',
               path: 'addItem',
-              builder: (context, params) => HomeScreen(),
+              builder: (context, params) => AddItemWidget(),
             )
           ]
         )

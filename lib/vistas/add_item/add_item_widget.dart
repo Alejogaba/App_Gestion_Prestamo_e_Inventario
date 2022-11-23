@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
+
 import '../../entidades/home_screen_bloc.dart';
 import '../../entidades/photos.dart';
 import '../flutter_flow/flutter_flow_drop_down.dart';
@@ -19,6 +23,8 @@ class AddItemWidget extends StatefulWidget {
 }
 
 class _AddItemWidgetState extends State<AddItemWidget> {
+  int selectedCard = -1;
+  String? nombreCategoriaSeleccionada;
   String? teamSelectValue;
   TextEditingController? shortBioController;
   TextEditingController? userNameController1;
@@ -27,6 +33,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
   String? userSelectValue;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  StorageController storageController = StorageController();
 
   @override
   void initState() {
@@ -272,16 +279,6 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                                               fit: BoxFit.cover,
                                             ),
                                           ),
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            child: Image.network(
-                                              'https://picsum.photos/seed/560/600',
-                                              width: 100,
-                                              height: 100,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
                                         ],
                                       ),
                                     ),
@@ -380,8 +377,10 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                               child: TextFormField(
                                 controller: userNameController3,
                                 obscureText: false,
-                                onChanged: (valor) {
-                                  bloc.changeQuery(valor);
+                                onChanged: (valor) async {
+                                  bloc.changeQuery(
+                                      await storageController.traducir(valor));
+                                  selectedCard = -1;
                                 },
                                 decoration: InputDecoration(
                                   labelText: 'Nombre de la nueva categoría',
@@ -437,39 +436,84 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                               ),
                             ),
                           if (teamSelectValue == 'Crear categoría...')
-                            Expanded(
-                              flex: 5,
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10, 0, 10, 0),
-                                child: StreamBuilder(
-                                  builder: (context, AsyncSnapshot<Photos> snapshot) {
-                                    if (snapshot.hasData) {
-                                      return ListView.builder(
-                                      itemCount: 6,
-                                      itemBuilder: (context, index) {
-                                      return listItem(snapshot.data!.results![index]);
-                                      });
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
+                              child: StreamBuilder(
+                                  stream: bloc.photosList,
+                                  builder: (context,
+                                      AsyncSnapshot<Photos> snapshot) {
+                                    if (snapshot.hasData ||
+                                        snapshot.data != null) {
+                                      return GridView.builder(
+                                        padding: EdgeInsets.zero,
+                                        gridDelegate:
+                                            // ignore: prefer_const_constructors
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 3,
+                                          crossAxisSpacing: 10,
+                                          mainAxisSpacing: 10,
+                                          childAspectRatio: 1,
+                                        ),
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: 6,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              setState(() {
+                                                selectedCard = index;
+                                                nombreCategoriaSeleccionada =
+                                                    snapshot
+                                                        .data!
+                                                        .results![index]
+                                                        .urls
+                                                        ?.regular
+                                                        .toString();
+                                                log('Usted ha seleccionado la imagen con Url: $nombreCategoriaSeleccionada');
+                                              });
+                                            },
+                                            child: imageItem(
+                                                snapshot.data!.results![index],
+                                                selectedCard == index
+                                                    ? true
+                                                    : false),
+                                          );
+                                        },
+                                      );
                                     } else {
-                                      return Center(child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: <Widget>[
-                            Image.asset(
-                              'assets/search_image.png',
-                              width: 180.0,
-                              height: 180.0,
-                            ),
-                            SizedBox(height: 20.0),
-                            Flexible(
-                            child: Text(
-                              'Type a word',
-                              style: Theme.of(context).textTheme.headline4,
-                            ))
-                            ],
-                                      ),);
+                                      return Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            10, 0, 10, 0),
+                                        child: GridView(
+                                          padding: EdgeInsets.zero,
+                                          gridDelegate:
+                                              // ignore: prefer_const_constructors
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 3,
+                                            crossAxisSpacing: 10,
+                                            mainAxisSpacing: 10,
+                                            childAspectRatio: 1,
+                                          ),
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.vertical,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              child: Image.network(
+                                                'https://picsum.photos/seed/560/600',
+                                                width: 100,
+                                                height: 100,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
                                     }
-                                },)
-                              ),
+                                  }),
                             ),
                           Padding(
                             padding:
@@ -593,4 +637,31 @@ class _AddItemWidgetState extends State<AddItemWidget> {
       ),
     );
   }
+}
+
+Widget imageItem(Result result, bool selectedCard) {
+  String myurl = result.urls!.regular!;
+  return Container(
+    height: 100,
+    width: 100,
+    margin: const EdgeInsets.only(left: 1.0, right: 1.0),
+    padding: const EdgeInsets.all(10.0),
+    alignment: Alignment.centerLeft,
+    decoration: BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(
+            result.urls!.regular!,
+          ),
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+        border: Border.all(
+          color: selectedCard
+              ? Color.fromARGB(204, 243, 6, 6)
+              : Color.fromARGB(255, 30, 41, 35),
+          width: 2.5,
+        )),
+  );
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:app_gestion_prestamo_inventario/entidades/photos.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/state.dart';
@@ -18,13 +19,14 @@ class HomeScreenBloc extends BlocBase {
   }
 
   Stream<Photos> get photosList => _query.stream
-      .debounceTime(Duration(milliseconds: 300))
+      .debounceTime(Duration(milliseconds: 2000))
       .where((String value) => value.isNotEmpty)
       .distinct()
       .transform(streamTransformer);
 
   final streamTransformer = StreamTransformer<String, Photos>.fromHandlers(
       handleData: (query, sink) async {
+    log('streamTransformer');
     State state = await _repository.imageData(query);
     if (state is SuccessState) {
       sink.add(state.value);
@@ -49,7 +51,7 @@ class HomeScreenBloc extends BlocBase {
   void shareImage(String url) {
     Uri myUri = Uri.parse(url);
     _repository.getImageToShare(url).then((Uint8List value) async {
-      Share.text('Titulo','Nombre','s');
+      Share.text('Titulo', 'Nombre', 's');
     });
   }
 }

@@ -69,6 +69,7 @@ dependencies:
   modern_form_esys_flutter_share: ^1.1.2
   observable: ^0.24.0
   network_image_search: ^1.0.0
+  translator: ^0.1.7
   
 
 

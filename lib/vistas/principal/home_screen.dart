@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import '../../entidades/home_screen_bloc.dart';
 import '../../entidades/photos.dart';
-
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -33,17 +34,16 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           child: Column(
             children: <Widget>[
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                        hintText: 'Enter a word',
-                        suffixIcon: Icon(Icons.search)),
-                    onChanged: (String value) {
-                      bloc.changeQuery(value);
-                    },
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                      hintText: 'Enter a word',
+                      suffixIcon: Icon(Icons.search)),
+                  onChanged: (value) {
+                    log('funcion onChange');
+                    bloc.changeQuery(value);
+                  },
                 ),
               ),
               Expanded(
@@ -51,9 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: StreamBuilder(
                     stream: bloc.photosList,
                     builder: (context, AsyncSnapshot<Photos> snapshot) {
-                      if (snapshot.hasData) {
+                      if (snapshot.hasData || snapshot.data!.total?.toInt()!=0) {
                         return ListView.builder(
-                            itemCount: snapshot.data!.results!.length,
+                            itemCount: 5,
                             itemBuilder: (context, index) {
                               return listItem(snapshot.data!.results![index]);
                             });
@@ -116,9 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(result.user!.name!),
                 Spacer(),
                 GestureDetector(
-                  onTap: (){
-                    
-                  },
+                  onTap: () {},
                   child: Icon(Icons.share, color: Colors.white),
                 )
               ],

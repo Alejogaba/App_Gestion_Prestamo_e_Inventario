@@ -21,7 +21,7 @@ class Wrapper extends StatelessWidget {
     } else if (usuario != null) {
       return const PrincipalWidget();
     } else {
-      return const LoginPageWidget();
+      return const PrincipalWidget();
     }
   }
 }
