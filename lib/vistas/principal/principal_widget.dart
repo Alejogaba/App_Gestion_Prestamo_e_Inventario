@@ -230,54 +230,60 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                   ],
                                 ),
                               ),
-                              ListView(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                children: [
-                                  Wrap(
-                                    spacing: 0,
-                                    runSpacing: 0,
-                                    alignment: WrapAlignment.start,
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.start,
-                                    direction: Axis.horizontal,
-                                    runAlignment: WrapAlignment.start,
-                                    verticalDirection: VerticalDirection.down,
-                                    clipBehavior: Clip.none,
-                                    children: [
-                                      FutureBuilder<List<Categoria>>(
-                                          future: cargarCategorias(),
-                                          builder: ((context, snapshot) {
-                                            int i = 0;
-                                            List<Widget> temp = [];
-
-                                            log('Cantidad items: ${listCategorias.length}');
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.done) {
-                                              return ListView.builder(
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                var temp = itemCategoria(
-                                                    context,
-                                                    snapshot
-                                                        .data![index].nombre,
-                                                    snapshot.data![index]
-                                                        .urlImagen);
-                                                return temp;
-                                              });
-                                            } else if (snapshot.hasError) {
-                                              log('Error: ${snapshot.error}');
-                                              return Container();
-                                            } else {
-                                              log('Error de conexion: ${snapshot.error}');
-                                              return Container();
-                                            }
-                                            print(snapshot.connectionState);
-                                          })),
-                                    ],
-                                  ),
-                                ],
+                              Wrap(
+                                children:[ FutureBuilder<List<Categoria>>(
+                                    future: cargarCategorias(),
+                                    builder: ((context, snapshot) {
+                                      int i = 0;
+                                      List<Widget> temp = [];
+                              
+                                      log('Cantidad items: ${listCategorias.length}');
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.done) {
+                                        return Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(
+                                              16, 16, 16, 0),
+                                          child: LayoutBuilder(
+                                            builder: (context, constraints) {
+                                              return GridView.builder(
+                                                primary: false,
+                                                shrinkWrap: true,
+                                                itemCount: snapshot.data!.length,
+                                                itemBuilder: (context, index) {
+                                                  var temp = itemCategoria(
+                                                      context,
+                                                      snapshot
+                                                          .data![index].nombre,
+                                                      snapshot.data![index]
+                                                          .urlImagen);
+                                                  return temp;
+                                                },
+                                                scrollDirection: Axis.vertical,
+                                                padding: EdgeInsets.zero,
+                                                gridDelegate:
+                                                    // ignore: prefer_const_constructors
+                                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount:
+                                                      constraints.maxWidth > 700
+                                                          ? 6
+                                                          : 1,
+                                                  mainAxisSpacing: 10,
+                                                  crossAxisSpacing: 10,
+                                                  
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      } else if (snapshot.hasError) {
+                                        log('Error: ${snapshot.error}');
+                                        return Container();
+                                      } else {
+                                        log('Error de conexion: ${snapshot.error}');
+                                        return Container();
+                                      }
+                                      print(snapshot.connectionState);
+                                    })),]
                               ),
                             ],
                           ),
@@ -313,11 +319,13 @@ Widget itemCategoria(BuildContext context, String? nombre, String? url) {
   return Padding(
     padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
     child: Container(
-      width: MediaQuery.of(context).size.width * 0.45,
-      height: 190,
-      constraints: BoxConstraints(
-        maxWidth: 200,
-        maxHeight: 200,
+      
+      //MediaQuery.of(context).size.width * 0.45,
+      width: 10,
+      height: 10,
+      constraints: const BoxConstraints(
+        maxWidth: 10,
+        maxHeight: 10,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
