@@ -1,3 +1,6 @@
+import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
+import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
+
 import '../components/nav_bar1_widget.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -18,16 +21,20 @@ class PrincipalWidget extends StatefulWidget {
 class _PrincipalWidgetState extends State<PrincipalWidget> {
   TextEditingController? textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  CategoriaController categoriaController = CategoriaController();
+  List<Categoria> listCategorias = [];
 
   @override
-  void initState() {
+  initState() {
     super.initState();
+    cargarCategorias();
     textController = TextEditingController();
   }
 
   @override
   void dispose() {
     textController?.dispose();
+
     super.dispose();
   }
 
@@ -275,64 +282,13 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  child: Image.network(
-                                                    'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Zm9vZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-                                                    width: double.infinity,
-                                                    height: 115,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(8, 12, 0, 0),
-                                                  child: Text(
-                                                    'Category Name',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .subtitle1
-                                                        .override(
-                                                          fontFamily: 'Outfit',
-                                                          color:
-                                                              Color(0xFF14181B),
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          useGoogleFonts: GoogleFonts
-                                                                  .asMap()
-                                                              .containsKey(
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .subtitle1Family),
-                                                        ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(8, 4, 0, 0),
-                                                  child: Text(
-                                                    'Category Name',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyText2
-                                                        .override(
-                                                          fontFamily: 'Outfit',
-                                                          color:
-                                                              Color(0xFF57636C),
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          useGoogleFonts: GoogleFonts
-                                                                  .asMap()
-                                                              .containsKey(
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyText2Family),
-                                                        ),
-                                                  ),
-                                                ),
+                                                
+                                                /*ListView.builder(
+                                                  itemCount: listCategorias.length,
+                                                  itemBuilder:
+                                                    ((context, index) {
+                                                  return itemCategoria('',listCategorias[index].urlImagen);
+                                                }))*/
                                               ],
                                             ),
                                           ),
@@ -954,4 +910,25 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
       ),
     );
   }
+
+  Future cargarCategorias() async {
+    listCategorias = await categoriaController.getCategorias();
+    for (var element in listCategorias) {
+      print('Lista categoria nombre: + ${element.nombre}');
+      print('Lista categoria url: ${element.urlImagen}');
+    }
+    return Future.value(listCategorias);
+  }
+}
+
+Widget itemCategoria(String nombre, String? url) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Image.network(
+        url!,
+        width: double.infinity,
+        height: 115,
+        fit: BoxFit.cover,
+      ),
+    );
 }

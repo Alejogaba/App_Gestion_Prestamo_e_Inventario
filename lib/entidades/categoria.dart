@@ -1,7 +1,13 @@
 class Categoria {
-  int? id;
   String? urlImagen;
   String? nombre;
 
-  Categoria(this.id, this.nombre, this.urlImagen);
+  Categoria(this.nombre, this.urlImagen);
+
+  factory Categoria.fromMap(Map<String, dynamic> map) {
+    return Categoria(
+      map['NOMBRE']??'',
+      map['URL_IMAGEN'] ?? '',
+    );
+  }
 }

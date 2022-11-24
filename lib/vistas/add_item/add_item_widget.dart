@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
 
 import '../../entidades/home_screen_bloc.dart';
@@ -24,16 +25,17 @@ class AddItemWidget extends StatefulWidget {
 
 class _AddItemWidgetState extends State<AddItemWidget> {
   int selectedCard = -1;
-  String? nombreCategoriaSeleccionada;
+  String? urlCategoriaSeleccionada;
   String? teamSelectValue;
   TextEditingController? shortBioController;
   TextEditingController? userNameController1;
   TextEditingController? userNameController2;
-  TextEditingController? userNameController3;
+  TextEditingController? categoriaNuevaController;
   String? userSelectValue;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   StorageController storageController = StorageController();
+  CategoriaController categoriaController = CategoriaController();
 
   @override
   void initState() {
@@ -42,7 +44,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
     shortBioController = TextEditingController();
     userNameController1 = TextEditingController();
     userNameController2 = TextEditingController();
-    userNameController3 = TextEditingController();
+    categoriaNuevaController = TextEditingController();
   }
 
   @override
@@ -51,7 +53,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
     shortBioController?.dispose();
     userNameController1?.dispose();
     userNameController2?.dispose();
-    userNameController3?.dispose();
+    categoriaNuevaController?.dispose();
     super.dispose();
   }
 
@@ -339,10 +341,8 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
                             child: FlutterFlowDropDown<String>(
-                              initialOption: teamSelectValue ??=
-                                  'Crear categoría...',
                               options: [
-                                'Crear categoría...',
+                                'Crear nueva categoría...',
                                 'Opción 2',
                                 'Team 3'
                               ],
@@ -375,7 +375,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(16, 16, 16, 0),
                               child: TextFormField(
-                                controller: userNameController3,
+                                controller: categoriaNuevaController,
                                 obscureText: false,
                                 onChanged: (valor) async {
                                   bloc.changeQuery(
@@ -464,14 +464,14 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                                             onTap: () {
                                               setState(() {
                                                 selectedCard = index;
-                                                nombreCategoriaSeleccionada =
+                                                urlCategoriaSeleccionada =
                                                     snapshot
                                                         .data!
                                                         .results![index]
                                                         .urls
                                                         ?.regular
                                                         .toString();
-                                                log('Usted ha seleccionado la imagen con Url: $nombreCategoriaSeleccionada');
+                                                log('Usted ha seleccionado la imagen con Url: $urlCategoriaSeleccionada');
                                               });
                                             },
                                             child: imageItem(
@@ -558,10 +558,13 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                           onPressed: () async {
                             if (formKey.currentState == null ||
                                 !formKey.currentState!.validate()) {
-                              return;
+                              categoriaController.addCategoria(
+                                  categoriaNuevaController,
+                                  urlCategoriaSeleccionada);
+                                  context.pop();
                             }
 
-                            context.pop();
+                            
                           },
                           text: 'Registrar item',
                           options: FFButtonOptions(
