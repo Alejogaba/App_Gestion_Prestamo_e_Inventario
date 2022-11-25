@@ -343,7 +343,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                             child: FlutterFlowDropDown<String>(
                               options: [
                                 'Crear nueva categoría...',
-                                'Opción 2',
+                                'Crear categoría...',
                                 'Team 3'
                               ],
                               onChanged: (val) =>

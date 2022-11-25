@@ -70,6 +70,7 @@ dependencies:
   observable: ^0.24.0
   network_image_search: ^1.0.0
   translator: ^0.1.7
+  sidebarx: ^0.14.0
   
 
 

@@ -17,6 +17,7 @@ class NavBar1Widget extends StatefulWidget {
 
 class _NavBar1WidgetState extends State<NavBar1Widget>
     with TickerProviderStateMixin {
+      
   final animationsMap = {
     'iconButtonOnActionTriggerAnimation1': AnimationInfo(
       trigger: AnimationTrigger.onActionTrigger,

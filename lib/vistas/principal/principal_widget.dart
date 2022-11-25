@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
+import 'package:flutter/rendering.dart';
 
 import '../components/nav_bar1_widget.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
@@ -12,6 +13,7 @@ import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sidebarx/sidebarx.dart';
 
 class PrincipalWidget extends StatefulWidget {
   const PrincipalWidget({Key? key}) : super(key: key);
@@ -41,17 +43,37 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('title')),
       key: scaffoldKey,
       backgroundColor: Color(0xFFF1F4F8),
       drawer: Drawer(
         elevation: 16,
-        child: Container(
-          width: 100,
-          height: 100,
-          decoration: BoxDecoration(
-            color: FlutterFlowTheme.of(context).secondaryBackground,
-          ),
+        child: ListView(
+    // Important: Remove any padding from the ListView.
+    padding: EdgeInsets.zero,
+    children: [
+      const DrawerHeader(
+        decoration: BoxDecoration(
+          color: Colors.blue,
         ),
+        child: Text('Drawer Header'),
+      ),
+      ListTile(
+        title: const Text('Item 1'),
+        onTap: () {
+          // Update the state of the app.
+          // ...
+        },
+      ),
+      ListTile(
+        title: const Text('Item 2'),
+        onTap: () {
+          // Update the state of the app.
+          // ...
+        },
+      ),
+    ],
+  ),
       ),
       body: NestedScrollView(
         headerSliverBuilder: (context, _) => [
@@ -63,7 +85,9 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                 IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
             automaticallyImplyLeading: false,
             title: AutoSizeText(
+              
               'Bienvenido',
+              
               style: FlutterFlowTheme.of(context).bodyText1.override(
                     fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
                     color: FlutterFlowTheme.of(context).primaryText,
@@ -214,9 +238,11 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                     ),
                                     Text(
                                       'See All',
+                                      
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1
                                           .override(
+                                            
                                             fontFamily: 'Outfit',
                                             color: Color(0xFF14181B),
                                             fontSize: 12,
@@ -230,71 +256,73 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                   ],
                                 ),
                               ),
-                              Wrap(
-                                children:[ FutureBuilder<List<Categoria>>(
-                                    future: cargarCategorias(),
-                                    builder: ((context, snapshot) {
-                                      int i = 0;
-                                      List<Widget> temp = [];
-                              
-                                      log('Cantidad items: ${listCategorias.length}');
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.done) {
-                                        return Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                              16, 16, 16, 0),
-                                          child: LayoutBuilder(
-                                            builder: (context, constraints) {
-                                              return GridView.builder(
-                                                primary: false,
-                                                shrinkWrap: true,
-                                                itemCount: snapshot.data!.length,
-                                                itemBuilder: (context, index) {
-                                                  var temp = itemCategoria(
-                                                      context,
-                                                      snapshot
-                                                          .data![index].nombre,
-                                                      snapshot.data![index]
-                                                          .urlImagen);
-                                                  return temp;
-                                                },
-                                                scrollDirection: Axis.vertical,
-                                                padding: EdgeInsets.zero,
-                                                gridDelegate:
-                                                    // ignore: prefer_const_constructors
-                                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                                  crossAxisCount:
-                                                      constraints.maxWidth > 700
-                                                          ? 6
-                                                          : 1,
-                                                  mainAxisSpacing: 10,
-                                                  crossAxisSpacing: 10,
-                                                  
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        );
-                                      } else if (snapshot.hasError) {
-                                        log('Error: ${snapshot.error}');
-                                        return Container();
-                                      } else {
-                                        log('Error de conexion: ${snapshot.error}');
-                                        return Container();
-                                      }
-                                      print(snapshot.connectionState);
-                                    })),]
-                              ),
+                              FutureBuilder<List<Categoria>>(
+                                  future: cargarCategorias(),
+                                  builder: ((context, snapshot) {
+                                    int i = 0;
+                                    List<Widget> temp = [];
+
+                                    log('Cantidad items: ${listCategorias.length}');
+
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      return Padding(
+                                        padding:
+                                            EdgeInsetsDirectional.fromSTEB(
+                                                16, 16, 16, 0),
+                                        child: LayoutBuilder(
+                                          builder: (context, constraints) {
+                                            log(constraints.maxWidth.toString());
+                                            return GridView.builder(
+                                              shrinkWrap: true,
+                                              itemCount:
+                                                  snapshot.data!.length,
+                                              itemBuilder: (context, index) {
+                                                var temp = itemCategoria(
+                                                    context,
+                                                    snapshot
+                                                        .data![index].nombre,
+                                                    snapshot.data![index]
+                                                        .urlImagen,
+                                                    constraints.maxWidth);
+                                                return temp;
+                                              },
+                                              scrollDirection: Axis.vertical,
+                                              padding: EdgeInsets.zero,
+                                              gridDelegate:
+                                                  // ignore: prefer_const_constructors
+                                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                                      crossAxisCount: defCantidadColumnas(constraints.maxWidth),
+                                                      mainAxisSpacing: 10,
+                                                      crossAxisSpacing: 10,
+                                                      childAspectRatio: 1.4),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    } else if (snapshot.hasError) {
+                                      log('Error: ${snapshot.error}');
+                                      return Container();
+                                    } else {
+                                      log('Error de conexion: ${snapshot.error}');
+                                      return Container();
+                                    }
+                                    print(snapshot.connectionState);
+                                  })),
                             ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Align(
-                    alignment: AlignmentDirectional(0, 1),
-                    child: NavBar1Widget(),
-                  ),
+                  if (responsiveVisibility(
+                    context: context,
+                    desktop: false,
+                  ))
+                    Align(
+                      alignment: AlignmentDirectional(0, 1),
+                      child: NavBar1Widget(),
+                    ),
                 ],
               ),
             );
@@ -314,12 +342,12 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   }
 }
 
-Widget itemCategoria(BuildContext context, String? nombre, String? url) {
+Widget itemCategoria(
+    BuildContext context, String? nombre, String? url, constraints) {
   log("Dibijando item categoria");
   return Padding(
     padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
     child: Container(
-      
       //MediaQuery.of(context).size.width * 0.45,
       width: 10,
       height: 10,
@@ -350,7 +378,7 @@ Widget itemCategoria(BuildContext context, String? nombre, String? url) {
               child: Image.network(
                 url!,
                 width: double.infinity,
-                height: 115,
+                height: defTamanoImagen(constraints), 
                 fit: BoxFit.cover,
               ),
             ),
@@ -376,6 +404,7 @@ Widget itemCategoria(BuildContext context, String? nombre, String? url) {
                       fontFamily: 'Outfit',
                       color: Color(0xFF57636C),
                       fontSize: 12,
+                      
                       fontWeight: FontWeight.normal,
                       useGoogleFonts: GoogleFonts.asMap().containsKey(
                           FlutterFlowTheme.of(context).bodyText2Family),
@@ -387,4 +416,38 @@ Widget itemCategoria(BuildContext context, String? nombre, String? url) {
       ),
     ),
   );
+}
+
+int defCantidadColumnas(screenSize) {
+  if (screenSize > 440 && screenSize<1057) {
+    return 2;
+  } else if (screenSize >= 1057 && screenSize<1240) {
+    return 3;
+  } else if (screenSize >= 1240 && screenSize<1500) {
+    return 4;
+  }else if(screenSize >= 1500 && screenSize<1840) {
+    return 5;
+  }else if (screenSize >= 1840) {
+    return 7;
+  }else{
+    return 1;
+  }
+}
+
+double? defTamanoImagen(screenSize) {
+  if (screenSize > 440 && screenSize<640) {
+    return 82;
+  }else if (screenSize >= 640 && screenSize<1057) {
+    return 180;
+  }else if (screenSize >= 1057 && screenSize<1240) {
+    return 170;
+  }else if (screenSize >= 1240 && screenSize<1370) {
+    return 140;
+  }else if (screenSize >= 1370 && screenSize<1840) {
+    return 135;
+  }else if (screenSize >= 1840) {
+    return 110;
+  }else{
+    return 180;
+  }
 }
