@@ -1,13 +1,15 @@
 import 'dart:developer';
 
 import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
+
 import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
 import 'package:flutter/rendering.dart';
 
+import '../../flutter_flow/flutter_flow_util.dart';
 import '../components/nav_bar1_widget.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +45,41 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('title')),
+      appBar: AppBar(backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+            iconTheme:
+                IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
+            automaticallyImplyLeading: !esEscritorio(context),
+            title: AutoSizeText(
+              
+              'Bienvenido',
+              
+              style: FlutterFlowTheme.of(context).bodyText1.override(
+                    fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    fontSize: 28,
+                    fontWeight: FontWeight.normal,
+                    useGoogleFonts: GoogleFonts.asMap().containsKey(
+                        FlutterFlowTheme.of(context).bodyText1Family),
+                  ),
+            ),
+            actions: [
+              FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 30,
+                borderWidth: 1,
+                buttonSize: 60,
+                icon: Icon(
+                  Icons.notifications_none,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  size: 30,
+                ),
+                onPressed: () {
+                  print('IconButton pressed ...');
+                },
+              ),
+            ],
+            centerTitle: false,
+            elevation: 4,),
       key: scaffoldKey,
       backgroundColor: Color(0xFFF1F4F8),
       drawer: Drawer(
@@ -83,7 +119,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             iconTheme:
                 IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
-            automaticallyImplyLeading: false,
+            automaticallyImplyLeading: true,
             title: AutoSizeText(
               
               'Bienvenido',
@@ -332,6 +368,8 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
     );
   }
 
+ 
+
   Future<List<Categoria>> cargarCategorias() async {
     listCategorias = await categoriaController.getCategorias();
     for (var element in listCategorias) {
@@ -450,4 +488,7 @@ double? defTamanoImagen(screenSize) {
   }else{
     return 180;
   }
+}
+
+ bool esEscritorio(BuildContext context) {return responsiveVisibility(context: context,desktop: true);
 }
