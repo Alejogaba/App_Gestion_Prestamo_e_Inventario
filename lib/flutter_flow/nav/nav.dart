@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:app_gestion_prestamo_inventario/vistas/activo_perfil_page/activo_perfil_page_widget.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/registrar_prestamo_page/registrar_prestamo_page_widget.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/resgistrar_activo_page/resgistrar_activo_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
@@ -13,10 +15,10 @@ import '../../vistas/lista_funcionarios_page/lista_funcionarios_page_widget.dart
 import '../../vistas/lista_prestamos_page/lista_prestamos_page_widget.dart';
 import '../../vistas/login_page/login_page_widget.dart';
 import '../../vistas/principal/principal_widget.dart';
-import '../../vistas/registrar_activo_page/registrar_activo_page_widget.dart';
+
 import '../../vistas/registrar_categoria_page/registrar_categoria_page_widget.dart';
 import '../../vistas/registrar_funcionario_page/registrar_funcionario_page_widget.dart';
-import '../../vistas/resgistrar_prestamos_page/resgistrar_prestamos_page_widget.dart';
+
 import '../flutter_flow_theme.dart';
 
 import '../../index.dart';
@@ -148,17 +150,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'ResgistrarPrestamosPage',
               path: 'resgistrarPrestamosPage',
-              builder: (context, params) => ResgistrarPrestamosPageWidget(),
+              builder: (context, params) => RegistrarPrestamoPageWidget(),
             ),
             FFRoute(
               name: 'RegistrarActivoPage',
               path: 'registrarActivoPage',
-              builder: (context, params) => RegistrarActivoPageWidget(),
+              builder: (context, params) => ResgistrarActivoPageWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),
       ],
-
     );
 
 extension NavParamExtensions on Map<String, String?> {

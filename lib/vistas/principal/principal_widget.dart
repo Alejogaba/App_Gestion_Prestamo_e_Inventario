@@ -322,73 +322,81 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
 Widget itemCategoria(
     BuildContext context, String? nombre, String? url, constraints) {
   log("Dibijando item categoria");
-  return Padding(
-    padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
-    child: Container(
-      //MediaQuery.of(context).size.width * 0.45,
-      width: 10,
-      height: 10,
-      constraints: const BoxConstraints(
-        maxWidth: 10,
-        maxHeight: 10,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 4,
-            color: Color(0x230E151B),
-            offset: Offset(0, 2),
-          )
-        ],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                url!,
-                width: double.infinity,
-                height: defTamanoImagen(constraints), 
-                fit: BoxFit.cover,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(8, 12, 0, 0),
-              child: Text(
-                nombre!,
-                style: FlutterFlowTheme.of(context).subtitle1.override(
-                      fontFamily: 'Outfit',
-                      color: Color(0xFF14181B),
-                      fontSize: 18,
-                      fontWeight: FontWeight.normal,
-                      useGoogleFonts: GoogleFonts.asMap().containsKey(
-                          FlutterFlowTheme.of(context).subtitle1Family),
-                    ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
-              child: Text(
-                'Category Name',
-                style: FlutterFlowTheme.of(context).bodyText2.override(
-                      fontFamily: 'Outfit',
-                      color: Color(0xFF57636C),
-                      fontSize: 12,
-                      
-                      fontWeight: FontWeight.normal,
-                      useGoogleFonts: GoogleFonts.asMap().containsKey(
-                          FlutterFlowTheme.of(context).bodyText2Family),
-                    ),
-              ),
-            ),
+  return GestureDetector(
+    onTap: () {
+      context.pushNamed(
+            'listaActivosPage',
+            
+          );
+    },
+    child: Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+      child: Container(
+        //MediaQuery.of(context).size.width * 0.45,
+        width: 10,
+        height: 10,
+        constraints: const BoxConstraints(
+          maxWidth: 10,
+          maxHeight: 10,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 4,
+              color: Color(0x230E151B),
+              offset: Offset(0, 2),
+            )
           ],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  url!,
+                  width: double.infinity,
+                  height: defTamanoImagen(constraints), 
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(8, 12, 0, 0),
+                child: Text(
+                  nombre!,
+                  style: FlutterFlowTheme.of(context).subtitle1.override(
+                        fontFamily: 'Outfit',
+                        color: Color(0xFF14181B),
+                        fontSize: 18,
+                        fontWeight: FontWeight.normal,
+                        useGoogleFonts: GoogleFonts.asMap().containsKey(
+                            FlutterFlowTheme.of(context).subtitle1Family),
+                      ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
+                child: Text(
+                  'Category Name',
+                  style: FlutterFlowTheme.of(context).bodyText2.override(
+                        fontFamily: 'Outfit',
+                        color: Color(0xFF57636C),
+                        fontSize: 12,
+                        
+                        fontWeight: FontWeight.normal,
+                        useGoogleFonts: GoogleFonts.asMap().containsKey(
+                            FlutterFlowTheme.of(context).bodyText2Family),
+                      ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     ),

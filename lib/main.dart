@@ -14,7 +14,7 @@ import 'index.dart';
 import 'flutter_flow/custom_icons.dart';
 import 'assets/constantes.dart' as constantes;
 import 'vistas/ajustes_page/ajustes_page_widget.dart';
-import 'vistas/flutter_flow/custom_icons.dart';
+import 'vistas/flutter_flow/customIcons.dart';
 import 'vistas/lista_funcionarios_page/lista_funcionarios_page_widget.dart';
 import 'vistas/lista_prestamos_page/lista_prestamos_page_widget.dart';
 import 'vistas/principal/principal_widget.dart';

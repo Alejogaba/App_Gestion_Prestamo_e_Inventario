@@ -36,11 +36,13 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        floatingActionButton: FloatingActionButton(
+      key: scaffoldKey,
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 50.0),
+        child: FloatingActionButton(
           onPressed: () {
-            print('FloatingActionButton pressed ...');
+             
           },
           backgroundColor: FlutterFlowTheme.of(context).primaryColor,
           elevation: 123,
@@ -55,177 +57,177 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
               size: 30,
             ),
             onPressed: () {
-              print('IconButton pressed ...');
+              context.pushNamed('resgistrarPrestamosPage');
             },
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
-        appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-          iconTheme:
-              IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
-          automaticallyImplyLeading: false,
-          title: AutoSizeText(
-            'Préstamo de activos',
-            style: FlutterFlowTheme.of(context).bodyText1.override(
-                  fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
-                  color: FlutterFlowTheme.of(context).tertiaryColor,
-                  fontSize: 28,
-                  fontWeight: FontWeight.w600,
-                  useGoogleFonts: GoogleFonts.asMap().containsKey(
-                      FlutterFlowTheme.of(context).bodyText1Family),
-                ),
-          ),
-          actions: [
-            FlutterFlowIconButton(
-              borderColor: Colors.transparent,
-              borderRadius: 30,
-              borderWidth: 1,
-              buttonSize: 60,
-              icon: Icon(
-                Icons.notifications_none,
+      ),
+      appBar: AppBar(
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+        iconTheme:
+            IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
+        automaticallyImplyLeading: false,
+        title: AutoSizeText(
+          'Préstamo de activos',
+          style: FlutterFlowTheme.of(context).bodyText1.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,
-                size: 30,
+                fontSize: 28,
+                fontWeight: FontWeight.w600,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText1Family),
               ),
-              onPressed: () {
-                print('IconButton pressed ...');
-              },
-            ),
-          ],
-          centerTitle: false,
-          elevation: 4,
         ),
-        body: Builder(
-          builder: (context) {
-            return GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Stack(
+        actions: [
+          FlutterFlowIconButton(
+            borderColor: Colors.transparent,
+            borderRadius: 30,
+            borderWidth: 1,
+            buttonSize: 60,
+            icon: Icon(
+              Icons.notifications_none,
+              color: FlutterFlowTheme.of(context).tertiaryColor,
+              size: 30,
+            ),
+            onPressed: () {
+             
+            },
+          ),
+        ],
+        centerTitle: false,
+        elevation: 4,
+      ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                                child: TextFormField(
-                                  controller: textController,
-                                  onChanged: (_) => EasyDebounce.debounce(
-                                    'textController',
-                                    Duration(milliseconds: 2000),
-                                    () => setState(() {}),
-                                  ),
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    labelText: 'Buscar funcionario...',
-                                    labelStyle: FlutterFlowTheme.of(context)
-                                        .bodyText2
+                  SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 12, 0, 0),
+                                  child: TextFormField(
+                                    controller: textController,
+                                    onChanged: (_) => EasyDebounce.debounce(
+                                      'textController',
+                                      Duration(milliseconds: 2000),
+                                      () => setState(() {}),
+                                    ),
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelText: 'Buscar funcionario...',
+                                      labelStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            color: Color(0xFF57636C),
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.normal,
+                                            useGoogleFonts: GoogleFonts.asMap()
+                                                .containsKey(
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText2Family),
+                                          ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color(0x00000000),
+                                          width: 1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      filled: true,
+                                      fillColor: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      prefixIcon: Icon(
+                                        Icons.search_rounded,
+                                        color: Color(0xFF57636C),
+                                      ),
+                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyText1
                                         .override(
                                           fontFamily: 'Poppins',
-                                          color: Color(0xFF57636C),
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
                                           fontSize: 18,
                                           fontWeight: FontWeight.normal,
                                           useGoogleFonts: GoogleFonts.asMap()
                                               .containsKey(
                                                   FlutterFlowTheme.of(context)
-                                                      .bodyText2Family),
+                                                      .bodyText1Family),
                                         ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    filled: true,
-                                    fillColor: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    prefixIcon: Icon(
-                                      Icons.search_rounded,
-                                      color: Color(0xFF57636C),
-                                    ),
+                                    maxLines: null,
                                   ),
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: 'Poppins',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.normal,
-                                        useGoogleFonts: GoogleFonts.asMap()
-                                            .containsKey(
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyText1Family),
-                                      ),
-                                  maxLines: null,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                        child: ScrollConfiguration(
-                          behavior: const ScrollBehavior(),
-                          child: GlowingOverscrollIndicator(
-                            axisDirection: AxisDirection.up,
-                            color: Colors.red,
-                            child: ListView.builder(
-                              padding: EdgeInsets.zero,
-                              primary: false,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              itemCount: 20,
-                              itemBuilder: (BuildContext context, int index) {
-                                return const tarjetaActivo();
-                              },
-                            ),
+                            ],
                           ),
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            primary: false,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: 10,
+                            itemBuilder: (BuildContext context, int index) {
+                              return const tarjetaItem();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-            );
-          },
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
-class tarjetaActivo extends StatelessWidget {
-  const tarjetaActivo({
+class tarjetaItem extends StatelessWidget {
+  const tarjetaItem({
     Key? key,
   }) : super(key: key);
 

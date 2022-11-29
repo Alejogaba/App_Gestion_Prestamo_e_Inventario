@@ -53,6 +53,7 @@ abstract class FlutterFlowTheme {
   late Color grayicon;
   late Color boxShadow;
   late Color errorColor;
+  late Color accentColor;
 
   String get title1Family => typography.title1Family;
   TextStyle get title1 => typography.title1;
@@ -104,6 +105,7 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color grayicon = Color(0xFF5A6267);
   late Color boxShadow = Color(0x411D2429);
   late Color errorColor = Color(0xFFD2B220);
+  late Color accentColor = Color(0xFF006D38);
 }
 
 abstract class Typography {
@@ -308,6 +310,7 @@ class DarkModeTheme extends FlutterFlowTheme {
   late Color grayicon = Color(0xFFABB3BA);
   late Color boxShadow = Color(0x30FFFFFF);
   late Color errorColor = Color(0xBFDF2424);
+  late Color accentColor = Color(0xFF006D38);
 }
 
 extension TextStyleHelper on TextStyle {

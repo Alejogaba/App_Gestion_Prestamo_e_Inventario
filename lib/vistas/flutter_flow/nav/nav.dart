@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
+import '../../registrar_prestamo_page/registrar_prestamo_page_widget.dart';
+import '../../resgistrar_activo_page/resgistrar_activo_page_widget.dart';
 import '../flutter_flow_theme.dart';
 
 import '../../../index.dart';
@@ -133,19 +135,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   : ListaPrestamosPageWidget(),
             ),
             FFRoute(
-              name: 'ResgistrarPrestamosPage',
-              path: 'resgistrarPrestamosPage',
-              builder: (context, params) => ResgistrarPrestamosPageWidget(),
+              name: 'ResgistrarActivoPage',
+              path: 'resgistrarActivosPage',
+              builder: (context, params) => ResgistrarActivoPageWidget(),
             ),
             FFRoute(
-              name: 'RegistrarActivoPage',
-              path: 'registrarActivoPage',
-              builder: (context, params) => RegistrarActivoPageWidget(),
+              name: 'RegistrarPrestamoPage',
+              path: 'registrarPrestamosPage',
+              builder: (context, params) => RegistrarPrestamoPageWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),
       ],
-     
     );
 
 extension NavParamExtensions on Map<String, String?> {
