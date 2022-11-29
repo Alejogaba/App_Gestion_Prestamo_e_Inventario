@@ -1,4 +1,4 @@
-import 'dart:html';
+
 
 import 'package:app_gestion_prestamo_inventario/flutter_flow/flutter_flow_util.dart';
 
@@ -24,7 +24,7 @@ class _RangoFechasWidgetState extends State<RangoFechasWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
-      child: responsiveVisibility(context:context,phone:true)? Column(
+      child: responsiveVisibility(context:context,phone:false)? Column(
         children: [
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(0, 0, 2, 0),
@@ -74,40 +74,43 @@ class _RangoFechasWidgetState extends State<RangoFechasWidget> {
           InkWell(
             onTap: () async {
             },
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.40,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: Color(0xFFCFD4DB),
-                  width: 1,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.40,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: Color(0xFFCFD4DB),
+                    width: 1,
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(12, 5, 12, 5),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Fecha entrega',
-                      style: FlutterFlowTheme.of(context).subtitle2.override(
-                            fontFamily: 'Lexend Deca',
-                            color: Color(0xFF57636C),
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                            useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                FlutterFlowTheme.of(context).subtitle2Family),
-                          ),
-                    ),
-                    Icon(
-                      Icons.date_range_outlined,
-                      color: Color(0xFF57636C),
-                      size: 24,
-                    ),
-                  ],
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(12, 5, 12, 5),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Fecha entrega',
+                        style: FlutterFlowTheme.of(context).subtitle2.override(
+                              fontFamily: 'Lexend Deca',
+                              color: Color(0xFF57636C),
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                              useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                  FlutterFlowTheme.of(context).subtitle2Family),
+                            ),
+                      ),
+                      Icon(
+                        Icons.date_range_outlined,
+                        color: Color(0xFF57636C),
+                        size: 24,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
