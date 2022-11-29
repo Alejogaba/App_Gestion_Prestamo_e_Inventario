@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+const _kLocaleStorageKey = '__locale_key__';
 
 class FFLocalizations {
   FFLocalizations(this.locale);
@@ -9,7 +12,17 @@ class FFLocalizations {
   static FFLocalizations of(BuildContext context) =>
       Localizations.of<FFLocalizations>(context, FFLocalizations)!;
 
-  static List<String> languages() => ['en'];
+  static List<String> languages() => ['es'];
+
+  static late SharedPreferences _prefs;
+  static Future initialize() async =>
+      _prefs = await SharedPreferences.getInstance();
+  static Future storeLocale(String locale) =>
+      _prefs.setString(_kLocaleStorageKey, locale);
+  static Locale? getStoredLocale() {
+    final locale = _prefs.getString(_kLocaleStorageKey);
+    return locale != null && locale.isNotEmpty ? createLocale(locale) : null;
+  }
 
   String get languageCode => locale.toString();
   int get languageIndex => languages().contains(languageCode)
@@ -20,9 +33,9 @@ class FFLocalizations {
       (kTranslationsMap[key] ?? {})[locale.toString()] ?? '';
 
   String getVariableText({
-    String? enText = '',
+    String? esText = '',
   }) =>
-      [enText][languageIndex] ?? '';
+      [esText][languageIndex] ?? '';
 }
 
 class FFLocalizationsDelegate extends LocalizationsDelegate<FFLocalizations> {

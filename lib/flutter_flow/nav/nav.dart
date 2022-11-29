@@ -1,9 +1,22 @@
 import 'dart:async';
 
-import 'package:app_gestion_prestamo_inventario/vistas/wrapper.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/activo_perfil_page/activo_perfil_page_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
+import '../../vistas/add_item/add_item_widget.dart';
+import '../../vistas/ajustes_page/ajustes_page_widget.dart';
+import '../../vistas/funcionario_perfil_page/funcionario_perfil_page_widget.dart';
+import '../../vistas/lista_activos_page/lista_activos_page_widget.dart';
+import '../../vistas/lista_funcionarios_page/lista_funcionarios_page_widget.dart';
+import '../../vistas/lista_prestamos_page/lista_prestamos_page_widget.dart';
+import '../../vistas/login_page/login_page_widget.dart';
+import '../../vistas/principal/principal_widget.dart';
+import '../../vistas/registrar_activo_page/registrar_activo_page_widget.dart';
+import '../../vistas/registrar_categoria_page/registrar_categoria_page_widget.dart';
+import '../../vistas/registrar_funcionario_page/registrar_funcionario_page_widget.dart';
+import '../../vistas/resgistrar_prestamos_page/resgistrar_prestamos_page_widget.dart';
 import '../flutter_flow_theme.dart';
 
 import '../../index.dart';
@@ -30,22 +43,122 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
-      errorBuilder: (context, _) => Wrapper(),
+      errorBuilder: (context, _) => appStateNotifier.showSplashImage
+          ? Builder(
+              builder: (context) => Container(
+                color: FlutterFlowTheme.of(context).primaryColor,
+                child: Center(
+                  child: Image.asset(
+                    'assets/images/Jc18_ESCUDO_LA_JAGUA_DE_IBIRICO.png',
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            )
+          : NavBarPage(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => Wrapper(),
+          builder: (context, _) => appStateNotifier.showSplashImage
+              ? Builder(
+                  builder: (context) => Container(
+                    color: FlutterFlowTheme.of(context).primaryColor,
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/Jc18_ESCUDO_LA_JAGUA_DE_IBIRICO.png',
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                )
+              : NavBarPage(),
           routes: [
             FFRoute(
-              name: 'HomePage',
-              path: 'homePage',
-              builder: (context, params) => Wrapper(),
+              name: 'principal',
+              path: 'principal',
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'principal')
+                  : PrincipalWidget(
+                      selectMode: params.getParam('selectMode', ParamType.bool),
+                    ),
+            ),
+            FFRoute(
+              name: 'loginPage',
+              path: 'loginPage',
+              builder: (context, params) => LoginPageWidget(),
+            ),
+            FFRoute(
+              name: 'addItem',
+              path: 'addItem',
+              builder: (context, params) => AddItemWidget(),
+            ),
+            FFRoute(
+              name: 'AjustesPage',
+              path: 'ajustesPage',
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'AjustesPage')
+                  : AjustesPageWidget(),
+            ),
+            FFRoute(
+              name: 'ListaFuncionariosPage',
+              path: 'listaFuncionariosPage',
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'ListaFuncionariosPage')
+                  : ListaFuncionariosPageWidget(),
+            ),
+            FFRoute(
+              name: 'RegistrarCategoriaPage',
+              path: 'registrarCategoriaPage',
+              builder: (context, params) => RegistrarCategoriaPageWidget(),
+            ),
+            FFRoute(
+              name: 'RegistrarFuncionarioPage',
+              path: 'registrarFuncionarioPage',
+              builder: (context, params) => RegistrarFuncionarioPageWidget(
+                editMode: params.getParam('editMode', ParamType.bool),
+              ),
+            ),
+            FFRoute(
+              name: 'FuncionarioPerfilPage',
+              path: 'funcionarioPerfilPage',
+              builder: (context, params) => FuncionarioPerfilPageWidget(),
+            ),
+            FFRoute(
+              name: 'ActivoPerfilPage',
+              path: 'activoPerfilPage',
+              builder: (context, params) => ActivoPerfilPageWidget(
+                activoDatos: params.getParam('activoDatos', ParamType.String),
+              ),
+            ),
+            FFRoute(
+              name: 'ListaActivosPage',
+              path: 'listaActivosPage',
+              builder: (context, params) => ListaActivosPageWidget(),
+            ),
+            FFRoute(
+              name: 'ListaPrestamosPage',
+              path: 'listaPrestamosPage',
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'ListaPrestamosPage')
+                  : ListaPrestamosPageWidget(),
+            ),
+            FFRoute(
+              name: 'ResgistrarPrestamosPage',
+              path: 'resgistrarPrestamosPage',
+              builder: (context, params) => ResgistrarPrestamosPageWidget(),
+            ),
+            FFRoute(
+              name: 'RegistrarActivoPage',
+              path: 'registrarActivoPage',
+              builder: (context, params) => RegistrarActivoPageWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),
       ],
-     
+
     );
 
 extension NavParamExtensions on Map<String, String?> {

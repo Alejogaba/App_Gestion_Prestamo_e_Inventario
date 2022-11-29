@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.app_gestion_prestamo_inventario">
+    package="com.example.app_gestion_prestamo_e_inventario">
    <application
-        android:label="app_gestion_prestamo_inventario"
+        android:label="app_gestion_prestamo_e_inventario"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -1,4 +1,4 @@
-package com.inventariadoapp.unicesar
+package com.example.app_gestion_prestamo_e_inventario
 
 import io.flutter.embedding.android.FlutterActivity
 

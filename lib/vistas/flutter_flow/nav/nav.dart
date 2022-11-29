@@ -1,16 +1,12 @@
 import 'dart:async';
 
-import 'package:app_gestion_prestamo_inventario/vistas/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
-import '../../lista/lista_widget.dart';
-import '../../login_page/login_page_widget.dart';
-import '../../principal/principal_widget.dart';
 import '../flutter_flow_theme.dart';
 
-
+import '../../../index.dart';
 import '../../../main.dart';
 import '../lat_lng.dart';
 import '../place.dart';
@@ -21,7 +17,7 @@ export 'serialization_util.dart';
 
 const kTransitionInfoKey = '__transition_info__';
 
-class nav extends ChangeNotifier {
+class AppStateNotifier extends ChangeNotifier {
   bool showSplashImage = true;
 
   void stopShowingSplashImage() {
@@ -30,31 +26,121 @@ class nav extends ChangeNotifier {
   }
 }
 
-GoRouter createRouter(nav appStateNotifier) => GoRouter(
+GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
-      errorBuilder: (context, _) => Wrapper(),
+      errorBuilder: (context, _) => appStateNotifier.showSplashImage
+          ? Builder(
+              builder: (context) => Container(
+                color: FlutterFlowTheme.of(context).primaryColor,
+                child: Center(
+                  child: Image.asset(
+                    'assets/images/Jc18_ESCUDO_LA_JAGUA_DE_IBIRICO.png',
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            )
+          : NavBarPage(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => Wrapper(),
+          builder: (context, _) => appStateNotifier.showSplashImage
+              ? Builder(
+                  builder: (context) => Container(
+                    color: FlutterFlowTheme.of(context).primaryColor,
+                    child: Center(
+                      child: Image.asset(
+                        'assets/images/Jc18_ESCUDO_LA_JAGUA_DE_IBIRICO.png',
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                )
+              : NavBarPage(),
           routes: [
             FFRoute(
               name: 'principal',
               path: 'principal',
-              builder: (context, params) => PrincipalWidget(),
-            ),
-            FFRoute(
-              name: 'lista',
-              path: 'lista',
-              builder: (context, params) => ListaWidget(),
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'principal')
+                  : PrincipalWidget(
+                      selectMode: params.getParam('selectMode', ParamType.bool),
+                    ),
             ),
             FFRoute(
               name: 'loginPage',
               path: 'loginPage',
               builder: (context, params) => LoginPageWidget(),
+            ),
+            FFRoute(
+              name: 'addItem',
+              path: 'addItem',
+              builder: (context, params) => AddItemWidget(),
+            ),
+            FFRoute(
+              name: 'AjustesPage',
+              path: 'ajustesPage',
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'AjustesPage')
+                  : AjustesPageWidget(),
+            ),
+            FFRoute(
+              name: 'ListaFuncionariosPage',
+              path: 'listaFuncionariosPage',
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'ListaFuncionariosPage')
+                  : ListaFuncionariosPageWidget(),
+            ),
+            FFRoute(
+              name: 'RegistrarCategoriaPage',
+              path: 'registrarCategoriaPage',
+              builder: (context, params) => RegistrarCategoriaPageWidget(),
+            ),
+            FFRoute(
+              name: 'RegistrarFuncionarioPage',
+              path: 'registrarFuncionarioPage',
+              builder: (context, params) => RegistrarFuncionarioPageWidget(
+                editMode: params.getParam('editMode', ParamType.bool),
+              ),
+            ),
+            FFRoute(
+              name: 'FuncionarioPerfilPage',
+              path: 'funcionarioPerfilPage',
+              builder: (context, params) => FuncionarioPerfilPageWidget(),
+            ),
+            FFRoute(
+              name: 'ActivoPerfilPage',
+              path: 'activoPerfilPage',
+              builder: (context, params) => ActivoPerfilPageWidget(
+                activoDatos: params.getParam('activoDatos', ParamType.String),
+              ),
+            ),
+            FFRoute(
+              name: 'ListaActivosPage',
+              path: 'listaActivosPage',
+              builder: (context, params) => ListaActivosPageWidget(),
+            ),
+            FFRoute(
+              name: 'ListaPrestamosPage',
+              path: 'listaPrestamosPage',
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'ListaPrestamosPage')
+                  : ListaPrestamosPageWidget(),
+            ),
+            FFRoute(
+              name: 'ResgistrarPrestamosPage',
+              path: 'resgistrarPrestamosPage',
+              builder: (context, params) => ResgistrarPrestamosPageWidget(),
+            ),
+            FFRoute(
+              name: 'RegistrarActivoPage',
+              path: 'registrarActivoPage',
+              builder: (context, params) => RegistrarActivoPageWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),
@@ -155,7 +241,7 @@ class FFRoute {
   final Widget Function(BuildContext, FFParameters) builder;
   final List<GoRoute> routes;
 
-  GoRoute toRoute(nav appStateNotifier) => GoRoute(
+  GoRoute toRoute(AppStateNotifier appStateNotifier) => GoRoute(
         name: name,
         path: path,
         pageBuilder: (context, state) {
