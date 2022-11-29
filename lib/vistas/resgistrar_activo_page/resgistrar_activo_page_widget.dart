@@ -1,3 +1,6 @@
+import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
+
+import '../../entidades/categoria.dart';
 import '../flutter_flow/flutter_flow_count_controller.dart';
 import '../flutter_flow/flutter_flow_drop_down.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
@@ -26,6 +29,12 @@ class _ResgistrarActivoPageWidgetState
   String? dropDownValue2;
   int? countControllerValue;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  List<Categoria> listCategorias = [];
+  List<String> listEstados = [
+    'Bueno: Activo en buen estado',
+    'Regular: Activo con desperfectos o daños menores pero en perfecto estado funcional',
+    'Malo: Activo en mal estado o dañado'
+  ];
 
   @override
   void initState() {
@@ -34,6 +43,7 @@ class _ResgistrarActivoPageWidgetState
     textController2 = TextEditingController();
     textController3 = TextEditingController();
     textFieldDescripcionController = TextEditingController();
+    cargarCategorias();
   }
 
   @override
@@ -580,10 +590,16 @@ class _ResgistrarActivoPageWidgetState
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 10),
                         child: FlutterFlowDropDown<String>(
-                          options: ['Option 1'],
+                          options: List.generate(
+                              listCategorias.length,
+                              (index) => DropdownMenuItem(
+                                  value: listCategorias[index].nombre,
+                                  child: Text(listCategorias[index]
+                                      .nombre
+                                      .toString()))),
                           onChanged: (val) =>
                               setState(() => dropDownValue1 = val),
-                          width: MediaQuery.of(context).size.width * 0.94,
+                          width: MediaQuery.of(context).size.width - 30,
                           height: 50,
                           textStyle: FlutterFlowTheme.of(context)
                               .bodyText1
@@ -627,36 +643,44 @@ class _ResgistrarActivoPageWidgetState
                       alignment: AlignmentDirectional(0, 0),
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 10),
-                        child: FlutterFlowDropDown<String>(
-                          options: [
-                            'Bueno: Activo en buen estado',
-                            'Regular: Activo con desperfectos o daños menores pero en perfecto estado funcional',
-                            'Malo: Activo en mal estado o dañado'
-                          ],
-                          onChanged: (val) =>
-                              setState(() => dropDownValue2 = val),
-                          width: MediaQuery.of(context).size.width * 0.94,
-                          height: 50,
-                          textStyle: FlutterFlowTheme.of(context)
-                              .bodyText1
-                              .override(
-                                fontFamily: FlutterFlowTheme.of(context)
-                                    .bodyText1Family,
-                                fontSize: 18,
-                                useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                    FlutterFlowTheme.of(context)
-                                        .bodyText1Family),
-                              ),
-                          hintText: 'Estado del activo*',
-                          fillColor:
-                              FlutterFlowTheme.of(context).primaryBackground,
-                          elevation: 2,
-                          borderColor:
-                              FlutterFlowTheme.of(context).secondaryText,
-                          borderWidth: 2,
-                          borderRadius: 8,
-                          margin: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
-                          hidesUnderline: true,
+                        child: FutureBuilder(
+                          future: cargarCategorias(),
+                          builder: (BuildContext context,
+                               snapshot) {
+                            return FlutterFlowDropDown<String>(
+                              options: (snapshot.connectionState ==
+                                          ConnectionState.done &&
+                                      listCategorias.isNotEmpty) ? List.generate(snapshot.data!.length,
+        (index) => DropdownMenuItem(
+            value: snapshot.data![index].nombre, child: Text(snapshot.data![index].nombre.toString()))):,
+                              onChanged: (val) =>
+                                  setState(() => dropDownValue2 = val),
+                              width: MediaQuery.of(context).size.width - 30,
+                              height: 50,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: FlutterFlowTheme.of(context)
+                                        .bodyText1Family,
+                                    fontSize: 18,
+                                    useGoogleFonts: GoogleFonts.asMap()
+                                        .containsKey(
+                                            FlutterFlowTheme.of(context)
+                                                .bodyText1Family),
+                                  ),
+                              hintText: 'Estado del activo*',
+                              fillColor: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
+                              elevation: 2,
+                              borderColor:
+                                  FlutterFlowTheme.of(context).secondaryText,
+                              borderWidth: 2,
+                              borderRadius: 8,
+                              margin:
+                                  EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
+                              hidesUnderline: true,
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -761,5 +785,15 @@ class _ResgistrarActivoPageWidgetState
         ),
       ),
     );
+  }
+
+  Future<List<Categoria>> cargarCategorias() async {
+    CategoriaController categoriaController = CategoriaController();
+    listCategorias = await categoriaController.getCategorias(null);
+    for (var element in listCategorias) {
+      print('Lista categoria nombre: + ${element.nombre}');
+      print('Lista categoria url: ${element.urlImagen}');
+    }
+    return Future.value(listCategorias);
   }
 }

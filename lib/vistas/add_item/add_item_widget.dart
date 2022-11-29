@@ -337,39 +337,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                               keyboardType: TextInputType.multiline,
                             ),
                           ),
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                            child: FlutterFlowDropDown<String>(
-                              options: [
-                                'Crear nueva categoría...',
-                                'Crear categoría...',
-                                'Team 3'
-                              ],
-                              onChanged: (val) =>
-                                  setState(() => teamSelectValue = val),
-                              width: double.infinity,
-                              height: 60,
-                              textStyle: FlutterFlowTheme.of(context).bodyText1,
-                              hintText: 'Seleccione Categoría',
-                              icon: Icon(
-                                Icons.category,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                size: 15,
-                              ),
-                              fillColor: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              elevation: 2,
-                              borderColor: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              borderWidth: 2,
-                              borderRadius: 8,
-                              margin:
-                                  EdgeInsetsDirectional.fromSTEB(24, 4, 12, 4),
-                              hidesUnderline: true,
-                            ),
-                          ),
+                         
                           if (teamSelectValue == 'Crear categoría...')
                             Padding(
                               padding:
@@ -518,37 +486,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                           Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(16, 12, 16, 0),
-                            child: FlutterFlowDropDown<String>(
-                              initialOption: userSelectValue ??=
-                                  'Oficina de las TIC',
-                              options: [
-                                'Oficina de las TIC',
-                                'Team 2',
-                                'Team 3'
-                              ],
-                              onChanged: (val) =>
-                                  setState(() => userSelectValue = val),
-                              width: double.infinity,
-                              height: 60,
-                              textStyle: FlutterFlowTheme.of(context).bodyText1,
-                              hintText: 'Funcionario a asignar...',
-                              icon: Icon(
-                                Icons.keyboard_arrow_down_rounded,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                size: 15,
-                              ),
-                              fillColor: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              elevation: 2,
-                              borderColor: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              borderWidth: 2,
-                              borderRadius: 8,
-                              margin:
-                                  EdgeInsetsDirectional.fromSTEB(24, 4, 12, 4),
-                              hidesUnderline: true,
-                            ),
+                            child: Container()
                           ),
                         ],
                       ),

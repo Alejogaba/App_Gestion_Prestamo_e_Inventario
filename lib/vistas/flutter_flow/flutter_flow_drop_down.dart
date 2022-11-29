@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 class FlutterFlowDropDown<T> extends StatefulWidget {
-  const FlutterFlowDropDown({
+  const FlutterFlowDropDown( {
     this.initialOption,
     this.hintText,
     required this.options,
@@ -24,7 +24,7 @@ class FlutterFlowDropDown<T> extends StatefulWidget {
 
   final T? initialOption;
   final String? hintText;
-  final List<T> options;
+  final List<DropdownMenuItem<T>> options;
   final List<String>? optionLabels;
   final Function(T?) onChanged;
   final Widget? icon;
@@ -60,22 +60,7 @@ class _FlutterFlowDropDownState<T> extends State<FlutterFlowDropDown<T>> {
       hint: widget.hintText != null
           ? Text(widget.hintText!, style: widget.textStyle)
           : null,
-      items: widget.options
-          .asMap()
-          .entries
-          .map(
-            (option) => DropdownMenuItem<T>(
-              value: option.value,
-              child: Text(
-                widget.optionLabels == null ||
-                        widget.optionLabels!.length < option.key + 1
-                    ? option.value.toString()
-                    : widget.optionLabels![option.key],
-                style: widget.textStyle,
-              ),
-            ),
-          )
-          .toList(),
+      items: widget.options,
       elevation: widget.elevation.toInt(),
       onChanged: !widget.disabled
           ? (value) {

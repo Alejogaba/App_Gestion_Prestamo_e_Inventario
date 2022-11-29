@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:app_gestion_prestamo_inventario/assets/utilidades.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
 import 'package:desktop_webview_auth/desktop_webview_auth.dart';
 import 'package:desktop_webview_auth/google.dart';
@@ -14,6 +15,7 @@ const _googleClientId =
     '199131897060-0p2gu71h9ap9avuecpp6bj7bspo4icqp.apps.googleusercontent.com';
 
 class CategoriaController {
+  Utilidades utilidades = Utilidades();
   final client =
       SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
 
@@ -24,16 +26,13 @@ class CategoriaController {
             (value) => log('Nueva categoria registrada: $value'));
   }
 
-  Future<List<Categoria>> getCategorias() async {
+  Future<List<Categoria>> getCategorias(String? nombre) async {
+    if (nombre==null||nombre.trim()=='') {
+      
     try {
       List<Categoria> listaCategoria = [];
       final data = await client.from('CATEGORIAS').select('*') as List<dynamic>;
-      //String nombre = (data['NOMBRE'] ?? '') as String;
-      //String urlImagen = (data['URL_IMAGEN'] ?? '') as String;
-      //Categoria categoria = Categoria(nombre, urlImagen);
-      //data.map((key, value) => value);
-      //data.forEach((k, v) => listaCategoria.add(categoria));
-      print('Datos: $data');
+      log('Datos: $data');
       return (data).map((e) => Categoria.fromMap(e)).toList();
     } on PostgrestException catch (error) {
       log(error.message);
@@ -42,13 +41,11 @@ class CategoriaController {
       log('Error al cargar categorias: $error');
       return [];
     }
-  }
-
-    Future<List<Categoria>> getCategoriasbyName(nombre) async {
-    try {
+    } else {
+       try {
       List<Categoria> listaCategoria = [];
-      final data = await client.from('CATEGORIAS').select('*').eq('nombre', nombre) as List<dynamic>;
-      print('Datos: $data');
+      final data = await client.from('CATEGORIAS').select('*').textSearch('NOMBRE', "'${Utilidades().capitalizeAllSentence(nombre)}'") as List<dynamic>;
+      log('Datos: $data');
       return (data).map((e) => Categoria.fromMap(e)).toList();
     } on PostgrestException catch (error) {
       log(error.message);
@@ -56,7 +53,9 @@ class CategoriaController {
     } catch (error) {
       log('Error al cargar categorias: $error');
       return [];
+    } 
     }
+    
   }
 
   Categoria toNote(Map<dynamic, dynamic> result) {

@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class PrincipalWidget extends StatefulWidget {
   const PrincipalWidget({
@@ -26,20 +27,22 @@ class PrincipalWidget extends StatefulWidget {
 }
 
 class _PrincipalWidgetState extends State<PrincipalWidget> {
-  TextEditingController? textController;
+  TextEditingController? searchController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   CategoriaController categoriaController = CategoriaController();
   List<Categoria> listCategorias = [];
+  String busquedaCategoria = '';
+  
 
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    searchController = TextEditingController();
   }
 
   @override
   void dispose() {
-    textController?.dispose();
+    searchController?.dispose();
     super.dispose();
   }
 
@@ -47,7 +50,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: Color(0xFFF1F4F8),
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       drawer: Drawer(
         elevation: 16,
         child: Container(
@@ -58,6 +61,63 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
           ),
         ),
       ),
+      floatingActionButton: 
+      Padding(
+        padding: const EdgeInsets.only(bottom: 50.0),
+        child: SpeedDial( //Speed dial menu
+        //margin bottom
+    icon: Icons.menu, //icon on Floating action button
+    activeIcon: Icons.close, //icon when menu is expanded on button
+    backgroundColor: FlutterFlowTheme.of(context).primaryColor, //background color of button
+    foregroundColor: Colors.white, //font color, icon color in button
+    activeBackgroundColor: FlutterFlowTheme.of(context).primaryColor, //background color when menu is expanded
+    activeForegroundColor: Colors.white,
+    buttonSize: const Size(56.0,56), //button size
+    visible: true,
+    closeManually: false,
+    curve: Curves.bounceIn,
+    overlayColor: Colors.black,
+    overlayOpacity: 0.5,
+    onOpen: () => print('OPENING DIAL'), // action when menu opens
+    onClose: () => print('DIAL CLOSED'), //action when menu closes
+
+    elevation: 8.0, //shadow elevation of button
+    shape: CircleBorder(), //shape of button
+    
+    children: [
+        SpeedDialChild( //speed dial child
+          child: Icon(FontAwesomeIcons.barcode),
+          backgroundColor: Color.fromARGB(255, 7, 133, 36),
+          foregroundColor: Colors.white,
+          label: 'Buscar por código de barras',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () => print('FIRST CHILD'),
+     
+        ),
+        SpeedDialChild(
+          child: Icon(Icons.add),
+          backgroundColor: Color.fromARGB(255, 7, 133, 107),
+          foregroundColor: Colors.white,
+          label: 'Registrar nuevo activo',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () => context.pushNamed('registraractivopage'),
+         
+        ),
+        SpeedDialChild(
+          child: Icon(Icons.category_rounded),
+          foregroundColor: Colors.white,
+          backgroundColor: Color.fromARGB(255, 6, 113, 122),
+          label: 'Crear nueva categoria',
+          labelStyle: TextStyle(fontSize: 18.0),
+          onTap: () => context.pushNamed('registrarcategoriapage'),
+          
+        ),
+
+        //add more menu item childs here
+    ],
+  ),
+      ),
+     
       body: NestedScrollView(
         headerSliverBuilder: (context, _) => [
           SliverAppBar(
@@ -72,7 +132,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
               'Bienvenido',
               style: FlutterFlowTheme.of(context).bodyText1.override(
                     fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
-                    color: FlutterFlowTheme.of(context).primaryText,
+                    color: FlutterFlowTheme.of(context).tertiaryColor,
                     fontSize: 28,
                     fontWeight: FontWeight.normal,
                     useGoogleFonts: GoogleFonts.asMap().containsKey(
@@ -87,7 +147,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                 buttonSize: 60,
                 icon: Icon(
                   Icons.notifications_none,
-                  color: FlutterFlowTheme.of(context).primaryText,
+                  color: FlutterFlowTheme.of(context).tertiaryColor,
                   size: 30,
                 ),
                 onPressed: () {
@@ -115,18 +175,20 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
                                     16, 12, 16, 0),
                                 child: TextFormField(
-                                  controller: textController,
-                                  onChanged: (_) => EasyDebounce.debounce(
+                                  controller: searchController,
+                                  onChanged: (value) => EasyDebounce.debounce(
                                     'textController',
-                                    Duration(milliseconds: 2000),
-                                    () => setState(() {}),
+                                    const Duration(milliseconds: 1000),
+                                    () => setState(() {
+                                      busquedaCategoria = value;
+                                    }),
                                   ),
                                   obscureText: false,
                                   decoration: InputDecoration(
-                                    labelText: 'Search products...',
+                                    labelText: 'Buscar categoria...',
                                     labelStyle: FlutterFlowTheme.of(context)
                                         .bodyText2
                                         .override(
@@ -243,9 +305,11 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                   List<Widget> temp = [];
 
                                   log('Cantidad items: ${listCategorias.length}');
+                                  log('Estado de conexion connctionState:$snapshot.connectionState');
 
                                   if (snapshot.connectionState ==
-                                      ConnectionState.done) {
+                                          ConnectionState.done &&
+                                      listCategorias.isNotEmpty) {
                                     return Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           16, 16, 16, 0),
@@ -287,7 +351,6 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                     log('Error de conexion: ${snapshot.error}');
                                     return Container();
                                   }
-                                  print(snapshot.connectionState);
                                 }),
                               ),
                             ],
@@ -296,7 +359,6 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                       ],
                     ),
                   ),
-                  
                 ],
               ),
             );
@@ -306,11 +368,8 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
     );
   }
 
-
- 
-
   Future<List<Categoria>> cargarCategorias() async {
-    listCategorias = await categoriaController.getCategorias();
+    listCategorias = await categoriaController.getCategorias(busquedaCategoria);
     for (var element in listCategorias) {
       print('Lista categoria nombre: + ${element.nombre}');
       print('Lista categoria url: ${element.urlImagen}');
@@ -321,13 +380,12 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
 
 Widget itemCategoria(
     BuildContext context, String? nombre, String? url, constraints) {
-  log("Dibijando item categoria");
+  log("Dibujando item categoria");
   return GestureDetector(
     onTap: () {
       context.pushNamed(
-            'listaActivosPage',
-            
-          );
+        'listaActivosPage',
+      );
     },
     child: Padding(
       padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
@@ -340,9 +398,9 @@ Widget itemCategoria(
           maxHeight: 10,
         ),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: FlutterFlowTheme.of(context).secondaryBackground,
           boxShadow: [
-            BoxShadow(
+            const BoxShadow(
               blurRadius: 4,
               color: Color(0x230E151B),
               offset: Offset(0, 2),
@@ -362,7 +420,7 @@ Widget itemCategoria(
                 child: Image.network(
                   url!,
                   width: double.infinity,
-                  height: defTamanoImagen(constraints), 
+                  height: defTamanoImagen(constraints),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -388,7 +446,6 @@ Widget itemCategoria(
                         fontFamily: 'Outfit',
                         color: Color(0xFF57636C),
                         fontSize: 12,
-                        
                         fontWeight: FontWeight.normal,
                         useGoogleFonts: GoogleFonts.asMap().containsKey(
                             FlutterFlowTheme.of(context).bodyText2Family),
@@ -404,38 +461,39 @@ Widget itemCategoria(
 }
 
 int defCantidadColumnas(screenSize) {
-  if (screenSize > 440 && screenSize<1057) {
+  if (screenSize > 440 && screenSize < 1057) {
     return 2;
-  } else if (screenSize >= 1057 && screenSize<1240) {
+  } else if (screenSize >= 1057 && screenSize < 1240) {
     return 3;
-  } else if (screenSize >= 1240 && screenSize<1500) {
+  } else if (screenSize >= 1240 && screenSize < 1500) {
     return 4;
-  }else if(screenSize >= 1500 && screenSize<1840) {
+  } else if (screenSize >= 1500 && screenSize < 1840) {
     return 5;
-  }else if (screenSize >= 1840) {
+  } else if (screenSize >= 1840) {
     return 7;
-  }else{
+  } else {
     return 1;
   }
 }
 
 double? defTamanoImagen(screenSize) {
-  if (screenSize > 440 && screenSize<640) {
+  if (screenSize > 440 && screenSize < 640) {
     return 82;
-  }else if (screenSize >= 640 && screenSize<1057) {
+  } else if (screenSize >= 640 && screenSize < 1057) {
     return 180;
-  }else if (screenSize >= 1057 && screenSize<1240) {
+  } else if (screenSize >= 1057 && screenSize < 1240) {
     return 170;
-  }else if (screenSize >= 1240 && screenSize<1370) {
+  } else if (screenSize >= 1240 && screenSize < 1370) {
     return 140;
-  }else if (screenSize >= 1370 && screenSize<1840) {
+  } else if (screenSize >= 1370 && screenSize < 1840) {
     return 135;
-  }else if (screenSize >= 1840) {
+  } else if (screenSize >= 1840) {
     return 110;
-  }else{
+  } else {
     return 180;
   }
 }
 
- bool esEscritorio(BuildContext context) {return responsiveVisibility(context: context,desktop: true);
+bool esEscritorio(BuildContext context) {
+  return responsiveVisibility(context: context, desktop: true);
 }
