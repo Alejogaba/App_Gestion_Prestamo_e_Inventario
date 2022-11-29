@@ -64,7 +64,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
             pinned: false,
             floating: true,
             snap: false,
-            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+            backgroundColor: FlutterFlowTheme.of(context).primaryColor,
             iconTheme:
                 IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
             automaticallyImplyLeading: false,

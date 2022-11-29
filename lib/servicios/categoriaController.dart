@@ -44,6 +44,21 @@ class CategoriaController {
     }
   }
 
+    Future<List<Categoria>> getCategoriasbyName(nombre) async {
+    try {
+      List<Categoria> listaCategoria = [];
+      final data = await client.from('CATEGORIAS').select('*').eq('nombre', nombre) as List<dynamic>;
+      print('Datos: $data');
+      return (data).map((e) => Categoria.fromMap(e)).toList();
+    } on PostgrestException catch (error) {
+      log(error.message);
+      return [];
+    } catch (error) {
+      log('Error al cargar categorias: $error');
+      return [];
+    }
+  }
+
   Categoria toNote(Map<dynamic, dynamic> result) {
     return Categoria(
       result['NOMBRE'],
