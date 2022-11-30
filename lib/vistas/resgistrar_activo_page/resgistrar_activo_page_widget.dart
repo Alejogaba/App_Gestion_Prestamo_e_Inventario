@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'dart:io';
 import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../entidades/categoria.dart';
@@ -228,8 +229,14 @@ class _ResgistrarActivoPageWidgetState
                         color: FlutterFlowTheme.of(context).primaryText,
                         size: 30,
                       ),
-                      onPressed: () {
-                        print('IconButton pressed ...');
+                      onPressed: () async {
+                        String res = await FlutterBarcodeScanner.scanBarcode(
+                            '#C62828', // scanning line color
+                            'Cancel', // cancel button text
+                            true, // whether to show the flash icon
+                            ScanMode.BARCODE);
+                        textControllerSerial!.text =
+                            res.trim().replaceAll(".", "");
                       },
                     ),
                   ],
@@ -882,7 +889,8 @@ class _ResgistrarActivoPageWidgetState
   }
 
   Future<void> pickFile() async {
-    FilePickerResult? pickedFile = await FilePicker.platform.pickFiles(type: FileType.image);
+    FilePickerResult? pickedFile =
+        await FilePicker.platform.pickFiles(type: FileType.image);
     setState(() {
       if (pickedFile != null) {
         File imagefile = File(pickedFile.files.single.path!);
@@ -895,7 +903,8 @@ class _ResgistrarActivoPageWidgetState
 
   Future pickImageDesktop() async {
     print("starting get image");
-    final FilePickerResult? pickedFile = await FilePicker.platform.pickFiles(type: FileType.image)                              ;
+    final FilePickerResult? pickedFile =
+        await FilePicker.platform.pickFiles(type: FileType.image);
     //final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     print("getting image Desktop.....");
     setState(() {
