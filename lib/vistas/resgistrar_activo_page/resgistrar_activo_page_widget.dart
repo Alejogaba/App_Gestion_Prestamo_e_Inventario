@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io' show Platform;
 import 'dart:io';
 import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
+import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -49,6 +50,8 @@ class _ResgistrarActivoPageWidgetState
   String? urlImagen;
   final ImagePicker picker = ImagePicker();
   late String result;
+  final _formKey = GlobalKey<FormState>();
+  bool _loading = false;
 
   @override
   void initState() {
@@ -92,7 +95,17 @@ class _ResgistrarActivoPageWidgetState
             size: 30,
           ),
           onPressed: () {
-            print('IconButton pressed ...');
+            if (_formKey.currentState!.validate()) {
+              _loading = true;
+              try {
+                if (imageFile != null) {
+                  StorageController storageController = StorageController();
+                  storageController.subirImagen(context, imageFile,imageFile!.path.toString(),textControllerSerial!.text);
+                }
+              } catch (e) {
+                log(e.toString());
+              }
+            }
           },
         ),
       ),
@@ -140,6 +153,12 @@ class _ResgistrarActivoPageWidgetState
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                         child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'No deje este campo vacio';
+                            }
+                            return null;
+                          },
                           controller: textControllerSerial,
                           obscureText: false,
                           decoration: InputDecoration(
@@ -344,6 +363,12 @@ class _ResgistrarActivoPageWidgetState
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                         child: TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'No deje este campo vacio';
+                            }
+                            return null;
+                          },
                           controller: textControllerNombre,
                           obscureText: false,
                           decoration: InputDecoration(
@@ -882,7 +907,8 @@ class _ResgistrarActivoPageWidgetState
   }
 
   Future<void> pickFile() async {
-    FilePickerResult? pickedFile = await FilePicker.platform.pickFiles(type: FileType.image);
+    FilePickerResult? pickedFile =
+        await FilePicker.platform.pickFiles(type: FileType.image);
     setState(() {
       if (pickedFile != null) {
         File imagefile = File(pickedFile.files.single.path!);
@@ -895,7 +921,8 @@ class _ResgistrarActivoPageWidgetState
 
   Future pickImageDesktop() async {
     print("starting get image");
-    final FilePickerResult? pickedFile = await FilePicker.platform.pickFiles(type: FileType.image)                              ;
+    final FilePickerResult? pickedFile =
+        await FilePicker.platform.pickFiles(type: FileType.image);
     //final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     print("getting image Desktop.....");
     setState(() {
