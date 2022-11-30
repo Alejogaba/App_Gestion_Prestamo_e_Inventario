@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 class FlutterFlowDropDown<T> extends StatefulWidget {
-  const FlutterFlowDropDown( {
+  const FlutterFlowDropDown({
     this.initialOption,
     this.hintText,
     required this.options,
@@ -18,6 +18,7 @@ class FlutterFlowDropDown<T> extends StatefulWidget {
     required this.borderRadius,
     required this.borderColor,
     required this.margin,
+    required this.value,
     this.hidesUnderline = false,
     this.disabled = false,
   });
@@ -39,6 +40,7 @@ class FlutterFlowDropDown<T> extends StatefulWidget {
   final EdgeInsetsGeometry margin;
   final bool hidesUnderline;
   final bool disabled;
+  final T? value;
 
   @override
   State<FlutterFlowDropDown<T>> createState() => _FlutterFlowDropDownState<T>();
@@ -56,7 +58,7 @@ class _FlutterFlowDropDownState<T> extends State<FlutterFlowDropDown<T>> {
   @override
   Widget build(BuildContext context) {
     final dropdownWidget = DropdownButton<T>(
-      value: widget.options.contains(dropDownValue) ? dropDownValue : null,
+      value: widget.value,
       hint: widget.hintText != null
           ? Text(widget.hintText!, style: widget.textStyle)
           : null,

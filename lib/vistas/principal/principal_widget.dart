@@ -32,7 +32,6 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   CategoriaController categoriaController = CategoriaController();
   List<Categoria> listCategorias = [];
   String busquedaCategoria = '';
-  
 
   @override
   void initState() {
@@ -61,63 +60,62 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
           ),
         ),
       ),
-      floatingActionButton: 
-      Padding(
+      floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 50.0),
-        child: SpeedDial( //Speed dial menu
-        //margin bottom
-    icon: Icons.menu, //icon on Floating action button
-    activeIcon: Icons.close, //icon when menu is expanded on button
-    backgroundColor: FlutterFlowTheme.of(context).primaryColor, //background color of button
-    foregroundColor: Colors.white, //font color, icon color in button
-    activeBackgroundColor: FlutterFlowTheme.of(context).primaryColor, //background color when menu is expanded
-    activeForegroundColor: Colors.white,
-    buttonSize: const Size(56.0,56), //button size
-    visible: true,
-    closeManually: false,
-    curve: Curves.bounceIn,
-    overlayColor: Colors.black,
-    overlayOpacity: 0.5,
-    onOpen: () => print('OPENING DIAL'), // action when menu opens
-    onClose: () => print('DIAL CLOSED'), //action when menu closes
+        child: SpeedDial(
+          //Speed dial menu
+          //margin bottom
+          icon: Icons.menu, //icon on Floating action button
+          activeIcon: Icons.close, //icon when menu is expanded on button
+          backgroundColor: FlutterFlowTheme.of(context)
+              .primaryColor, //background color of button
+          foregroundColor: Colors.white, //font color, icon color in button
+          activeBackgroundColor: FlutterFlowTheme.of(context)
+              .primaryColor, //background color when menu is expanded
+          activeForegroundColor: Colors.white,
+          buttonSize: const Size(56.0, 56), //button size
+          visible: true,
+          closeManually: false,
+          curve: Curves.bounceIn,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+          onOpen: () => print('OPENING DIAL'), // action when menu opens
+          onClose: () => print('DIAL CLOSED'), //action when menu closes
 
-    elevation: 8.0, //shadow elevation of button
-    shape: CircleBorder(), //shape of button
-    
-    children: [
-        SpeedDialChild( //speed dial child
-          child: Icon(FontAwesomeIcons.barcode),
-          backgroundColor: Color.fromARGB(255, 7, 133, 36),
-          foregroundColor: Colors.white,
-          label: 'Buscar por código de barras',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => print('FIRST CHILD'),
-     
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.add),
-          backgroundColor: Color.fromARGB(255, 7, 133, 107),
-          foregroundColor: Colors.white,
-          label: 'Registrar nuevo activo',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => context.pushNamed('registraractivopage'),
-         
-        ),
-        SpeedDialChild(
-          child: Icon(Icons.category_rounded),
-          foregroundColor: Colors.white,
-          backgroundColor: Color.fromARGB(255, 6, 113, 122),
-          label: 'Crear nueva categoria',
-          labelStyle: TextStyle(fontSize: 18.0),
-          onTap: () => context.pushNamed('registrarcategoriapage'),
-          
-        ),
+          elevation: 8.0, //shadow elevation of button
+          shape: CircleBorder(), //shape of button
 
-        //add more menu item childs here
-    ],
-  ),
+          children: [
+            SpeedDialChild(
+              //speed dial child
+              child: Icon(FontAwesomeIcons.barcode),
+              backgroundColor: Color.fromARGB(255, 7, 133, 36),
+              foregroundColor: Colors.white,
+              label: 'Buscar por código de barras',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => print('FIRST CHILD'),
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.add),
+              backgroundColor: Color.fromARGB(255, 7, 133, 107),
+              foregroundColor: Colors.white,
+              label: 'Registrar nuevo activo',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => context.pushNamed('additem'),
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.category_rounded),
+              foregroundColor: Colors.white,
+              backgroundColor: Color.fromARGB(255, 6, 113, 122),
+              label: 'Crear nueva categoria',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => context.pushNamed('registrarcategoriapage'),
+            ),
+
+            //add more menu item childs here
+          ],
+        ),
       ),
-     
       body: NestedScrollView(
         headerSliverBuilder: (context, _) => [
           SliverAppBar(

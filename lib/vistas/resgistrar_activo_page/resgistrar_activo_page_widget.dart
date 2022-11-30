@@ -21,12 +21,12 @@ class ResgistrarActivoPageWidget extends StatefulWidget {
 
 class _ResgistrarActivoPageWidgetState
     extends State<ResgistrarActivoPageWidget> {
-  String? dropDownValue1;
-  TextEditingController? textController1;
-  TextEditingController? textController2;
-  TextEditingController? textController3;
+  String? dropDownValueEstadoActivo;
+  TextEditingController? textControllerSerial;
+  TextEditingController? textControllerN_inventario;
+  TextEditingController? textControllerNombre;
   TextEditingController? textFieldDescripcionController;
-  String? dropDownValue2;
+  String? dropDownValueCategoria;
   int? countControllerValue;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List<Categoria> listCategorias = [];
@@ -39,18 +39,18 @@ class _ResgistrarActivoPageWidgetState
   @override
   void initState() {
     super.initState();
-    textController1 = TextEditingController();
-    textController2 = TextEditingController();
-    textController3 = TextEditingController();
+    textControllerSerial = TextEditingController();
+    textControllerN_inventario = TextEditingController();
+    textControllerNombre = TextEditingController();
     textFieldDescripcionController = TextEditingController();
     cargarCategorias();
   }
 
   @override
   void dispose() {
-    textController1?.dispose();
-    textController2?.dispose();
-    textController3?.dispose();
+    textControllerSerial?.dispose();
+    textControllerN_inventario?.dispose();
+    textControllerNombre?.dispose();
     textFieldDescripcionController?.dispose();
     super.dispose();
   }
@@ -125,7 +125,7 @@ class _ResgistrarActivoPageWidgetState
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                         child: TextFormField(
-                          controller: textController1,
+                          controller: textControllerSerial,
                           obscureText: false,
                           decoration: InputDecoration(
                             labelText: 'Número serial*',
@@ -229,7 +229,7 @@ class _ResgistrarActivoPageWidgetState
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
                         child: TextFormField(
-                          controller: textController2,
+                          controller: textControllerN_inventario,
                           obscureText: false,
                           decoration: InputDecoration(
                             labelText: 'Número de inventario',
@@ -329,7 +329,7 @@ class _ResgistrarActivoPageWidgetState
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                         child: TextFormField(
-                          controller: textController3,
+                          controller: textControllerNombre,
                           obscureText: false,
                           decoration: InputDecoration(
                             labelText: 'Nombre*',
@@ -590,15 +590,14 @@ class _ResgistrarActivoPageWidgetState
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 10),
                         child: FlutterFlowDropDown<String>(
+                          value: dropDownValueEstadoActivo,
                           options: List.generate(
-                              listCategorias.length,
+                              listEstados.length,
                               (index) => DropdownMenuItem(
-                                  value: listCategorias[index].nombre,
-                                  child: Text(listCategorias[index]
-                                      .nombre
-                                      .toString()))),
+                                  value: listEstados[index],
+                                  child: Text(listEstados[index]))),
                           onChanged: (val) =>
-                              setState(() => dropDownValue1 = val),
+                              setState(() => dropDownValueEstadoActivo = val),
                           width: MediaQuery.of(context).size.width - 30,
                           height: 50,
                           textStyle: FlutterFlowTheme.of(context)
@@ -611,7 +610,7 @@ class _ResgistrarActivoPageWidgetState
                                     FlutterFlowTheme.of(context)
                                         .bodyText1Family),
                               ),
-                          hintText: 'Categoría*',
+                          hintText: 'Estado del activo*',
                           fillColor:
                               FlutterFlowTheme.of(context).primaryBackground,
                           elevation: 2,
@@ -645,16 +644,26 @@ class _ResgistrarActivoPageWidgetState
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 10),
                         child: FutureBuilder(
                           future: cargarCategorias(),
-                          builder: (BuildContext context,
-                               snapshot) {
+                          builder: (BuildContext context, snapshot) {
                             return FlutterFlowDropDown<String>(
+                              value: dropDownValueCategoria,
                               options: (snapshot.connectionState ==
                                           ConnectionState.done &&
-                                      listCategorias.isNotEmpty) ? List.generate(snapshot.data!.length,
-        (index) => DropdownMenuItem(
-            value: snapshot.data![index].nombre, child: Text(snapshot.data![index].nombre.toString()))):,
+                                      listCategorias.isNotEmpty)
+                                  ? List.generate(
+                                      snapshot.data!.length,
+                                      (index) => DropdownMenuItem(
+                                          value: snapshot.data![index].nombre,
+                                          child: Text(snapshot
+                                              .data![index].nombre
+                                              .toString())))
+                                  : List.generate(
+                                      0,
+                                      (index) => DropdownMenuItem(
+                                          value: listEstados[index],
+                                          child: Text(listEstados[index]))),
                               onChanged: (val) =>
-                                  setState(() => dropDownValue2 = val),
+                                  setState(() => dropDownValueCategoria = val),
                               width: MediaQuery.of(context).size.width - 30,
                               height: 50,
                               textStyle: FlutterFlowTheme.of(context)
@@ -668,7 +677,7 @@ class _ResgistrarActivoPageWidgetState
                                             FlutterFlowTheme.of(context)
                                                 .bodyText1Family),
                                   ),
-                              hintText: 'Estado del activo*',
+                              hintText: 'Categoria*',
                               fillColor: FlutterFlowTheme.of(context)
                                   .primaryBackground,
                               elevation: 2,
@@ -796,4 +805,6 @@ class _ResgistrarActivoPageWidgetState
     }
     return Future.value(listCategorias);
   }
+
+  
 }

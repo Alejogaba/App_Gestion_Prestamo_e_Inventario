@@ -14,15 +14,17 @@ const _redirectUri = 'https://accounts.google.com/o/oauth2/auth';
 const _googleClientId =
     '199131897060-0p2gu71h9ap9avuecpp6bj7bspo4icqp.apps.googleusercontent.com';
 
-class CategoriaController {
+class ActivoController {
   Utilidades utilidades = Utilidades();
   final client =
       SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
 
-  Future<void> addCategoria(nombre, urlImagen) async {
+  Future<void> addActivo(idSerial,numInventario,nombre,urlImagen,estado,categoria) async {
     final data = await client
-        .from('categorias')
-        .insert({'nombre': nombre, 'url_imagen': urlImagen}).then(
+        .from('ACTIVOS')
+        .insert({'ID_SERIAL': idSerial,'NUM_ACTIVO': numInventario,
+        'NOMBRE': nombre, 'URL_IMAGEN': urlImagen,'ESTADO': estado,
+        'NOMBRE_CATEGORIA': categoria,}).then(
             (value) => log('Nueva categoria registrada: $value'));
   }
 
