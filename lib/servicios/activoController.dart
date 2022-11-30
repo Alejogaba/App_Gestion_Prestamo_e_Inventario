@@ -19,13 +19,23 @@ class ActivoController {
   final client =
       SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
 
-  Future<void> addActivo(idSerial,numInventario,nombre,urlImagen,estado,categoria) async {
-    final data = await client
-        .from('ACTIVOS')
-        .insert({'ID_SERIAL': idSerial,'NUM_ACTIVO': numInventario,
-        'NOMBRE': nombre, 'URL_IMAGEN': urlImagen,'ESTADO': estado,
-        'NOMBRE_CATEGORIA': categoria,}).then(
-            (value) => log('Nueva categoria registrada: $value'));
+  Future<void> addActivo(
+      idSerial, numInventario, nombre, urlImagen, estado, categoria) async {
+    try {
+      await client.from('ACTIVOS').insert({
+        'ID_SERIAL': idSerial,
+        'NUM_ACTIVO': numInventario,
+        'NOMBRE': nombre,
+        'URL_IMAGEN': urlImagen,
+        'ESTADO': estado,
+        'NOMBRE_CATEGORIA': categoria,
+      }).then((value) => log('Nueva categoria registrada: $value'));
+      log("Registrado con exito");
+    } on Exception catch (e) {
+      log(e.toString());
+    }catch(e){
+      log(e.toString());
+    }
   }
 
   Future<List<Categoria>> getCategorias(String? nombre) async {
