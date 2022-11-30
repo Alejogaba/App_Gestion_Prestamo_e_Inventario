@@ -1,4 +1,9 @@
+import 'dart:developer';
+import 'dart:io' show Platform;
+import 'dart:io';
 import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../entidades/categoria.dart';
 import '../flutter_flow/flutter_flow_count_controller.dart';
@@ -10,6 +15,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:google_ml_kit/google_ml_kit.dart';
 
 class ResgistrarActivoPageWidget extends StatefulWidget {
   const ResgistrarActivoPageWidget({Key? key}) : super(key: key);
@@ -26,6 +34,7 @@ class _ResgistrarActivoPageWidgetState
   TextEditingController? textControllerN_inventario;
   TextEditingController? textControllerNombre;
   TextEditingController? textFieldDescripcionController;
+  TextEditingController? controladorimagenUrl;
   String? dropDownValueCategoria;
   int? countControllerValue;
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -35,6 +44,11 @@ class _ResgistrarActivoPageWidgetState
     'Regular: Activo con desperfectos o daños menores pero en perfecto estado funcional',
     'Malo: Activo en mal estado o dañado'
   ];
+  File? imageFile;
+  InputImage? inputImage;
+  String? urlImagen;
+  final ImagePicker picker = ImagePicker();
+  late String result;
 
   @override
   void initState() {
@@ -43,6 +57,7 @@ class _ResgistrarActivoPageWidgetState
     textControllerN_inventario = TextEditingController();
     textControllerNombre = TextEditingController();
     textFieldDescripcionController = TextEditingController();
+
     cargarCategorias();
   }
 
@@ -449,12 +464,8 @@ class _ResgistrarActivoPageWidgetState
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                'https://picsum.photos/seed/560/600',
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              ),
+                              child:
+                                  imagenPerfil(context, urlImagen, imageFile),
                             ),
                           ],
                         ),
@@ -806,5 +817,169 @@ class _ResgistrarActivoPageWidgetState
     return Future.value(listCategorias);
   }
 
-  
+  Future pickImageFromGallery() async {
+    print("starting get image");
+    final XFile? pickedFile =
+        await picker.pickImage(source: ImageSource.gallery);
+    //final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    print("getting image.....");
+    setState(() {
+      if (pickedFile != null) {
+        print("file not null");
+        imageFile = File(pickedFile.path);
+        inputImage = InputImage.fromFilePath(pickedFile.path);
+        imageToText(inputImage);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future captureImageFromCamera() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    setState(() {
+      if (pickedFile != null) {
+        imageFile = File(pickedFile.path);
+        inputImage = InputImage.fromFilePath(pickedFile.path);
+        imageToText(inputImage);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future<void> _showChoiceDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Seleccione"),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  GestureDetector(
+                    child: Text("Galeria"),
+                    onTap: () {
+                      pickImageFromGallery();
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+                  GestureDetector(
+                    child: Text("Camara"),
+                    onTap: () {
+                      captureImageFromCamera();
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Future<void> pickFile() async {
+    FilePickerResult? pickedFile = await FilePicker.platform.pickFiles(type: FileType.image);
+    setState(() {
+      if (pickedFile != null) {
+        File imagefile = File(pickedFile.files.single.path!);
+        log('ruta archivo: ${imagefile.path}');
+      } else {
+        // User canceled the picker
+      }
+    });
+  }
+
+  Future pickImageDesktop() async {
+    print("starting get image");
+    final FilePickerResult? pickedFile = await FilePicker.platform.pickFiles(type: FileType.image)                              ;
+    //final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    print("getting image Desktop.....");
+    setState(() {
+      if (pickedFile != null) {
+        print("file not null");
+        imageFile = File(pickedFile.files.single.path!);
+        //inputImage = InputImage.fromFilePath(pickedFile.files.single.path!);
+        //imageToText(inputImage);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future imageToText(inputImage) async {
+    print("starting");
+    result = '';
+
+    final textDetector = GoogleMlKit.vision.textRecognizer();
+    print("loaded textDetector");
+    final RecognizedText recognisedText =
+        await textDetector.processImage(inputImage);
+    print("loaded recognisedText");
+
+    setState(() {
+      String text = recognisedText.text;
+      for (TextBlock block in recognisedText.blocks) {
+        //each block of text/section of text
+        final String text = block.text;
+        print("block of text: ");
+        print(text);
+        for (TextLine line in block.lines) {
+          //each line within a text block
+          for (TextElement element in line.elements) {
+            //each word within a line
+            result += element.text + " ";
+          }
+        }
+      }
+      result += "\n\n";
+    });
+  }
+
+  Widget imagenPerfil(BuildContext context, urlImagen, imageFile) {
+    return GestureDetector(
+      onTap: () async {
+        if (Platform.isAndroid || Platform.isIOS) {
+          await _showChoiceDialog(context);
+          setState(() {
+            controladorimagenUrl = null;
+          });
+        } else {
+          print('Escoger imagen');
+          await pickImageDesktop();
+          setState(() {
+            controladorimagenUrl = null;
+          });
+        }
+      },
+      child: Container(
+          width: 100,
+          height: 100,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: urlImagen != null && imageFile == null
+                  ? DecorationImage(
+                      fit: BoxFit.cover, image: NetworkImage(urlImagen))
+                  : null),
+          child: urlImagen == null || imageFile != null
+              ? _decideImageView(imageFile)
+              : null),
+    );
+  }
+
+  Widget _decideImageView(imageFile) {
+    if (imageFile == null) {
+      return Center(child: Text("No se ha seleccionado una imagen"));
+    } else {
+      return Image.file(
+        imageFile,
+        width: 100,
+        height: 100,
+        fit: BoxFit.cover,
+      );
+    }
+  }
 }

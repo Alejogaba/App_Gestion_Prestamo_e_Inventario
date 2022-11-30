@@ -20,15 +20,11 @@ import 'vistas/lista_prestamos_page/lista_prestamos_page_widget.dart';
 import 'vistas/principal/principal_widget.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
     url: constantes.SUPABASE_URL,
     anonKey: constantes.SUPABASE_ANNON_KEY,
   );
   WidgetsFlutterBinding.ensureInitialized();
-
-  WidgetsFlutterBinding.ensureInitialized();
-
   await FlutterFlowTheme.initialize();
 
   runApp(MyApp());

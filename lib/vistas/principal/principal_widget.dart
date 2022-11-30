@@ -101,7 +101,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
               foregroundColor: Colors.white,
               label: 'Registrar nuevo activo',
               labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => context.pushNamed('additem'),
+              onTap: () => context.pushNamed('registraractivopage'),
             ),
             SpeedDialChild(
               child: Icon(Icons.category_rounded),
