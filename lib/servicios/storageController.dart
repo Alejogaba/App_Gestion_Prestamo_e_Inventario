@@ -11,18 +11,33 @@ import '../../assets/constantes.dart' as constantes;
 import 'package:universal_io/io.dart';
 import 'package:translator/translator.dart';
 
-const _redirectUri = 'https://accounts.google.com/o/oauth2/auth';
-const _googleClientId =
-    '199131897060-0p2gu71h9ap9avuecpp6bj7bspo4icqp.apps.googleusercontent.com';
 
 class StorageController {
-  final client =
+  final supabase =
       SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
-
-  Future<void> subirImagen(filePath) async {
-    final file = File('path/to/file');
-    final fileBytes = await file.readAsBytes();
-    await client.storage.from('categorias').uploadBinary(filePath, fileBytes);
+  Future<String?> subirImagen(BuildContext context,filePath,imageFile,String? id_serial) async {
+    try {
+      final bytes = await imageFile.readAsBytes();
+      final fileExt = imageFile.path.split('.').last;
+      final fileName = '$id_serial.$fileExt';
+      final filePath = fileName;
+      await supabase.storage.from('ACTIVOS').uploadBinary(
+            filePath,
+            bytes,
+            fileOptions: FileOptions(contentType: imageFile.mimeType),
+          );
+      final imageUrlResponse = await supabase.storage
+          .from('ACTIVOS')
+          .createSignedUrl(filePath, 60 * 60 * 24 * 365 * 10);
+      return imageUrlResponse;
+    } on StorageException catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message)));
+    } catch (error) {
+        ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: 
+        Text("Ha ocurrido un error inesperado al momento de subir la imageFile")));
+    }
+    return null;
   }
 
   Future<String> traducir(String input) async {
