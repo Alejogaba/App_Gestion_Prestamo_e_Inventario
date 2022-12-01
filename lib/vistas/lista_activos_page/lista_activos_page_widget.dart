@@ -278,6 +278,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                               VerticalDirection.down,
                                           clipBehavior: Clip.none,
                                           children: [
+                                            
                                             StreamBuilder(
                                                 stream: activoController
                                                     .getActivosStream(),
@@ -293,19 +294,36 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                     return Container();
                                                   snapshot.data!
                                                       .forEach((data) {
+                                                    
                                                     listaActivos.add(
                                                         Activo.fromMap(data));
                                                     log('Añadiendo activo: ${Activo.fromMap(data).nombre}');
-                                                    Text(Activo.fromMap(data).nombre
+                                                    Text(Activo.fromMap(data)
+                                                        .nombre
                                                         .toString());
                                                   });
-                                                  return  Text(
-                                                      'Categoria. first.name');
+                                                  return Container();
                                                 }),
-                                            
                                           ],
                                         ),
                                       ),
+                                      Wrap(
+                                        spacing: 8,
+                                        runSpacing: 8,
+                                        alignment: WrapAlignment.start,
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.start,
+                                        direction: Axis.horizontal,
+                                        runAlignment: WrapAlignment.start,
+                                        verticalDirection:
+                                            VerticalDirection.down,
+                                        clipBehavior: Clip.none,
+                                        children: List.generate(
+                                            listaActivos.length, (index) {
+                                          return tarjetaActivo(context,
+                                              listaActivos[index].nombre);
+                                        }),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -324,108 +342,101 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   }
 }
 
-class tarjetaActivo extends StatelessWidget {
-  const tarjetaActivo({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.45,
-      height: 200,
-      decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).secondaryBackground,
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 4,
-            color: FlutterFlowTheme.of(context).boxShadow,
-            offset: Offset(0, 2),
-          )
+Widget tarjetaActivo(context, String? nombre) {
+  return Container(
+    width: MediaQuery.of(context).size.width * 0.45,
+    height: 200,
+    decoration: BoxDecoration(
+      color: FlutterFlowTheme.of(context).secondaryBackground,
+      boxShadow: [
+        BoxShadow(
+          blurRadius: 4,
+          color: FlutterFlowTheme.of(context).boxShadow,
+          offset: Offset(0, 2),
+        )
+      ],
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(
+        color: FlutterFlowTheme.of(context).secondaryText,
+      ),
+    ),
+    child: Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.network(
+              'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Zm9vZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+              width: double.infinity,
+              height: 115,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(5, 6, 0, 0),
+            child: Text(
+              nombre.toString(),
+              style: FlutterFlowTheme.of(context).subtitle1,
+            ),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+                child: FaIcon(
+                  FontAwesomeIcons.barcode,
+                  color: Colors.black,
+                  size: 15,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 1),
+                child: Text(
+                  'Category Name',
+                  style: FlutterFlowTheme.of(context).bodyText2.override(
+                        fontFamily:
+                            FlutterFlowTheme.of(context).bodyText2Family,
+                        color: FlutterFlowTheme.of(context).grayicon,
+                        useGoogleFonts: GoogleFonts.asMap().containsKey(
+                            FlutterFlowTheme.of(context).bodyText2Family),
+                      ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+                child: FaIcon(
+                  FontAwesomeIcons.solidCircle,
+                  color: Colors.black,
+                  size: 10,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 5),
+                child: Text(
+                  'Category Name',
+                  style: FlutterFlowTheme.of(context).bodyText2.override(
+                        fontFamily:
+                            FlutterFlowTheme.of(context).bodyText2Family,
+                        color: FlutterFlowTheme.of(context).grayicon,
+                        useGoogleFonts: GoogleFonts.asMap().containsKey(
+                            FlutterFlowTheme.of(context).bodyText2Family),
+                      ),
+                ),
+              ),
+            ],
+          ),
         ],
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: FlutterFlowTheme.of(context).secondaryText,
-        ),
       ),
-      child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Zm9vZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-                width: double.infinity,
-                height: 115,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(5, 6, 0, 0),
-              child: Text(
-                'Activo Name',
-                style: FlutterFlowTheme.of(context).subtitle1,
-              ),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-                  child: FaIcon(
-                    FontAwesomeIcons.barcode,
-                    color: Colors.black,
-                    size: 15,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 1),
-                  child: Text(
-                    'Category Name',
-                    style: FlutterFlowTheme.of(context).bodyText2.override(
-                          fontFamily:
-                              FlutterFlowTheme.of(context).bodyText2Family,
-                          color: FlutterFlowTheme.of(context).grayicon,
-                          useGoogleFonts: GoogleFonts.asMap().containsKey(
-                              FlutterFlowTheme.of(context).bodyText2Family),
-                        ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-                  child: FaIcon(
-                    FontAwesomeIcons.solidCircle,
-                    color: Colors.black,
-                    size: 10,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 5),
-                  child: Text(
-                    'Category Name',
-                    style: FlutterFlowTheme.of(context).bodyText2.override(
-                          fontFamily:
-                              FlutterFlowTheme.of(context).bodyText2Family,
-                          color: FlutterFlowTheme.of(context).grayicon,
-                          useGoogleFonts: GoogleFonts.asMap().containsKey(
-                              FlutterFlowTheme.of(context).bodyText2Family),
-                        ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+    ),
+  );
 }
