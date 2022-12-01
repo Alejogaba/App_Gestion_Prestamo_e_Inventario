@@ -22,11 +22,12 @@ import 'dart:async';
 import 'package:google_ml_kit/google_ml_kit.dart';
 
 class ResgistrarActivoPageWidget extends StatefulWidget {
-  const ResgistrarActivoPageWidget({Key? key}) : super(key: key);
+  final String? idSerial;
+  const ResgistrarActivoPageWidget({Key? key, this.idSerial}) : super(key: key);
 
   @override
   _ResgistrarActivoPageWidgetState createState() =>
-      _ResgistrarActivoPageWidgetState();
+      _ResgistrarActivoPageWidgetState(this.idSerial);
 }
 
 class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
@@ -58,16 +59,20 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   bool _dropdownErrorColor = false;
   CategoriaController categoriaController = CategoriaController();
   late final _listaCategorias = cargarCategorias();
+  String? idSerial;
+
+  _ResgistrarActivoPageWidgetState(this.idSerial);
 
   // ignore: prefer_final_fields
 
   @override
   void initState() {
     super.initState();
-    textControllerSerial = TextEditingController();
+    idSerial!=null ? textControllerSerial?.text=idSerial! : textControllerSerial = TextEditingController();
     textControllerN_inventario = TextEditingController();
     textControllerNombre = TextEditingController();
     textFieldDescripcionController = TextEditingController();
+    
   }
 
   @override

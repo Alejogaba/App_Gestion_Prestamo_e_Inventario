@@ -125,7 +125,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'ListaActivosPage',
               path: 'listaActivosPage',
-              builder: (context, params) => ListaActivosPageWidget(nombreCategoria: params.getParam( 'nombreCategoria', ParamType.String),),
+              builder: (context, params) => ListaActivosPageWidget(nombreCategoria: params.getParam( 'nombreCategoria', ParamType.String)),
             ),
             FFRoute(
               name: 'ListaPrestamosPage',
@@ -142,7 +142,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'RegistrarActivoPage',
               path: 'registrarActivoPage',
-              builder: (context, params) => ResgistrarActivoPageWidget(),
+              builder: (context, params) => ResgistrarActivoPageWidget(idSerial: params.getParam( 'idSerial', ParamType.String)),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),

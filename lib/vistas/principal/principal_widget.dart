@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../entidades/categoria.dart';
@@ -89,6 +90,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
           overlayOpacity: 0.5,
           onOpen: () => print('OPENING DIAL'), // action when menu opens
           onClose: () => print('DIAL CLOSED'), //action when menu closes
+          
 
           elevation: 8.0, //shadow elevation of button
           shape: CircleBorder(), //shape of button
@@ -101,7 +103,27 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
               foregroundColor: Colors.white,
               label: 'Buscar por código de barras',
               labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => print('FIRST CHILD'),
+              onTap: () async {
+                await FlutterBarcodeScanner.scanBarcode(
+                        '#C62828', // scanning line color
+                        'Cancel', // cancel button text
+                        true, // whether to show the flash icon
+                        ScanMode.BARCODE)
+                    .then((value) {
+                      if (value != null) {
+                  // ignore: use_build_context_synchronously
+                  context.pushNamed(
+                    'registraractivopage',
+                    queryParams: {
+                      'idSerial': serializeParam(
+                        value.trim().replaceAll(".", ""),
+                        ParamType.String,
+                      )
+                    },
+                  );
+                }  
+                });
+              },
             ),
             SpeedDialChild(
               child: Icon(Icons.add),
@@ -109,7 +131,15 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
               foregroundColor: Colors.white,
               label: 'Registrar nuevo activo',
               labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => context.pushNamed('registraractivopage'),
+              onTap: () => context.pushNamed(
+                    'registraractivopage',
+                    queryParams: {
+                      'idSerial': serializeParam(
+                        null,
+                        ParamType.String,
+                      )
+                    },
+                  ),
             ),
             SpeedDialChild(
               child: Icon(Icons.category_rounded),

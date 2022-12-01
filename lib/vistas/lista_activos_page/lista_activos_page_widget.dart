@@ -266,64 +266,50 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0, 12, 0, 44),
-                                        child: Wrap(
-                                          spacing: 8,
-                                          runSpacing: 8,
-                                          alignment: WrapAlignment.start,
-                                          crossAxisAlignment:
-                                              WrapCrossAlignment.start,
-                                          direction: Axis.horizontal,
-                                          runAlignment: WrapAlignment.start,
-                                          verticalDirection:
-                                              VerticalDirection.down,
-                                          clipBehavior: Clip.none,
-                                          children: [
-                                            
-                                            StreamBuilder(
-                                                stream: activoController
-                                                    .getActivosStream(),
-                                                builder: (context,
-                                                    AsyncSnapshot<
-                                                            List<
-                                                                Map<String,
-                                                                    dynamic>>>
-                                                        snapshot) {
-                                                  if (!snapshot.hasData ||
-                                                      snapshot.hasError ||
-                                                      snapshot.data!.isEmpty)
-                                                    return Container();
-                                                  snapshot.data!
-                                                      .forEach((data) {
-                                                    
-                                                    listaActivos.add(
-                                                        Activo.fromMap(data));
-                                                    log('Añadiendo activo: ${Activo.fromMap(data).nombre}');
-                                                    Text(Activo.fromMap(data)
-                                                        .nombre
-                                                        .toString());
-                                                  });
-                                                  return Container();
+                                        child: StreamBuilder(
+                                            stream: activoController
+                                                .getActivosStream(),
+                                            builder: (context,
+                                                AsyncSnapshot<
+                                                        List<
+                                                            Map<String,
+                                                                dynamic>>>
+                                                    snapshot) {
+                                              if (!snapshot.hasData ||
+                                                  snapshot.hasError ||
+                                                  snapshot.data!.isEmpty)
+                                                return Container();
+                                              snapshot.data!.forEach((data) {
+                                                listaActivos
+                                                    .add(Activo.fromMap(data));
+                                                log('Añadiendo activo: ${Activo.fromMap(data).nombre}');
+                                                Text(Activo.fromMap(data)
+                                                    .nombre
+                                                    .toString());
+                                              });
+                                              return Wrap(
+                                                spacing: MediaQuery.of(context).size.width * 0.05,
+                                                runSpacing: 10,
+                                                alignment: WrapAlignment.start,
+                                                crossAxisAlignment:
+                                                    WrapCrossAlignment.start,
+                                                direction: Axis.horizontal,
+                                                runAlignment:
+                                                    WrapAlignment.start,
+                                                verticalDirection:
+                                                    VerticalDirection.down,
+                                                clipBehavior: Clip.none,
+                                                children: List.generate(
+                                                    snapshot.data!.length,
+                                                    (index) {
+                                                  return tarjetaActivo(
+                                                      context,
+                                                      Activo.fromMap(snapshot.data![index]).nombre);
                                                 }),
-                                          ],
-                                        ),
+                                              );
+                                            }),
                                       ),
-                                      Wrap(
-                                        spacing: 8,
-                                        runSpacing: 8,
-                                        alignment: WrapAlignment.start,
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.start,
-                                        direction: Axis.horizontal,
-                                        runAlignment: WrapAlignment.start,
-                                        verticalDirection:
-                                            VerticalDirection.down,
-                                        clipBehavior: Clip.none,
-                                        children: List.generate(
-                                            listaActivos.length, (index) {
-                                          return tarjetaActivo(context,
-                                              listaActivos[index].nombre);
-                                        }),
-                                      )
+                                      
                                     ],
                                   ),
                                 ),
@@ -345,7 +331,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
 Widget tarjetaActivo(context, String? nombre) {
   return Container(
     width: MediaQuery.of(context).size.width * 0.45,
-    height: 200,
+    height: 220,
     decoration: BoxDecoration(
       color: FlutterFlowTheme.of(context).secondaryBackground,
       boxShadow: [
