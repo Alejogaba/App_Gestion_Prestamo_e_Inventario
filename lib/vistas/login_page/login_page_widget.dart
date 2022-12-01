@@ -74,7 +74,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                   width: 500,
                   height: 500,
                   decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).tertiaryColor,
+                    color: FlutterFlowTheme.of(context).whiteColor,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -1193,22 +1193,19 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
         context, controladorNombre!.text, controladorContrasena!.text);
     log('Funcion iniciar sesion');
 
-    if (controladorNombre.text.isEmpty || controladorNombre.text.isEmpty ) {
+    if (controladorNombre.text.isEmpty || controladorNombre.text.isEmpty) {
       log("No deje campos vacios");
-      setState(() {
-      });
+      setState(() {});
     } else {
       if (controladorNombre.text.contains(' ') ||
           controladorContrasena.text.contains(' ')) {
         log("No ingrese espacios en blanco");
-        setState(() {
-        });
+        setState(() {});
       } else {
         if (resultado.toString().contains("Error")) {
           log("No se pudo iniciar sesión");
           setState(() {
             cajaAdvertencia(context, resultado.toString());
-
           });
         } else {
           log(authService.usuarioDeFirebase(resultado)!.uid);

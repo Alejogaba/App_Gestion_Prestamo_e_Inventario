@@ -138,7 +138,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
               'Bienvenido',
               style: FlutterFlowTheme.of(context).bodyText1.override(
                     fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
-                    color: FlutterFlowTheme.of(context).tertiaryColor,
+                    color: FlutterFlowTheme.of(context).whiteColor,
                     fontSize: 28,
                     fontWeight: FontWeight.normal,
                     useGoogleFonts: GoogleFonts.asMap().containsKey(
@@ -153,7 +153,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                 buttonSize: 60,
                 icon: Icon(
                   Icons.notifications_none,
-                  color: FlutterFlowTheme.of(context).tertiaryColor,
+                  color: FlutterFlowTheme.of(context).whiteColor,
                   size: 30,
                 ),
                 onPressed: () {
@@ -471,9 +471,12 @@ Widget itemCategoria(
       log('Nombre Categoria: $nombre');
       context.pushNamed(
         'listaActivosPage',
-        params: <String, String>{
-          'nombreCategoria': nombre!,
-        },
+        queryParams: {
+          'nombreCategoria': serializeParam(
+            nombre!,
+            ParamType.String,
+          ),
+        }.withoutNulls,
       );
     },
     child: Padding(

@@ -68,7 +68,6 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     textControllerN_inventario = TextEditingController();
     textControllerNombre = TextEditingController();
     textFieldDescripcionController = TextEditingController();
-    
   }
 
   @override
@@ -100,7 +99,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
           buttonSize: 60,
           icon: FaIcon(
             _errorColor ? Icons.error : FontAwesomeIcons.solidSave,
-            color: FlutterFlowTheme.of(context).tertiaryColor,
+            color: FlutterFlowTheme.of(context).whiteColor,
             size: 30,
           ),
           onPressed: () async {
@@ -550,7 +549,6 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                           padding:
                               EdgeInsetsDirectional.fromSTEB(16, 0, 16, 14),
                           child: GridView(
-                            
                             padding: EdgeInsets.zero,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
@@ -560,7 +558,6 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                               childAspectRatio: 1,
                             ),
                             shrinkWrap: true,
-                            
                             scrollDirection: Axis.vertical,
                             children: [
                               ClipRRect(
@@ -1085,8 +1082,6 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
               : null),
     );
   }
-
-  
 
   Widget _decideImageView(imageFile) {
     if (imageFile == null) {

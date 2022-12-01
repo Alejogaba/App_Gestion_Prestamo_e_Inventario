@@ -39,7 +39,7 @@ abstract class FlutterFlowTheme {
 
   late Color primaryColor;
   late Color secondaryColor;
-  late Color tertiaryColor;
+  late Color whiteColor;
   late Color alternate;
   late Color primaryBackground;
   late Color secondaryBackground;
@@ -91,7 +91,7 @@ DeviceSize getDeviceSize(BuildContext context) {
 class LightModeTheme extends FlutterFlowTheme {
   late Color primaryColor = const Color(0xFF006D38);
   late Color secondaryColor = const Color(0xFFDBDBDB);
-  late Color tertiaryColor = const Color(0xFFFFFFFF);
+  late Color whiteColor = const Color(0xFFFFFFFF);
   late Color alternate = const Color(0xFF004121);
   late Color primaryBackground = const Color(0xFFF1F4F8);
   late Color secondaryBackground = const Color(0xFFFFFFFF);
@@ -296,7 +296,7 @@ class DesktopTypography extends Typography {
 class DarkModeTheme extends FlutterFlowTheme {
   late Color primaryColor = const Color(0xFF006D38);
   late Color secondaryColor = const Color(0xFF39D2C0);
-  late Color tertiaryColor = const Color(0xFFFFFFFF);
+  late Color whiteColor = const Color(0xFFFFFFFF);
   late Color alternate = const Color(0x94006D38);
   late Color primaryBackground = const Color(0xFF1D2429);
   late Color secondaryBackground = const Color(0xFF090F13);

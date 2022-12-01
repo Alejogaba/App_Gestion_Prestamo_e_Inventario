@@ -40,7 +40,7 @@ class _ListaFuncionariosPageWidgetState
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       floatingActionButton: FloatingActionButton(
-         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         child: FlutterFlowIconButton(
           borderColor: Colors.transparent,
           borderRadius: 30,
@@ -48,21 +48,18 @@ class _ListaFuncionariosPageWidgetState
           buttonSize: 60,
           icon: Icon(
             Icons.add,
-            color: FlutterFlowTheme.of(context).tertiaryColor,
+            color: FlutterFlowTheme.of(context).whiteColor,
             size: 30,
           ),
           onPressed: () {
             print('IconButton pressed ...');
           },
         ),
-      
         onPressed: () {
           print('FloatingActionButton pressed ...');
         },
-       
       ),
-      floatingActionButtonLocation:    
-      FloatingActionButtonLocation.miniEndFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       body: NestedScrollView(
         headerSliverBuilder: (context, _) => [
           SliverAppBar(
@@ -76,7 +73,7 @@ class _ListaFuncionariosPageWidgetState
               'Funcionarios',
               style: FlutterFlowTheme.of(context).bodyText1.override(
                     fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
-                    color: FlutterFlowTheme.of(context).tertiaryColor,
+                    color: FlutterFlowTheme.of(context).whiteColor,
                     fontSize: 28,
                     fontWeight: FontWeight.w600,
                     useGoogleFonts: GoogleFonts.asMap().containsKey(
@@ -91,7 +88,7 @@ class _ListaFuncionariosPageWidgetState
                 buttonSize: 60,
                 icon: Icon(
                   Icons.notifications_none,
-                  color: FlutterFlowTheme.of(context).tertiaryColor,
+                  color: FlutterFlowTheme.of(context).whiteColor,
                   size: 30,
                 ),
                 onPressed: () {
@@ -127,9 +124,8 @@ class _ListaFuncionariosPageWidgetState
                                   children: [
                                     Expanded(
                                       child: Padding(
-                                        padding:
-                                            EdgeInsetsDirectional.fromSTEB(
-                                                0, 12, 0, 0),
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 12, 0, 0),
                                         child: TextFormField(
                                           controller: textController,
                                           onChanged: (_) =>
@@ -140,15 +136,13 @@ class _ListaFuncionariosPageWidgetState
                                           ),
                                           obscureText: false,
                                           decoration: InputDecoration(
-                                            labelText:
-                                                'Buscar funcionario...',
+                                            labelText: 'Buscar funcionario...',
                                             labelStyle:
                                                 FlutterFlowTheme.of(context)
                                                     .bodyText2
                                                     .override(
                                                       fontFamily: 'Poppins',
-                                                      color:
-                                                          Color(0xFF57636C),
+                                                      color: Color(0xFF57636C),
                                                       fontSize: 18,
                                                       fontWeight:
                                                           FontWeight.normal,
@@ -161,9 +155,9 @@ class _ListaFuncionariosPageWidgetState
                                                     ),
                                             enabledBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
-                                                color: FlutterFlowTheme.of(
-                                                        context)
-                                                    .secondaryText,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
                                                 width: 1,
                                               ),
                                               borderRadius:
@@ -171,9 +165,9 @@ class _ListaFuncionariosPageWidgetState
                                             ),
                                             focusedBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
-                                                color: FlutterFlowTheme.of(
-                                                        context)
-                                                    .secondaryText,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
                                                 width: 1,
                                               ),
                                               borderRadius:
@@ -209,9 +203,9 @@ class _ListaFuncionariosPageWidgetState
                                               .bodyText1
                                               .override(
                                                 fontFamily: 'Poppins',
-                                                color: FlutterFlowTheme.of(
-                                                        context)
-                                                    .primaryText,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.normal,
                                                 useGoogleFonts: GoogleFonts
@@ -229,8 +223,8 @@ class _ListaFuncionariosPageWidgetState
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0, 12, 0, 0),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                                 child: ListView(
                                   padding: EdgeInsets.zero,
                                   primary: false,
@@ -257,9 +251,8 @@ class _ListaFuncionariosPageWidgetState
                                           borderRadius:
                                               BorderRadius.circular(8),
                                           border: Border.all(
-                                            color:
-                                                FlutterFlowTheme.of(context)
-                                                    .secondaryText,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
                                           ),
                                         ),
                                         child: Padding(
@@ -274,8 +267,7 @@ class _ListaFuncionariosPageWidgetState
                                                     .fromSTEB(0, 1, 1, 1),
                                                 child: ClipRRect(
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          6),
+                                                      BorderRadius.circular(6),
                                                   child: Image.network(
                                                     'https://la-jagua-de-ibirico.micolombiadigital.gov.co/sites/la-jagua-de-ibirico/content/files/000435/21702_garcia-guerra-yain-alfonso_1024x600.JPG',
                                                     width: 80,
@@ -286,10 +278,8 @@ class _ListaFuncionariosPageWidgetState
                                               ),
                                               Expanded(
                                                 child: Padding(
-                                                  padding:
-                                                      EdgeInsetsDirectional
-                                                          .fromSTEB(
-                                                              8, 2, 4, 0),
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(8, 2, 4, 0),
                                                   child: Column(
                                                     mainAxisSize:
                                                         MainAxisSize.max,
@@ -302,31 +292,32 @@ class _ListaFuncionariosPageWidgetState
                                                     children: [
                                                       Text(
                                                         'Nombre funcionario',
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .title3
-                                                            .override(
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              color: FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .primaryText,
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w500,
-                                                              useGoogleFonts: GoogleFonts
-                                                                      .asMap()
-                                                                  .containsKey(
-                                                                      FlutterFlowTheme.of(context)
-                                                                          .title3Family),
-                                                            ),
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .title3
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                  fontSize: 20,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  useGoogleFonts: GoogleFonts
+                                                                          .asMap()
+                                                                      .containsKey(
+                                                                          FlutterFlowTheme.of(context)
+                                                                              .title3Family),
+                                                                ),
                                                       ),
                                                       Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
-                                                                .fromSTEB(0,
-                                                                    3, 8, 0),
+                                                                .fromSTEB(
+                                                                    0, 3, 8, 0),
                                                         child: AutoSizeText(
                                                           'cargo',
                                                           textAlign:
@@ -355,8 +346,8 @@ class _ListaFuncionariosPageWidgetState
                                                       Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
-                                                                .fromSTEB(0,
-                                                                    4, 8, 0),
+                                                                .fromSTEB(
+                                                                    0, 4, 8, 0),
                                                         child: AutoSizeText(
                                                           'Area',
                                                           textAlign:
@@ -387,8 +378,7 @@ class _ListaFuncionariosPageWidgetState
                                                 ),
                                               ),
                                               Column(
-                                                mainAxisSize:
-                                                    MainAxisSize.max,
+                                                mainAxisSize: MainAxisSize.max,
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceBetween,
@@ -403,8 +393,7 @@ class _ListaFuncionariosPageWidgetState
                                                     child: Icon(
                                                       Icons
                                                           .chevron_right_rounded,
-                                                      color:
-                                                          Color(0xFF57636C),
+                                                      color: Color(0xFF57636C),
                                                       size: 24,
                                                     ),
                                                   ),
@@ -417,9 +406,8 @@ class _ListaFuncionariosPageWidgetState
                                     ),
                                     if (false)
                                       Padding(
-                                        padding:
-                                            EdgeInsetsDirectional.fromSTEB(
-                                                0, 0, 0, 24),
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 0, 24),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment:

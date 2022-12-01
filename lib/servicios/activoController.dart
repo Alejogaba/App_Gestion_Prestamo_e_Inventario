@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:app_gestion_prestamo_inventario/assets/utilidades.dart';
+import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
 import 'package:desktop_webview_auth/desktop_webview_auth.dart';
 import 'package:desktop_webview_auth/google.dart';
@@ -7,6 +9,7 @@ import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase/src/supabase_stream_builder.dart';
 import 'package:supabase/supabase.dart';
 import '../../assets/constantes.dart' as constantes;
 
@@ -16,13 +19,13 @@ const _googleClientId =
 
 class ActivoController {
   Utilidades utilidades = Utilidades();
-  final client =
+  final supabase =
       SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
 
   Future<void> addActivo(
       idSerial, numInventario, nombre, urlImagen, estado, categoria) async {
     try {
-      await client.from('ACTIVOS').insert({
+      await supabase.from('ACTIVOS').insert({
         'ID_SERIAL': idSerial,
         'NUM_ACTIVO': numInventario,
         'NOMBRE': nombre,
@@ -33,9 +36,34 @@ class ActivoController {
       log("Registrado con exito");
     } on Exception catch (e) {
       log(e.toString());
-    }catch(e){
+    } catch (e) {
       log(e.toString());
     }
+  }
+
+  StreamSubscription<SupabaseStreamEvent> getActivos() {
+    List<Activo> activoList = [];
+    final response = supabase
+        .from('ACTIVOS')
+        .stream(primaryKey: ['ID_SERIAL']).listen((data) {
+      for (var element in data) {
+        var a = Activo.fromMap(element);
+        activoList.add(a);
+        log('Mapeado: $a.nombre');
+        log('Elemento: ${element.toString()}');
+      }
+    });
+    return response;
+  }
+
+  Stream<SupabaseStreamEvent> getActivosStream() {
+    List<Activo> activoList = [];
+    final response = supabase
+        .from('ACTIVOS')
+        .stream(primaryKey: ['ID_SERIAL'])
+        .order('NOMBRE', ascending: true)
+        .execute();
+    return response;
   }
 
   Future<List<Categoria>> getCategorias(String? nombre) async {
@@ -43,7 +71,7 @@ class ActivoController {
       try {
         List<Categoria> listaCategoria = [];
         final data =
-            await client.from('CATEGORIAS').select('*') as List<dynamic>;
+            await supabase.from('CATEGORIAS').select('*') as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Categoria.fromMap(e)).toList();
       } on PostgrestException catch (error) {
@@ -56,7 +84,7 @@ class ActivoController {
     } else {
       try {
         List<Categoria> listaCategoria = [];
-        final data = await client.from('CATEGORIAS').select('*').textSearch(
+        final data = await supabase.from('CATEGORIAS').select('*').textSearch(
                 'NOMBRE', "'${Utilidades().capitalizeAllSentence(nombre)}'")
             as List<dynamic>;
         log('Datos: $data');

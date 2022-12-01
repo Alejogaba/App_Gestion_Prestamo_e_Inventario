@@ -40,7 +40,7 @@ class _RegistrarPrestamoPageWidgetState
           buttonSize: 60,
           icon: FaIcon(
             FontAwesomeIcons.solidSave,
-            color: FlutterFlowTheme.of(context).tertiaryColor,
+            color: FlutterFlowTheme.of(context).whiteColor,
             size: 30,
           ),
           onPressed: () {

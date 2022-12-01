@@ -1,4 +1,3 @@
-
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -129,7 +128,6 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                   );
                   return;
                 }
-                
               },
               text: 'Send Reset Link',
               options: FFButtonOptions(
@@ -138,7 +136,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                 color: FlutterFlowTheme.of(context).primaryColor,
                 textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                       fontFamily: 'Outfit',
-                      color: FlutterFlowTheme.of(context).tertiaryColor,
+                      color: FlutterFlowTheme.of(context).whiteColor,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),

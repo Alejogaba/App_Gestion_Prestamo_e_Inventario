@@ -414,7 +414,7 @@ class _AjustesPageWidgetState extends State<AjustesPageWidget>
                     color: Color(0xBFDF2424),
                     textStyle: FlutterFlowTheme.of(context).bodyText2.override(
                           fontFamily: 'Lexend Deca',
-                          color: FlutterFlowTheme.of(context).tertiaryColor,
+                          color: FlutterFlowTheme.of(context).whiteColor,
                           fontSize: 14,
                           fontWeight: FontWeight.normal,
                           useGoogleFonts: GoogleFonts.asMap().containsKey(

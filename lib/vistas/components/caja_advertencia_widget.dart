@@ -82,7 +82,7 @@ class _CajaAdvertenciaWidgetState extends State<CajaAdvertenciaWidget> {
                           .subtitle2
                           .override(
                             fontFamily: 'Poppins',
-                            color: FlutterFlowTheme.of(context).tertiaryColor,
+                            color: FlutterFlowTheme.of(context).whiteColor,
                             useGoogleFonts: GoogleFonts.asMap().containsKey(
                                 FlutterFlowTheme.of(context).subtitle2Family),
                           ),

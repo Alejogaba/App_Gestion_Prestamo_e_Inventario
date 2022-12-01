@@ -41,9 +41,7 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 50.0),
         child: FloatingActionButton(
-          onPressed: () {
-             
-          },
+          onPressed: () {},
           backgroundColor: FlutterFlowTheme.of(context).primaryColor,
           elevation: 123,
           child: FlutterFlowIconButton(
@@ -53,7 +51,7 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
             buttonSize: 60,
             icon: Icon(
               Icons.add,
-              color: FlutterFlowTheme.of(context).tertiaryColor,
+              color: FlutterFlowTheme.of(context).whiteColor,
               size: 30,
             ),
             onPressed: () {
@@ -71,7 +69,7 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
           'Préstamo de activos',
           style: FlutterFlowTheme.of(context).bodyText1.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
-                color: FlutterFlowTheme.of(context).tertiaryColor,
+                color: FlutterFlowTheme.of(context).whiteColor,
                 fontSize: 28,
                 fontWeight: FontWeight.w600,
                 useGoogleFonts: GoogleFonts.asMap()
@@ -86,12 +84,10 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
             buttonSize: 60,
             icon: Icon(
               Icons.notifications_none,
-              color: FlutterFlowTheme.of(context).tertiaryColor,
+              color: FlutterFlowTheme.of(context).whiteColor,
               size: 30,
             ),
-            onPressed: () {
-             
-            },
+            onPressed: () {},
           ),
         ],
         centerTitle: false,

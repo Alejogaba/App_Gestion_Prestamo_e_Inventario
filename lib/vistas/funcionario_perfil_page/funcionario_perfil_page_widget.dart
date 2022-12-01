@@ -85,7 +85,7 @@ class _FuncionarioPerfilPageWidgetState
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         icon: Icon(
           Icons.add_rounded,
-          color: FlutterFlowTheme.of(context).tertiaryColor,
+          color: FlutterFlowTheme.of(context).whiteColor,
           size: 24,
         ),
         elevation: 8,
@@ -93,7 +93,7 @@ class _FuncionarioPerfilPageWidgetState
           'Asignar activo',
           style: FlutterFlowTheme.of(context).bodyText1.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
-                color: FlutterFlowTheme.of(context).tertiaryColor,
+                color: FlutterFlowTheme.of(context).whiteColor,
                 useGoogleFonts: GoogleFonts.asMap()
                     .containsKey(FlutterFlowTheme.of(context).bodyText1Family),
               ),
@@ -343,7 +343,7 @@ class _FuncionarioPerfilPageWidgetState
                                                           fontFamily: 'Poppins',
                                                           color: FlutterFlowTheme
                                                                   .of(context)
-                                                              .tertiaryColor,
+                                                              .whiteColor,
                                                           fontSize: 22,
                                                           useGoogleFonts: GoogleFonts
                                                                   .asMap()
@@ -1028,7 +1028,8 @@ class _FuncionarioPerfilPageWidgetState
                               },
                               onLongPress: () async {
                                 HapticFeedback.mediumImpact();
-                                await actions.copyToClipboard(context,'texto a copiar');
+                                await actions.copyToClipboard(
+                                    context, 'texto a copiar');
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
@@ -1296,7 +1297,7 @@ class _FuncionarioPerfilPageWidgetState
                                                   Clip.antiAliasWithSaveLayer,
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .tertiaryColor,
+                                                      .whiteColor,
                                               elevation: 2,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:

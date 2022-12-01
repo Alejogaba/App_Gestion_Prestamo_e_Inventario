@@ -270,7 +270,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
           buttonSize: 60,
           icon: Icon(
             Icons.add,
-            color: FlutterFlowTheme.of(context).tertiaryColor,
+            color: FlutterFlowTheme.of(context).whiteColor,
             size: 30,
           ),
           onPressed: () {
@@ -373,8 +373,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                         .primaryText,
                                                 size: 16,
                                               ),
-                                              onPressed: () async {
-                                              },
+                                              onPressed: () async {},
                                             ),
                                           ),
                                         ),
@@ -873,7 +872,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   Clip.antiAliasWithSaveLayer,
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .tertiaryColor,
+                                                      .whiteColor,
                                               elevation: 2,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
