@@ -5,12 +5,15 @@ import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supabase/supabase.dart';
 import '../../assets/constantes.dart' as constantes;
 import 'package:universal_io/io.dart';
 import 'package:translator/translator.dart';
 import 'package:path/path.dart' as p;
+
+import '../flutter_flow/flutter_flow_theme.dart';
 
 class StorageController {
   final supabase =
@@ -36,21 +39,50 @@ class StorageController {
       log('Filename: $fileName');
       return imageUrlResponse;
     } on StorageException catch (error) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error.message)));
+      var errorTraducido = await traducir(error.message);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Error al subir imagen:$errorTraducido',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+            
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
       log(error.message);
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              "Ha ocurrido un error inesperado al momento de subir la imageFile")));
+      log(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "Ha ocurrido un error inesperado al momento de subir la imagen",
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      
       log(error.toString());
     }
     return null;
   }
 
   Future<String> traducir(String input) async {
+    try {
     final translator = GoogleTranslator();
-    var translation = await translator.translate(input, from: 'es', to: 'en');
+    var translation = await translator.translate(input, from: 'en', to: 'es');
     return translation.toString();
+    } catch (e) {
+      log(e.toString());
+      return "Ha ocurrido un error inesperado, revise su conexión a internet";
+    }
+    
   }
 }
