@@ -29,10 +29,11 @@ class StorageController {
             fileOptions: FileOptions(),
           );
 
-      "Se hizo una restructuracion de red en la zona financiera de tesoreria, esto debido a que manejan un rango de ip diferentes al resto del edificio necesario para el uso de algunos software financieros0"
       final imageUrlResponse = await supabase.storage
-          .from('ACTIVOS')
+          .from('activos')
           .createSignedUrl(filePath, 60 * 60 * 24 * 365 * 10);
+      log('resultado imagen: $imageUrlResponse');
+      log('Filename: $fileName');
       return imageUrlResponse;
     } on StorageException catch (error) {
       ScaffoldMessenger.of(context)

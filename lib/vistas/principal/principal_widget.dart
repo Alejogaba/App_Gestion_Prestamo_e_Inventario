@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'dart:developer';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../entidades/categoria.dart';
 import '../../servicios/categoriaController.dart';
@@ -30,13 +33,18 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   TextEditingController? searchController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   CategoriaController categoriaController = CategoriaController();
-  List<Categoria> listCategorias = [];
+  List<Categoria> listCategoriasLocal = [];
   String busquedaCategoria = '';
+  late final listaCategoriasOnline = cargarCategorias();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final prefs = SharedPreferences.getInstance();
+  bool local = false;
 
   @override
   void initState() {
     super.initState();
     searchController = TextEditingController();
+    _cargarlistaLocal();
   }
 
   @override
@@ -297,17 +305,18 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                 ),
                               ),
                               FutureBuilder<List<Categoria>>(
-                                future: cargarCategorias(),
+                                future: listaCategoriasOnline,
                                 builder: ((context, snapshot) {
                                   int i = 0;
                                   List<Widget> temp = [];
 
-                                  log('Cantidad items: ${listCategorias.length}');
                                   log('Estado de conexion connctionState:$snapshot.connectionState');
 
                                   if (snapshot.connectionState ==
                                           ConnectionState.done &&
-                                      listCategorias.isNotEmpty) {
+                                      snapshot.data!.length > 0) {
+                                    log('Cargando lista Online');
+                                    _guardarlistaLocal(snapshot.data);
                                     return Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           16, 16, 16, 0),
@@ -342,13 +351,66 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                         },
                                       ),
                                     );
+                                  } else if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    for (var element in listCategoriasLocal) {
+                                      print(
+                                          'Lista LOCAL categoria nombre: + ${element.nombre}');
+                                      print(
+                                          'Lista LOCAL categoria url: ${element.urlImagen}');
+                                    }
+                                    log('Usando cache local');
+
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          16, 16, 16, 0),
+                                      child: LayoutBuilder(
+                                        builder: (context, constraints) {
+                                          log(constraints.maxWidth.toString());
+                                          return GridView.builder(
+                                            shrinkWrap: true,
+                                            itemCount:
+                                                listCategoriasLocal.length,
+                                            itemBuilder: (context, index) {
+                                              var temp = itemCategoria(
+                                                  context,
+                                                  listCategoriasLocal[index]
+                                                      .nombre,
+                                                  listCategoriasLocal[index]
+                                                      .urlImagen,
+                                                  constraints.maxWidth);
+                                              return temp;
+                                            },
+                                            scrollDirection: Axis.vertical,
+                                            padding: EdgeInsets.zero,
+                                            gridDelegate:
+                                                // ignore: prefer_const_constructors
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount:
+                                                        defCantidadColumnas(
+                                                            constraints
+                                                                .maxWidth),
+                                                    mainAxisSpacing: 10,
+                                                    crossAxisSpacing: 10,
+                                                    childAspectRatio: 1.4),
+                                          );
+                                        },
+                                      ),
+                                    );
                                   } else if (snapshot.hasError) {
                                     log('Error: ${snapshot.error}');
                                     return Container();
                                   } else {
                                     log('Error de conexion: ${snapshot.error}');
-                                    return Container();
                                   }
+                                  for (var element in listCategoriasLocal) {
+                                    print(
+                                        'Lista LOCAL categoria nombre: + ${element.nombre}');
+                                    print(
+                                        'Lista LOCAL categoria url: ${element.urlImagen}');
+                                  }
+                                  log('Usando cache local');
+                                  return Container();
                                 }),
                               ),
                             ],
@@ -367,22 +429,51 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   }
 
   Future<List<Categoria>> cargarCategorias() async {
-    listCategorias = await categoriaController.getCategorias(busquedaCategoria);
-    for (var element in listCategorias) {
+    listCategoriasLocal =
+        await categoriaController.getCategorias(busquedaCategoria);
+    for (var element in listCategoriasLocal) {
       print('Lista categoria nombre: + ${element.nombre}');
       print('Lista categoria url: ${element.urlImagen}');
     }
-    return Future.value(listCategorias);
+    return Future.value(listCategoriasLocal);
+  }
+
+  Future<void> _guardarlistaLocal(List<Categoria>? listaOnline) async {
+    final SharedPreferences prefs = await _prefs;
+
+    if (listaOnline != null && listaOnline.isNotEmpty) {
+      var listCategoriasJson = json.encode(listaOnline
+          .map<Map<String, dynamic>>((categoria) => Categoria.toMap(categoria))
+          .toList());
+      await prefs.setString('listaCategorias', listCategoriasJson);
+      log('Codificando listaCategoriasJson');
+    }
+  }
+
+  Future<void> _cargarlistaLocal() async {
+    final SharedPreferences prefs = await _prefs;
+    final String? listaCategoriasJson = prefs.getString('listaCategorias');
+    if (listaCategoriasJson != null) {
+      setState(() {
+        log('Decodificando listaCategoriasJson');
+        listCategoriasLocal = Categoria.decode(listaCategoriasJson);
+      });
+    }
   }
 }
 
 Widget itemCategoria(
     BuildContext context, String? nombre, String? url, constraints) {
   log("Dibujando item categoria");
+
   return GestureDetector(
     onTap: () {
+      log('Nombre Categoria: $nombre');
       context.pushNamed(
         'listaActivosPage',
+        params: <String, String>{
+          'nombreCategoria': nombre!,
+        },
       );
     },
     child: Padding(
@@ -398,10 +489,10 @@ Widget itemCategoria(
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).secondaryBackground,
           boxShadow: [
-            const BoxShadow(
+            BoxShadow(
               blurRadius: 4,
-              color: Color(0x230E151B),
-              offset: Offset(0, 2),
+              color: FlutterFlowTheme.of(context).boxShadow,
+              offset: const Offset(0, 2),
             )
           ],
           borderRadius: BorderRadius.circular(12),
@@ -428,7 +519,7 @@ Widget itemCategoria(
                   nombre!,
                   style: FlutterFlowTheme.of(context).subtitle1.override(
                         fontFamily: 'Outfit',
-                        color: Color(0xFF14181B),
+                        color: FlutterFlowTheme.of(context).primaryText,
                         fontSize: 18,
                         fontWeight: FontWeight.normal,
                         useGoogleFonts: GoogleFonts.asMap().containsKey(
@@ -442,7 +533,7 @@ Widget itemCategoria(
                   'Category Name',
                   style: FlutterFlowTheme.of(context).bodyText2.override(
                         fontFamily: 'Outfit',
-                        color: Color(0xFF57636C),
+                        color: FlutterFlowTheme.of(context).grayicon,
                         fontSize: 12,
                         fontWeight: FontWeight.normal,
                         useGoogleFonts: GoogleFonts.asMap().containsKey(
@@ -490,6 +581,12 @@ double? defTamanoImagen(screenSize) {
   } else {
     return 180;
   }
+}
+
+Widget _loader(BuildContext context, String url) {
+  return const Center(
+    child: CircularProgressIndicator(),
+  );
 }
 
 bool esEscritorio(BuildContext context) {

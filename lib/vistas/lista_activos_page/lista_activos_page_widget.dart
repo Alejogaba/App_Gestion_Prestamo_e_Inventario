@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
+
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -10,21 +14,30 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ListaActivosPageWidget extends StatefulWidget {
-  const ListaActivosPageWidget({Key? key}) : super(key: key);
+  final String nombreCategoria;
+  const ListaActivosPageWidget({Key? key, required this.nombreCategoria})
+      : super(key: key);
 
   @override
-  _ListaActivosPageWidgetState createState() => _ListaActivosPageWidgetState();
+  // ignore: library_private_types_in_public_api
+  _ListaActivosPageWidgetState createState() =>
+      _ListaActivosPageWidgetState(this.nombreCategoria);
 }
 
 class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   TextEditingController? textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final String nombreCategoria;
   var id = '';
+  
+
+  _ListaActivosPageWidgetState(this.nombreCategoria);
 
   @override
   void initState() {
     super.initState();
     textController = TextEditingController();
+    log('Categoria:$nombreCategoria');
   }
 
   @override

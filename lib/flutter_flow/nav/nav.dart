@@ -125,7 +125,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'ListaActivosPage',
               path: 'listaActivosPage',
-              builder: (context, params) => ListaActivosPageWidget(),
+              builder: (context, params) => ListaActivosPageWidget(nombreCategoria: params.getParam('nombreCategoria', ParamType.String),),
             ),
             FFRoute(
               name: 'ListaPrestamosPage',

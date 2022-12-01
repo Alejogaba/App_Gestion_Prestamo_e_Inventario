@@ -29,8 +29,8 @@ class ResgistrarActivoPageWidget extends StatefulWidget {
       _ResgistrarActivoPageWidgetState();
 }
 
-class _ResgistrarActivoPageWidgetState
-    extends State<ResgistrarActivoPageWidget>  with SingleTickerProviderStateMixin {
+class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
+    with SingleTickerProviderStateMixin {
   EstadoActivo? dropDownValueEstadoActivo;
   TextEditingController? textControllerSerial;
   TextEditingController? textControllerN_inventario;
@@ -55,8 +55,12 @@ class _ResgistrarActivoPageWidgetState
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
   bool _errorColor = false;
+  bool _dropdownErrorColor = false;
+  CategoriaController categoriaController = CategoriaController();
+  late final _listaCategorias = cargarCategorias();
+
   // ignore: prefer_final_fields
- 
+
   @override
   void initState() {
     super.initState();
@@ -64,8 +68,7 @@ class _ResgistrarActivoPageWidgetState
     textControllerN_inventario = TextEditingController();
     textControllerNombre = TextEditingController();
     textFieldDescripcionController = TextEditingController();
-
-    cargarCategorias();
+    
   }
 
   @override
@@ -96,7 +99,7 @@ class _ResgistrarActivoPageWidgetState
           borderWidth: 1,
           buttonSize: 60,
           icon: FaIcon(
-            _loading ? FontAwesomeIcons.angular:FontAwesomeIcons.solidSave,
+            _errorColor ? Icons.error : FontAwesomeIcons.solidSave,
             color: FlutterFlowTheme.of(context).tertiaryColor,
             size: 30,
           ),
@@ -113,26 +116,57 @@ class _ResgistrarActivoPageWidgetState
                       imageFile!.path.toString(),
                       imageFile!,
                       textControllerSerial!.text);
-                }else{
                   ActivoController activoController = ActivoController();
-                await activoController.addActivo(
-                    textControllerSerial!.text,
-                    textControllerN_inventario!.text,
-                    textControllerNombre!.text,
-                    imagenUrl,
-                    dropDownValueEstadoActivo!.id,
-                    dropDownValueCategoria!);
-                _loading = false;
+                  await activoController.addActivo(
+                      textControllerSerial!.text,
+                      textControllerN_inventario!.text,
+                      textControllerNombre!.text,
+                      imagenUrl,
+                      dropDownValueEstadoActivo!.id,
+                      dropDownValueCategoria!);
+                  _loading = false;
+                } else {
+                  ActivoController activoController = ActivoController();
+                  await activoController.addActivo(
+                      textControllerSerial!.text,
+                      textControllerN_inventario!.text,
+                      textControllerNombre!.text,
+                      imagenUrl,
+                      dropDownValueEstadoActivo!.id,
+                      dropDownValueCategoria!);
+                  _loading = false;
                 }
-                
               } catch (e) {
                 log(e.toString());
-                _loading = false;
-                _errorColor = true;
+                setState(() {
+                  _errorColor = true;
+                });
                 Future.delayed(const Duration(milliseconds: 6000), () {
-                  _errorColor = false;
+                  setState(() {
+                    _errorColor = false;
+                  });
                 });
               }
+            } else if (dropDownValueCategoria == null) {
+              setState(() {
+                _errorColor = true;
+                _dropdownErrorColor = true;
+              });
+              Future.delayed(const Duration(milliseconds: 6000), () {
+                setState(() {
+                  _errorColor = false;
+                });
+              });
+            } else {
+              log('rojo');
+              setState(() {
+                _errorColor = true;
+              });
+              Future.delayed(const Duration(milliseconds: 6000), () {
+                setState(() {
+                  _errorColor = false;
+                });
+              });
             }
           },
         ),
@@ -193,29 +227,29 @@ class _ResgistrarActivoPageWidgetState
                             obscureText: false,
                             decoration: InputDecoration(
                               labelText: 'Número serial*',
-                              labelStyle: FlutterFlowTheme.of(context)
-                                  .title3
-                                  .override(
-                                    fontFamily:
-                                        FlutterFlowTheme.of(context).title3Family,
-                                    fontSize: 20,
-                                    useGoogleFonts: GoogleFonts.asMap()
-                                        .containsKey(FlutterFlowTheme.of(context)
-                                            .title3Family),
-                                  ),
+                              labelStyle:
+                                  FlutterFlowTheme.of(context).title3.override(
+                                        fontFamily: FlutterFlowTheme.of(context)
+                                            .title3Family,
+                                        fontSize: 20,
+                                        useGoogleFonts: GoogleFonts.asMap()
+                                            .containsKey(
+                                                FlutterFlowTheme.of(context)
+                                                    .title3Family),
+                                      ),
                               hintText: 'S/N',
-                              hintStyle: FlutterFlowTheme.of(context)
-                                  .title3
-                                  .override(
-                                    fontFamily:
-                                        FlutterFlowTheme.of(context).title3Family,
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    fontSize: 22,
-                                    useGoogleFonts: GoogleFonts.asMap()
-                                        .containsKey(FlutterFlowTheme.of(context)
-                                            .title3Family),
-                                  ),
+                              hintStyle:
+                                  FlutterFlowTheme.of(context).title3.override(
+                                        fontFamily: FlutterFlowTheme.of(context)
+                                            .title3Family,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                        fontSize: 22,
+                                        useGoogleFonts: GoogleFonts.asMap()
+                                            .containsKey(
+                                                FlutterFlowTheme.of(context)
+                                                    .title3Family),
+                                      ),
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
@@ -261,8 +295,9 @@ class _ResgistrarActivoPageWidgetState
                                   fontFamily:
                                       FlutterFlowTheme.of(context).title3Family,
                                   fontSize: 22,
-                                  useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                      FlutterFlowTheme.of(context).title3Family),
+                                  useGoogleFonts: GoogleFonts.asMap()
+                                      .containsKey(FlutterFlowTheme.of(context)
+                                          .title3Family),
                                 ),
                           ),
                         ),
@@ -303,29 +338,29 @@ class _ResgistrarActivoPageWidgetState
                             obscureText: false,
                             decoration: InputDecoration(
                               labelText: 'Número de inventario',
-                              labelStyle: FlutterFlowTheme.of(context)
-                                  .title3
-                                  .override(
-                                    fontFamily:
-                                        FlutterFlowTheme.of(context).title3Family,
-                                    fontSize: 20,
-                                    useGoogleFonts: GoogleFonts.asMap()
-                                        .containsKey(FlutterFlowTheme.of(context)
-                                            .title3Family),
-                                  ),
+                              labelStyle:
+                                  FlutterFlowTheme.of(context).title3.override(
+                                        fontFamily: FlutterFlowTheme.of(context)
+                                            .title3Family,
+                                        fontSize: 20,
+                                        useGoogleFonts: GoogleFonts.asMap()
+                                            .containsKey(
+                                                FlutterFlowTheme.of(context)
+                                                    .title3Family),
+                                      ),
                               hintText: '01234',
-                              hintStyle: FlutterFlowTheme.of(context)
-                                  .title3
-                                  .override(
-                                    fontFamily:
-                                        FlutterFlowTheme.of(context).title3Family,
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    fontSize: 22,
-                                    useGoogleFonts: GoogleFonts.asMap()
-                                        .containsKey(FlutterFlowTheme.of(context)
-                                            .title3Family),
-                                  ),
+                              hintStyle:
+                                  FlutterFlowTheme.of(context).title3.override(
+                                        fontFamily: FlutterFlowTheme.of(context)
+                                            .title3Family,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                        fontSize: 22,
+                                        useGoogleFonts: GoogleFonts.asMap()
+                                            .containsKey(
+                                                FlutterFlowTheme.of(context)
+                                                    .title3Family),
+                                      ),
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
@@ -376,8 +411,9 @@ class _ResgistrarActivoPageWidgetState
                                   fontFamily:
                                       FlutterFlowTheme.of(context).title3Family,
                                   fontSize: 22,
-                                  useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                      FlutterFlowTheme.of(context).title3Family),
+                                  useGoogleFonts: GoogleFonts.asMap()
+                                      .containsKey(FlutterFlowTheme.of(context)
+                                          .title3Family),
                                 ),
                           ),
                         ),
@@ -409,29 +445,29 @@ class _ResgistrarActivoPageWidgetState
                             obscureText: false,
                             decoration: InputDecoration(
                               labelText: 'Nombre*',
-                              labelStyle: FlutterFlowTheme.of(context)
-                                  .title3
-                                  .override(
-                                    fontFamily:
-                                        FlutterFlowTheme.of(context).title3Family,
-                                    fontSize: 20,
-                                    useGoogleFonts: GoogleFonts.asMap()
-                                        .containsKey(FlutterFlowTheme.of(context)
-                                            .title3Family),
-                                  ),
+                              labelStyle:
+                                  FlutterFlowTheme.of(context).title3.override(
+                                        fontFamily: FlutterFlowTheme.of(context)
+                                            .title3Family,
+                                        fontSize: 20,
+                                        useGoogleFonts: GoogleFonts.asMap()
+                                            .containsKey(
+                                                FlutterFlowTheme.of(context)
+                                                    .title3Family),
+                                      ),
                               hintText: 'Ej. Impresora MP125',
-                              hintStyle: FlutterFlowTheme.of(context)
-                                  .title3
-                                  .override(
-                                    fontFamily:
-                                        FlutterFlowTheme.of(context).title3Family,
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    fontSize: 22,
-                                    useGoogleFonts: GoogleFonts.asMap()
-                                        .containsKey(FlutterFlowTheme.of(context)
-                                            .title3Family),
-                                  ),
+                              hintStyle:
+                                  FlutterFlowTheme.of(context).title3.override(
+                                        fontFamily: FlutterFlowTheme.of(context)
+                                            .title3Family,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                        fontSize: 22,
+                                        useGoogleFonts: GoogleFonts.asMap()
+                                            .containsKey(
+                                                FlutterFlowTheme.of(context)
+                                                    .title3Family),
+                                      ),
                               enabledBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0x00000000),
@@ -477,8 +513,9 @@ class _ResgistrarActivoPageWidgetState
                                   fontFamily:
                                       FlutterFlowTheme.of(context).title3Family,
                                   fontSize: 22,
-                                  useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                      FlutterFlowTheme.of(context).title3Family),
+                                  useGoogleFonts: GoogleFonts.asMap()
+                                      .containsKey(FlutterFlowTheme.of(context)
+                                          .title3Family),
                                 ),
                           ),
                         ),
@@ -510,8 +547,10 @@ class _ResgistrarActivoPageWidgetState
                     children: [
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 14),
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(16, 0, 16, 14),
                           child: GridView(
+                            
                             padding: EdgeInsets.zero,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
@@ -521,6 +560,7 @@ class _ResgistrarActivoPageWidgetState
                               childAspectRatio: 1,
                             ),
                             shrinkWrap: true,
+                            
                             scrollDirection: Axis.vertical,
                             children: [
                               ClipRRect(
@@ -549,7 +589,8 @@ class _ResgistrarActivoPageWidgetState
                         child: Align(
                           alignment: AlignmentDirectional(0.05, 0),
                           child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                             child: TextFormField(
                               controller: textFieldDescripcionController,
                               obscureText: false,
@@ -568,7 +609,8 @@ class _ResgistrarActivoPageWidgetState
                                               FlutterFlowTheme.of(context)
                                                   .subtitle2Family),
                                     ),
-                                hintText: 'Ej. Impresora Laserjet MP125 marca HP',
+                                hintText:
+                                    'Ej. Impresora Laserjet MP125 marca HP',
                                 hintStyle: FlutterFlowTheme.of(context)
                                     .bodyText1
                                     .override(
@@ -628,12 +670,13 @@ class _ResgistrarActivoPageWidgetState
                                   .override(
                                     fontFamily: FlutterFlowTheme.of(context)
                                         .bodyText1Family,
-                                    color:
-                                        FlutterFlowTheme.of(context).primaryText,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
                                     fontSize: 22,
                                     useGoogleFonts: GoogleFonts.asMap()
-                                        .containsKey(FlutterFlowTheme.of(context)
-                                            .bodyText1Family),
+                                        .containsKey(
+                                            FlutterFlowTheme.of(context)
+                                                .bodyText1Family),
                                   ),
                               maxLines: 2,
                               minLines: 1,
@@ -681,11 +724,11 @@ class _ResgistrarActivoPageWidgetState
                                   fontFamily: FlutterFlowTheme.of(context)
                                       .bodyText1Family,
                                   fontSize: 18,
-                                  useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                      FlutterFlowTheme.of(context)
+                                  useGoogleFonts: GoogleFonts.asMap()
+                                      .containsKey(FlutterFlowTheme.of(context)
                                           .bodyText1Family),
                                 ),
-                            hintText: 'Estado del activo*',
+                            hintText: listEstados[0].descripcion,
                             fillColor:
                                 FlutterFlowTheme.of(context).primaryBackground,
                             elevation: 2,
@@ -693,7 +736,8 @@ class _ResgistrarActivoPageWidgetState
                                 FlutterFlowTheme.of(context).secondaryText,
                             borderWidth: 2,
                             borderRadius: 8,
-                            margin: EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
+                            margin:
+                                EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
                             hidesUnderline: true,
                           ),
                         ),
@@ -718,7 +762,7 @@ class _ResgistrarActivoPageWidgetState
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 10),
                           child: FutureBuilder<List<Categoria>>(
-                            future: cargarCategorias(),
+                            future: _listaCategorias,
                             builder: (BuildContext context, snapshot) {
                               return FlutterFlowDropDown<String>(
                                 value: dropDownValueCategoria,
@@ -735,10 +779,9 @@ class _ResgistrarActivoPageWidgetState
                                     : List.generate(
                                         0,
                                         (index) => DropdownMenuItem(
-                                            value: null,
-                                            child: Text(''))),
-                                onChanged: (val) =>
-                                    setState(() => dropDownValueCategoria = val),
+                                            value: null, child: Text(''))),
+                                onChanged: (val) => setState(
+                                    () => dropDownValueCategoria = val),
                                 width: MediaQuery.of(context).size.width - 30,
                                 height: 50,
                                 textStyle: FlutterFlowTheme.of(context)
@@ -756,12 +799,14 @@ class _ResgistrarActivoPageWidgetState
                                 fillColor: FlutterFlowTheme.of(context)
                                     .primaryBackground,
                                 elevation: 2,
-                                borderColor:
-                                    FlutterFlowTheme.of(context).secondaryText,
+                                borderColor: _dropdownErrorColor
+                                    ? Colors.redAccent
+                                    : FlutterFlowTheme.of(context)
+                                        .secondaryText,
                                 borderWidth: 2,
                                 borderRadius: 8,
-                                margin:
-                                    EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
+                                margin: EdgeInsetsDirectional.fromSTEB(
+                                    12, 4, 12, 4),
                                 hidesUnderline: true,
                               );
                             },
@@ -797,8 +842,9 @@ class _ResgistrarActivoPageWidgetState
                                         .bodyText1Family,
                                     fontSize: 18,
                                     useGoogleFonts: GoogleFonts.asMap()
-                                        .containsKey(FlutterFlowTheme.of(context)
-                                            .bodyText1Family),
+                                        .containsKey(
+                                            FlutterFlowTheme.of(context)
+                                                .bodyText1Family),
                                   ),
                             ),
                             Padding(
@@ -823,7 +869,8 @@ class _ResgistrarActivoPageWidgetState
                                     FontAwesomeIcons.minus,
                                     color: enabled
                                         ? Color(0xA9D43538)
-                                        : FlutterFlowTheme.of(context).boxShadow,
+                                        : FlutterFlowTheme.of(context)
+                                            .boxShadow,
                                     size: 20,
                                   ),
                                   incrementIconBuilder: (enabled) => FaIcon(
@@ -831,7 +878,8 @@ class _ResgistrarActivoPageWidgetState
                                     color: enabled
                                         ? FlutterFlowTheme.of(context)
                                             .primaryColor
-                                        : FlutterFlowTheme.of(context).boxShadow,
+                                        : FlutterFlowTheme.of(context)
+                                            .boxShadow,
                                     size: 20,
                                   ),
                                   countBuilder: (count) => Text(
@@ -839,8 +887,9 @@ class _ResgistrarActivoPageWidgetState
                                     style: FlutterFlowTheme.of(context)
                                         .title2
                                         .override(
-                                          fontFamily: FlutterFlowTheme.of(context)
-                                              .title2Family,
+                                          fontFamily:
+                                              FlutterFlowTheme.of(context)
+                                                  .title2Family,
                                           color: FlutterFlowTheme.of(context)
                                               .grayicon,
                                           useGoogleFonts: GoogleFonts.asMap()
@@ -1036,6 +1085,8 @@ class _ResgistrarActivoPageWidgetState
               : null),
     );
   }
+
+  
 
   Widget _decideImageView(imageFile) {
     if (imageFile == null) {
