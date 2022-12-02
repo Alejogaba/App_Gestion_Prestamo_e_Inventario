@@ -17,6 +17,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:web_scraper/web_scraper.dart';
 
 class PrincipalWidget extends StatefulWidget {
   const PrincipalWidget({
@@ -90,7 +91,6 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
           overlayOpacity: 0.5,
           onOpen: () => print('OPENING DIAL'), // action when menu opens
           onClose: () => print('DIAL CLOSED'), //action when menu closes
-          
 
           elevation: 8.0, //shadow elevation of button
           shape: CircleBorder(), //shape of button
@@ -110,18 +110,18 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                         true, // whether to show the flash icon
                         ScanMode.BARCODE)
                     .then((value) {
-                      if (value != null) {
-                  // ignore: use_build_context_synchronously
-                  context.pushNamed(
-                    'registraractivopage',
-                    queryParams: {
-                      'idSerial': serializeParam(
-                        value.trim().replaceAll(".", ""),
-                        ParamType.String,
-                      )
-                    },
-                  );
-                }  
+                  if (value != null) {
+                    // ignore: use_build_context_synchronously
+                    context.pushNamed(
+                      'registraractivopage',
+                      queryParams: {
+                        'idSerial': serializeParam(
+                          value.trim().replaceAll(".", ""),
+                          ParamType.String,
+                        )
+                      },
+                    );
+                  }
                 });
               },
             ),
@@ -132,14 +132,14 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
               label: 'Registrar nuevo activo',
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () => context.pushNamed(
-                    'registraractivopage',
-                    queryParams: {
-                      'idSerial': serializeParam(
-                        null,
-                        ParamType.String,
-                      )
-                    },
-                  ),
+                'registraractivopage',
+                queryParams: {
+                  'idSerial': serializeParam(
+                    null,
+                    ParamType.String,
+                  )
+                },
+              ),
             ),
             SpeedDialChild(
               child: Icon(Icons.category_rounded),
@@ -624,4 +624,13 @@ Widget _loader(BuildContext context, String url) {
 
 bool esEscritorio(BuildContext context) {
   return responsiveVisibility(context: context, desktop: true);
+}
+
+webScraper() async {
+  final webScraper = WebScraper('https://www.google.com');
+  if (await webScraper.loadFullURL('https://www.google.com/search?q=7709121771402&sourceid=chrome&ie=UTF-8')) {
+    List<Map<String, dynamic>> elements =
+        webScraper.getElement('div.yuRUbf > h3.LC20lb MBeuO DKV0Md', ['href']);
+    log('SCRAPER: $elements');
+  }
 }
