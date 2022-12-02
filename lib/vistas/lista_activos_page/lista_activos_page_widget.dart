@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -42,7 +43,6 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
     super.initState();
     textController = TextEditingController();
     log('CATEGORIA DE LA LISTA:$nombreCategoria');
-    a = activoController.getActivos();
   }
 
   @override
@@ -54,37 +54,94 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: activoController.getActivosStream(),
+        stream: activoController.getActivosStream(nombreCategoria),
         builder: (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
           return Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                print('FloatingActionButton pressed ...');
-              },
-              backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-              elevation: 123,
-              child: FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: Icon(
-                  Icons.add,
-                  color: FlutterFlowTheme.of(context).whiteColor,
-                  size: 30,
-                ),
-                onPressed: () async {
-                  id = await FlutterBarcodeScanner.scanBarcode(
-                    '#C62828', // scanning line color
-                    'Cancel', // cancel button text
-                    true, // whether to show the flash icon
-                    ScanMode.QR,
-                  );
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.only(bottom: 50.0),
+              child: SpeedDial(
+                //Speed dial menu
+                //margin bottom
+                icon: Icons.menu, //icon on Floating action button
+                activeIcon: Icons.close, //icon when menu is expanded on button
+                backgroundColor: FlutterFlowTheme.of(context)
+                    .primaryColor, //background color of button
+                foregroundColor:
+                    Colors.white, //font color, icon color in button
+                activeBackgroundColor: FlutterFlowTheme.of(context)
+                    .primaryColor, //background color when menu is expanded
+                activeForegroundColor: Colors.white,
+                buttonSize: const Size(56.0, 56), //button size
+                visible: true,
+                closeManually: false,
+                curve: Curves.bounceIn,
+                overlayColor: Colors.black,
+                overlayOpacity: 0.5,
+                onOpen: () => print('OPENING DIAL'), // action when menu opens
+                onClose: () => print('DIAL CLOSED'), //action when menu closes
 
-                  setState(() {});
-                },
+                elevation: 8.0, //shadow elevation of button
+                shape: CircleBorder(), //shape of button
+
+                children: [
+                  SpeedDialChild(
+                    //speed dial child
+                    child: Icon(FontAwesomeIcons.barcode),
+                    backgroundColor: Color.fromARGB(255, 7, 133, 36),
+                    foregroundColor: Colors.white,
+                    label: 'Buscar por código de barras',
+                    labelStyle: TextStyle(fontSize: 18.0),
+                    onTap: () async {
+                      await FlutterBarcodeScanner.scanBarcode(
+                              '#C62828', // scanning line color
+                              'Cancelar', // cancel button text
+                              true, // whether to show the flash icon
+                              ScanMode.BARCODE)
+                          .then((value) {
+                        if (value != null) {
+                          // ignore: use_build_context_synchronously
+                          context.pushNamed(
+                            'registraractivopage',
+                            queryParams: {
+                              'idSerial': serializeParam(
+                                value.trim().replaceAll(".", ""),
+                                ParamType.String,
+                              )
+                            },
+                          );
+                        }
+                      });
+                    },
+                  ),
+                  SpeedDialChild(
+                    child: Icon(Icons.add),
+                    backgroundColor: Color.fromARGB(255, 7, 133, 107),
+                    foregroundColor: Colors.white,
+                    label: 'Registrar nuevo activo',
+                    labelStyle: TextStyle(fontSize: 18.0),
+                    onTap: () => context.pushNamed(
+                      'registraractivopage',
+                      queryParams: {
+                        'idSerial': serializeParam(
+                          null,
+                          ParamType.String,
+                        )
+                      },
+                    ),
+                  ),
+                  SpeedDialChild(
+                    child: Icon(Icons.category_rounded),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Color.fromARGB(255, 6, 113, 122),
+                    label: 'Crear nueva categoria',
+                    labelStyle: TextStyle(fontSize: 18.0),
+                    onTap: () => context.pushNamed('registrarcategoriapage'),
+                  ),
+
+                  //add more menu item childs here
+                ],
               ),
             ),
             body: NestedScrollView(
@@ -268,7 +325,8 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                             0, 12, 0, 44),
                                         child: StreamBuilder(
                                             stream: activoController
-                                                .getActivosStream(),
+                                                .getActivosStream(
+                                                    nombreCategoria),
                                             builder: (context,
                                                 AsyncSnapshot<
                                                         List<
@@ -288,7 +346,10 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                     .toString());
                                               });
                                               return Wrap(
-                                                spacing: MediaQuery.of(context).size.width * 0.05,
+                                                spacing: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.05,
                                                 runSpacing: 10,
                                                 alignment: WrapAlignment.start,
                                                 crossAxisAlignment:
@@ -303,13 +364,20 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                     snapshot.data!.length,
                                                     (index) {
                                                   return tarjetaActivo(
-                                                      context,
-                                                      Activo.fromMap(snapshot.data![index]).nombre);
+                                                      context, Activo.fromMap(snapshot
+                                                              .data![index])
+                                                          .idSerial,
+                                                      Activo.fromMap(snapshot
+                                                              .data![index])
+                                                          .nombre,Activo.fromMap(snapshot
+                                                              .data![index])
+                                                          .urlImagen,Activo.fromMap(snapshot
+                                                              .data![index])
+                                                          .estado);
                                                 }),
                                               );
                                             }),
                                       ),
-                                      
                                     ],
                                   ),
                                 ),
@@ -328,10 +396,10 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   }
 }
 
-Widget tarjetaActivo(context, String? nombre) {
+Widget tarjetaActivo(context,String idSerial, String? nombre, String? urlImagen, int? estadoActivo) {
   return Container(
-    width: MediaQuery.of(context).size.width * 0.45,
-    height: 220,
+    width: 210,
+    height: 215,
     decoration: BoxDecoration(
       color: FlutterFlowTheme.of(context).secondaryBackground,
       boxShadow: [
@@ -354,14 +422,14 @@ Widget tarjetaActivo(context, String? nombre) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Zm9vZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-              width: double.infinity,
-              height: 115,
-              fit: BoxFit.cover,
-            ),
-          ),
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  urlImagen!,
+                  width: double.infinity,
+                  height: 125,
+                  fit: BoxFit.cover,
+                ),
+      ),
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(5, 6, 0, 0),
             child: Text(
@@ -376,14 +444,14 @@ Widget tarjetaActivo(context, String? nombre) {
                 padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                 child: FaIcon(
                   FontAwesomeIcons.barcode,
-                  color: Colors.black,
+                  color: FlutterFlowTheme.of(context).primaryText,
                   size: 15,
                 ),
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 1),
                 child: Text(
-                  'Category Name',
+                  idSerial,
                   style: FlutterFlowTheme.of(context).bodyText2.override(
                         fontFamily:
                             FlutterFlowTheme.of(context).bodyText2Family,
@@ -402,14 +470,14 @@ Widget tarjetaActivo(context, String? nombre) {
                 padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                 child: FaIcon(
                   FontAwesomeIcons.solidCircle,
-                  color: Colors.black,
+                  color: definirColorEstado(estadoActivo),
                   size: 10,
                 ),
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 5),
                 child: Text(
-                  'Category Name',
+                  definirEstadoActivo(estadoActivo).toString(),
                   style: FlutterFlowTheme.of(context).bodyText2.override(
                         fontFamily:
                             FlutterFlowTheme.of(context).bodyText2Family,
@@ -425,4 +493,54 @@ Widget tarjetaActivo(context, String? nombre) {
       ),
     ),
   );
+}
+
+Color? definirColorEstado(int? estado) {
+  switch (estado) {
+    case 0:
+      return Colors.green;
+
+    case 1:
+      return Colors.yellow;
+
+    case 2:
+      return Colors.red;
+
+    default:
+      return Colors.grey;
+  }
+}
+
+double? defTamanoImagen(screenSize) {
+  if (screenSize > 440 && screenSize < 640) {
+    return 82;
+  } else if (screenSize >= 640 && screenSize < 1057) {
+    return 180;
+  } else if (screenSize >= 1057 && screenSize < 1240) {
+    return 170;
+  } else if (screenSize >= 1240 && screenSize < 1370) {
+    return 140;
+  } else if (screenSize >= 1370 && screenSize < 1840) {
+    return 135;
+  } else if (screenSize >= 1840) {
+    return 110;
+  } else {
+    return 180;
+  }
+}
+
+String? definirEstadoActivo(int? estado) {
+  switch (estado) {
+    case 0:
+      return 'Bueno';
+
+    case 1:
+      return 'Regular';
+
+    case 2:
+      return 'Malo';
+
+    default:
+      return 'No definido';
+  }
 }

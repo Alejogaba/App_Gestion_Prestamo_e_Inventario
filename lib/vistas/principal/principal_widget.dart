@@ -106,7 +106,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
               onTap: () async {
                 await FlutterBarcodeScanner.scanBarcode(
                         '#C62828', // scanning line color
-                        'Cancel', // cancel button text
+                        'Cancelar', // cancel button text
                         true, // whether to show the flash icon
                         ScanMode.BARCODE)
                     .then((value) {

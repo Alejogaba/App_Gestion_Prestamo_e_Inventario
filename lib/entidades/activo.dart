@@ -1,21 +1,38 @@
 class Activo {
-  String numSerial;
-  int? numActivo;
-  String? nombre;
+  String idSerial;
+  String? numActivo;
+  String nombre;
+  String? detalles;
   String? urlImagen;
-  int? estado;
-  String? categoria;
+  int estado = 0;
+  String categoria;
+  int cantidad = 1;
+  String? capacidad;
+  String? fechaCreado;
 
-  Activo(this.numSerial, this.numActivo, this.nombre, this.urlImagen,this.estado, this.categoria);
+  Activo(
+      this.idSerial,
+      this.numActivo,
+      this.nombre,
+      this.detalles,
+      this.urlImagen,
+      this.estado,
+      this.categoria,
+      this.cantidad,
+      this.capacidad,
+      this.fechaCreado);
 
   factory Activo.fromMap(Map<String, dynamic> map) {
     return Activo(
-      map['ID_SERIAL'] ?? '',
-      map['NUM_ACTIVO'] ?? '',
-      map['NOMBRE'] ?? '',
-      map['URL_IMAGEN'] ?? '',
-      map['ESTADO']?? '',
-      map['NOMBRE_CATEGORIA']?? ''
-    );
+        map['ID_SERIAL'] ?? '',
+        map['NUM_ACTIVO'] ?? '',
+        map['NOMBRE'] ?? '',
+        map['DETALLES'] ?? '',
+        map['URL_IMAGEN'] ?? '',
+        map['ESTADO'] ?? 0,
+        map['NOMBRE_CATEGORIA'] ?? '',
+        map['CANTIDAD'] ?? '',
+        map['CAPACIDAD'] ?? '',
+        map['FECHA_CREADO'] ?? '');
   }
 }

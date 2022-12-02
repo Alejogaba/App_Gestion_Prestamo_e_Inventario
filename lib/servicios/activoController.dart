@@ -3,15 +3,18 @@ import 'dart:developer';
 import 'package:app_gestion_prestamo_inventario/assets/utilidades.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
+import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
 import 'package:desktop_webview_auth/desktop_webview_auth.dart';
 import 'package:desktop_webview_auth/google.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase/src/supabase_stream_builder.dart';
 import 'package:supabase/supabase.dart';
 import '../../assets/constantes.dart' as constantes;
+import '../flutter_flow/flutter_flow_theme.dart';
 
 const _redirectUri = 'https://accounts.google.com/o/oauth2/auth';
 const _googleClientId =
@@ -23,46 +26,77 @@ class ActivoController {
       SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
 
   Future<void> addActivo(
-      idSerial, numInventario, nombre, urlImagen, estado, categoria) async {
+      context,
+      String idSerial,
+      String? numInventario,
+      String nombre,
+      String? detalles,
+      String? urlImagen,
+      int estado,
+      String categoria,
+      int? cantidad,
+      String? capacidad,
+      String? fechaCreado) async {
     try {
+      log('Inserando nuevo activo...');
+      Utilidades utilidades = Utilidades();
       await supabase.from('ACTIVOS').insert({
-        'ID_SERIAL': idSerial,
+        'ID_SERIAL': idSerial.toUpperCase(),
         'NUM_ACTIVO': numInventario,
-        'NOMBRE': nombre,
+        'NOMBRE': utilidades.capitalizeAllWord(nombre),
+        'DETALLES': detalles,
         'URL_IMAGEN': urlImagen,
         'ESTADO': estado,
-        'NOMBRE_CATEGORIA': categoria,
-      }).then((value) => log('Nueva categoria registrada: $value'));
+        'NOMBRE_CATEGORIA': utilidades.capitalizeAllWord(categoria),
+        'CANTIDAD': cantidad,
+        'CAPACIDAD': capacidad,
+        'FECHA_CREADO': fechaCreado,
+      }).then((value) => log('Nueva activo registrado: $value'));
       log("Registrado con exito");
-    } on Exception catch (e) {
-      log(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "Activo registrado con exitó",
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+      ));
+      
+    } on Exception catch (error) {
+      StorageController storageController = StorageController();
+      var errorTraducido = await storageController.traducir(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          errorTraducido,
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      log(error.toString());
     } catch (e) {
       log(e.toString());
     }
   }
 
-  StreamSubscription<SupabaseStreamEvent> getActivos() {
+  Stream<SupabaseStreamEvent> getActivosStream(String? categoria) {
     List<Activo> activoList = [];
-    final response = supabase
-        .from('ACTIVOS')
-        .stream(primaryKey: ['ID_SERIAL']).listen((data) {
-      for (var element in data) {
-        var a = Activo.fromMap(element);
-        activoList.add(a);
-        log('Mapeado: $a.nombre');
-        log('Elemento: ${element.toString()}');
-      }
-    });
-    return response;
-  }
-
-  Stream<SupabaseStreamEvent> getActivosStream() {
-    List<Activo> activoList = [];
-    final response = supabase
-        .from('ACTIVOS')
-        .stream(primaryKey: ['ID_SERIAL'])
-        .order('NOMBRE', ascending: true)
-        .execute();
+    final response = (categoria != null && categoria.length > 3)
+        ? supabase
+            .from('ACTIVOS')
+            .stream(primaryKey: ['ID_SERIAL'])
+            .eq('NOMBRE_CATEGORIA', categoria)
+            .order('FECHA_CREADO', ascending: false)
+        : supabase.from('ACTIVOS').stream(
+            primaryKey: ['ID_SERIAL']).order('FECHA_CREADO', ascending: false);
     return response;
   }
 

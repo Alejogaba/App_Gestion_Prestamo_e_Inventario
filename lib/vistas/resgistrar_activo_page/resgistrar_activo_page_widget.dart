@@ -5,6 +5,7 @@ import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart'
 import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -33,7 +34,7 @@ class ResgistrarActivoPageWidget extends StatefulWidget {
 class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     with SingleTickerProviderStateMixin {
   EstadoActivo? dropDownValueEstadoActivo;
-  TextEditingController? textControllerSerial;
+  TextEditingController textControllerSerial = TextEditingController();
   TextEditingController? textControllerN_inventario;
   TextEditingController? textControllerNombre;
   TextEditingController? textFieldDescripcionController;
@@ -59,7 +60,9 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   bool _dropdownErrorColor = false;
   CategoriaController categoriaController = CategoriaController();
   late final _listaCategorias = cargarCategorias();
-  String? idSerial;
+  String? idSerial = '';
+  int? numInventario;
+  int estadoActivoOpcion = 0;
 
   _ResgistrarActivoPageWidgetState(this.idSerial);
 
@@ -68,16 +71,17 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   @override
   void initState() {
     super.initState();
-    idSerial!=null ? textControllerSerial?.text=idSerial! : textControllerSerial = TextEditingController();
+    idSerial != null
+        ? textControllerSerial.text = idSerial!
+        : textControllerSerial.text = '';
     textControllerN_inventario = TextEditingController();
     textControllerNombre = TextEditingController();
     textFieldDescripcionController = TextEditingController();
-    
   }
 
   @override
   void dispose() {
-    textControllerSerial?.dispose();
+    textControllerSerial.dispose();
     textControllerN_inventario?.dispose();
     textControllerNombre?.dispose();
     textFieldDescripcionController?.dispose();
@@ -112,49 +116,44 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                 dropDownValueCategoria != null) {
               _loading = true;
               String? imagenUrl;
-              try {
-                if (imageFile != null) {
-                  StorageController storageController = StorageController();
-                  imagenUrl = await storageController.subirImagen(
-                      context,
-                      imageFile!.path.toString(),
-                      imageFile!,
-                      textControllerSerial!.text);
-                  ActivoController activoController = ActivoController();
-                  await activoController.addActivo(
-                      textControllerSerial!.text,
-                      textControllerN_inventario!.text,
-                      textControllerNombre!.text,
-                      imagenUrl,
-                      dropDownValueEstadoActivo!.id,
-                      dropDownValueCategoria!);
-                  _loading = false;
-                } else {
-                  ActivoController activoController = ActivoController();
-                  await activoController.addActivo(
-                      textControllerSerial!.text,
-                      textControllerN_inventario!.text,
-                      textControllerNombre!.text,
-                      imagenUrl,
-                      dropDownValueEstadoActivo!.id,
-                      dropDownValueCategoria!);
-                  _loading = false;
-                }
-              } catch (e) {
-                log(e.toString());
-                setState(() {
-                  _errorColor = true;
+              log('serial: ${textControllerSerial.text.toString()}');
+
+              if (imageFile != null) {
+                StorageController storageController = StorageController();
+                imagenUrl = await storageController.subirImagen(
+                    context,
+                    imageFile!.path.toString(),
+                    imageFile!,
+                    textControllerSerial.text);
+                ActivoController activoController = ActivoController();
+                // ignore: use_build_context_synchronously
+                await registrarActivo(activoController, context, imagenUrl);
+                Timer(Duration(seconds: 3), () {
+                  context.pop();
                 });
-                Future.delayed(const Duration(milliseconds: 6000), () {
-                  setState(() {
-                    _errorColor = false;
-                  });
+              } else {
+                ActivoController activoController = ActivoController();
+                await registrarActivo(activoController, context, imagenUrl);
+                Timer(Duration(seconds: 3), () {
+                  context.pop();
                 });
               }
             } else if (dropDownValueCategoria == null) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  "Seleccione una categoria",
+                  style: FlutterFlowTheme.of(context).bodyText2.override(
+                        fontFamily:
+                            FlutterFlowTheme.of(context).bodyText2Family,
+                        color: FlutterFlowTheme.of(context).whiteColor,
+                        useGoogleFonts: GoogleFonts.asMap().containsKey(
+                            FlutterFlowTheme.of(context).bodyText2Family),
+                      ),
+                ),
+                backgroundColor: Colors.redAccent,
+              ));
               setState(() {
                 _errorColor = true;
-                _dropdownErrorColor = true;
               });
               Future.delayed(const Duration(milliseconds: 6000), () {
                 setState(() {
@@ -162,6 +161,19 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                 });
               });
             } else {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  "No deje campos vacios",
+                  style: FlutterFlowTheme.of(context).bodyText2.override(
+                        fontFamily:
+                            FlutterFlowTheme.of(context).bodyText2Family,
+                        color: FlutterFlowTheme.of(context).whiteColor,
+                        useGoogleFonts: GoogleFonts.asMap().containsKey(
+                            FlutterFlowTheme.of(context).bodyText2Family),
+                      ),
+                ),
+                backgroundColor: Colors.redAccent,
+              ));
               log('rojo');
               setState(() {
                 _errorColor = true;
@@ -225,7 +237,6 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                               if (value == null || value.isEmpty) {
                                 return 'No deje este campo vacio';
                               }
-                              return null;
                             },
                             controller: textControllerSerial,
                             obscureText: false,
@@ -322,7 +333,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                               'Cancel', // cancel button text
                               true, // whether to show the flash icon
                               ScanMode.BARCODE);
-                          textControllerSerial!.text =
+                          textControllerSerial.text =
                               res.trim().replaceAll(".", "");
                         },
                       ),
@@ -446,6 +457,9 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                               return null;
                             },
                             controller: textControllerNombre,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(20),
+                            ],
                             obscureText: false,
                             decoration: InputDecoration(
                               labelText: 'Nombre*',
@@ -716,8 +730,10 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                     child: Text(listEstados[index]
                                         .descripcion
                                         .toString()))),
-                            onChanged: (val) =>
-                                setState(() => dropDownValueEstadoActivo = val),
+                            onChanged: (val) => setState(() {
+                              dropDownValueEstadoActivo = val;
+                              estadoActivoOpcion = val!.id!;
+                            }),
                             width: MediaQuery.of(context).size.width - 30,
                             height: 50,
                             textStyle: FlutterFlowTheme.of(context)
@@ -921,6 +937,23 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         ),
       ),
     );
+  }
+
+  Future<void> registrarActivo(ActivoController activoController,
+      BuildContext context, String? imagenUrl) async {
+    await activoController.addActivo(
+        context,
+        textControllerSerial.text,
+        textControllerN_inventario!.text,
+        textControllerNombre!.text,
+        textFieldDescripcionController!.text,
+        imagenUrl,
+        estadoActivoOpcion,
+        dropDownValueCategoria!,
+        countControllerValue,
+        null,
+        null);
+    _loading = false;
   }
 
   Future<List<Categoria>> cargarCategorias() async {
