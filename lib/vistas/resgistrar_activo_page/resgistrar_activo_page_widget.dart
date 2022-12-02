@@ -20,7 +20,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
-import 'package:google_ml_kit/google_ml_kit.dart';
+
 
 class ResgistrarActivoPageWidget extends StatefulWidget {
   final String? idSerial;
@@ -50,7 +50,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     EstadoActivo(2, 'Malo: Activo en mal estado o dañado'),
   ];
   File? imageFile;
-  InputImage? inputImage;
+
   String? urlImagen;
   final ImagePicker picker = ImagePicker();
   late String result;
@@ -133,7 +133,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                 });
               } else {
                 ActivoController activoController = ActivoController();
-                await registrarActivo(activoController, context, imagenUrl);
+                await registrarActivo(activoController, context, 'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png');
                 Timer(Duration(seconds: 3), () {
                   context.pop();
                 });
@@ -919,8 +919,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
       if (pickedFile != null) {
         print("file not null");
         imageFile = File(pickedFile.path);
-        inputImage = InputImage.fromFilePath(pickedFile.path);
-        imageToText(inputImage);
+       
       } else {
         print('No image selected.');
       }
@@ -932,8 +931,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     setState(() {
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
-        inputImage = InputImage.fromFilePath(pickedFile.path);
-        imageToText(inputImage);
+       
       } else {
         print('No image selected.');
       }
@@ -1001,35 +999,6 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
       } else {
         print('No image selected.');
       }
-    });
-  }
-
-  Future imageToText(inputImage) async {
-    print("starting");
-    result = '';
-
-    final textDetector = GoogleMlKit.vision.textRecognizer();
-    print("loaded textDetector");
-    final RecognizedText recognisedText =
-        await textDetector.processImage(inputImage);
-    print("loaded recognisedText");
-
-    setState(() {
-      String text = recognisedText.text;
-      for (TextBlock block in recognisedText.blocks) {
-        //each block of text/section of text
-        final String text = block.text;
-        print("block of text: ");
-        print(text);
-        for (TextLine line in block.lines) {
-          //each line within a text block
-          for (TextElement element in line.elements) {
-            //each word within a line
-            result += element.text + " ";
-          }
-        }
-      }
-      result += "\n\n";
     });
   }
 

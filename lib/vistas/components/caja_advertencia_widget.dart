@@ -1,20 +1,40 @@
+import '../../servicios/activoController.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
-import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CajaAdvertenciaWidget extends StatefulWidget {
-  const CajaAdvertenciaWidget({Key? key}) : super(key: key);
+  final String mensaje;
+  final String objetoaEliminar;
+  final String id;
+  final bool blur;
+
+  const CajaAdvertenciaWidget(
+      {Key? key,
+      required this.mensaje,
+      required this.objetoaEliminar,
+      required this.id,
+      required this.blur})
+      : super(key: key);
 
   @override
-  _CajaAdvertenciaWidgetState createState() => _CajaAdvertenciaWidgetState();
+  // ignore: library_private_types_in_public_api, no_logic_in_create_state
+  _CajaAdvertenciaWidgetState createState() =>
+      _CajaAdvertenciaWidgetState(mensaje, objetoaEliminar, id, blur);
 }
 
 class _CajaAdvertenciaWidgetState extends State<CajaAdvertenciaWidget> {
+  final String mensaje;
+  final String objetoaEliminar;
+  final String id;
+  bool blur;
+
+  _CajaAdvertenciaWidgetState(
+      this.mensaje, this.objetoaEliminar, this.id, this.blur);
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contextCajaAdvertencia) {
     return Align(
       alignment: AlignmentDirectional(0, 0),
       child: Padding(
@@ -26,7 +46,8 @@ class _CajaAdvertenciaWidgetState extends State<CajaAdvertenciaWidget> {
             maxHeight: 300,
           ),
           decoration: BoxDecoration(
-            color: FlutterFlowTheme.of(context).secondaryBackground,
+            color:
+                FlutterFlowTheme.of(contextCajaAdvertencia).secondaryBackground,
             boxShadow: [
               BoxShadow(
                 blurRadius: 7,
@@ -46,24 +67,30 @@ class _CajaAdvertenciaWidgetState extends State<CajaAdvertenciaWidget> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                   child: Text(
-                    'Cancel Trip',
-                    style: FlutterFlowTheme.of(context).title2.override(
+                    'Advertencia',
+                    style: FlutterFlowTheme.of(contextCajaAdvertencia)
+                        .title2
+                        .override(
                           fontFamily: 'Poppins',
                           color: Color(0xBFDF2424),
                           useGoogleFonts: GoogleFonts.asMap().containsKey(
-                              FlutterFlowTheme.of(context).title2Family),
+                              FlutterFlowTheme.of(contextCajaAdvertencia)
+                                  .title2Family),
                         ),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                   child: Text(
-                    'If you want to cancel your tripl please leave a note below to send to the host.',
-                    style: FlutterFlowTheme.of(context).bodyText1.override(
+                    mensaje,
+                    style: FlutterFlowTheme.of(contextCajaAdvertencia)
+                        .bodyText1
+                        .override(
                           fontFamily: 'Poppins',
                           fontSize: 18,
                           useGoogleFonts: GoogleFonts.asMap().containsKey(
-                              FlutterFlowTheme.of(context).bodyText1Family),
+                              FlutterFlowTheme.of(contextCajaAdvertencia)
+                                  .bodyText1Family),
                         ),
                   ),
                 ),
@@ -71,20 +98,23 @@ class _CajaAdvertenciaWidgetState extends State<CajaAdvertenciaWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                   child: FFButtonWidget(
                     onPressed: () {
-                      print('Button pressed ...');
+                      eliminarObjeto(
+                          contextCajaAdvertencia, objetoaEliminar, id);
                     },
-                    text: 'Yes, Cancel Trip',
+                    text: 'Sí, deseo eliminar este $objetoaEliminar',
                     options: FFButtonOptions(
                       width: double.infinity,
                       height: 50,
                       color: Color(0xFFFC4253),
-                      textStyle: FlutterFlowTheme.of(context)
+                      textStyle: FlutterFlowTheme.of(contextCajaAdvertencia)
                           .subtitle2
                           .override(
                             fontFamily: 'Poppins',
-                            color: FlutterFlowTheme.of(context).whiteColor,
+                            color: FlutterFlowTheme.of(contextCajaAdvertencia)
+                                .whiteColor,
                             useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                FlutterFlowTheme.of(context).subtitle2Family),
+                                FlutterFlowTheme.of(contextCajaAdvertencia)
+                                    .subtitle2Family),
                           ),
                       elevation: 2,
                       borderSide: BorderSide(
@@ -104,20 +134,23 @@ class _CajaAdvertenciaWidgetState extends State<CajaAdvertenciaWidget> {
                       padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          context.pop();
+                          return 'cerrar';
                         },
-                        text: 'Never Mind',
+                        text: 'No, cancelar',
                         options: FFButtonOptions(
                           width: 170,
                           height: 50,
-                          color: FlutterFlowTheme.of(context).primaryBackground,
-                          textStyle: FlutterFlowTheme.of(context)
+                          color: FlutterFlowTheme.of(contextCajaAdvertencia)
+                              .primaryBackground,
+                          textStyle: FlutterFlowTheme.of(contextCajaAdvertencia)
                               .subtitle2
                               .override(
                                 fontFamily: 'Poppins',
-                                color: FlutterFlowTheme.of(context).primaryText,
+                                color:
+                                    FlutterFlowTheme.of(contextCajaAdvertencia)
+                                        .primaryText,
                                 useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                    FlutterFlowTheme.of(context)
+                                    FlutterFlowTheme.of(contextCajaAdvertencia)
                                         .subtitle2Family),
                               ),
                           elevation: 0,
@@ -138,5 +171,16 @@ class _CajaAdvertenciaWidgetState extends State<CajaAdvertenciaWidget> {
         ),
       ),
     );
+  }
+
+  eliminarObjeto(context, String objeto, String id) async {
+    switch (objeto) {
+      case 'activo':
+        ActivoController activoController = ActivoController();
+        final res = await activoController.eliminarActivo(context, id);
+        if (res == 'ok') context.pop;
+        break;
+      default:
+    }
   }
 }

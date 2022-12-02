@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:supabase/src/supabase_stream_builder.dart';
 import 'package:supabase/supabase.dart';
 import '../../assets/constantes.dart' as constantes;
@@ -65,7 +66,6 @@ class ActivoController {
         ),
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
       ));
-      
     } on Exception catch (error) {
       StorageController storageController = StorageController();
       var errorTraducido = await storageController.traducir(error.toString());
@@ -98,6 +98,78 @@ class ActivoController {
         : supabase.from('ACTIVOS').stream(
             primaryKey: ['ID_SERIAL']).order('FECHA_CREADO', ascending: false);
     return response;
+  }
+
+  Future<Activo> buscarActivo(String idSerial) async {
+    Activo activoVacio = Activo(
+        '',
+        '',
+        '',
+        '',
+        'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png',
+        3,
+        '',
+        0,
+        '');
+    try {
+      final data = (await supabase
+              .from('ACTIVOS')
+              .select()
+              .match({'ID_SERIAL': idSerial}).maybeSingle())
+          as Map<String, dynamic>?;
+      if (data == null) {
+        return activoVacio;
+      } else {
+        return Activo.fromMap(data);
+      }
+    } on DatabaseException catch (e) {
+      log(e.result.toString());
+      return activoVacio;
+    } catch (e) {
+      log(e.toString());
+      return activoVacio;
+    }
+  }
+
+  Future<String> eliminarActivo(context, String idSerial) async {
+    try {
+      final data =
+          (await supabase.from('ACTIVOS').delete().eq('ID_SERIAL', idSerial));
+      log('Eliminando:$data');
+      return 'ok';
+    } on Exception catch (error) {
+      StorageController storageController = StorageController();
+      var errorTraducido = await storageController.traducir(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          errorTraducido,
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      log(error.toString());
+      return 'error';
+    } catch (e) {
+      log(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Ha ocurrido un error inesperado al intentar eliminar el activo',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      return 'error';
+    }
   }
 
   Future<List<Categoria>> getCategorias(String? nombre) async {

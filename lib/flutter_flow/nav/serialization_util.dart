@@ -132,7 +132,8 @@ enum ParamType {
   LatLng,
   Color,
   FFPlace,
-  JSON,
+  JSON, 
+  Activo,
 }
 
 dynamic deserializeParam<T>(

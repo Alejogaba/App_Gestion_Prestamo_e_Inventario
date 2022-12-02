@@ -363,17 +363,24 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                 children: List.generate(
                                                     snapshot.data!.length,
                                                     (index) {
-                                                  return tarjetaActivo(
-                                                      context, Activo.fromMap(snapshot
-                                                              .data![index])
-                                                          .idSerial,
-                                                      Activo.fromMap(snapshot
-                                                              .data![index])
-                                                          .nombre,Activo.fromMap(snapshot
-                                                              .data![index])
-                                                          .urlImagen,Activo.fromMap(snapshot
-                                                              .data![index])
-                                                          .estado);
+                                                  return GestureDetector(
+                                                    onTap: () {
+                                                      context.pushNamed(
+        'activoPerfilPage',
+        queryParams: {
+          'idActivo': serializeParam(
+            Activo.fromMap(snapshot
+                                                            .data![index]).idSerial,
+            ParamType.String,
+          )
+        },
+      );
+                                                    },
+                                                    child: tarjetaActivo(
+                                                        context,
+                                                        Activo.fromMap(snapshot
+                                                            .data![index])),
+                                                  );
                                                 }),
                                               );
                                             }),
@@ -396,7 +403,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   }
 }
 
-Widget tarjetaActivo(context,String idSerial, String? nombre, String? urlImagen, int? estadoActivo) {
+Widget tarjetaActivo(context, Activo activo) {
   return Container(
     width: 210,
     height: 215,
@@ -422,18 +429,18 @@ Widget tarjetaActivo(context,String idSerial, String? nombre, String? urlImagen,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  urlImagen!,
-                  width: double.infinity,
-                  height: 125,
-                  fit: BoxFit.cover,
-                ),
-      ),
+            borderRadius: BorderRadius.circular(10),
+            child: Image.network(
+              activo.urlImagen,
+              width: double.infinity,
+              height: 125,
+              fit: BoxFit.cover,
+            ),
+          ),
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(5, 6, 0, 0),
             child: Text(
-              nombre.toString(),
+              activo.nombre.toString(),
               style: FlutterFlowTheme.of(context).subtitle1,
             ),
           ),
@@ -451,7 +458,7 @@ Widget tarjetaActivo(context,String idSerial, String? nombre, String? urlImagen,
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 1),
                 child: Text(
-                  idSerial,
+                  activo.idSerial,
                   style: FlutterFlowTheme.of(context).bodyText2.override(
                         fontFamily:
                             FlutterFlowTheme.of(context).bodyText2Family,
@@ -470,14 +477,14 @@ Widget tarjetaActivo(context,String idSerial, String? nombre, String? urlImagen,
                 padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                 child: FaIcon(
                   FontAwesomeIcons.solidCircle,
-                  color: definirColorEstado(estadoActivo),
+                  color: definirColorEstado(activo.estado),
                   size: 10,
                 ),
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 5),
                 child: Text(
-                  definirEstadoActivo(estadoActivo).toString(),
+                  definirEstadoActivo(activo.estado).toString(),
                   style: FlutterFlowTheme.of(context).bodyText2.override(
                         fontFamily:
                             FlutterFlowTheme.of(context).bodyText2Family,
@@ -495,22 +502,6 @@ Widget tarjetaActivo(context,String idSerial, String? nombre, String? urlImagen,
   );
 }
 
-Color? definirColorEstado(int? estado) {
-  switch (estado) {
-    case 0:
-      return Colors.green;
-
-    case 1:
-      return Colors.yellow;
-
-    case 2:
-      return Colors.red;
-
-    default:
-      return Colors.grey;
-  }
-}
-
 double? defTamanoImagen(screenSize) {
   if (screenSize > 440 && screenSize < 640) {
     return 82;
@@ -526,6 +517,22 @@ double? defTamanoImagen(screenSize) {
     return 110;
   } else {
     return 180;
+  }
+}
+
+Color? definirColorEstado(int? estado) {
+  switch (estado) {
+    case 0:
+      return Colors.green;
+
+    case 1:
+      return Colors.yellow;
+
+    case 2:
+      return Colors.red;
+
+    default:
+      return Colors.grey;
   }
 }
 

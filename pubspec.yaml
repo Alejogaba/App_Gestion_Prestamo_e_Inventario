@@ -76,7 +76,8 @@ dependencies:
   flutter_svg: ^1.1.6
   flutter_barcode_scanner: ^2.0.0
   flutter_speed_dial: ^6.2.0
-  google_ml_kit: ^0.13.0
+  web_scraper: ^0.1.4
+  fdottedline_nullsafety: ^2.0.1
   
 
 

@@ -119,6 +119,7 @@ class _NavBarPageState extends State<NavBarPage> {
         visible: responsiveVisibility(
           context: context,
           desktop: false,
+          phone: false,
         ),
         child: FloatingNavbar(
           currentIndex: currentIndex,

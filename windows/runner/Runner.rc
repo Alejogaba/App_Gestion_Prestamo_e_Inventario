@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "app_gestion_prestamo_inventario" "\0"
+            VALUE "FileDescription", "app_gestion_prestamo_e_inventario" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "app_gestion_prestamo_inventario" "\0"
+            VALUE "InternalName", "app_gestion_prestamo_e_inventario" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "app_gestion_prestamo_inventario.exe" "\0"
-            VALUE "ProductName", "app_gestion_prestamo_inventario" "\0"
+            VALUE "OriginalFilename", "app_gestion_prestamo_e_inventario.exe" "\0"
+            VALUE "ProductName", "app_gestion_prestamo_e_inventario" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -3,12 +3,12 @@ class Activo {
   String? numActivo;
   String nombre;
   String? detalles;
-  String? urlImagen;
+  String urlImagen;
   int estado = 0;
   String categoria;
   int cantidad = 1;
   String? capacidad;
-  String? fechaCreado;
+
 
   Activo(
       this.idSerial,
@@ -19,8 +19,7 @@ class Activo {
       this.estado,
       this.categoria,
       this.cantidad,
-      this.capacidad,
-      this.fechaCreado);
+      this.capacidad,);
 
   factory Activo.fromMap(Map<String, dynamic> map) {
     return Activo(
@@ -33,6 +32,6 @@ class Activo {
         map['NOMBRE_CATEGORIA'] ?? '',
         map['CANTIDAD'] ?? '',
         map['CAPACIDAD'] ?? '',
-        map['FECHA_CREADO'] ?? '');
+        );
   }
 }
