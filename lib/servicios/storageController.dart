@@ -40,20 +40,27 @@ class StorageController {
       return imageUrlResponse;
     } on StorageException catch (error) {
       var errorTraducido = await traducir(error.message);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          'Error al subir imagen:$errorTraducido',
-          style: FlutterFlowTheme.of(context).bodyText2.override(
-                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
-                color: FlutterFlowTheme.of(context).tertiaryColor,
-                useGoogleFonts: GoogleFonts.asMap()
-                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
-              ),
-            
-        ),
-        backgroundColor: Colors.redAccent,
-      ));
       log(error.message);
+      if (!errorTraducido.contains('existe')) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            'Error al subir imagen:$errorTraducido',
+            style: FlutterFlowTheme.of(context).bodyText2.override(
+                  fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                  color: FlutterFlowTheme.of(context).tertiaryColor,
+                  useGoogleFonts: GoogleFonts.asMap().containsKey(
+                      FlutterFlowTheme.of(context).bodyText2Family),
+                ),
+          ),
+          backgroundColor: Colors.redAccent,
+        ));
+        return null;
+      } else {
+        final fileExt = imageFile.path.split('.').last;
+        final fileName = '$id_serial.$fileExt';
+        return 'https://ujftfjxhobllfwadrwqj.supabase.co/storage/v1/object/public/activos/$fileName';
+      }
+      
     } catch (error) {
       log(error.toString());
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -68,7 +75,7 @@ class StorageController {
         ),
         backgroundColor: Colors.redAccent,
       ));
-      
+
       log(error.toString());
     }
     return null;
@@ -76,13 +83,12 @@ class StorageController {
 
   Future<String> traducir(String input) async {
     try {
-    final translator = GoogleTranslator();
-    var translation = await translator.translate(input, from: 'en', to: 'es');
-    return translation.toString();
+      final translator = GoogleTranslator();
+      var translation = await translator.translate(input, from: 'en', to: 'es');
+      return translation.toString();
     } catch (e) {
       log(e.toString());
       return "Ha ocurrido un error inesperado, revise su conexión a internet";
     }
-    
   }
 }
