@@ -131,11 +131,12 @@ class ActivoController {
     }
   }
 
-  Future<void> eliminarActivo(context,String idSerial) async {
+  Future<String> eliminarActivo(context, String idSerial) async {
     try {
       final data =
           (await supabase.from('ACTIVOS').delete().eq('ID_SERIAL', idSerial));
       log('Eliminando:$data');
+      return 'ok';
     } on Exception catch (error) {
       StorageController storageController = StorageController();
       var errorTraducido = await storageController.traducir(error.toString());
@@ -152,8 +153,22 @@ class ActivoController {
         backgroundColor: Colors.redAccent,
       ));
       log(error.toString());
+      return 'error';
     } catch (e) {
       log(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Ha ocurrido un error inesperado al intentar eliminar el activo',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      return 'error';
     }
   }
 
