@@ -1,11 +1,9 @@
 import 'dart:async';
 
-
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
-
 
 import '../flutter_flow_theme.dart';
 
@@ -119,13 +117,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'ActivoPerfilPage',
               path: 'activoPerfilPage',
               builder: (context, params) => ActivoPerfilPageWidget(
-                activoDatos: params.getParam('activoDatos', ParamType.String),
+                idActivo: params.getParam('idActivo', ParamType.String),
               ),
             ),
             FFRoute(
               name: 'ListaActivosPage',
               path: 'listaActivosPage',
-              builder: (context, params) => ListaActivosPageWidget(nombreCategoria: params.getParam( 'nombreCategoria', ParamType.String)),
+              builder: (context, params) => ListaActivosPageWidget(
+                  nombreCategoria:
+                      params.getParam('nombreCategoria', ParamType.String)),
             ),
             FFRoute(
               name: 'ListaPrestamosPage',
@@ -142,7 +142,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'RegistrarActivoPage',
               path: 'registrarActivoPage',
-              builder: (context, params) => ResgistrarActivoPageWidget(idSerial: params.getParam( 'idSerial', ParamType.String)),
+              builder: (context, params) => ResgistrarActivoPageWidget(
+                  idSerial: params.getParam('idSerial', ParamType.String)),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),

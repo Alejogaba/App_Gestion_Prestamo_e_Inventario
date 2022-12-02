@@ -496,10 +496,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                           onPressed: () async {
                             if (formKey.currentState == null ||
                                 !formKey.currentState!.validate()) {
-                              categoriaController.addCategoria(
-                                  categoriaNuevaController,
-                                  urlCategoriaSeleccionada);
-                                  context.pop();
+                            
                             }
 
                             

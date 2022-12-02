@@ -1,3 +1,6 @@
+import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
+import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
+
 import '../components/caja_advertencia_widget.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_expanded_image_view.dart';
@@ -15,15 +18,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 class ActivoPerfilPageWidget extends StatefulWidget {
+  final String idActivo;
   const ActivoPerfilPageWidget({
     Key? key,
-    this.activoDatos,
+    required this.idActivo,
   }) : super(key: key);
 
-  final String? activoDatos;
-
   @override
-  _ActivoPerfilPageWidgetState createState() => _ActivoPerfilPageWidgetState();
+  _ActivoPerfilPageWidgetState createState() =>
+      _ActivoPerfilPageWidgetState(this.idActivo);
 }
 
 class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
@@ -240,9 +243,24 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
     ),
   };
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  Activo activo = Activo(
+      '',
+      '',
+      '',
+      '',
+      'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png',
+      3,
+      '',
+      0,
+      '');
+  late String idActivo;
+  bool blur = false;
+
+  _ActivoPerfilPageWidgetState(this.idActivo);
 
   @override
   void initState() {
+    cargarActivo(idActivo);
     super.initState();
     setupAnimations(
       animationsMap.values.where((anim) =>
@@ -257,28 +275,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('FloatingActionButton pressed ...');
-        },
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-        elevation: 8,
-        child: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30,
-          borderWidth: 1,
-          buttonSize: 60,
-          icon: Icon(
-            Icons.add,
-            color: FlutterFlowTheme.of(context).whiteColor,
-            size: 30,
-          ),
-          onPressed: () {
-            print('IconButton pressed ...');
-          },
-        ),
-      ).animateOnPageLoad(
-          animationsMap['floatingActionButtonOnPageLoadAnimation']!),
+      //floatingActionButton: myFloatingButton().animateOnPageLoad(
+      // animationsMap['floatingActionButtonOnPageLoadAnimation']!),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Stack(
@@ -332,8 +330,10 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                             size: 20,
                                           ),
                                           onPressed: () async {
-                                            await Future.delayed(const Duration(
-                                                milliseconds: 1000));
+                                            setState(() {
+                                              blur = true;
+                                            });
+                                            
                                           },
                                         ),
                                       ),
@@ -409,7 +409,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                 size: 20,
                                               ),
                                               onPressed: () {
-                                                print('IconButton pressed ...');
+                                                context.pop();
                                               },
                                             ),
                                           ),
@@ -449,7 +449,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                       FlutterFlowExpandedImageView(
                                                     image: CachedNetworkImage(
                                                       imageUrl:
-                                                          'https://fotos.perfil.com/2021/06/25/hennessey-mammoth-1000-trx-asi-es-la-camioneta-mas-picante-y-potente-del-mundo-1195417.jpg',
+                                                          activo.urlImagen,
                                                       fit: BoxFit.contain,
                                                     ),
                                                     allowRotation: false,
@@ -466,8 +466,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                 borderRadius:
                                                     BorderRadius.circular(16),
                                                 child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      'https://fotos.perfil.com/2021/06/25/hennessey-mammoth-1000-trx-asi-es-la-camioneta-mas-picante-y-potente-del-mundo-1195417.jpg',
+                                                  imageUrl: activo.urlImagen,
                                                   width: double.infinity,
                                                   height: double.infinity,
                                                   fit: BoxFit.cover,
@@ -490,7 +489,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      'Nombre',
+                                      activo.nombre,
                                       style: FlutterFlowTheme.of(context)
                                           .title1
                                           .override(
@@ -526,13 +525,13 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         8, 0, 0, 0),
                                     child: Text(
-                                      'S/N:',
+                                      'S/N: ${activo.idSerial}',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText2
                                           .override(
-                                            fontFamily: 'Lexend Deca',
+                                            fontFamily: 'Poppins',
                                             color: Color(0xFF8B97A2),
-                                            fontSize: 12,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.normal,
                                             useGoogleFonts: GoogleFonts.asMap()
                                                 .containsKey(
@@ -545,40 +544,48 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                               ).animateOnPageLoad(
                                   animationsMap['rowOnPageLoadAnimation1']!),
                             ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(24, 8, 24, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  FaIcon(
-                                    FontAwesomeIcons.boxOpen,
-                                    color: Color(0xFFAD8762),
-                                    size: 24,
-                                  ),
-                                  Padding(
+                            (activo.numActivo != null)
+                                ? Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        8, 0, 0, 0),
-                                    child: Text(
-                                      'Nro inventario: ',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText2
-                                          .override(
-                                            fontFamily: 'Lexend Deca',
-                                            color: Color(0xFF8B97A2),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.normal,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyText2Family),
+                                        24, 8, 24, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        FaIcon(
+                                          FontAwesomeIcons.boxOpen,
+                                          color: Color(0xFFAD8762),
+                                          size: 24,
+                                        ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  8, 0, 0, 0),
+                                          child: Text(
+                                            (activo.numActivo == null ||
+                                                    activo.numActivo!.isEmpty)
+                                                ? 'Nro inventario: No disponible'
+                                                : 'Nro inventario: ${activo.numActivo!}',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText2
+                                                .override(
+                                                  fontFamily: 'Lexend Deca',
+                                                  color: Color(0xFF8B97A2),
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.normal,
+                                                  useGoogleFonts: GoogleFonts
+                                                          .asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2Family),
+                                                ),
                                           ),
-                                    ),
-                                  ),
-                                ],
-                              ).animateOnPageLoad(
-                                  animationsMap['rowOnPageLoadAnimation2']!),
-                            ),
+                                        ),
+                                      ],
+                                    ).animateOnPageLoad(animationsMap[
+                                        'rowOnPageLoadAnimation2']!),
+                                  )
+                                : Row(),
                             Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(24, 12, 24, 0),
@@ -586,14 +593,14 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Text(
-                                    'DESCRIPCIÓN',
+                                    'DETALLES',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyText2
                                         .override(
-                                          fontFamily: 'Poppins',
+                                          fontFamily: 'Lexend Deca',
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
-                                          fontSize: 12,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           useGoogleFonts: GoogleFonts.asMap()
                                               .containsKey(
@@ -616,13 +623,15 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 0, 0, 24),
                                       child: Text(
-                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.',
+                                        (activo.detalles != null)
+                                            ? activo.detalles!
+                                            : 'Sin detalles...',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText2
                                             .override(
                                               fontFamily: 'Poppins',
                                               color: Color(0xFF8B97A2),
-                                              fontSize: 14,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.normal,
                                               useGoogleFonts:
                                                   GoogleFonts.asMap()
@@ -652,7 +661,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                           fontFamily: 'Poppins',
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
-                                          fontSize: 12,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           useGoogleFonts: GoogleFonts.asMap()
                                               .containsKey(
@@ -662,15 +671,15 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        2, 0, 0, 4),
+                                        2, 0, 0, 0),
                                     child: Text(
-                                      'Nombre categoria',
+                                      activo.categoria,
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText2
                                           .override(
                                             fontFamily: 'Lexend Deca',
                                             color: Color(0xFF8B97A2),
-                                            fontSize: 14,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.normal,
                                             useGoogleFonts: GoogleFonts.asMap()
                                                 .containsKey(
@@ -702,7 +711,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                             fontFamily: 'Poppins',
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryText,
-                                            fontSize: 12,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.bold,
                                             useGoogleFonts: GoogleFonts.asMap()
                                                 .containsKey(
@@ -716,7 +725,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                         4, 0, 0, 2.4),
                                     child: FaIcon(
                                       FontAwesomeIcons.solidCircle,
-                                      color: Color(0xF5129230),
+                                      color: definirColorEstado(activo.estado),
                                       size: 10,
                                     ),
                                   ),
@@ -726,7 +735,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           2, 0, 0, 3),
                                       child: Text(
-                                        'Bueno',
+                                        definirEstadoActivo(activo.estado),
                                         textAlign: TextAlign.center,
                                         maxLines: 2,
                                         style: FlutterFlowTheme.of(context)
@@ -734,7 +743,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                             .override(
                                               fontFamily: 'Poppins',
                                               color: Color(0xFF8B97A2),
-                                              fontSize: 14,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.normal,
                                               useGoogleFonts:
                                                   GoogleFonts.asMap()
@@ -763,10 +772,10 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                     style: FlutterFlowTheme.of(context)
                                         .bodyText2
                                         .override(
-                                          fontFamily: 'Poppins',
+                                          fontFamily: 'Lexend Deca',
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
-                                          fontSize: 12,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                           useGoogleFonts: GoogleFonts.asMap()
                                               .containsKey(
@@ -778,7 +787,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         6, 0, 0, 0),
                                     child: Text(
-                                      '1',
+                                      activo.cantidad.toString(),
                                       textAlign: TextAlign.center,
                                       maxLines: 2,
                                       style: FlutterFlowTheme.of(context)
@@ -786,7 +795,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                           .override(
                                             fontFamily: 'Poppins',
                                             color: Color(0xFF8B97A2),
-                                            fontSize: 15,
+                                            fontSize: 20,
                                             fontWeight: FontWeight.normal,
                                             useGoogleFonts: GoogleFonts.asMap()
                                                 .containsKey(
@@ -799,199 +808,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                               ).animateOnPageLoad(
                                   animationsMap['rowOnPageLoadAnimation6']!),
                             ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(24, 8, 24, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 10, 0, 0),
-                                    child: Text(
-                                      'FUNCIONARIO ASIGNADO',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText2
-                                          .override(
-                                            fontFamily: 'Poppins',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyText2Family),
-                                          ),
-                                    ),
-                                  ),
-                                ],
-                              ).animateOnPageLoad(
-                                  animationsMap['rowOnPageLoadAnimation7']!),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(20, 5, 20, 4),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 88,
-                                decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 2,
-                                      color: Color(0x3E000000),
-                                      offset: Offset(0, 1),
-                                    )
-                                  ],
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          8, 0, 12, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 0, 8, 2),
-                                            child: Card(
-                                              clipBehavior:
-                                                  Clip.antiAliasWithSaveLayer,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .whiteColor,
-                                              elevation: 2,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                              ),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                child: Image.network(
-                                                  'https://la-jagua-de-ibirico.micolombiadigital.gov.co/sites/la-jagua-de-ibirico/content/files/000435/21702_garcia-guerra-yain-alfonso_1024x600.JPG',
-                                                  width: 73,
-                                                  height: 70,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  'Nombre',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .subtitle1
-                                                      .override(
-                                                        fontFamily:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .subtitle1Family,
-                                                        fontSize: 15,
-                                                        useGoogleFonts: GoogleFonts
-                                                                .asMap()
-                                                            .containsKey(
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .subtitle1Family),
-                                                      ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 1.4, 0, 1),
-                                                  child: Text(
-                                                    'Cargo',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyText2
-                                                        .override(
-                                                          fontFamily:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText2Family,
-                                                          fontSize: 13,
-                                                          useGoogleFonts: GoogleFonts
-                                                                  .asMap()
-                                                              .containsKey(
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyText2Family),
-                                                        ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 0, 0, 1),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: [
-                                                      Text(
-                                                        'Area',
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText2
-                                                                .override(
-                                                                  fontFamily: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyText2Family,
-                                                                  fontSize: 13,
-                                                                  useGoogleFonts: GoogleFonts
-                                                                          .asMap()
-                                                                      .containsKey(
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .bodyText2Family),
-                                                                ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          FlutterFlowIconButton(
-                                            borderColor: Colors.transparent,
-                                            borderRadius: 30,
-                                            buttonSize: 46,
-                                            icon: Icon(
-                                              Icons.delete_outline,
-                                              color: Color(0xFFE62424),
-                                              size: 24,
-                                            ),
-                                            onPressed: () {
-                                              print('IconButton pressed ...');
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ).animateOnPageLoad(animationsMap[
-                                  'containerOnPageLoadAnimation']!),
-                            ),
+                            //TituloListafFuncionariosAsignados(animationsMap: animationsMap),
+                            //ListaFuncionariosAsignados(animationsMap: animationsMap),
                             Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 60, 0, 0),
@@ -1008,7 +826,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                 ),
               ],
             ),
-            if (true == true)
+            if (blur)
               ClipRRect(
                 borderRadius: BorderRadius.circular(0),
                 child: BackdropFilter(
@@ -1025,7 +843,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                         alignment: AlignmentDirectional(0, 0),
                         child: CajaAdvertenciaWidget().animateOnActionTrigger(
                           animationsMap[
-                              'cajaAdvertenciaOnActionTriggerAnimation']!,
+                              'cajaAdvertenciaOnActionTriggerAnimation']!, hasBeenTriggered: blur
                         ),
                       ),
                     ],
@@ -1036,5 +854,254 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
         ),
       ),
     );
+  }
+
+  Future<void> cargarActivo(id) async {
+    ActivoController activoController = ActivoController();
+    var res = await activoController.buscarActivo(id);
+    setState(() {
+      activo = res;
+    });
+  }
+}
+
+class myFloatingButton extends StatelessWidget {
+  const myFloatingButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        print('FloatingActionButton pressed ...');
+      },
+      backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+      elevation: 8,
+      child: FlutterFlowIconButton(
+        borderColor: Colors.transparent,
+        borderRadius: 30,
+        borderWidth: 1,
+        buttonSize: 60,
+        icon: Icon(
+          Icons.add,
+          color: FlutterFlowTheme.of(context).whiteColor,
+          size: 30,
+        ),
+        onPressed: () {
+          print('IconButton pressed ...');
+        },
+      ),
+    );
+  }
+}
+
+class ListaFuncionariosAsignados extends StatelessWidget {
+  const ListaFuncionariosAsignados({
+    Key? key,
+    required this.animationsMap,
+  }) : super(key: key);
+
+  final Map<String, AnimationInfo> animationsMap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(20, 5, 20, 4),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 88,
+        decoration: BoxDecoration(
+          color: FlutterFlowTheme.of(context).primaryBackground,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 2,
+              color: Color(0x3E000000),
+              offset: Offset(0, 1),
+            )
+          ],
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: FlutterFlowTheme.of(context).secondaryText,
+            width: 1,
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(8, 0, 12, 0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 8, 2),
+                    child: Card(
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      color: FlutterFlowTheme.of(context).whiteColor,
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          'https://la-jagua-de-ibirico.micolombiadigital.gov.co/sites/la-jagua-de-ibirico/content/files/000435/21702_garcia-guerra-yain-alfonso_1024x600.JPG',
+                          width: 73,
+                          height: 70,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Nombre',
+                          style: FlutterFlowTheme.of(context)
+                              .subtitle1
+                              .override(
+                                fontFamily: FlutterFlowTheme.of(context)
+                                    .subtitle1Family,
+                                fontSize: 16,
+                                useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                    FlutterFlowTheme.of(context)
+                                        .subtitle1Family),
+                              ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 1.4, 0, 1),
+                          child: Text(
+                            'Cargo',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyText2
+                                .override(
+                                  fontFamily: FlutterFlowTheme.of(context)
+                                      .bodyText2Family,
+                                  fontSize: 14,
+                                  useGoogleFonts: GoogleFonts.asMap()
+                                      .containsKey(FlutterFlowTheme.of(context)
+                                          .bodyText2Family),
+                                ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 1),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                'Area',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText2
+                                    .override(
+                                      fontFamily: FlutterFlowTheme.of(context)
+                                          .bodyText2Family,
+                                      fontSize: 14,
+                                      useGoogleFonts: GoogleFonts.asMap()
+                                          .containsKey(
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyText2Family),
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  FlutterFlowIconButton(
+                    borderColor: Colors.transparent,
+                    borderRadius: 30,
+                    buttonSize: 46,
+                    icon: Icon(
+                      Icons.delete_outline,
+                      color: Color(0xFFE62424),
+                      size: 24,
+                    ),
+                    onPressed: () {
+                      print('IconButton pressed ...');
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation']!),
+    );
+  }
+}
+
+class TituloListafFuncionariosAsignados extends StatelessWidget {
+  const TituloListafFuncionariosAsignados({
+    Key? key,
+    required this.animationsMap,
+  }) : super(key: key);
+
+  final Map<String, AnimationInfo> animationsMap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(24, 8, 24, 0),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+            child: Text(
+              'FUNCIONARIO ASIGNADO',
+              style: FlutterFlowTheme.of(context).bodyText2.override(
+                    fontFamily: 'Poppins',
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    useGoogleFonts: GoogleFonts.asMap().containsKey(
+                        FlutterFlowTheme.of(context).bodyText2Family),
+                  ),
+            ),
+          ),
+        ],
+      ).animateOnPageLoad(animationsMap['rowOnPageLoadAnimation7']!),
+    );
+  }
+}
+
+Color? definirColorEstado(int? estado) {
+  switch (estado) {
+    case 0:
+      return Colors.green;
+
+    case 1:
+      return Colors.yellow;
+
+    case 2:
+      return Colors.red;
+
+    default:
+      return Colors.grey;
+  }
+}
+
+String definirEstadoActivo(int? estado) {
+  switch (estado) {
+    case 0:
+      return 'Bueno';
+
+    case 1:
+      return 'Regular';
+
+    case 2:
+      return 'Malo';
+
+    default:
+      return 'No definido';
   }
 }

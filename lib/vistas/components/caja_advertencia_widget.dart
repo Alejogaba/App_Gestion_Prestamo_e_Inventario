@@ -46,7 +46,7 @@ class _CajaAdvertenciaWidgetState extends State<CajaAdvertenciaWidget> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                   child: Text(
-                    'Cancel Trip',
+                    'Advertencia',
                     style: FlutterFlowTheme.of(context).title2.override(
                           fontFamily: 'Poppins',
                           color: Color(0xBFDF2424),
