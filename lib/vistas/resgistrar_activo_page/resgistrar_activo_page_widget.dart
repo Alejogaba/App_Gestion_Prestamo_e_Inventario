@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:app_gestion_prestamo_inventario/entidades/activo_impresora.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/estadoActivo.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../entidades/activo.dart';
 import '../../entidades/categoria.dart';
 import '../flutter_flow/flutter_flow_count_controller.dart';
 import '../flutter_flow/flutter_flow_drop_down.dart';
@@ -21,21 +23,32 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 
-
 class ResgistrarActivoPageWidget extends StatefulWidget {
+  final String? operacionaRealizar;
   final String? idSerial;
-  const ResgistrarActivoPageWidget({Key? key, this.idSerial}) : super(key: key);
+  final String? categoria;
+  final Activo? activoEditar;
+  final Activo_Impresora? activo_impresora;
+  const ResgistrarActivoPageWidget(
+      {Key? key,
+      this.operacionaRealizar,
+      this.idSerial,
+      this.categoria,
+      this.activoEditar,
+      this.activo_impresora})
+      : super(key: key);
 
   @override
   _ResgistrarActivoPageWidgetState createState() =>
-      _ResgistrarActivoPageWidgetState(this.idSerial);
+      _ResgistrarActivoPageWidgetState(this.operacionaRealizar, this.idSerial,
+          this.categoria, this.activoEditar, this.activo_impresora);
 }
 
 class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     with SingleTickerProviderStateMixin {
   EstadoActivo? dropDownValueEstadoActivo;
   TextEditingController textControllerSerial = TextEditingController();
-  TextEditingController? textControllerN_inventario;
+  TextEditingController textControllerN_inventario = TextEditingController();
   TextEditingController? textControllerNombre;
   TextEditingController? textFieldDescripcionController;
   TextEditingController? controladorimagenUrl;
@@ -60,11 +73,17 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   bool _dropdownErrorColor = false;
   CategoriaController categoriaController = CategoriaController();
   late final _listaCategorias = cargarCategorias();
-  String? idSerial = '';
   int? numInventario;
   int estadoActivoOpcion = 0;
+  Activo? activo;
+  final String? operacionaRealizar;
+  final String? idSerial;
+  final String? categoria;
+  final Activo? activoEditar;
+  final Activo_Impresora? activo_impresora;
 
-  _ResgistrarActivoPageWidgetState(this.idSerial);
+  _ResgistrarActivoPageWidgetState(this.operacionaRealizar, this.idSerial,
+      this.categoria, this.activoEditar, this.activo_impresora);
 
   // ignore: prefer_final_fields
 
@@ -74,7 +93,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     idSerial != null
         ? textControllerSerial.text = idSerial!
         : textControllerSerial.text = '';
-    textControllerN_inventario = TextEditingController();
+
+    textControllerN_inventario.text = '';
     textControllerNombre = TextEditingController();
     textFieldDescripcionController = TextEditingController();
   }
@@ -82,7 +102,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   @override
   void dispose() {
     textControllerSerial.dispose();
-    textControllerN_inventario?.dispose();
+    textControllerN_inventario.dispose();
     textControllerNombre?.dispose();
     textFieldDescripcionController?.dispose();
     super.dispose();
@@ -133,7 +153,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                 });
               } else {
                 ActivoController activoController = ActivoController();
-                await registrarActivo(activoController, context, 'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png');
+                await registrarActivo(activoController, context,
+                    'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png');
                 Timer(Duration(seconds: 3), () {
                   context.pop();
                 });
@@ -216,27 +237,27 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         elevation: 0,
       ),
       body: Padding(
-        padding:  const EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+        padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
         child: Container(
           alignment: Alignment.center,
-            margin: EdgeInsets.all(20),
-            height: 200,
-            width:double.infinity,
-            decoration: BoxDecoration(
-              color: FlutterFlowTheme.of(context).secondaryBackground,
-               borderRadius: BorderRadius.circular(30), //border corner radius
-               boxShadow:[ 
-                 BoxShadow(
-                    color: FlutterFlowTheme.of(context).boxShadow, //color of shadow
-                    spreadRadius: 5, //spread radius
-                    blurRadius: 7, // blur radius
-                    offset: Offset(0, 2), // changes position of shadow
-                    //first paramerter of offset is left-right
-                    //second parameter is top to down
-                 ),
-                 //you can set more BoxShadow() here
-                ],
-            ),
+          margin: EdgeInsets.all(20),
+          height: 200,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: FlutterFlowTheme.of(context).secondaryBackground,
+            borderRadius: BorderRadius.circular(30), //border corner radius
+            boxShadow: [
+              BoxShadow(
+                color: FlutterFlowTheme.of(context).boxShadow, //color of shadow
+                spreadRadius: 5, //spread radius
+                blurRadius: 7, // blur radius
+                offset: Offset(0, 2), // changes position of shadow
+                //first paramerter of offset is left-right
+                //second parameter is top to down
+              ),
+              //you can set more BoxShadow() here
+            ],
+          ),
           child: Form(
             key: _formKey,
             child: Padding(
@@ -253,7 +274,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                               child: TextFormField(
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -264,29 +286,31 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                 obscureText: false,
                                 decoration: InputDecoration(
                                   labelText: 'Número serial*',
-                                  labelStyle:
-                                      FlutterFlowTheme.of(context).title3.override(
-                                            fontFamily: FlutterFlowTheme.of(context)
-                                                .title3Family,
-                                            fontSize: 20,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .title3Family),
-                                          ),
+                                  labelStyle: FlutterFlowTheme.of(context)
+                                      .title3
+                                      .override(
+                                        fontFamily: FlutterFlowTheme.of(context)
+                                            .title3Family,
+                                        fontSize: 20,
+                                        useGoogleFonts: GoogleFonts.asMap()
+                                            .containsKey(
+                                                FlutterFlowTheme.of(context)
+                                                    .title3Family),
+                                      ),
                                   hintText: 'S/N',
-                                  hintStyle:
-                                      FlutterFlowTheme.of(context).title3.override(
-                                            fontFamily: FlutterFlowTheme.of(context)
-                                                .title3Family,
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            fontSize: 22,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .title3Family),
-                                          ),
+                                  hintStyle: FlutterFlowTheme.of(context)
+                                      .title3
+                                      .override(
+                                        fontFamily: FlutterFlowTheme.of(context)
+                                            .title3Family,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                        fontSize: 22,
+                                        useGoogleFonts: GoogleFonts.asMap()
+                                            .containsKey(
+                                                FlutterFlowTheme.of(context)
+                                                    .title3Family),
+                                      ),
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
@@ -328,13 +352,16 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                     ),
                                   ),
                                 ),
-                                style: FlutterFlowTheme.of(context).title3.override(
-                                      fontFamily:
-                                          FlutterFlowTheme.of(context).title3Family,
+                                style: FlutterFlowTheme.of(context)
+                                    .title3
+                                    .override(
+                                      fontFamily: FlutterFlowTheme.of(context)
+                                          .title3Family,
                                       fontSize: 22,
                                       useGoogleFonts: GoogleFonts.asMap()
-                                          .containsKey(FlutterFlowTheme.of(context)
-                                              .title3Family),
+                                          .containsKey(
+                                              FlutterFlowTheme.of(context)
+                                                  .title3Family),
                                     ),
                               ),
                             ),
@@ -350,11 +377,12 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                               size: 30,
                             ),
                             onPressed: () async {
-                              String res = await FlutterBarcodeScanner.scanBarcode(
-                                  '#C62828', // scanning line color
-                                  'Cancel', // cancel button text
-                                  true, // whether to show the flash icon
-                                  ScanMode.BARCODE);
+                              String res =
+                                  await FlutterBarcodeScanner.scanBarcode(
+                                      '#C62828', // scanning line color
+                                      'Cancel', // cancel button text
+                                      true, // whether to show the flash icon
+                                      ScanMode.BARCODE);
                               textControllerSerial.text =
                                   res.trim().replaceAll(".", "");
                             },
@@ -369,9 +397,14 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
-                              child: TextFormFieldCustom(textControllerN_inventario: textControllerN_inventario,
-                              label:'Número de inventario',hint:'Ej.0134',maxCharacters:4),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                              child: TextFormFieldCustom(
+                                  context,
+                                  textControllerN_inventario,
+                                  'Número de inventario',
+                                  'Ej.0134',
+                                  4),
                             ),
                           ),
                         ],
@@ -389,7 +422,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                               child: TextFormField(
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -404,29 +438,31 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                 obscureText: false,
                                 decoration: InputDecoration(
                                   labelText: 'Nombre*',
-                                  labelStyle:
-                                      FlutterFlowTheme.of(context).title3.override(
-                                            fontFamily: FlutterFlowTheme.of(context)
-                                                .title3Family,
-                                            fontSize: 20,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .title3Family),
-                                          ),
+                                  labelStyle: FlutterFlowTheme.of(context)
+                                      .title3
+                                      .override(
+                                        fontFamily: FlutterFlowTheme.of(context)
+                                            .title3Family,
+                                        fontSize: 20,
+                                        useGoogleFonts: GoogleFonts.asMap()
+                                            .containsKey(
+                                                FlutterFlowTheme.of(context)
+                                                    .title3Family),
+                                      ),
                                   hintText: 'Ej. Impresora MP125',
-                                  hintStyle:
-                                      FlutterFlowTheme.of(context).title3.override(
-                                            fontFamily: FlutterFlowTheme.of(context)
-                                                .title3Family,
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            fontSize: 22,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .title3Family),
-                                          ),
+                                  hintStyle: FlutterFlowTheme.of(context)
+                                      .title3
+                                      .override(
+                                        fontFamily: FlutterFlowTheme.of(context)
+                                            .title3Family,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                        fontSize: 22,
+                                        useGoogleFonts: GoogleFonts.asMap()
+                                            .containsKey(
+                                                FlutterFlowTheme.of(context)
+                                                    .title3Family),
+                                      ),
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color(0x00000000),
@@ -468,13 +504,16 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                     ),
                                   ),
                                 ),
-                                style: FlutterFlowTheme.of(context).title3.override(
-                                      fontFamily:
-                                          FlutterFlowTheme.of(context).title3Family,
+                                style: FlutterFlowTheme.of(context)
+                                    .title3
+                                    .override(
+                                      fontFamily: FlutterFlowTheme.of(context)
+                                          .title3Family,
                                       fontSize: 22,
                                       useGoogleFonts: GoogleFonts.asMap()
-                                          .containsKey(FlutterFlowTheme.of(context)
-                                              .title3Family),
+                                          .containsKey(
+                                              FlutterFlowTheme.of(context)
+                                                  .title3Family),
                                     ),
                               ),
                             ),
@@ -522,8 +561,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                 children: [
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
-                                    child:
-                                        imagenPerfil(context, urlImagen, imageFile),
+                                    child: imagenPerfil(
+                                        context, urlImagen, imageFile),
                                   ),
                                 ],
                               ),
@@ -556,8 +595,9 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                     labelStyle: FlutterFlowTheme.of(context)
                                         .subtitle2
                                         .override(
-                                          fontFamily: FlutterFlowTheme.of(context)
-                                              .subtitle2Family,
+                                          fontFamily:
+                                              FlutterFlowTheme.of(context)
+                                                  .subtitle2Family,
                                           color: FlutterFlowTheme.of(context)
                                               .primaryText,
                                           fontSize: 20,
@@ -571,8 +611,9 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                     hintStyle: FlutterFlowTheme.of(context)
                                         .bodyText1
                                         .override(
-                                          fontFamily: FlutterFlowTheme.of(context)
-                                              .bodyText1Family,
+                                          fontFamily:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyText1Family,
                                           color: FlutterFlowTheme.of(context)
                                               .secondaryText,
                                           fontSize: 18,
@@ -660,7 +701,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                           Align(
                             alignment: AlignmentDirectional(0, 0),
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 10),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 10, 10),
                               child: FlutterFlowDropDown<EstadoActivo>(
                                 initialOption: listEstados[0],
                                 value: dropDownValueEstadoActivo,
@@ -684,19 +726,20 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                           .bodyText1Family,
                                       fontSize: 18,
                                       useGoogleFonts: GoogleFonts.asMap()
-                                          .containsKey(FlutterFlowTheme.of(context)
-                                              .bodyText1Family),
+                                          .containsKey(
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyText1Family),
                                     ),
                                 hintText: listEstados[0].descripcion,
-                                fillColor:
-                                    FlutterFlowTheme.of(context).primaryBackground,
+                                fillColor: FlutterFlowTheme.of(context)
+                                    .primaryBackground,
                                 elevation: 2,
                                 borderColor:
                                     FlutterFlowTheme.of(context).secondaryText,
                                 borderWidth: 2,
                                 borderRadius: 8,
-                                margin:
-                                    EdgeInsetsDirectional.fromSTEB(12, 4, 12, 4),
+                                margin: EdgeInsetsDirectional.fromSTEB(
+                                    12, 4, 12, 4),
                                 hidesUnderline: true,
                               ),
                             ),
@@ -710,7 +753,11 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                       color: Color(0x94ABB3BA),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20,  MediaQuery.of(context).size.width-40,  MediaQuery.of(context).size.width-40, 20),
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                          20,
+                          MediaQuery.of(context).size.width - 40,
+                          MediaQuery.of(context).size.width - 40,
+                          20),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -719,7 +766,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                           Align(
                             alignment: AlignmentDirectional(0, 0),
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 10),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 10, 10),
                               child: FutureBuilder<List<Categoria>>(
                                 future: _listaCategorias,
                                 builder: (BuildContext context, snapshot) {
@@ -731,7 +779,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                         ? List.generate(
                                             snapshot.data!.length,
                                             (index) => DropdownMenuItem(
-                                                value: snapshot.data![index].nombre,
+                                                value: snapshot
+                                                    .data![index].nombre,
                                                 child: Text(snapshot
                                                     .data![index].nombre
                                                     .toString())))
@@ -741,13 +790,15 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                 value: null, child: Text(''))),
                                     onChanged: (val) => setState(
                                         () => dropDownValueCategoria = val),
-                                    width: MediaQuery.of(context).size.width - 30,
+                                    width:
+                                        MediaQuery.of(context).size.width - 30,
                                     height: 50,
                                     textStyle: FlutterFlowTheme.of(context)
                                         .bodyText1
                                         .override(
-                                          fontFamily: FlutterFlowTheme.of(context)
-                                              .bodyText1Family,
+                                          fontFamily:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyText1Family,
                                           fontSize: 18,
                                           useGoogleFonts: GoogleFonts.asMap()
                                               .containsKey(
@@ -788,7 +839,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
@@ -807,8 +859,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                       ),
                                 ),
                                 Padding(
-                                  padding:
-                                      EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 12, 0, 0),
                                   child: Container(
                                     width: 160,
                                     height: 50,
@@ -849,12 +901,15 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                               fontFamily:
                                                   FlutterFlowTheme.of(context)
                                                       .title2Family,
-                                              color: FlutterFlowTheme.of(context)
-                                                  .grayicon,
-                                              useGoogleFonts: GoogleFonts.asMap()
-                                                  .containsKey(
-                                                      FlutterFlowTheme.of(context)
-                                                          .title2Family),
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .grayicon,
+                                              useGoogleFonts:
+                                                  GoogleFonts.asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .title2Family),
                                             ),
                                       ),
                                       count: countControllerValue ??= 1,
@@ -887,7 +942,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     await activoController.addActivo(
         context,
         textControllerSerial.text,
-        textControllerN_inventario!.text,
+        textControllerN_inventario.text,
         textControllerNombre!.text,
         textFieldDescripcionController!.text,
         imagenUrl,
@@ -919,7 +974,6 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
       if (pickedFile != null) {
         print("file not null");
         imageFile = File(pickedFile.path);
-       
       } else {
         print('No image selected.');
       }
@@ -931,7 +985,6 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     setState(() {
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
-       
       } else {
         print('No image selected.');
       }
@@ -1047,107 +1100,89 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   }
 }
 
-class TextFormFieldCustom extends StatelessWidget {
-
-  const TextFormFieldCustom({
-    Key? key,
-    required TextEditingController controlador, required String hint, required String label, required int maxCharacters,
-  }) : super(key: key);
-
-  final TextEditingController? textControllerN_inventario;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-     cursorColor: FlutterFlowTheme.of(context).primaryText,
-     
-      controller:controlador,
-       inputFormatters: [
-                                  LengthLimitingTextInputFormatter(maxCharacters),
-                                ],
-      obscureText: false,
-      decoration: InputDecoration(
-        fillColor: FlutterFlowTheme.of(context).primaryBackground,
-        labelText: 'Número de inventario',
-        labelStyle:
-            FlutterFlowTheme.of(context).title3.override(
-                  fontFamily: FlutterFlowTheme.of(context)
-                      .title3Family,
-                  fontSize: 20,
-                  useGoogleFonts: GoogleFonts.asMap()
-                      .containsKey(
-                          FlutterFlowTheme.of(context)
-                              .title3Family),
-                  color: FlutterFlowTheme.of(context).primaryText,
-                ),
-        hintText: '01234',
-        hintStyle:
-            FlutterFlowTheme.of(context).title3.override(
-                  fontFamily: FlutterFlowTheme.of(context)
-                      .title3Family,
-                  color: FlutterFlowTheme.of(context)
-                      .secondaryText,
-                  fontSize: 22,
-                  useGoogleFonts: GoogleFonts.asMap()
-                      .containsKey(
-                          FlutterFlowTheme.of(context)
-                              .title3Family),
-                ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
+Widget TextFormFieldCustom(
+  context,
+  TextEditingController controlador,
+  String hint,
+  String label,
+  int maxCharacters,
+) {
+  return TextFormField(
+    cursorColor: FlutterFlowTheme.of(context).primaryText,
+    controller: controlador,
+    inputFormatters: [
+      LengthLimitingTextInputFormatter(maxCharacters),
+    ],
+    obscureText: false,
+    decoration: InputDecoration(
+      fillColor: FlutterFlowTheme.of(context).primaryBackground,
+      labelText: 'Número de inventario',
+      labelStyle: FlutterFlowTheme.of(context).title3.override(
+            fontFamily: FlutterFlowTheme.of(context).title3Family,
+            fontSize: 20,
+            useGoogleFonts: GoogleFonts.asMap()
+                .containsKey(FlutterFlowTheme.of(context).title3Family),
             color: FlutterFlowTheme.of(context).primaryText,
-            width: 1,
           ),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(4.0),
-            topRight: Radius.circular(4.0),
-          ),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: FlutterFlowTheme.of(context).primaryText,
-            width: 1,
-          ),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(4.0),
-            topRight: Radius.circular(4.0),
-          ),
-        ),
-        errorBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: FlutterFlowTheme.of(context).primaryText,
-            width: 1,
-          ),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(4.0),
-            topRight: Radius.circular(4.0),
-          ),
-        ),
-        focusedErrorBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: FlutterFlowTheme.of(context).primaryText,
-            width: 1,
-          ),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(4.0),
-            topRight: Radius.circular(4.0),
-          ),
-        ),
-        suffixIcon: FaIcon(
-          FontAwesomeIcons.boxOpen,
-          color: Color(0xFFAD8762),
-          size: 30,
-        ),
-      ),
-    
-      style: FlutterFlowTheme.of(context).title3.override(
-            fontFamily:
-                FlutterFlowTheme.of(context).title3Family,
+      hintText: '01234',
+      hintStyle: FlutterFlowTheme.of(context).title3.override(
+            fontFamily: FlutterFlowTheme.of(context).title3Family,
+            color: FlutterFlowTheme.of(context).secondaryText,
             fontSize: 22,
             useGoogleFonts: GoogleFonts.asMap()
-                .containsKey(FlutterFlowTheme.of(context)
-                    .title3Family),
+                .containsKey(FlutterFlowTheme.of(context).title3Family),
           ),
-    );
-  }
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+          color: FlutterFlowTheme.of(context).primaryText,
+          width: 1,
+        ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(4.0),
+          topRight: Radius.circular(4.0),
+        ),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+          color: FlutterFlowTheme.of(context).primaryText,
+          width: 1,
+        ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(4.0),
+          topRight: Radius.circular(4.0),
+        ),
+      ),
+      errorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+          color: FlutterFlowTheme.of(context).primaryText,
+          width: 1,
+        ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(4.0),
+          topRight: Radius.circular(4.0),
+        ),
+      ),
+      focusedErrorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(
+          color: FlutterFlowTheme.of(context).primaryText,
+          width: 1,
+        ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(4.0),
+          topRight: Radius.circular(4.0),
+        ),
+      ),
+      suffixIcon: FaIcon(
+        FontAwesomeIcons.boxOpen,
+        color: Color(0xFFAD8762),
+        size: 30,
+      ),
+    ),
+    style: FlutterFlowTheme.of(context).title3.override(
+          fontFamily: FlutterFlowTheme.of(context).title3Family,
+          fontSize: 22,
+          useGoogleFonts: GoogleFonts.asMap()
+              .containsKey(FlutterFlowTheme.of(context).title3Family),
+        ),
+  );
 }
