@@ -1,5 +1,9 @@
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../components/caja_advertencia_widget.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
@@ -865,9 +869,14 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                     children: [
                       Align(
                         alignment: AlignmentDirectional(0, 0),
-                        
-                        child: CajaAdvertenciaWidget(mensaje:'¿Esta seguro que desea eliminar este activo?',
-                        objetoaEliminar:'activo',id:activo.idSerial.toString(),blur: blur,),
+
+                        child: CajaAdvertenciaWidget(
+                          mensaje:
+                              '¿Esta seguro que desea eliminar este activo?',
+                          objetoaEliminar: 'activo',
+                          id: activo.idSerial.toString(),
+                          blur: blur,
+                        ),
                         //. animateOnActionTrigger(animationsMap['cajaAdvertenciaOnActionTriggerAnimation']!,hasBeenTriggered: true),
                       ),
                     ],
@@ -1062,8 +1071,6 @@ class ListaFuncionariosAsignados extends StatelessWidget {
     );
   }
 }
-
-Widget
 
 class TituloListafFuncionariosAsignados extends StatelessWidget {
   const TituloListafFuncionariosAsignados({
