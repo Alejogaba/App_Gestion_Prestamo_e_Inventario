@@ -134,13 +134,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.6"
-  desktop_webview_auth:
-    dependency: "direct main"
-    description:
-      name: desktop_webview_auth
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.11"
   dotted_border:
     dependency: "direct main"
     description:
@@ -763,13 +756,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
-  sidebarx:
-    dependency: "direct main"
-    description:
-      name: sidebarx
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.14.0"
   sky_engine:
     dependency: transitive
     description: flutter

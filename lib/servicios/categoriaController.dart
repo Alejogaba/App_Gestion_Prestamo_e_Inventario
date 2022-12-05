@@ -2,8 +2,7 @@ import 'dart:developer';
 import 'package:app_gestion_prestamo_inventario/assets/utilidades.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
-import 'package:desktop_webview_auth/desktop_webview_auth.dart';
-import 'package:desktop_webview_auth/google.dart';
+
 import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -58,13 +57,14 @@ class CategoriaController {
   Future<void> addCategoria(
       context,
       String nombre,
-      String urlImagen) async {
+      String urlImagen,String? descripcion) async {
     try {
       log('Inserando nuevo activo...');
       Utilidades utilidades = Utilidades();
       await client.from('CATEGORIAS').insert({
         'NOMBRE': utilidades.capitalizeAllWord(nombre),
         'URL_IMAGEN': urlImagen,
+        'DESCRIPCION': (descripcion==null) ? null : utilidades.capitalizeAllSentence(descripcion),
         
       }).then((value) => log('Nueva categoria registrada: $value'));
       log("Registrado con exito");
@@ -105,6 +105,7 @@ class CategoriaController {
     return Categoria(
       result['NOMBRE'],
       result['URL_IMAGEN'],
+      result['DESCRIPCION'],
     );
   }
 }

@@ -4,8 +4,6 @@ import 'package:app_gestion_prestamo_inventario/assets/utilidades.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
-import 'package:desktop_webview_auth/desktop_webview_auth.dart';
-import 'package:desktop_webview_auth/google.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -209,6 +207,7 @@ class ActivoController {
     return Categoria(
       result['NOMBRE'],
       result['URL_IMAGEN'],
+       result['DESCRIPCION'],
     );
   }
 }

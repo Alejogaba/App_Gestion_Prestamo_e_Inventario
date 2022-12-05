@@ -1,6 +1,4 @@
 import 'dart:developer';
-import 'package:desktop_webview_auth/desktop_webview_auth.dart';
-import 'package:desktop_webview_auth/google.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';

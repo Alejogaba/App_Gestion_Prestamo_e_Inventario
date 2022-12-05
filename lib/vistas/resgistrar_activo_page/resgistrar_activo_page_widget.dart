@@ -49,8 +49,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   TextEditingController textControllerSerial = TextEditingController();
   TextEditingController textControllerN_inventario = TextEditingController();
   TextEditingController textControllerNombre = TextEditingController();
-  TextEditingController? textFieldDescripcionController =
-      TextEditingController();
+  TextEditingController? textControllerDetalles = TextEditingController();
   TextEditingController? controladorimagenUrl = TextEditingController();
   String? dropDownValueCategoria;
   int? countControllerValue = 1;
@@ -80,7 +79,10 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   final String? idSerial;
   final String? categoria;
   final Activo? activoEditar;
-  FocusNode _focusNode = FocusNode();
+  FocusNode _focusNodeIdSerial = FocusNode();
+  FocusNode _focusNodeNinventario = FocusNode();
+  FocusNode _focusNodeNombre = FocusNode();
+  FocusNode _focusNodeDetalles = FocusNode();
   Color color = Colors.red;
   List<TextInputFormatter> inputNumero = <TextInputFormatter>[
     // for below version 2 use this
@@ -94,6 +96,10 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     LengthLimitingTextInputFormatter(10),
   ];
 
+  dynamic tamanio_padding = (Platform.isAndroid || Platform.isIOS)
+      ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
+      : EdgeInsetsDirectional.fromSTEB(80, 10, 80, 10);
+
   _ResgistrarActivoPageWidgetState(this.operacionaRealizar, this.idSerial,
       this.categoria, this.activoEditar);
 
@@ -106,7 +112,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
       textControllerSerial.text = activoEditar!.idSerial.toString();
       textControllerN_inventario.text = activoEditar!.numActivo.toString();
       textControllerNombre.text = activoEditar!.nombre.toString();
-      textFieldDescripcionController!.text = activoEditar!.detalles.toString();
+      textControllerDetalles!.text = activoEditar!.detalles.toString();
       dropDownValueCategoria = activoEditar!.categoria.toString();
       dropDownValueEstadoActivo!.id = activoEditar!.estado;
     } else {
@@ -123,24 +129,12 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     textControllerSerial.dispose();
     textControllerN_inventario.dispose();
     textControllerNombre.dispose();
-    textFieldDescripcionController?.dispose();
+    textControllerDetalles?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _focusNode.addListener(() {
-      setState(() {
-        fontFamily:
-        FlutterFlowTheme.of(context).title3Family;
-        fontSize:
-        20;
-        color:
-        _focusNode.hasFocus
-            ? FlutterFlowTheme.of(context).primaryText
-            : FlutterFlowTheme.of(context).grayicon;
-      });
-    });
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -175,7 +169,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                     context,
                     imageFile!.path.toString(),
                     imageFile!,
-                    textControllerSerial.text);
+                    textControllerSerial.text,'activos');
                 ActivoController activoController = ActivoController();
                 // ignore: use_build_context_synchronously
                 await registrarActivo(activoController, context, imagenUrl);
@@ -273,13 +267,17 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
             ? EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0)
             : EdgeInsetsDirectional.fromSTEB(60, 16, 60, 16),
         child: Container(
-          alignment: Alignment.center,
-          margin: EdgeInsets.all(20),
-          height: 1000,
+          alignment: Alignment.topCenter,
+          margin: (Platform.isAndroid || Platform.isIOS)
+              ? null
+              : EdgeInsets.all(10),
+          height: (Platform.isAndroid || Platform.isIOS) ? null : 1000,
           width: double.infinity,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
-            borderRadius: BorderRadius.circular(30), //border corner radius
+            borderRadius: (Platform.isAndroid || Platform.isIOS)
+                ? null
+                : BorderRadius.circular(30), //border corner radius
             /*boxShadow: [
               BoxShadow(
                 color: FlutterFlowTheme.of(context).boxShadow, //color of shadow
@@ -306,24 +304,22 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                     Column(
                       children: [
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 5, 10, 12),
+                          padding: tamanio_padding,
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Expanded(
-                                child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 0, 0, 0),
-                                    child: TextFormFieldCustom(
-                                        context,
-                                        textControllerSerial,
-                                        'S/N',
-                                        'Número de serial*',
-                                        30,
-                                        TextInputType.text,
-                                        null,
-                                        true,
-                                        null)),
+                                child: TextFormFieldCustom(
+                                    context,
+                                    textControllerSerial,
+                                    'S/N',
+                                    'Número de serial*',
+                                    20,
+                                    TextInputType.text,
+                                    null,
+                                    true,
+                                    null,
+                                    _focusNodeIdSerial),
                               ),
                               Container(
                                 width: 50,
@@ -394,8 +390,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                             children: [
                               Expanded(
                                 child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      10, 0, 10, 0),
+                                  padding: tamanio_padding,
                                   child: TextFormFieldCustom(
                                       context,
                                       textControllerN_inventario,
@@ -409,7 +404,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                         FontAwesomeIcons.boxOpen,
                                         color: Color(0xFFAD8762),
                                         size: 30,
-                                      )),
+                                      ),
+                                      _focusNodeNinventario),
                                 ),
                               ),
                             ],
@@ -420,22 +416,22 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 5, 10, 5),
                       child: Row(
-                        mainAxisSize: MainAxisSize.max,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Expanded(
                             child: Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(10, 0, 0, 5),
+                              padding: tamanio_padding,
                               child: TextFormFieldCustom(
                                   context,
-                                  textFieldDescripcionController,
+                                  textControllerNombre,
                                   'Ej.Impresora mp203',
                                   'Nombre*',
                                   30,
                                   TextInputType.text,
                                   null,
                                   true,
-                                  null),
+                                  null,
+                                  _focusNodeNombre),
                             ),
                           ),
                         ],
@@ -444,7 +440,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                       child: Wrap(
-                        spacing: 10,
+                        spacing: 0,
                         runSpacing: 2,
                         alignment: WrapAlignment.center,
                         crossAxisAlignment: WrapCrossAlignment.start,
@@ -456,19 +452,21 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                           Column(
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10, 10, 0, 0),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                 child: Text(
                                   'Seleccione o suba una imagen',
                                   style: FlutterFlowTheme.of(context).title3,
                                 ),
                               ),
                               Container(
-                                width: 250,
+                                width: (Platform.isAndroid || Platform.isIOS)
+                                    ? MediaQuery.of(context).size.width * 0.8
+                                    : MediaQuery.of(context).size.width * 0.2,
                                 child: Center(
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        16, 16, 16, 14),
+                                        0, 16, 0, 14),
                                     child: Center(
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
@@ -484,7 +482,9 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                           Column(
                             children: [
                               Container(
-                                width: 800,
+                                width: (Platform.isAndroid || Platform.isIOS)
+                                    ? MediaQuery.of(context).size.width * 0.9
+                                    : MediaQuery.of(context).size.width * 0.6,
                                 child: Align(
                                   alignment: AlignmentDirectional(0.05, 0),
                                   child: Padding(
@@ -492,18 +492,21 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                           0, 30, 0, 0),
                                       child: TextFormFieldCustom(
                                           context,
-                                          textControllerNombre,
+                                          textControllerDetalles,
                                           'Ej.Impresora LaserJet MP203 marca HP',
                                           'Detalles',
-                                          30,
+                                          150,
                                           TextInputType.multiline,
                                           null,
                                           false,
-                                          null)),
+                                          null,
+                                          _focusNodeDetalles)),
                                 ),
                               ),
                               Container(
-                                width: 800,
+                                width: (Platform.isAndroid || Platform.isIOS)
+                                    ? MediaQuery.of(context).size.width * 0.9
+                                    : MediaQuery.of(context).size.width * 0.6,
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 12, 0, 0),
@@ -592,7 +595,9 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                 ),
                               ),
                               Container(
-                                width: 800,
+                                width: (Platform.isAndroid || Platform.isIOS)
+                                    ? MediaQuery.of(context).size.width * 0.9
+                                    : MediaQuery.of(context).size.width * 0.6,
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 12, 0, 0),
@@ -660,10 +665,6 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                       () =>
                                                           dropDownValueCategoria =
                                                               val),
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width -
-                                                      110,
                                                   height: 50,
                                                   textStyle:
                                                       FlutterFlowTheme.of(
@@ -710,14 +711,17 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                 ),
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),
-                    Divider(
-                      height: 2,
-                      thickness: 1,
-                      color: Color(0x94ABB3BA),
+                    Padding(
+                      padding: tamanio_padding,
+                      child: Divider(
+                        height: 2,
+                        thickness: 1,
+                        color: Color(0x94ABB3BA),
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
@@ -825,8 +829,17 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     );
   }
 
-  Widget TextFormFieldCustom(context, controlador, String hint, String label,
-      int maxCharacters, tipo_teclado, esNumero, bool _esObligatorio, sufix) {
+  Widget TextFormFieldCustom(
+      context,
+      controlador,
+      String hint,
+      String label,
+      int maxCharacters,
+      tipo_teclado,
+      esNumero,
+      bool _esObligatorio,
+      sufix,
+      _focusNode) {
     return TextFormField(
       validator: (_esObligatorio)
           ? (value) {
@@ -852,7 +865,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         labelStyle: FlutterFlowTheme.of(context).title3.override(
               fontFamily: FlutterFlowTheme.of(context).title3Family,
               fontSize: 22,
-              color: _focusNode.hasFocus
+              color: _focusNodeIdSerial.hasFocus
                   ? FlutterFlowTheme.of(context).primaryText
                   : FlutterFlowTheme.of(context).grayicon,
               useGoogleFonts: GoogleFonts.asMap()
@@ -925,7 +938,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         textControllerSerial.text,
         textControllerN_inventario.text,
         textControllerNombre.text,
-        textFieldDescripcionController!.text,
+        textControllerDetalles!.text,
         imagenUrl,
         estadoActivoOpcion,
         dropDownValueCategoria!,
@@ -1057,7 +1070,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         strokeWidth: 2,
         dashPattern: [10, 10],
         child: Container(
-            width: 200,
+            width: 250,
             height: 200,
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
@@ -1083,8 +1096,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     } else {
       return Image.file(
         imageFile,
-        width: 100,
-        height: 100,
+        width: 250,
+        height: 200,
         fit: BoxFit.cover,
       );
     }

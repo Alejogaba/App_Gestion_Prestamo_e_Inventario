@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -112,18 +113,33 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                         'Cancelar', // cancel button text
                         true, // whether to show the flash icon
                         ScanMode.BARCODE)
-                    .then((value) {
+                    .then((value) async {
                   if (value != null) {
-                    // ignore: use_build_context_synchronously
-                    context.pushNamed(
-                      'registraractivopage',
-                      queryParams: {
-                        'idSerial': serializeParam(
-                          value.trim().replaceAll(".", ""),
-                          ParamType.String,
-                        )
-                      },
-                    );
+                    ActivoController activoController = ActivoController();
+                    var res = await activoController.buscarActivo(value);
+                    if (res.idSerial.isEmpty) {
+                      // ignore: use_build_context_synchronously
+                      context.pushNamed(
+                        'registraractivopage',
+                        queryParams: {
+                          'idSerial': serializeParam(
+                            value.trim().replaceAll(".", ""),
+                            ParamType.String,
+                          )
+                        },
+                      );
+                    } else {
+                      // ignore: use_build_context_synchronously
+                      context.pushNamed(
+                        'activoPerfilPage',
+                        queryParams: {
+                          'idActivo': serializeParam(
+                            res.idSerial,
+                            ParamType.String,
+                          )
+                        },
+                      );
+                    }
                   }
                 });
               },
@@ -242,14 +258,19 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                         ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(0x00000000),
+                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryText,
                                         width: 1,
                                       ),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color: Color(0x00000000),
+                                        color:FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryText,
                                         width: 1,
                                       ),
                                       borderRadius: BorderRadius.circular(12),
@@ -269,7 +290,9 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     filled: true,
-                                    fillColor: Colors.white,
+                                    fillColor: FlutterFlowTheme
+                                                            .of(context)
+                                                        .secondaryBackground,
                                     prefixIcon: Icon(
                                       Icons.search_rounded,
                                       color: Color(0xFF57636C),
@@ -302,7 +325,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 4, 0, 4),
                                       child: Text(
-                                        'Categories',
+                                        'Categorias',
                                         style: FlutterFlowTheme.of(context)
                                             .subtitle2
                                             .override(
@@ -319,21 +342,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                             ),
                                       ),
                                     ),
-                                    Text(
-                                      'See All',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText1
-                                          .override(
-                                            fontFamily: 'Outfit',
-                                            color: Color(0xFF14181B),
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.normal,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyText1Family),
-                                          ),
-                                    ),
+                                    
                                   ],
                                 ),
                               ),
@@ -365,7 +374,8 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                                   snapshot.data![index].nombre,
                                                   snapshot
                                                       .data![index].urlImagen,
-                                                  constraints.maxWidth);
+                                                  constraints.maxWidth,listCategoriasLocal[index]
+                                                      .descripcion!);
                                               return temp;
                                             },
                                             scrollDirection: Axis.vertical,
@@ -411,7 +421,8 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                                       .nombre,
                                                   listCategoriasLocal[index]
                                                       .urlImagen,
-                                                  constraints.maxWidth);
+                                                  constraints.maxWidth,listCategoriasLocal[index]
+                                                      .descripcion!);
                                               return temp;
                                             },
                                             scrollDirection: Axis.vertical,
@@ -496,7 +507,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
 }
 
 Widget itemCategoria(
-    BuildContext context, String? nombre, String? url, constraints) {
+    BuildContext context, String? nombre, String? url, constraints,String descripcion) {
   log("Dibujando item categoria");
 
   return GestureDetector(
@@ -566,7 +577,7 @@ Widget itemCategoria(
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(8, 4, 0, 0),
                 child: Text(
-                  'Category Name',
+                  descripcion,
                   style: FlutterFlowTheme.of(context).bodyText2.override(
                         fontFamily: 'Outfit',
                         color: FlutterFlowTheme.of(context).grayicon,
@@ -603,7 +614,7 @@ int defCantidadColumnas(screenSize) {
 
 double? defTamanoImagen(screenSize) {
   if (screenSize > 440 && screenSize < 640) {
-    return 82;
+    return 110;
   } else if (screenSize >= 640 && screenSize < 1057) {
     return 180;
   } else if (screenSize >= 1057 && screenSize < 1240) {

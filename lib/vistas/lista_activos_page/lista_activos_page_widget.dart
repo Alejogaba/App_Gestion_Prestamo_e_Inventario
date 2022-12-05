@@ -94,29 +94,40 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                     label: 'Buscar por código de barras',
                     labelStyle: TextStyle(fontSize: 18.0),
                     onTap: () async {
-                      await FlutterBarcodeScanner.scanBarcode(
-                              '#C62828', // scanning line color
-                              'Cancelar', // cancel button text
-                              true, // whether to show the flash icon
-                              ScanMode.BARCODE)
-                          .then((value) {
-                        if (value != null) {
-                          // ignore: use_build_context_synchronously
-                          context.pushNamed(
-                            'registraractivopage',
-                            queryParams: {
-                              'idSerial': serializeParam(
-                                value.trim().replaceAll(".", ""),
-                                ParamType.String,
-                              ),
-                              'categoria': serializeParam(
-                                nombreCategoria,
-                                ParamType.String,
-                              ),
-                            },
-                          );
-                        }
-                      });
+                await FlutterBarcodeScanner.scanBarcode(
+                        '#C62828', // scanning line color
+                        'Cancelar', // cancel button text
+                        true, // whether to show the flash icon
+                        ScanMode.BARCODE)
+                    .then((value) async {
+                  if (value != null) {
+                    ActivoController activoController = ActivoController();
+                    var res = await activoController.buscarActivo(value);
+                    if (res.idSerial.isEmpty) {
+                      // ignore: use_build_context_synchronously
+                      context.pushNamed(
+                        'registraractivopage',
+                        queryParams: {
+                          'idSerial': serializeParam(
+                            value.trim().replaceAll(".", ""),
+                            ParamType.String,
+                          )
+                        },
+                      );
+                    } else {
+                      // ignore: use_build_context_synchronously
+                      context.pushNamed(
+                        'activoPerfilPage',
+                        queryParams: {
+                          'idActivo': serializeParam(
+                            res.idSerial,
+                            ParamType.String,
+                          )
+                        },
+                      );
+                    }
+                  }
+                });
                     },
                   ),
                   SpeedDialChild(
@@ -223,7 +234,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                   obscureText: false,
                                                   decoration: InputDecoration(
                                                     labelText:
-                                                        'Buscar funcionario...',
+                                                        'Buscar activo...',
                                                     labelStyle: FlutterFlowTheme
                                                             .of(context)
                                                         .bodyText2

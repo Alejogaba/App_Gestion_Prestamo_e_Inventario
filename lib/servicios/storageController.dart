@@ -1,6 +1,4 @@
 import 'dart:developer';
-import 'package:desktop_webview_auth/desktop_webview_auth.dart';
-import 'package:desktop_webview_auth/google.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
@@ -18,15 +16,15 @@ import '../flutter_flow/flutter_flow_theme.dart';
 class StorageController {
   final supabase =
       SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
-  Future<String?> subirImagen(BuildContext context, String filePath,
-      File imageFile, String? id_serial) async {
+  Future<String> subirImagen(BuildContext context, String? filePath,
+      File imageFile, String? id,String bucketName) async {
     try {
       final bytes = await imageFile.readAsBytes();
       final fileExt = imageFile.path.split('.').last;
-      final fileName = '$id_serial.$fileExt';
+      final fileName = '$id.$fileExt';
       final filePath = fileName;
       final fileType = "${filePath.split('.').last}/";
-      await supabase.storage.from('activos').uploadBinary(
+      await supabase.storage.from(bucketName).uploadBinary(
             filePath,
             bytes,
             fileOptions: FileOptions(),
@@ -54,11 +52,13 @@ class StorageController {
           ),
           backgroundColor: Colors.redAccent,
         ));
-        return null;
+        final fileExt = imageFile.path.split('.').last;
+        final fileName = '$id.$fileExt';
+        return 'https://ujftfjxhobllfwadrwqj.supabase.co/storage/v1/object/public/$bucketName/$fileName';
       } else {
         final fileExt = imageFile.path.split('.').last;
-        final fileName = '$id_serial.$fileExt';
-        return 'https://ujftfjxhobllfwadrwqj.supabase.co/storage/v1/object/public/activos/$fileName';
+        final fileName = '$id.$fileExt';
+        return 'https://ujftfjxhobllfwadrwqj.supabase.co/storage/v1/object/public/$bucketName/$fileName';
       }
       
     } catch (error) {
@@ -78,7 +78,7 @@ class StorageController {
 
       log(error.toString());
     }
-    return null;
+    return 'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png';
   }
 
   Future<String> traducir(String input) async {

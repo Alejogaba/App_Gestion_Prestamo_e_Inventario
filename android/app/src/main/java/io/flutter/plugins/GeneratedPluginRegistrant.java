@@ -21,11 +21,6 @@ public final class GeneratedPluginRegistrant {
       Log.e(TAG, "Error registering plugin app_links, com.llfbandit.app_links.AppLinksPlugin", e);
     }
     try {
-      flutterEngine.getPlugins().add(new com.example.desktop_webview_auth.DesktopWebviewAuthPlugin());
-    } catch(Exception e) {
-      Log.e(TAG, "Error registering plugin desktop_webview_auth, com.example.desktop_webview_auth.DesktopWebviewAuthPlugin", e);
-    }
-    try {
       flutterEngine.getPlugins().add(new com.mr.flutter.plugin.filepicker.FilePickerPlugin());
     } catch(Exception e) {
       Log.e(TAG, "Error registering plugin file_picker, com.mr.flutter.plugin.filepicker.FilePickerPlugin", e);
