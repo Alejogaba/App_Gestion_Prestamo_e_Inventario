@@ -34,6 +34,7 @@ class _ListaFuncionariosPageWidgetState
     extends State<ListaFuncionariosPageWidget> {
   TextEditingController? textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  String textDial = 'Buscar por código de barras';
 
   @override
   void initState() {
@@ -88,8 +89,9 @@ class _ListaFuncionariosPageWidgetState
               label: 'Buscar por código de barras',
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () async {
-                scanCnic(ImageSource.camera);
-                log('https://pub.dev/packages/barcode_scan2/install')
+                var res = await scanCnic(ImageSource.camera);
+
+                log('https://pub.dev/packages/barcode_scan2/install');
               },
             ),
             SpeedDialChild(
@@ -99,23 +101,11 @@ class _ListaFuncionariosPageWidgetState
               label: 'Registrar nuevo activo',
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () => context.pushNamed(
-                'registraractivopage',
-                queryParams: {
-                  'idSerial': serializeParam(
-                    null,
-                    ParamType.String,
-                  )
-                },
+                'registrarfuncionariopage',
+               
               ),
             ),
-            SpeedDialChild(
-              child: Icon(Icons.category_rounded),
-              foregroundColor: Colors.white,
-              backgroundColor: Color.fromARGB(255, 6, 113, 122),
-              label: 'Crear nueva categoria',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => context.pushNamed('registrarcategoriapage'),
-            ),
+            
 
             //add more menu item childs here
           ],
@@ -330,12 +320,12 @@ class _ListaFuncionariosPageWidgetState
                                                 child: ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(6),
-                                                  child: Image.network(
-                                                    'https://la-jagua-de-ibirico.micolombiadigital.gov.co/sites/la-jagua-de-ibirico/content/files/000435/21702_garcia-guerra-yain-alfonso_1024x600.JPG',
+                                                  child: Text('image') /*Image.network(
+                                                    'https://hablemosdemineria.com/wp-content/uploads/2021/09/Ovelio-Jimenez.jpg',
                                                     width: 80,
                                                     height: 80,
                                                     fit: BoxFit.cover,
-                                                  ),
+                                                  ),*/
                                                 ),
                                               ),
                                               Expanded(
@@ -502,37 +492,14 @@ class _ListaFuncionariosPageWidgetState
     );
   }
 
-  Future<void> scan() async {
-    var license = '';
-    List<RecognizerResult> results;
-
-    Recognizer recognizer = BlinkIdCombinedRecognizer();
-    OverlaySettings settings = BlinkIdOverlaySettings();
-
-    // set your license
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      license = "";
-    } else if (Theme.of(context).platform == TargetPlatform.android) {
-      license = "";
-    }
-
-    try {
-      // perform scan and gather results
-      results = await MicroblinkScanner.scanWithCamera(
-          RecognizerCollection([recognizer]), settings, license);
-      log(results.toString());
-    } on PlatformException catch (e) {
-      log(e.message.toString());
-      // handle exception
-    }
-  }
-
+ 
   Future<void> scanCnic(ImageSource imageSource) async {
     /// you will need to pass one argument of "ImageSource" as shown here
     CnicModel cnicModel =
         await CnicScanner().scanImage(imageSource: imageSource);
     if (cnicModel == null) return;
     setState(() {
+      textDial = cnicModel.cnicHolderName;
       log(cnicModel.cnicHolderName);
     });
   }

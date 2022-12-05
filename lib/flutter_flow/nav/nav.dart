@@ -105,7 +105,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'RegistrarFuncionarioPage',
               path: 'registrarFuncionarioPage',
               builder: (context, params) => RegistrarFuncionarioPageWidget(
-                editMode: params.getParam('editMode', ParamType.bool),
+                
               ),
             ),
             FFRoute(
