@@ -1,3 +1,14 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:blinkid_flutter/microblink_scanner.dart';
+import 'package:blinkid_flutter/overlay_settings.dart';
+import 'package:blinkid_flutter/overlays/blinkid_overlays.dart';
+import 'package:blinkid_flutter/recognizer.dart';
+import 'package:cnic_scanner/model/cnic_model.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -8,6 +19,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:cnic_scanner/cnic_scanner.dart';
 
 class ListaFuncionariosPageWidget extends StatefulWidget {
   const ListaFuncionariosPageWidget({Key? key}) : super(key: key);
@@ -39,25 +52,74 @@ class _ListaFuncionariosPageWidgetState
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-        child: FlutterFlowIconButton(
-          borderColor: Colors.transparent,
-          borderRadius: 30,
-          borderWidth: 1,
-          buttonSize: 60,
-          icon: Icon(
-            Icons.add,
-            color: FlutterFlowTheme.of(context).whiteColor,
-            size: 30,
-          ),
-          onPressed: () {
-            print('IconButton pressed ...');
-          },
+      floatingActionButton: Padding(
+        padding: (Platform.isAndroid || Platform.isIOS)
+            ? EdgeInsets.only(bottom: 50.0, right: 16)
+            : EdgeInsets.only(bottom: 0, right: 0),
+        child: SpeedDial(
+          //Speed dial menu
+          //margin bottom
+          icon: Icons.menu, //icon on Floating action button
+          activeIcon: Icons.close, //icon when menu is expanded on button
+          backgroundColor: FlutterFlowTheme.of(context)
+              .primaryColor, //background color of button
+          foregroundColor: Colors.white, //font color, icon color in button
+          activeBackgroundColor: FlutterFlowTheme.of(context)
+              .primaryColor, //background color when menu is expanded
+          activeForegroundColor: Colors.white,
+          buttonSize: const Size(56.0, 56), //button size
+          visible: true,
+          closeManually: false,
+          curve: Curves.bounceIn,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+          onOpen: () => print('OPENING DIAL'), // action when menu opens
+          onClose: () => print('DIAL CLOSED'), //action when menu closes
+
+          elevation: 8.0, //shadow elevation of button
+          shape: CircleBorder(), //shape of button
+
+          children: [
+            SpeedDialChild(
+              //speed dial child
+              child: Icon(FontAwesomeIcons.barcode),
+              backgroundColor: Color.fromARGB(255, 7, 133, 36),
+              foregroundColor: Colors.white,
+              label: 'Buscar por código de barras',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () async {
+                scanCnic(ImageSource.camera);
+                log('https://pub.dev/packages/barcode_scan2/install')
+              },
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.add),
+              backgroundColor: Color.fromARGB(255, 7, 133, 107),
+              foregroundColor: Colors.white,
+              label: 'Registrar nuevo activo',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => context.pushNamed(
+                'registraractivopage',
+                queryParams: {
+                  'idSerial': serializeParam(
+                    null,
+                    ParamType.String,
+                  )
+                },
+              ),
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.category_rounded),
+              foregroundColor: Colors.white,
+              backgroundColor: Color.fromARGB(255, 6, 113, 122),
+              label: 'Crear nueva categoria',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => context.pushNamed('registrarcategoriapage'),
+            ),
+
+            //add more menu item childs here
+          ],
         ),
-        onPressed: () {
-          print('FloatingActionButton pressed ...');
-        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       body: NestedScrollView(
@@ -438,5 +500,40 @@ class _ListaFuncionariosPageWidgetState
         ),
       ),
     );
+  }
+
+  Future<void> scan() async {
+    var license = '';
+    List<RecognizerResult> results;
+
+    Recognizer recognizer = BlinkIdCombinedRecognizer();
+    OverlaySettings settings = BlinkIdOverlaySettings();
+
+    // set your license
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      license = "";
+    } else if (Theme.of(context).platform == TargetPlatform.android) {
+      license = "";
+    }
+
+    try {
+      // perform scan and gather results
+      results = await MicroblinkScanner.scanWithCamera(
+          RecognizerCollection([recognizer]), settings, license);
+      log(results.toString());
+    } on PlatformException catch (e) {
+      log(e.message.toString());
+      // handle exception
+    }
+  }
+
+  Future<void> scanCnic(ImageSource imageSource) async {
+    /// you will need to pass one argument of "ImageSource" as shown here
+    CnicModel cnicModel =
+        await CnicScanner().scanImage(imageSource: imageSource);
+    if (cnicModel == null) return;
+    setState(() {
+      log(cnicModel.cnicHolderName);
+    });
   }
 }
