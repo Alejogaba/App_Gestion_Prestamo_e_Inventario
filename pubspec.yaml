@@ -78,6 +78,7 @@ dependencies:
   flutter_speed_dial: ^6.2.0
   web_scraper: ^0.1.4
   fdottedline_nullsafety: ^2.0.1
+  dotted_border: ^2.0.0+3
   
 
 

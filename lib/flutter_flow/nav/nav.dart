@@ -143,8 +143,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'RegistrarActivoPage',
               path: 'registrarActivoPage',
               builder: (context, params) => ResgistrarActivoPageWidget(
-                  idSerial: params.getParam('idSerial', ParamType.String)),
-            )
+                operacionaRealizar:
+                    params.getParam('operacionaRealizar', ParamType.String),
+                idSerial: params.getParam('idSerial', ParamType.String),
+                categoria: params.getParam('categoria', ParamType.String),
+                activoEditar: params.getParam('activoEditar', ParamType.Activo),
+              ),
+            ),
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),
       ],

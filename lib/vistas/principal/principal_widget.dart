@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,7 +72,9 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 50.0),
+        padding: (Platform.isAndroid || Platform.isIOS)
+            ? EdgeInsets.only(bottom: 50.0, right: 16)
+            : EdgeInsets.only(bottom: 0, right: 0),
         child: SpeedDial(
           //Speed dial menu
           //margin bottom
@@ -628,7 +631,8 @@ bool esEscritorio(BuildContext context) {
 
 webScraper() async {
   final webScraper = WebScraper('https://www.google.com');
-  if (await webScraper.loadFullURL('https://www.google.com/search?q=7709121771402&sourceid=chrome&ie=UTF-8')) {
+  if (await webScraper.loadFullURL(
+      'https://www.google.com/search?q=7709121771402&sourceid=chrome&ie=UTF-8')) {
     List<Map<String, dynamic>> elements =
         webScraper.getElement('div.yuRUbf > h3.LC20lb MBeuO DKV0Md', ['href']);
     log('SCRAPER: $elements');

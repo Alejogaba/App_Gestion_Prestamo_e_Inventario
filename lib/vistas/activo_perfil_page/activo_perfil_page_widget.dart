@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
+import '../../flutter_flow/flutter_flow_widgets.dart';
 import '../components/caja_advertencia_widget.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_expanded_image_view.dart';
@@ -870,12 +871,11 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                       Align(
                         alignment: AlignmentDirectional(0, 0),
 
-                        child: CajaAdvertenciaWidget(
-                          mensaje:
-                              '¿Esta seguro que desea eliminar este activo?',
-                          objetoaEliminar: 'activo',
-                          id: activo.idSerial.toString(),
-                          blur: blur,
+                        child: _cajaAdvertencia(
+                          context,
+                          '¿Esta seguro que desea eliminar este activo?',
+                          'activo',
+                          activo.idSerial.toString(),
                         ),
                         //. animateOnActionTrigger(animationsMap['cajaAdvertenciaOnActionTriggerAnimation']!,hasBeenTriggered: true),
                       ),
@@ -887,6 +887,145 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
         ),
       ),
     );
+  }
+
+  Widget _cajaAdvertencia(context, mensaje, objetoaEliminar, id) {
+    return Align(
+      alignment: AlignmentDirectional(0, 0),
+      child: Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(16, 24, 16, 5),
+        child: Container(
+          width: 450,
+          constraints: BoxConstraints(
+            maxWidth: 500,
+            maxHeight: 300,
+          ),
+          decoration: BoxDecoration(
+            color: FlutterFlowTheme.of(context).secondaryBackground,
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 7,
+                color: Color(0x4D000000),
+                offset: Offset(0, 3),
+              )
+            ],
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                  child: Text(
+                    'Advertencia',
+                    style: FlutterFlowTheme.of(context).title2.override(
+                          fontFamily: 'Poppins',
+                          color: Color(0xBFDF2424),
+                          useGoogleFonts: GoogleFonts.asMap().containsKey(
+                              FlutterFlowTheme.of(context).title2Family),
+                        ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                  child: Text(
+                    mensaje,
+                    style: FlutterFlowTheme.of(context).bodyText1.override(
+                          fontFamily: 'Poppins',
+                          fontSize: 18,
+                          useGoogleFonts: GoogleFonts.asMap().containsKey(
+                              FlutterFlowTheme.of(context).bodyText1Family),
+                        ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
+                  child: FFButtonWidget(
+                    onPressed: () {
+                      eliminarObjeto(context, objetoaEliminar, id);
+                    },
+                    text: 'Sí, deseo eliminar este $objetoaEliminar',
+                    options: FFButtonOptions(
+                      width: double.infinity,
+                      height: 50,
+                      color: Color(0xFFFC4253),
+                      textStyle: FlutterFlowTheme.of(context)
+                          .subtitle2
+                          .override(
+                            fontFamily: 'Poppins',
+                            color: FlutterFlowTheme.of(context).whiteColor,
+                            useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                FlutterFlowTheme.of(context).subtitle2Family),
+                          ),
+                      elevation: 2,
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    showLoadingIndicator: false,
+                  ),
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                      child: FFButtonWidget(
+                        onPressed: () {
+                          setState(() {
+                            blur = false;
+                          });
+                        },
+                        text: 'No, cancelar',
+                        options: FFButtonOptions(
+                          width: 170,
+                          height: 50,
+                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          textStyle: FlutterFlowTheme.of(context)
+                              .subtitle2
+                              .override(
+                                fontFamily: 'Poppins',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                    FlutterFlowTheme.of(context)
+                                        .subtitle2Family),
+                              ),
+                          elevation: 0,
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        showLoadingIndicator: false,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  eliminarObjeto(context, String objeto, String id) async {
+    switch (objeto) {
+      case 'activo':
+        ActivoController activoController = ActivoController();
+        final res = await activoController.eliminarActivo(context, id);
+        if (res == 'ok') context.pop;
+        break;
+      default:
+    }
   }
 
   Future<void> cargarActivo(id) async {

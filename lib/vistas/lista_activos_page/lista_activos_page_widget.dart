@@ -108,7 +108,11 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                               'idSerial': serializeParam(
                                 value.trim().replaceAll(".", ""),
                                 ParamType.String,
-                              )
+                              ),
+                              'categoria': serializeParam(
+                                nombreCategoria,
+                                ParamType.String,
+                              ),
                             },
                           );
                         }
@@ -366,15 +370,18 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                   return GestureDetector(
                                                     onTap: () {
                                                       context.pushNamed(
-        'activoPerfilPage',
-        queryParams: {
-          'idActivo': serializeParam(
-            Activo.fromMap(snapshot
-                                                            .data![index]).idSerial,
-            ParamType.String,
-          )
-        },
-      );
+                                                        'activoPerfilPage',
+                                                        queryParams: {
+                                                          'idActivo':
+                                                              serializeParam(
+                                                            Activo.fromMap(
+                                                                    snapshot.data![
+                                                                        index])
+                                                                .idSerial,
+                                                            ParamType.String,
+                                                          )
+                                                        },
+                                                      );
                                                     },
                                                     child: tarjetaActivo(
                                                         context,
