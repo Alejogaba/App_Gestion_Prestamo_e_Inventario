@@ -79,6 +79,8 @@ dependencies:
   dotted_border: ^2.0.0+3
   blinkid_flutter: ^5.18.0
   cnic_scanner: ^0.0.2
+  pdf: ^3.8.4
+
   
 
 

@@ -10,6 +10,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../entidades/activo.dart';
 import '../../entidades/categoria.dart';
@@ -78,7 +79,6 @@ class _RegistrarFuncionarioPageWidgetState
   Funcionario? activo;
   final String? operacionaRealizar;
   final String? id;
-  
 
   final Funcionario? funcionarioEditar;
   FocusNode _focusNodeCorreo = FocusNode();
@@ -140,8 +140,8 @@ class _RegistrarFuncionarioPageWidgetState
   @override
   Widget build(BuildContext context) {
     dynamic anchoColumnaWrap = (Platform.isAndroid || Platform.isIOS)
-      ? MediaQuery.of(context).size.width * 0.9
-      : MediaQuery.of(context).size.width * 0.4;
+        ? MediaQuery.of(context).size.width * 0.9
+        : MediaQuery.of(context).size.width * 0.4;
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -309,7 +309,6 @@ class _RegistrarFuncionarioPageWidgetState
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                       child: Wrap(
@@ -325,15 +324,17 @@ class _RegistrarFuncionarioPageWidgetState
                           Column(
                             children: [
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 10, 20, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 10, 20, 0),
                                 child: Text(
                                   'Seleccione o suba una imagen',
                                   style: FlutterFlowTheme.of(context).title3,
                                 ),
                               ),
                               Container(
-                                width: (Platform.isAndroid || Platform.isIOS)? MediaQuery.of(context).size.width * 0.9: MediaQuery.of(context).size.width * 0.2,
+                                width: (Platform.isAndroid || Platform.isIOS)
+                                    ? MediaQuery.of(context).size.width * 0.9
+                                    : MediaQuery.of(context).size.width * 0.2,
                                 child: Center(
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
@@ -349,282 +350,292 @@ class _RegistrarFuncionarioPageWidgetState
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 16),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 10, 0, 16),
                                 child: Text(
                                   'Ó',
                                   style: FlutterFlowTheme.of(context).title3,
                                 ),
                               ),
-                               FFButtonWidget(
-                                
-                               
-                  onPressed: () {
-                    print('Button pressed ...');
-                  },
-                  text: 'Buscar en la web',
-                  icon: FaIcon(
-                                              FontAwesomeIcons.externalLinkAlt,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .whiteColor,
-                                              size: 20,
-                                            ),
-                  options: FFButtonOptions(
-                    width: 160,
-                    height: 50,
-                    
-                    color: FlutterFlowTheme.of(context).primaryColor,
-                    textStyle: FlutterFlowTheme.of(context).bodyText2.override(
-                          fontFamily: 'Lexend Deca',
-                          color: FlutterFlowTheme.of(context).whiteColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.normal,
-                          useGoogleFonts: GoogleFonts.asMap().containsKey(
-                              FlutterFlowTheme.of(context).bodyText2Family),
-                        ),
-                    elevation: 3,
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                              
+                              FFButtonWidget(
+                                onPressed: () async {
+                                  var url = Uri.parse(
+                                      'http://www.lajaguadeibirico-cesar.gov.co/tema/directorio-de-funcionarios');
+                                  if (!await launchUrl(
+                                    url,
+                                    mode: LaunchMode.externalApplication,
+                                  )) {
+                                    throw 'No se puede abrir $url';
+                                  }
+                                },
+                                text: 'Buscar en la web',
+                                icon: FaIcon(
+                                  FontAwesomeIcons.externalLinkAlt,
+                                  color:
+                                      FlutterFlowTheme.of(context).whiteColor,
+                                  size: 20,
+                                ),
+                                options: FFButtonOptions(
+                                  width: 160,
+                                  height: 50,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .bodyText2
+                                      .override(
+                                        fontFamily: 'Lexend Deca',
+                                        color: FlutterFlowTheme.of(context)
+                                            .whiteColor,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.normal,
+                                        useGoogleFonts: GoogleFonts.asMap()
+                                            .containsKey(
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyText2Family),
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
                             ],
                           ),
                           Column(
-                                children: [
-                                  Container(
-                                    width: anchoColumnaWrap,
-                                    child: Align(
-                                      alignment: AlignmentDirectional(0.05, 0),
-                                      child: Row(
-                                         mainAxisSize: MainAxisSize.max,
-                                         children: [
-                                          Padding(padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 50, 5, 0),
-                                                    child: FaIcon(
-                                              FontAwesomeIcons.solidIdCard,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .grayicon,
-                                              size: 28,
-                                            ),),
-                                            Expanded(
-                                              child: Padding(padding:  EdgeInsetsDirectional.fromSTEB(
-                                                      0, 30, 0, 0),
-                                                      child:TextFormFieldCustom(
-                                                context,
-                                                textControllerCedula,
-                                                'Ej. 1065324298',
-                                                'Número de cédula*',
-                                                10,
-                                                TextInputType.number,
-                                                inputNumero,
-                                                true,
-                                                null,
-                                                _focusNodeCedula),
-                                          ),
-                                            )
-                                         ],
+                            children: [
+                              Container(
+                                width: anchoColumnaWrap,
+                                child: Align(
+                                  alignment: AlignmentDirectional(0.05, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 50, 5, 0),
+                                        child: FaIcon(
+                                          FontAwesomeIcons.solidIdCard,
+                                          color: FlutterFlowTheme.of(context)
+                                              .grayicon,
+                                          size: 28,
+                                        ),
                                       ),
-                                    ),
-                                  
+                                      Expanded(
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 30, 0, 0),
+                                          child: TextFormFieldCustom(
+                                              context,
+                                              textControllerCedula,
+                                              'Ej. 1065324298',
+                                              'Número de cédula*',
+                                              10,
+                                              TextInputType.number,
+                                              inputNumero,
+                                              true,
+                                              null,
+                                              _focusNodeCedula),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  Container(
-                                    width: anchoColumnaWrap,
-                                    child: Align(
-                                      alignment: AlignmentDirectional(0.05, 0),
-                                      child: Row(
-                                         mainAxisSize: MainAxisSize.max,
-                                         children: [
-                                          Padding(padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 50, 5, 0),
-                                                    child: FaIcon(
-                                              FontAwesomeIcons.solidUser,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .grayicon,
-                                              size: 28,
-                                            ),),
-                                            Expanded(
-                                              child: Padding(padding:  EdgeInsetsDirectional.fromSTEB(
-                                                      0, 30, 0, 0),
-                                                      child:TextFormFieldCustom(
-                                                context,
-                                                textControllerNombres,
-                                                'Ej. Luis Carlos',
-                                                'Nombres*',
-                                                30,
-                                                TextInputType.name,
-                                                null,
-                                                false,
-                                                null,
-                                                _focusNodeNombre),
-                                          ),
-                                            )
-                                         ],
+                                ),
+                              ),
+                              Container(
+                                width: anchoColumnaWrap,
+                                child: Align(
+                                  alignment: AlignmentDirectional(0.05, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 50, 5, 0),
+                                        child: FaIcon(
+                                          FontAwesomeIcons.solidUser,
+                                          color: FlutterFlowTheme.of(context)
+                                              .grayicon,
+                                          size: 28,
+                                        ),
                                       ),
-                                    ),
-                                  
+                                      Expanded(
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 30, 0, 0),
+                                          child: TextFormFieldCustom(
+                                              context,
+                                              textControllerNombres,
+                                              'Ej. Luis Carlos',
+                                              'Nombres*',
+                                              30,
+                                              TextInputType.name,
+                                              null,
+                                              false,
+                                              null,
+                                              _focusNodeNombre),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  Container(
-                                    width: anchoColumnaWrap,
-                                    child: Align(
-                                      alignment: AlignmentDirectional(0.05, 0),
-                                      child: Row(
-                                         mainAxisSize: MainAxisSize.max,
-                                         children: [
-                                          Padding(padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 50, 5, 0),
-                                                    child: FaIcon(
-                                              FontAwesomeIcons.solidUser,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .grayicon,
-                                              size: 28,
-                                            ),),
-                                            Expanded(
-                                              child: Padding(padding:  EdgeInsetsDirectional.fromSTEB(
-                                                      0, 30, 0, 0),
-                                                      child:TextFormFieldCustom(
-                                                context,
-                                                textControllerApellidos,
-                                                'Ej. Calderon Gutierrez',
-                                                'Apellidos',
-                                                30,
-                                                TextInputType.name,
-                                                null,
-                                                false,
-                                                null,
-                                                _focusNodeApellidos),
-                                          ),
-                                            )
-                                         ],
+                                ),
+                              ),
+                              Container(
+                                width: anchoColumnaWrap,
+                                child: Align(
+                                  alignment: AlignmentDirectional(0.05, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 50, 5, 0),
+                                        child: FaIcon(
+                                          FontAwesomeIcons.solidUser,
+                                          color: FlutterFlowTheme.of(context)
+                                              .grayicon,
+                                          size: 28,
+                                        ),
                                       ),
-                                    ),
-                                  
+                                      Expanded(
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 30, 0, 0),
+                                          child: TextFormFieldCustom(
+                                              context,
+                                              textControllerApellidos,
+                                              'Ej. Calderon Gutierrez',
+                                              'Apellidos',
+                                              30,
+                                              TextInputType.name,
+                                              null,
+                                              false,
+                                              null,
+                                              _focusNodeApellidos),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  Container(
-                                    width: anchoColumnaWrap,
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 12, 0, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                            child: Align(
-                                              alignment:
-                                                  AlignmentDirectional(0, 0),
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 16, 0, 20),
-                                                child: FutureBuilder<
-                                                    List<Categoria>>(
-                                                  future: _listaCategorias,
-                                                  builder:
-                                                      (BuildContext context,
-                                                          snapshot) {
-                                                    return FlutterFlowDropDown<
-                                                        String>(
-                                                      value: dropDownValueArea,
-                                                      options: (snapshot.connectionState ==
-                                                                  ConnectionState
-                                                                      .done &&
-                                                              listCategorias
-                                                                  .isNotEmpty)
-                                                          ? List.generate(
-                                                              snapshot
-                                                                  .data!.length,
-                                                              (index) =>
-                                                                  DropdownMenuItem(
-                                                                      value: snapshot
-                                                                          .data![
-                                                                              index]
-                                                                          .nombre,
-                                                                      child:
-                                                                          Text(
-                                                                        snapshot
-                                                                            .data![index]
-                                                                            .nombre
-                                                                            .toString(),
-                                                                        style: FlutterFlowTheme.of(context)
-                                                                            .bodyText1
-                                                                            .override(
-                                                                              fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
-                                                                              fontSize: 18,
-                                                                              useGoogleFonts: GoogleFonts.asMap().containsKey(FlutterFlowTheme.of(context).bodyText1Family),
-                                                                            ),
-                                                                      )))
-                                                          : List.generate(
-                                                              0,
-                                                              (index) =>
-                                                                  DropdownMenuItem(
-                                                                      value:
-                                                                          null,
-                                                                      child: Text(
-                                                                          ''))),
-                                                      onChanged: (val) =>
-                                                          setState(() =>
-                                                              dropDownValueArea =
-                                                                  val),
-                                                      height: 50,
-                                                      textStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyText1
-                                                              .override(
-                                                                fontFamily: FlutterFlowTheme.of(
+                                ),
+                              ),
+                              Container(
+                                width: anchoColumnaWrap,
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 12, 0, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: Align(
+                                          alignment: AlignmentDirectional(0, 0),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 16, 0, 20),
+                                            child:
+                                                FutureBuilder<List<Categoria>>(
+                                              future: _listaCategorias,
+                                              builder: (BuildContext context,
+                                                  snapshot) {
+                                                return FlutterFlowDropDown<
+                                                    String>(
+                                                  value: dropDownValueArea,
+                                                  options: (snapshot
+                                                                  .connectionState ==
+                                                              ConnectionState
+                                                                  .done &&
+                                                          listCategorias
+                                                              .isNotEmpty)
+                                                      ? List.generate(
+                                                          snapshot.data!.length,
+                                                          (index) =>
+                                                              DropdownMenuItem(
+                                                                  value: snapshot
+                                                                      .data![
+                                                                          index]
+                                                                      .nombre,
+                                                                  child: Text(
+                                                                    snapshot
+                                                                        .data![
+                                                                            index]
+                                                                        .nombre
+                                                                        .toString(),
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyText1
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              FlutterFlowTheme.of(context).bodyText2Family,
+                                                                          fontSize:
+                                                                              18,
+                                                                          useGoogleFonts:
+                                                                              GoogleFonts.asMap().containsKey(FlutterFlowTheme.of(context).bodyText1Family),
+                                                                        ),
+                                                                  )))
+                                                      : List.generate(
+                                                          0,
+                                                          (index) =>
+                                                              DropdownMenuItem(
+                                                                  value: null,
+                                                                  child: Text(
+                                                                      ''))),
+                                                  onChanged: (val) => setState(
+                                                      () => dropDownValueArea =
+                                                          val),
+                                                  height: 50,
+                                                  textStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyText1
+                                                          .override(
+                                                            fontFamily:
+                                                                FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyText2Family,
-                                                                fontSize: 18,
-                                                                useGoogleFonts: GoogleFonts
-                                                                        .asMap()
-                                                                    .containsKey(
-                                                                        FlutterFlowTheme.of(context)
-                                                                            .bodyText1Family),
-                                                              ),
-                                                      hintText: 'Categoria*',
-                                                      fillColor:
-                                                          FlutterFlowTheme.of(
+                                                            fontSize: 18,
+                                                            useGoogleFonts: GoogleFonts
+                                                                    .asMap()
+                                                                .containsKey(
+                                                                    FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyText1Family),
+                                                          ),
+                                                  hintText: 'Categoria*',
+                                                  fillColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .primaryBackground,
+                                                  elevation: 2,
+                                                  borderColor:
+                                                      _dropdownErrorColor
+                                                          ? Colors.redAccent
+                                                          : FlutterFlowTheme.of(
                                                                   context)
-                                                              .primaryBackground,
-                                                      elevation: 2,
-                                                      borderColor:
-                                                          _dropdownErrorColor
-                                                              ? Colors.redAccent
-                                                              : FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .secondaryText,
-                                                      borderWidth: 2,
-                                                      borderRadius: 8,
-                                                      margin:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  12, 4, 12, 4),
-                                                      hidesUnderline: true,
-                                                    );
-                                                  },
-                                                ),
-                                              ),
+                                                              .secondaryText,
+                                                  borderWidth: 2,
+                                                  borderRadius: 8,
+                                                  margin: EdgeInsetsDirectional
+                                                      .fromSTEB(12, 4, 12, 4),
+                                                  hidesUnderline: true,
+                                                );
+                                              },
                                             ),
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                  
-                                ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -645,8 +656,8 @@ class _RegistrarFuncionarioPageWidgetState
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 30, 15, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 30, 15, 0),
                                 child: Icon(
                                   Icons.mail,
                                   color: FlutterFlowTheme.of(context).grayicon,
@@ -675,8 +686,8 @@ class _RegistrarFuncionarioPageWidgetState
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 30, 15, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 30, 15, 0),
                                 child: FaIcon(
                                   FontAwesomeIcons.phone,
                                   color: FlutterFlowTheme.of(context).grayicon,
@@ -705,8 +716,8 @@ class _RegistrarFuncionarioPageWidgetState
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 30, 15, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 30, 15, 0),
                                 child: FaIcon(
                                   FontAwesomeIcons.phone,
                                   color: FlutterFlowTheme.of(context).grayicon,
@@ -735,8 +746,8 @@ class _RegistrarFuncionarioPageWidgetState
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 30, 16, 0),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 30, 16, 0),
                                 child: FaIcon(
                                   FontAwesomeIcons.globe,
                                   color: FlutterFlowTheme.of(context).grayicon,
@@ -784,7 +795,6 @@ class _RegistrarFuncionarioPageWidgetState
                         ),
                       ],
                     ),
-                    
                   ],
                 ),
               ),

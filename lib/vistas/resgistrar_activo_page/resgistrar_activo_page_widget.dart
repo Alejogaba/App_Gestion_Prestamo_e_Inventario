@@ -9,9 +9,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../entidades/activo.dart';
 import '../../entidades/categoria.dart';
+import '../../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/flutter_flow_count_controller.dart';
 import '../flutter_flow/flutter_flow_drop_down.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
@@ -121,6 +123,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
           : textControllerSerial.text = '';
 
       textControllerN_inventario.text = '';
+      textControllerNombre.text = '';
     }
   }
 
@@ -475,6 +478,50 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                       ),
                                     ),
                                   ),
+                                ),
+                              ),
+                              FFButtonWidget(
+                                onPressed: () async {
+                                  var url = Uri.parse(
+                                      'https://www.google.com/search?tbm=isch&q=${textControllerNombre.text.toString()}');
+                                  if (!await launchUrl(
+                                    url,
+                                    mode: LaunchMode.externalApplication,
+                                  )) {
+                                    throw 'No se puede abrir $url';
+                                  }
+                                },
+                                text: 'Buscar en la web',
+                                icon: FaIcon(
+                                  FontAwesomeIcons.externalLinkAlt,
+                                  color:
+                                      FlutterFlowTheme.of(context).whiteColor,
+                                  size: 20,
+                                ),
+                                options: FFButtonOptions(
+                                  width: 160,
+                                  height: 50,
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryColor,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .bodyText2
+                                      .override(
+                                        fontFamily: 'Lexend Deca',
+                                        color: FlutterFlowTheme.of(context)
+                                            .whiteColor,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.normal,
+                                        useGoogleFonts: GoogleFonts.asMap()
+                                            .containsKey(
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyText2Family),
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
                             ],

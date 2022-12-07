@@ -5,6 +5,7 @@ import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
+import '../../servicios/pdfApi.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -94,40 +95,41 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                     label: 'Buscar por código de barras',
                     labelStyle: TextStyle(fontSize: 18.0),
                     onTap: () async {
-                await FlutterBarcodeScanner.scanBarcode(
-                        '#C62828', // scanning line color
-                        'Cancelar', // cancel button text
-                        true, // whether to show the flash icon
-                        ScanMode.BARCODE)
-                    .then((value) async {
-                  if (value != null) {
-                    ActivoController activoController = ActivoController();
-                    var res = await activoController.buscarActivo(value);
-                    if (res.idSerial.isEmpty) {
-                      // ignore: use_build_context_synchronously
-                      context.pushNamed(
-                        'registraractivopage',
-                        queryParams: {
-                          'idSerial': serializeParam(
-                            value.trim().replaceAll(".", ""),
-                            ParamType.String,
-                          )
-                        },
-                      );
-                    } else {
-                      // ignore: use_build_context_synchronously
-                      context.pushNamed(
-                        'activoPerfilPage',
-                        queryParams: {
-                          'idActivo': serializeParam(
-                            res.idSerial,
-                            ParamType.String,
-                          )
-                        },
-                      );
-                    }
-                  }
-                });
+                      await FlutterBarcodeScanner.scanBarcode(
+                              '#C62828', // scanning line color
+                              'Cancelar', // cancel button text
+                              true, // whether to show the flash icon
+                              ScanMode.BARCODE)
+                          .then((value) async {
+                        if (value != null) {
+                          ActivoController activoController =
+                              ActivoController();
+                          var res = await activoController.buscarActivo(value);
+                          if (res.idSerial.isEmpty) {
+                            // ignore: use_build_context_synchronously
+                            context.pushNamed(
+                              'registraractivopage',
+                              queryParams: {
+                                'idSerial': serializeParam(
+                                  value.trim().replaceAll(".", ""),
+                                  ParamType.String,
+                                )
+                              },
+                            );
+                          } else {
+                            // ignore: use_build_context_synchronously
+                            context.pushNamed(
+                              'activoPerfilPage',
+                              queryParams: {
+                                'idActivo': serializeParam(
+                                  res.idSerial,
+                                  ParamType.String,
+                                )
+                              },
+                            );
+                          }
+                        }
+                      });
                     },
                   ),
                   SpeedDialChild(
@@ -190,7 +192,22 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                               FlutterFlowTheme.of(context).bodyText1Family),
                         ),
                   ),
-                  actions: [],
+                  actions: [
+                    FlutterFlowIconButton(
+                      borderColor: Colors.transparent,
+                      borderRadius: 30,
+                      borderWidth: 1,
+                      buttonSize: 60,
+                       icon: FaIcon(
+                  FontAwesomeIcons.filePdf,
+                  color: FlutterFlowTheme.of(context).whiteColor,
+                  size: 30,
+                ),
+                      onPressed: () async {
+                        await PdfApi.generarTablaActivo(listaActivos);
+                      },
+                    ),
+                  ],
                   centerTitle: false,
                   elevation: 4,
                 )
@@ -352,6 +369,8 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                   snapshot.hasError ||
                                                   snapshot.data!.isEmpty)
                                                 return Container();
+
+                                              listaActivos.clear();
                                               snapshot.data!.forEach((data) {
                                                 listaActivos
                                                     .add(Activo.fromMap(data));
@@ -360,6 +379,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                     .nombre
                                                     .toString());
                                               });
+
                                               return Wrap(
                                                 spacing: MediaQuery.of(context)
                                                         .size
