@@ -1,5 +1,6 @@
 class Utilidades {
-  String capitalize(String value) {
+  String mayusculaPrimeraLetra(String value) {
+    value = value.trim().toLowerCase();
     var result = value[0].toUpperCase();
     bool cap = true;
     for (int i = 1; i < value.length; i++) {
@@ -14,6 +15,7 @@ class Utilidades {
   }
 
   String mayusculaTodasPrimerasLetras(String value) {
+    value = value.trim().toLowerCase();
     var result = value[0].toUpperCase();
     for (int i = 1; i < value.length; i++) {
       if (value[i - 1] == " ") {
@@ -25,7 +27,8 @@ class Utilidades {
     return result;
   }
 
-  String mayusculaPrimeraLetra(String value) {
+  String mayusculaPrimeraLetraFrase(String value) {
+    value = value.trim().toLowerCase();
     var result = value[0].toUpperCase();
     bool caps = false;
     bool start = true;

@@ -85,6 +85,7 @@ class _RegistrarFuncionarioPageWidgetState
   final String? operacionaRealizar;
   final String? id;
   int idArea = 0;
+  int anchominimo=640;
 
   final Funcionario? funcionarioEditar;
   FocusNode _focusNodeCorreo = FocusNode();
@@ -313,19 +314,17 @@ class _RegistrarFuncionarioPageWidgetState
       body: Stack(
         children: [
           Padding(
-            padding: (Platform.isAndroid || Platform.isIOS)
-                ? EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0)
-                : EdgeInsetsDirectional.fromSTEB(60, 16, 60, 16),
+            padding: defTamanoAncho(MediaQuery.of(context).size.width),
             child: Container(
               alignment: Alignment.topCenter,
-              margin: (Platform.isAndroid || Platform.isIOS)
-                  ? null
+              margin: (MediaQuery.of(context).size.width < anchominimo)
+                  ? EdgeInsets.fromLTRB(0, 15, 0, 0)
                   : EdgeInsets.all(10),
               height: (Platform.isAndroid || Platform.isIOS) ? null : 1000,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: FlutterFlowTheme.of(context).secondaryBackground,
-                borderRadius: (Platform.isAndroid || Platform.isIOS)
+                borderRadius: (MediaQuery.of(context).size.width < anchominimo)
                     ? null
                     : BorderRadius.circular(30), //border corner radius
                 /*boxShadow: [
@@ -343,8 +342,8 @@ class _RegistrarFuncionarioPageWidgetState
               child: Form(
                 key: _formKey,
                 child: Padding(
-                  padding: (Platform.isAndroid || Platform.isIOS)
-                      ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
+                  padding: (MediaQuery.of(context).size.width < anchominimo)
+                      ? EdgeInsetsDirectional.all(0)
                       : EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
                   child: SingleChildScrollView(
                     child: Column(
@@ -375,8 +374,7 @@ class _RegistrarFuncionarioPageWidgetState
                                     ),
                                   ),
                                   Container(
-                                    width: (Platform.isAndroid ||
-                                            Platform.isIOS)
+                                    width: (MediaQuery.of(context).size.width < anchominimo)
                                         ? MediaQuery.of(context).size.width *
                                             0.9
                                         : MediaQuery.of(context).size.width *
@@ -1168,11 +1166,11 @@ class _RegistrarFuncionarioPageWidgetState
               width: 250,
               height: 200,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                 border: Border.all(
-              color: FlutterFlowTheme.of(context).primaryText,
-              width: 2,
-            ),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    width: 2,
+                  ),
                   shape: BoxShape.rectangle,
                   image: urlImagen != null && imageFile == null
                       ? DecorationImage(
@@ -1201,5 +1199,13 @@ class _RegistrarFuncionarioPageWidgetState
         ),
       );
     }
+  }
+}
+
+EdgeInsetsGeometry defTamanoAncho(screenSize) {
+  if (screenSize < 640) {
+    return EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0);
+  } else {
+    return EdgeInsetsDirectional.fromSTEB(50, 50, 50, 50);
   }
 }

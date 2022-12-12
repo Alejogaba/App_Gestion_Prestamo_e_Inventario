@@ -52,9 +52,10 @@ class FuncionariosController {
         'APELLIDOS': (apellidos == null)
             ? ''
             : utilidades.mayusculaTodasPrimerasLetras(apellidos),
-        'CARGO': utilidades.mayusculaPrimeraLetra(cargo!),
-        'CORREO':
-            (correo == null) ? '' : utilidades.mayusculaPrimeraLetra(correo),
+        'CARGO': utilidades.mayusculaPrimeraLetraFrase(cargo!),
+        'CORREO': (correo == null)
+            ? ''
+            : utilidades.mayusculaPrimeraLetraFrase(correo),
         'URL_IMAGEN': urlImagen,
         'ID_AREA': idArea,
         'TELEFONO_1': telefono1,
@@ -76,7 +77,7 @@ class FuncionariosController {
         ));
         return 'ok';
       });
-       return 'ok';
+      return 'ok';
     } on Exception catch (error) {
       StorageController storageController = StorageController();
       var errorTraducido = await storageController.traducir(error.toString());

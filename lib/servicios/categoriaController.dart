@@ -40,7 +40,8 @@ class CategoriaController {
       try {
         List<Categoria> listaCategoria = [];
         final data = await client.from('CATEGORIAS').select('*').textSearch(
-                'NOMBRE', "'${Utilidades().mayusculaPrimeraLetra(nombre)}'")
+                'NOMBRE',
+                "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'")
             as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Categoria.fromMap(e)).toList();
@@ -64,7 +65,7 @@ class CategoriaController {
         'URL_IMAGEN': urlImagen,
         'DESCRIPCION': (descripcion == null)
             ? null
-            : utilidades.mayusculaPrimeraLetra(descripcion),
+            : utilidades.mayusculaPrimeraLetraFrase(descripcion),
       }).then((value) => log('Nueva categoria registrada: $value'));
       log("Registrado con exito");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

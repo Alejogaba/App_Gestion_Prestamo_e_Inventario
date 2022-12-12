@@ -5,6 +5,7 @@ import 'package:app_gestion_prestamo_inventario/entidades/estadoActivo.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/registrar_funcionario_page/registrar_funcionario_page_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -266,9 +267,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         elevation: 0,
       ),
       body: Padding(
-        padding: (Platform.isAndroid || Platform.isIOS)
-            ? EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0)
-            : EdgeInsetsDirectional.fromSTEB(60, 16, 60, 16),
+        padding: defTamanoAncho(MediaQuery.of(context).size.width),
         child: Container(
           alignment: Alignment.topCenter,
           margin: (Platform.isAndroid || Platform.isIOS)
@@ -1150,3 +1149,12 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     }
   }
 }
+
+EdgeInsetsGeometry defTamanoAncho(screenSize) {
+  if (screenSize > 440 && screenSize < 640) {
+    return EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0);
+  } else{
+    return EdgeInsetsDirectional.fromSTEB(50, 50, 50, 50);
+  } 
+}
+
