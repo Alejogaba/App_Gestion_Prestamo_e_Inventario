@@ -1,3 +1,7 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,12 +22,25 @@ import 'vistas/flutter_flow/customIcons.dart';
 import 'vistas/lista_funcionarios_page/lista_funcionarios_page_widget.dart';
 import 'vistas/lista_prestamos_page/lista_prestamos_page_widget.dart';
 import 'vistas/principal/principal_widget.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   await Supabase.initialize(
     url: constantes.SUPABASE_URL,
     anonKey: constantes.SUPABASE_ANNON_KEY,
   );
+  Directory _tempDirectory = await getTemporaryDirectory();
+  if (Platform.isAndroid) {
+    List<Directory>? _externalCacheDirectories =
+        await getExternalCacheDirectories();
+    _externalCacheDirectories?.forEach((element) {
+      log('Ruta directorios de cache: ${element.path}');
+    });
+  } else {
+    log('Ruta directorio temporal: ${_tempDirectory.path}');
+  }
+  await FastCachedImageConfig.init(
+      path: _tempDirectory.path, clearCacheAfter: const Duration(days: 15));
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterFlowTheme.initialize();
 
@@ -71,7 +88,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'InventariadoApp',
-      
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: _themeMode,
@@ -106,9 +122,9 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'ListaPrestamosPage': ListaPrestamosPageWidget(),
+      //'ListaPrestamosPage': ListaPrestamosPageWidget(),
       'principal': PrincipalWidget(),
-      'AjustesPage': AjustesPageWidget(),
+      //'AjustesPage': AjustesPageWidget(),
       'ListaFuncionariosPage': ListaFuncionariosPageWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
@@ -138,7 +154,7 @@ class _NavBarPageState extends State<NavBarPage> {
           width: MediaQuery.of(context).size.width * 1,
           elevation: 0,
           items: [
-            FloatingNavbarItem(
+            /*FloatingNavbarItem(
               customWidget: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -153,7 +169,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   ),
                 ],
               ),
-            ),
+            ),*/
             FloatingNavbarItem(
               customWidget: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -168,7 +184,7 @@ class _NavBarPageState extends State<NavBarPage> {
                 ],
               ),
             ),
-            FloatingNavbarItem(
+            /*FloatingNavbarItem(
               customWidget: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -183,7 +199,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   ),
                 ],
               ),
-            ),
+            ),*/
             FloatingNavbarItem(
               customWidget: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

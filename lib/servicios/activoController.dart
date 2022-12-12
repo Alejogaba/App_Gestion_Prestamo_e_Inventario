@@ -2,22 +2,15 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:app_gestion_prestamo_inventario/assets/utilidades.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
-import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
-import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sqflite/sqflite.dart';
+// ignore: implementation_imports
 import 'package:supabase/src/supabase_stream_builder.dart';
 import 'package:supabase/supabase.dart';
 import '../../assets/constantes.dart' as constantes;
 import '../flutter_flow/flutter_flow_theme.dart';
-
-const _redirectUri = 'https://accounts.google.com/o/oauth2/auth';
-const _googleClientId =
-    '199131897060-0p2gu71h9ap9avuecpp6bj7bspo4icqp.apps.googleusercontent.com';
 
 class ActivoController {
   Utilidades utilidades = Utilidades();
@@ -42,11 +35,11 @@ class ActivoController {
       await supabase.from('ACTIVOS').insert({
         'ID_SERIAL': idSerial.toUpperCase(),
         'NUM_ACTIVO': numInventario,
-        'NOMBRE': utilidades.capitalizeAllWord(nombre),
+        'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
         'DETALLES': detalles,
         'URL_IMAGEN': urlImagen,
         'ESTADO': estado,
-        'NOMBRE_CATEGORIA': utilidades.capitalizeAllWord(categoria),
+        'NOMBRE_CATEGORIA': utilidades.mayusculaTodasPrimerasLetras(categoria),
         'CANTIDAD': cantidad,
         'CAPACIDAD': capacidad,
         'FECHA_CREADO': fechaCreado,
@@ -85,8 +78,7 @@ class ActivoController {
     }
   }
 
-  Stream<SupabaseStreamEvent> getActivosStream(String? categoria) {
-    List<Activo> activoList = [];
+  Stream<SupabaseStreamEvent> getActivoStream(String? categoria) {
     final response = (categoria != null && categoria.length > 3)
         ? supabase
             .from('ACTIVOS')
@@ -168,46 +160,5 @@ class ActivoController {
       ));
       return 'error';
     }
-  }
-
-  Future<List<Categoria>> getCategorias(String? nombre) async {
-    if (nombre == null || nombre.trim() == '') {
-      try {
-        List<Categoria> listaCategoria = [];
-        final data =
-            await supabase.from('CATEGORIAS').select('*') as List<dynamic>;
-        log('Datos: $data');
-        return (data).map((e) => Categoria.fromMap(e)).toList();
-      } on PostgrestException catch (error) {
-        log(error.message);
-        return [];
-      } catch (error) {
-        log('Error al cargar categorias: $error');
-        return [];
-      }
-    } else {
-      try {
-        List<Categoria> listaCategoria = [];
-        final data = await supabase.from('CATEGORIAS').select('*').textSearch(
-                'NOMBRE', "'${Utilidades().capitalizeAllSentence(nombre)}'")
-            as List<dynamic>;
-        log('Datos: $data');
-        return (data).map((e) => Categoria.fromMap(e)).toList();
-      } on PostgrestException catch (error) {
-        log(error.message);
-        return [];
-      } catch (error) {
-        log('Error al cargar categorias: $error');
-        return [];
-      }
-    }
-  }
-
-  Categoria toNote(Map<dynamic, dynamic> result) {
-    return Categoria(
-      result['NOMBRE'],
-      result['URL_IMAGEN'],
-       result['DESCRIPCION'],
-    );
   }
 }

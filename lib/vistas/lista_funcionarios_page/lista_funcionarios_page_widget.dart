@@ -1,6 +1,9 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:app_gestion_prestamo_inventario/entidades/area.dart';
+import 'package:app_gestion_prestamo_inventario/entidades/funcionario.dart';
+import 'package:app_gestion_prestamo_inventario/servicios/funcionariosController.dart';
 import 'package:blinkid_flutter/microblink_scanner.dart';
 import 'package:blinkid_flutter/overlay_settings.dart';
 import 'package:blinkid_flutter/overlays/blinkid_overlays.dart';
@@ -21,6 +24,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:cnic_scanner/cnic_scanner.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 
 class ListaFuncionariosPageWidget extends StatefulWidget {
   const ListaFuncionariosPageWidget({Key? key}) : super(key: key);
@@ -32,19 +37,23 @@ class ListaFuncionariosPageWidget extends StatefulWidget {
 
 class _ListaFuncionariosPageWidgetState
     extends State<ListaFuncionariosPageWidget> {
-  TextEditingController? textController;
+  TextEditingController? textControllerBusqueda;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   String textDial = 'Buscar por código de barras';
+  List<Funcionario> listFuncionariosLocal = [];
+  FuncionariosController funcionariosController = FuncionariosController();
+  late final listaFuncioarios = cargarFuncionarios(textControllerBusqueda);
 
+  late final storageLocation = rutaArchivostemporales();
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    textControllerBusqueda = TextEditingController();
   }
 
   @override
   void dispose() {
-    textController?.dispose();
+    textControllerBusqueda?.dispose();
     super.dispose();
   }
 
@@ -54,9 +63,7 @@ class _ListaFuncionariosPageWidgetState
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       floatingActionButton: Padding(
-        padding: (Platform.isAndroid || Platform.isIOS)
-            ? EdgeInsets.only(bottom: 50.0, right: 16)
-            : EdgeInsets.only(bottom: 0, right: 0),
+        padding: EdgeInsets.only(bottom: 50.0, right: 16),
         child: SpeedDial(
           //Speed dial menu
           //margin bottom
@@ -102,10 +109,8 @@ class _ListaFuncionariosPageWidgetState
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () => context.pushNamed(
                 'registrarfuncionariopage',
-               
               ),
             ),
-            
 
             //add more menu item childs here
           ],
@@ -179,10 +184,10 @@ class _ListaFuncionariosPageWidgetState
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0, 12, 0, 0),
                                         child: TextFormField(
-                                          controller: textController,
+                                          controller: textControllerBusqueda,
                                           onChanged: (_) =>
                                               EasyDebounce.debounce(
-                                            'textController',
+                                            'textControllerBusqueda',
                                             Duration(milliseconds: 2000),
                                             () => setState(() {}),
                                           ),
@@ -277,204 +282,42 @@ class _ListaFuncionariosPageWidgetState
                               Padding(
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                                child: ListView(
-                                  padding: EdgeInsets.zero,
-                                  primary: false,
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          16, 0, 16, 8),
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              blurRadius: 3,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .boxShadow,
-                                              spreadRadius: 1,
-                                            )
-                                          ],
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          border: Border.all(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  8, 8, 8, 8),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 1, 1, 1),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(6),
-                                                  child: Text('image') /*Image.network(
-                                                    'https://hablemosdemineria.com/wp-content/uploads/2021/09/Ovelio-Jimenez.jpg',
-                                                    width: 80,
-                                                    height: 80,
-                                                    fit: BoxFit.cover,
-                                                  ),*/
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(8, 2, 4, 0),
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        'Nombre funcionario',
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .title3
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Poppins',
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primaryText,
-                                                                  fontSize: 20,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                  useGoogleFonts: GoogleFonts
-                                                                          .asMap()
-                                                                      .containsKey(
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .title3Family),
-                                                                ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0, 3, 8, 0),
-                                                        child: AutoSizeText(
-                                                          'cargo',
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyText2
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Poppins',
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .grayicon,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                useGoogleFonts: GoogleFonts
-                                                                        .asMap()
-                                                                    .containsKey(
-                                                                        FlutterFlowTheme.of(context)
-                                                                            .bodyText2Family),
-                                                              ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0, 4, 8, 0),
-                                                        child: AutoSizeText(
-                                                          'Area',
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyText2
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Poppins',
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .grayicon,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                useGoogleFonts: GoogleFonts
-                                                                        .asMap()
-                                                                    .containsKey(
-                                                                        FlutterFlowTheme.of(context)
-                                                                            .bodyText2Family),
-                                                              ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 4, 0, 0),
-                                                    child: Icon(
-                                                      Icons
-                                                          .chevron_right_rounded,
-                                                      color: Color(0xFF57636C),
-                                                      size: 24,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    if (false)
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 0, 24),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            SvgPicture.asset(
-                                              'assets/images/Rolling-1s-200px.svg',
-                                              width: 60,
-                                              height: 60,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                  ],
+                                child: FutureBuilder<List<Funcionario>>(
+                                  future: cargarFuncionarios(
+                                      textControllerBusqueda),
+                                  builder: ((context, snapshot) {
+                                    int i = 0;
+                                    List<Widget> temp = [];
+
+                                    log('Estado de conexion connctionState:$snapshot.connectionState');
+
+                                    if (snapshot.connectionState ==
+                                            ConnectionState.done &&
+                                        snapshot.data!.length > 0) {
+                                      return ListView.builder(
+                                        padding: EdgeInsets.zero,
+                                        primary: false,
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: snapshot.data!.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return tarjetaFuncionario(
+                                              snapshot.data![index]);
+                                        },
+                                      );
+                                    } else if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return loading(context);
+                                    } else if (snapshot.hasError) {
+                                      log('Error: ${snapshot.error}');
+                                      return Container();
+                                    } else {
+                                      log('Error de conexion: ${snapshot.error}');
+                                    }
+
+                                    return Container();
+                                  }),
                                 ),
                               ),
                             ],
@@ -492,7 +335,6 @@ class _ListaFuncionariosPageWidgetState
     );
   }
 
- 
   Future<void> scanCnic(ImageSource imageSource) async {
     /// you will need to pass one argument of "ImageSource" as shown here
     CnicModel cnicModel =
@@ -503,4 +345,232 @@ class _ListaFuncionariosPageWidgetState
       log(cnicModel.cnicHolderName);
     });
   }
+
+  static Future<String> rutaArchivostemporales() async {
+    var _tempDirectory = await getTemporaryDirectory();
+    return _tempDirectory.path;
+  }
+}
+
+Future<List<Funcionario>> cargarFuncionarios(
+    TextEditingController? terminobusqueda) async {
+  FuncionariosController funcionariosController = FuncionariosController();
+  List<Funcionario> listFuncionariosLocal =
+      await funcionariosController.getFuncionarios(terminobusqueda!.text);
+  return Future.value(listFuncionariosLocal);
+}
+
+Widget loading(context) {
+  return Padding(
+    padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 24),
+    child: Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 100,
+          height: 100,
+          child: CircularProgressIndicator(
+            color: FlutterFlowTheme.of(context).primaryColor,
+            strokeWidth: 10.0,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class tarjetaFuncionario extends StatelessWidget {
+  final Funcionario funcionario;
+  const tarjetaFuncionario(
+    this.funcionario, {
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  void initState() {}
+  @override
+  Widget build(BuildContext context) {
+    Area area = Area(id: 1, nombre: 'Área', urlImagen: '');
+    return GestureDetector(
+      onTap: () {
+        context.pushNamed(
+          'funcionarioPerfilPage',
+          queryParams: {
+            'funcionario': serializeParam(
+              funcionario,
+              ParamType.Funcionario,
+            ),
+            'area': serializeParam(
+              Area(id: 1, nombre: 'Oficina de las TICs',urlImagen: ''),
+              ParamType.Area,
+            )
+          },
+        );
+      },
+      child: Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 8),
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: FlutterFlowTheme.of(context).secondaryBackground,
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 3,
+                color: FlutterFlowTheme.of(context).boxShadow,
+                spreadRadius: 1,
+              )
+            ],
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: FlutterFlowTheme.of(context).secondaryText,
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 1, 1, 1),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: (funcionario.urlImagen.isEmpty)
+                        ? Text('No disponible')
+                        : FastCachedImage(
+                            width: 80,
+                            height: 80,
+                            url: funcionario.urlImagen,
+                            fit: BoxFit.cover,
+                            fadeInDuration: const Duration(seconds: 1),
+                            errorBuilder: (context, exception, stacktrace) {
+                              log(stacktrace.toString());
+                              return Text('ERROR');
+                            },
+                            loadingBuilder: (context, progress) {
+                              return Container(
+                                color: FlutterFlowTheme.of(context)
+                                    .secondaryBackground,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    if (progress.isDownloading &&
+                                        progress.totalBytes != null)
+                                      Text(
+                                          '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
+                                          style: const TextStyle(
+                                              color: Color(0xFF006D38))),
+                                    SizedBox(
+                                        width: 70,
+                                        height: 70,
+                                        child: CircularProgressIndicator(
+                                            color: const Color(0xFF006D38),
+                                            value: progress
+                                                .progressPercentage.value)),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(8, 2, 4, 0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          (funcionario.apellidos != null &&
+                                  funcionario.apellidos!.isNotEmpty)
+                              ? '${funcionario.nombres.split(' ')[0]} ${funcionario.apellidos!.split(' ')[0]}'
+                              : funcionario.nombres,
+                          style: FlutterFlowTheme.of(context).title3.override(
+                                fontFamily: 'Poppins',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                    FlutterFlowTheme.of(context).title3Family),
+                              ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 3, 8, 0),
+                          child: AutoSizeText(
+                            funcionario.cargo,
+                            textAlign: TextAlign.start,
+                            style: FlutterFlowTheme.of(context)
+                                .bodyText2
+                                .override(
+                                  fontFamily: 'Poppins',
+                                  color: FlutterFlowTheme.of(context).grayicon,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  useGoogleFonts: GoogleFonts.asMap()
+                                      .containsKey(FlutterFlowTheme.of(context)
+                                          .bodyText2Family),
+                                ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 4, 8, 0),
+                          child: FutureBuilder<Area>(
+                            future: cargarArea(funcionario.idArea),
+                            initialData: area,
+                            builder: ((context, snapshot) {
+                              area = snapshot.data!;
+                              return AutoSizeText(
+                                snapshot.data!.nombre,
+                                textAlign: TextAlign.start,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText2
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color:
+                                          FlutterFlowTheme.of(context).grayicon,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                      useGoogleFonts: GoogleFonts.asMap()
+                                          .containsKey(
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyText2Family),
+                                    ),
+                              );
+                            }),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 4, 0, 0),
+                      child: Icon(
+                        Icons.chevron_right_rounded,
+                        color: Color(0xFF57636C),
+                        size: 24,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Future<Area> cargarArea(id) async {
+  FuncionariosController funcionariosController = FuncionariosController();
+  Area area = await funcionariosController.buscarArea(id.toString());
+  return area;
 }

@@ -26,7 +26,7 @@ class CategoriaController {
       try {
         List<Categoria> listaCategoria = [];
         final data =
-            await client.from('CATEGORIAS').select('*')  as List<dynamic>;
+            await client.from('CATEGORIAS').select('*') as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Categoria.fromMap(e)).toList();
       } on PostgrestException catch (error) {
@@ -40,7 +40,7 @@ class CategoriaController {
       try {
         List<Categoria> listaCategoria = [];
         final data = await client.from('CATEGORIAS').select('*').textSearch(
-                'NOMBRE', "'${Utilidades().capitalizeAllSentence(nombre)}'")
+                'NOMBRE', "'${Utilidades().mayusculaPrimeraLetra(nombre)}'")
             as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Categoria.fromMap(e)).toList();
@@ -55,17 +55,16 @@ class CategoriaController {
   }
 
   Future<void> addCategoria(
-      context,
-      String nombre,
-      String urlImagen,String? descripcion) async {
+      context, String nombre, String urlImagen, String? descripcion) async {
     try {
       log('Inserando nuevo activo...');
       Utilidades utilidades = Utilidades();
       await client.from('CATEGORIAS').insert({
-        'NOMBRE': utilidades.capitalizeAllWord(nombre),
+        'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
         'URL_IMAGEN': urlImagen,
-        'DESCRIPCION': (descripcion==null) ? null : utilidades.capitalizeAllSentence(descripcion),
-        
+        'DESCRIPCION': (descripcion == null)
+            ? null
+            : utilidades.mayusculaPrimeraLetra(descripcion),
       }).then((value) => log('Nueva categoria registrada: $value'));
       log("Registrado con exito");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

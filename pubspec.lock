@@ -190,6 +190,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.1"
+  fast_cached_network_image:
+    dependency: "direct main"
+    description:
+      name: fast_cached_network_image
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   fdottedline_nullsafety:
     dependency: "direct main"
     description:
@@ -916,7 +923,7 @@ packages:
     source: hosted
     version: "1.0.33"
   supabase:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: supabase
       url: "https://pub.dartlang.org"

@@ -55,7 +55,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: activoController.getActivosStream(nombreCategoria),
+        stream: activoController.getActivoStream(nombreCategoria),
         builder: (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
           return Scaffold(
             key: scaffoldKey,
@@ -198,11 +198,11 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                       borderRadius: 30,
                       borderWidth: 1,
                       buttonSize: 60,
-                       icon: FaIcon(
-                  FontAwesomeIcons.filePdf,
-                  color: FlutterFlowTheme.of(context).whiteColor,
-                  size: 30,
-                ),
+                      icon: FaIcon(
+                        FontAwesomeIcons.filePdf,
+                        color: FlutterFlowTheme.of(context).whiteColor,
+                        size: 30,
+                      ),
                       onPressed: () async {
                         await PdfApi.generarTablaActivo(listaActivos);
                       },
@@ -357,7 +357,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                             0, 12, 0, 44),
                                         child: StreamBuilder(
                                             stream: activoController
-                                                .getActivosStream(
+                                                .getActivoStream(
                                                     nombreCategoria),
                                             builder: (context,
                                                 AsyncSnapshot<

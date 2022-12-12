@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
 import 'package:flutter/foundation.dart';
@@ -17,53 +18,79 @@ class StorageController {
   final supabase =
       SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
   Future<String> subirImagen(BuildContext context, String? filePath,
-      File imageFile, String? id,String bucketName) async {
+      File imageFile, String? id, String bucketName) async {
     try {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "Subiendo imagen....",
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+      ));
+
       final bytes = await imageFile.readAsBytes();
       final fileExt = imageFile.path.split('.').last;
       final fileName = '$id.$fileExt';
       final filePath = fileName;
       final fileType = "${filePath.split('.').last}/";
-      await supabase.storage.from(bucketName).uploadBinary(
+      final storageResponse = await supabase.storage
+          .from(bucketName)
+          .uploadBinary(
             filePath,
             bytes,
-            fileOptions: FileOptions(),
-          );
+            fileOptions: const FileOptions(cacheControl: '4000', upsert: true,
+            ),
+          )
+          .then((value) => {});
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "Imagen subida con exitó",
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+      ));
+      log('Resultado subida imagen: $storageResponse');
 
       final imageUrlResponse = await supabase.storage
-          .from('activos')
+          .from(bucketName)
           .createSignedUrl(filePath, 60 * 60 * 24 * 365 * 10);
       log('resultado imagen: $imageUrlResponse');
       log('Filename: $fileName');
-      return imageUrlResponse;
+
+      return 'https://ujftfjxhobllfwadrwqj.supabase.co/storage/v1/object/public/$bucketName/$fileName';
     } on StorageException catch (error) {
       var errorTraducido = await traducir(error.message);
       log(error.message);
-      if (!errorTraducido.contains('existe')) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            'Error al subir imagen:$errorTraducido',
-            style: FlutterFlowTheme.of(context).bodyText2.override(
-                  fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
-                  color: FlutterFlowTheme.of(context).tertiaryColor,
-                  useGoogleFonts: GoogleFonts.asMap().containsKey(
-                      FlutterFlowTheme.of(context).bodyText2Family),
-                ),
-          ),
-          backgroundColor: Colors.redAccent,
-        ));
-        final fileExt = imageFile.path.split('.').last;
-        final fileName = '$id.$fileExt';
-        return 'https://ujftfjxhobllfwadrwqj.supabase.co/storage/v1/object/public/$bucketName/$fileName';
-      } else {
-        final fileExt = imageFile.path.split('.').last;
-        final fileName = '$id.$fileExt';
-        return 'https://ujftfjxhobllfwadrwqj.supabase.co/storage/v1/object/public/$bucketName/$fileName';
-      }
-      
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Error al subir imagen:$errorTraducido',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      final fileExt = imageFile.path.split('.').last;
+      final fileName = '$id.$fileExt';
+      return 'error';
     } catch (error) {
       log(error.toString());
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: Duration(seconds: 10),
         content: Text(
           "Ha ocurrido un error inesperado al momento de subir la imagen",
           style: FlutterFlowTheme.of(context).bodyText2.override(
@@ -78,7 +105,7 @@ class StorageController {
 
       log(error.toString());
     }
-    return 'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png';
+    return 'error';
   }
 
   Future<String> traducir(String input) async {

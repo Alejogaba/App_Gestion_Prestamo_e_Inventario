@@ -111,7 +111,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'FuncionarioPerfilPage',
               path: 'funcionarioPerfilPage',
-              builder: (context, params) => FuncionarioPerfilPageWidget(),
+              builder: (context, params) => FuncionarioPerfilPageWidget(funcionario: params.getParam('funcionario', ParamType.Funcionario),
+              area: params.getParam('area', ParamType.Area),),
             ),
             FFRoute(
               name: 'ActivoPerfilPage',
