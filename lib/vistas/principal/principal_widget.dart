@@ -73,9 +73,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
         ),
       ),
       floatingActionButton: Padding(
-        padding: (Platform.isAndroid || Platform.isIOS)
-            ? EdgeInsets.only(bottom: 50.0, right: 16)
-            : EdgeInsets.only(bottom: 0, right: 0),
+        padding:  EdgeInsets.only(bottom: 50.0, right: 16),
         child: SpeedDial(
           //Speed dial menu
           //margin bottom
@@ -258,19 +256,16 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                         ),
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
                                         width: 1,
                                       ),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
-                                        color:FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
                                         width: 1,
                                       ),
                                       borderRadius: BorderRadius.circular(12),
@@ -290,9 +285,8 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     filled: true,
-                                    fillColor: FlutterFlowTheme
-                                                            .of(context)
-                                                        .secondaryBackground,
+                                    fillColor: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
                                     prefixIcon: Icon(
                                       Icons.search_rounded,
                                       color: Color(0xFF57636C),
@@ -342,7 +336,6 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                             ),
                                       ),
                                     ),
-                                    
                                   ],
                                 ),
                               ),
@@ -374,7 +367,8 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                                   snapshot.data![index].nombre,
                                                   snapshot
                                                       .data![index].urlImagen,
-                                                  constraints.maxWidth,listCategoriasLocal[index]
+                                                  constraints.maxWidth,
+                                                  listCategoriasLocal[index]
                                                       .descripcion!);
                                               return temp;
                                             },
@@ -396,51 +390,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                     );
                                   } else if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    for (var element in listCategoriasLocal) {
-                                      print(
-                                          'Lista LOCAL categoria nombre: + ${element.nombre}');
-                                      print(
-                                          'Lista LOCAL categoria url: ${element.urlImagen}');
-                                    }
-                                    log('Usando cache local');
-
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          16, 16, 16, 0),
-                                      child: LayoutBuilder(
-                                        builder: (context, constraints) {
-                                          log(constraints.maxWidth.toString());
-                                          return GridView.builder(
-                                            shrinkWrap: true,
-                                            itemCount:
-                                                listCategoriasLocal.length,
-                                            itemBuilder: (context, index) {
-                                              var temp = itemCategoria(
-                                                  context,
-                                                  listCategoriasLocal[index]
-                                                      .nombre,
-                                                  listCategoriasLocal[index]
-                                                      .urlImagen,
-                                                  constraints.maxWidth,listCategoriasLocal[index]
-                                                      .descripcion!);
-                                              return temp;
-                                            },
-                                            scrollDirection: Axis.vertical,
-                                            padding: EdgeInsets.zero,
-                                            gridDelegate:
-                                                // ignore: prefer_const_constructors
-                                                SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount:
-                                                        defCantidadColumnas(
-                                                            constraints
-                                                                .maxWidth),
-                                                    mainAxisSpacing: 10,
-                                                    crossAxisSpacing: 10,
-                                                    childAspectRatio: 1.4),
-                                          );
-                                        },
-                                      ),
-                                    );
+                                    return loading(context);
                                   } else if (snapshot.hasError) {
                                     log('Error: ${snapshot.error}');
                                     return Container();
@@ -506,8 +456,8 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   }
 }
 
-Widget itemCategoria(
-    BuildContext context, String? nombre, String? url, constraints,String descripcion) {
+Widget itemCategoria(BuildContext context, String? nombre, String? url,
+    constraints, String descripcion) {
   log("Dibujando item categoria");
 
   return GestureDetector(
@@ -648,4 +598,24 @@ webScraper() async {
         webScraper.getElement('div.yuRUbf > h3.LC20lb MBeuO DKV0Md', ['href']);
     log('SCRAPER: $elements');
   }
+}
+
+Widget loading(context) {
+  return Padding(
+    padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 24),
+    child: Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 100,
+          height: 100,
+          child: CircularProgressIndicator(
+            color: FlutterFlowTheme.of(context).primaryColor,
+            strokeWidth: 10.0,
+          ),
+        ),
+      ],
+    ),
+  );
 }

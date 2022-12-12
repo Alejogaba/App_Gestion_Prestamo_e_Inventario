@@ -1,17 +1,21 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:ui';
 import 'package:app_gestion_prestamo_inventario/entidades/activo_impresora.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/estadoActivo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/funcionario.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
+import 'package:app_gestion_prestamo_inventario/servicios/funcionariosController.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../entidades/activo.dart';
+import '../../entidades/area.dart';
 import '../../entidades/categoria.dart';
 import '../../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/flutter_flow_count_controller.dart';
@@ -52,10 +56,11 @@ class _RegistrarFuncionarioPageWidgetState
   TextEditingController textControllerTelefono_1 = TextEditingController();
   TextEditingController textControllerTelefono_2 = TextEditingController();
   TextEditingController textControllerEnlaceSIGEP = TextEditingController();
-  String? dropDownValueArea;
+  TextEditingController textControllerCargo = TextEditingController();
+  Area? dropDownValueArea;
   int? countControllerValue = 1;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  List<Categoria> listCategorias = [];
+  List<Area> listAreas = [];
   List<EstadoActivo> listEstados = [
     EstadoActivo(0, 'Bueno: Activo en buen estado'),
     EstadoActivo(1,
@@ -63,6 +68,7 @@ class _RegistrarFuncionarioPageWidgetState
     EstadoActivo(2, 'Malo: Activo en mal estado o dañado'),
   ];
   File? imageFile;
+  bool blur = false;
 
   String? urlImagen;
   final ImagePicker picker = ImagePicker();
@@ -72,13 +78,13 @@ class _RegistrarFuncionarioPageWidgetState
   bool _errorColor = false;
   bool _dropdownErrorColor = false;
   CategoriaController categoriaController = CategoriaController();
-  late final _listaCategorias = cargarCategorias();
+  late final _listaAreas = cargarAreas();
   int? numInventario;
   int estadoActivoOpcion = 0;
   Funcionario? activo;
   final String? operacionaRealizar;
   final String? id;
-  
+  int idArea = 0;
 
   final Funcionario? funcionarioEditar;
   FocusNode _focusNodeCorreo = FocusNode();
@@ -88,6 +94,7 @@ class _RegistrarFuncionarioPageWidgetState
   FocusNode _focusNodeTelefono_1 = FocusNode();
   FocusNode _focusNodeTelefono_2 = FocusNode();
   FocusNode _focusNodeEnlaceSIGEP = FocusNode();
+  FocusNode _focusNodeCargo = FocusNode();
   Color color = Colors.red;
   List<TextInputFormatter> inputNumero = <TextInputFormatter>[
     // for below version 2 use this
@@ -118,7 +125,13 @@ class _RegistrarFuncionarioPageWidgetState
       textControllerCedula.text = funcionarioEditar!.cedula.toString();
       textControllerNombres.text = funcionarioEditar!.nombres.toString();
       textControllerCorreo!.text = funcionarioEditar!.correo.toString();
-      dropDownValueArea = funcionarioEditar!.idArea.toString();
+      textControllerTelefono_1.text = funcionarioEditar!.telefono1.toString();
+      (funcionarioEditar!.telefono2 != null)
+          ? textControllerTelefono_2.text =
+              funcionarioEditar!.telefono2.toString()
+          : textControllerTelefono_2.text = "";
+      textControllerCargo.text = funcionarioEditar!.cargo.toString();
+      dropDownValueArea!.id = funcionarioEditar!.idArea;
     } else {
       id != null
           ? textControllerApellidos.text = id.toString()
@@ -130,18 +143,19 @@ class _RegistrarFuncionarioPageWidgetState
 
   @override
   void dispose() {
+    super.dispose();
     textControllerApellidos.dispose();
     textControllerCedula.dispose();
     textControllerNombres.dispose();
     textControllerCorreo?.dispose();
-    super.dispose();
+    textControllerCargo.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     dynamic anchoColumnaWrap = (Platform.isAndroid || Platform.isIOS)
-      ? MediaQuery.of(context).size.width * 0.9
-      : MediaQuery.of(context).size.width * 0.4;
+        ? MediaQuery.of(context).size.width * 0.9
+        : MediaQuery.of(context).size.width * 0.4;
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -166,7 +180,9 @@ class _RegistrarFuncionarioPageWidgetState
           onPressed: () async {
             if (_formKey.currentState!.validate() &&
                 dropDownValueArea != null) {
-              _loading = true;
+              setState(() {
+                blur = true;
+              });
               String? imagenUrl;
               log('serial: ${textControllerApellidos.text.toString()}');
 
@@ -176,26 +192,48 @@ class _RegistrarFuncionarioPageWidgetState
                     context,
                     imageFile!.path.toString(),
                     imageFile!,
-                    textControllerApellidos.text,
-                    'activos');
-                ActivoController activoController = ActivoController();
+                    textControllerCedula.text,
+                    'funcionarios');
+                FuncionariosController funcionarioController =
+                    FuncionariosController();
+                String res = '';
                 // ignore: use_build_context_synchronously
-                await registrarActivo(activoController, context, imagenUrl);
-                Timer(Duration(seconds: 3), () {
-                  context.pop();
-                });
+                if (imagenUrl != 'error') {
+                  res = await registrarFuncionario(
+                      funcionarioController, context, imagenUrl);
+                  setState(() {
+                    blur = false;
+                  });
+                  if (res == 'ok') {
+                    Timer(Duration(seconds: 3), () {
+                      context.pop();
+                    });
+                  }
+                } else {
+                  setState(() {
+                    blur = false;
+                  });
+                }
               } else {
-                ActivoController activoController = ActivoController();
-                await registrarActivo(activoController, context,
+                FuncionariosController funcionarioController =
+                    FuncionariosController();
+                String res = await registrarFuncionario(
+                    funcionarioController,
+                    context,
                     'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png');
-                Timer(Duration(seconds: 3), () {
-                  context.pop();
-                });
+                if (res == 'ok') {
+                  setState(() {
+                    blur = false;
+                  });
+                  Timer(Duration(seconds: 3), () {
+                    context.pop();
+                  });
+                }
               }
             } else if (dropDownValueArea == null) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
-                  "Seleccione una categoria",
+                  "Seleccione el área donde se encuentra el funcionario",
                   style: FlutterFlowTheme.of(context).bodyText2.override(
                         fontFamily:
                             FlutterFlowTheme.of(context).bodyText2Family,
@@ -207,6 +245,7 @@ class _RegistrarFuncionarioPageWidgetState
                 backgroundColor: Colors.redAccent,
               ));
               setState(() {
+                blur = false;
                 _errorColor = true;
               });
               Future.delayed(const Duration(milliseconds: 6000), () {
@@ -230,6 +269,7 @@ class _RegistrarFuncionarioPageWidgetState
               ));
               log('rojo');
               setState(() {
+                blur = false;
                 _errorColor = true;
               });
               Future.delayed(const Duration(milliseconds: 6000), () {
@@ -270,245 +310,259 @@ class _RegistrarFuncionarioPageWidgetState
         centerTitle: false,
         elevation: 0,
       ),
-      body: Padding(
-        padding: (Platform.isAndroid || Platform.isIOS)
-            ? EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0)
-            : EdgeInsetsDirectional.fromSTEB(60, 16, 60, 16),
-        child: Container(
-          alignment: Alignment.topCenter,
-          margin: (Platform.isAndroid || Platform.isIOS)
-              ? null
-              : EdgeInsets.all(10),
-          height: (Platform.isAndroid || Platform.isIOS) ? null : 1000,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: FlutterFlowTheme.of(context).secondaryBackground,
-            borderRadius: (Platform.isAndroid || Platform.isIOS)
-                ? null
-                : BorderRadius.circular(30), //border corner radius
-            /*boxShadow: [
-              BoxShadow(
-                color: FlutterFlowTheme.of(context).boxShadow, //color of shadow
-                spreadRadius: 5, //spread radius
-                blurRadius: 7, // blur radius
-                offset: Offset(0, 2), // changes position of shadow
-                //first paramerter of offset is left-right
-                //second parameter is top to down
+      body: Stack(
+        children: [
+          Padding(
+            padding: (Platform.isAndroid || Platform.isIOS)
+                ? EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0)
+                : EdgeInsetsDirectional.fromSTEB(60, 16, 60, 16),
+            child: Container(
+              alignment: Alignment.topCenter,
+              margin: (Platform.isAndroid || Platform.isIOS)
+                  ? null
+                  : EdgeInsets.all(10),
+              height: (Platform.isAndroid || Platform.isIOS) ? null : 1000,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).secondaryBackground,
+                borderRadius: (Platform.isAndroid || Platform.isIOS)
+                    ? null
+                    : BorderRadius.circular(30), //border corner radius
+                /*boxShadow: [
+                  BoxShadow(
+                    color: FlutterFlowTheme.of(context).boxShadow, //color of shadow
+                    spreadRadius: 5, //spread radius
+                    blurRadius: 7, // blur radius
+                    offset: Offset(0, 2), // changes position of shadow
+                    //first paramerter of offset is left-right
+                    //second parameter is top to down
+                  ),
+                  //you can set more BoxShadow() here
+                ],*/
               ),
-              //you can set more BoxShadow() here
-            ],*/
-          ),
-          child: Form(
-            key: _formKey,
-            child: Padding(
-              padding: (Platform.isAndroid || Platform.isIOS)
-                  ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
-                  : EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                      child: Wrap(
-                        spacing: 0,
-                        runSpacing: 2,
-                        alignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.start,
-                        direction: Axis.horizontal,
-                        runAlignment: WrapAlignment.center,
-                        verticalDirection: VerticalDirection.down,
-                        clipBehavior: Clip.none,
-                        children: [
-                          Column(
+              child: Form(
+                key: _formKey,
+                child: Padding(
+                  padding: (Platform.isAndroid || Platform.isIOS)
+                      ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
+                      : EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                          child: Wrap(
+                            spacing: 0,
+                            runSpacing: 2,
+                            alignment: WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            direction: Axis.horizontal,
+                            runAlignment: WrapAlignment.center,
+                            verticalDirection: VerticalDirection.down,
+                            clipBehavior: Clip.none,
                             children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 10, 20, 0),
-                                child: Text(
-                                  'Seleccione o suba una imagen',
-                                  style: FlutterFlowTheme.of(context).title3,
-                                ),
-                              ),
-                              Container(
-                                width: (Platform.isAndroid || Platform.isIOS)? MediaQuery.of(context).size.width * 0.9: MediaQuery.of(context).size.width * 0.2,
-                                child: Center(
-                                  child: Padding(
+                              Column(
+                                children: [
+                                  Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 16, 10, 14),
+                                        0, 10, 20, 0),
+                                    child: Text(
+                                      'Seleccione y suba una imagen',
+                                      style:
+                                          FlutterFlowTheme.of(context).title3,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: (Platform.isAndroid ||
+                                            Platform.isIOS)
+                                        ? MediaQuery.of(context).size.width *
+                                            0.9
+                                        : MediaQuery.of(context).size.width *
+                                            0.2,
                                     child: Center(
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: imagenPerfil(
-                                            context, urlImagen, imageFile),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 16, 10, 14),
+                                        child: Center(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            child: imagenPerfil(
+                                                context, urlImagen, imageFile),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
+                                  FFButtonWidget(
+                                    onPressed: () async {
+                                      var url = Uri.parse(
+                                          'http://www.lajaguadeibirico-cesar.gov.co/tema/directorio-de-funcionarios');
+                                      if (!await launchUrl(
+                                        url,
+                                        mode: LaunchMode.externalApplication,
+                                      )) {
+                                        throw 'No se puede abrir $url';
+                                      }
+                                    },
+                                    text: 'Buscar imagen en la web',
+                                    icon: FaIcon(
+                                      FontAwesomeIcons.externalLinkAlt,
+                                      color: FlutterFlowTheme.of(context)
+                                          .whiteColor,
+                                      size: 20,
+                                    ),
+                                    options: FFButtonOptions(
+                                      width: 230,
+                                      height: 55,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryColor,
+                                      textStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Lexend Deca',
+                                            color: FlutterFlowTheme.of(context)
+                                                .whiteColor,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.normal,
+                                            useGoogleFonts: GoogleFonts.asMap()
+                                                .containsKey(
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText2Family),
+                                          ),
+                                      elevation: 3,
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 16),
-                                child: Text(
-                                  'Ó',
-                                  style: FlutterFlowTheme.of(context).title3,
-                                ),
-                              ),
-                               FFButtonWidget(
-                                
-                               
-                  onPressed: () {
-                    print('Button pressed ...');
-                  },
-                  text: 'Buscar en la web',
-                  icon: FaIcon(
-                                              FontAwesomeIcons.externalLinkAlt,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .whiteColor,
-                                              size: 20,
-                                            ),
-                  options: FFButtonOptions(
-                    width: 160,
-                    height: 50,
-                    
-                    color: FlutterFlowTheme.of(context).primaryColor,
-                    textStyle: FlutterFlowTheme.of(context).bodyText2.override(
-                          fontFamily: 'Lexend Deca',
-                          color: FlutterFlowTheme.of(context).whiteColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.normal,
-                          useGoogleFonts: GoogleFonts.asMap().containsKey(
-                              FlutterFlowTheme.of(context).bodyText2Family),
-                        ),
-                    elevation: 3,
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                              
-                            ],
-                          ),
-                          Column(
+                              Column(
                                 children: [
                                   Container(
                                     width: anchoColumnaWrap,
                                     child: Align(
                                       alignment: AlignmentDirectional(0.05, 0),
                                       child: Row(
-                                         mainAxisSize: MainAxisSize.max,
-                                         children: [
-                                          Padding(padding:
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 50, 5, 0),
-                                                    child: FaIcon(
+                                            child: FaIcon(
                                               FontAwesomeIcons.solidIdCard,
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .grayicon,
                                               size: 28,
-                                            ),),
-                                            Expanded(
-                                              child: Padding(padding:  EdgeInsetsDirectional.fromSTEB(
-                                                      0, 30, 0, 0),
-                                                      child:TextFormFieldCustom(
-                                                context,
-                                                textControllerCedula,
-                                                'Ej. 1065324298',
-                                                'Número de cédula*',
-                                                10,
-                                                TextInputType.number,
-                                                inputNumero,
-                                                true,
-                                                null,
-                                                _focusNodeCedula),
+                                            ),
                                           ),
-                                            )
-                                         ],
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 30, 0, 0),
+                                              child: TextFormFieldCustom(
+                                                  context,
+                                                  textControllerCedula,
+                                                  'Ej. 1065324298',
+                                                  'Número de cédula*',
+                                                  10,
+                                                  TextInputType.number,
+                                                  inputNumero,
+                                                  true,
+                                                  null,
+                                                  _focusNodeCedula),
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ),
-                                  
                                   ),
                                   Container(
                                     width: anchoColumnaWrap,
                                     child: Align(
                                       alignment: AlignmentDirectional(0.05, 0),
                                       child: Row(
-                                         mainAxisSize: MainAxisSize.max,
-                                         children: [
-                                          Padding(padding:
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 50, 5, 0),
-                                                    child: FaIcon(
+                                            child: FaIcon(
                                               FontAwesomeIcons.solidUser,
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .grayicon,
                                               size: 28,
-                                            ),),
-                                            Expanded(
-                                              child: Padding(padding:  EdgeInsetsDirectional.fromSTEB(
-                                                      0, 30, 0, 0),
-                                                      child:TextFormFieldCustom(
-                                                context,
-                                                textControllerNombres,
-                                                'Ej. Luis Carlos',
-                                                'Nombres*',
-                                                30,
-                                                TextInputType.name,
-                                                null,
-                                                false,
-                                                null,
-                                                _focusNodeNombre),
+                                            ),
                                           ),
-                                            )
-                                         ],
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 30, 0, 0),
+                                              child: TextFormFieldCustom(
+                                                  context,
+                                                  textControllerNombres,
+                                                  'Ej. Luis Carlos',
+                                                  'Nombres*',
+                                                  30,
+                                                  TextInputType.name,
+                                                  null,
+                                                  false,
+                                                  null,
+                                                  _focusNodeNombre),
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ),
-                                  
                                   ),
                                   Container(
                                     width: anchoColumnaWrap,
                                     child: Align(
                                       alignment: AlignmentDirectional(0.05, 0),
                                       child: Row(
-                                         mainAxisSize: MainAxisSize.max,
-                                         children: [
-                                          Padding(padding:
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 50, 5, 0),
-                                                    child: FaIcon(
+                                            child: FaIcon(
                                               FontAwesomeIcons.solidUser,
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .grayicon,
                                               size: 28,
-                                            ),),
-                                            Expanded(
-                                              child: Padding(padding:  EdgeInsetsDirectional.fromSTEB(
-                                                      0, 30, 0, 0),
-                                                      child:TextFormFieldCustom(
-                                                context,
-                                                textControllerApellidos,
-                                                'Ej. Calderon Gutierrez',
-                                                'Apellidos',
-                                                30,
-                                                TextInputType.name,
-                                                null,
-                                                false,
-                                                null,
-                                                _focusNodeApellidos),
+                                            ),
                                           ),
-                                            )
-                                         ],
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 30, 0, 0),
+                                              child: TextFormFieldCustom(
+                                                  context,
+                                                  textControllerApellidos,
+                                                  'Ej. Calderon Gutierrez',
+                                                  'Apellidos',
+                                                  30,
+                                                  TextInputType.name,
+                                                  null,
+                                                  false,
+                                                  null,
+                                                  _focusNodeApellidos),
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ),
-                                  
                                   ),
                                   Container(
                                     width: anchoColumnaWrap,
@@ -529,19 +583,20 @@ class _RegistrarFuncionarioPageWidgetState
                                               child: Padding(
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(0, 16, 0, 20),
-                                                child: FutureBuilder<
-                                                    List<Categoria>>(
-                                                  future: _listaCategorias,
+                                                child:
+                                                    FutureBuilder<List<Area>>(
+                                                  future: _listaAreas,
                                                   builder:
                                                       (BuildContext context,
                                                           snapshot) {
                                                     return FlutterFlowDropDown<
-                                                        String>(
+                                                        Area>(
                                                       value: dropDownValueArea,
-                                                      options: (snapshot.connectionState ==
+                                                      options: (snapshot
+                                                                      .connectionState ==
                                                                   ConnectionState
                                                                       .done &&
-                                                              listCategorias
+                                                              listAreas
                                                                   .isNotEmpty)
                                                           ? List.generate(
                                                               snapshot
@@ -549,9 +604,8 @@ class _RegistrarFuncionarioPageWidgetState
                                                               (index) =>
                                                                   DropdownMenuItem(
                                                                       value: snapshot
-                                                                          .data![
-                                                                              index]
-                                                                          .nombre,
+                                                                              .data![
+                                                                          index],
                                                                       child:
                                                                           Text(
                                                                         snapshot
@@ -594,7 +648,7 @@ class _RegistrarFuncionarioPageWidgetState
                                                                         FlutterFlowTheme.of(context)
                                                                             .bodyText1Family),
                                                               ),
-                                                      hintText: 'Categoria*',
+                                                      hintText: 'Área*',
                                                       fillColor:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -623,174 +677,237 @@ class _RegistrarFuncionarioPageWidgetState
                                       ),
                                     ),
                                   ),
-                                  
                                 ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: tamanio_padding,
-                      child: Divider(
-                        height: 2,
-                        thickness: 1,
-                        color: Color(0x94ABB3BA),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: tamanio_padding,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 30, 15, 0),
-                                child: Icon(
-                                  Icons.mail,
-                                  color: FlutterFlowTheme.of(context).grayicon,
-                                  size: 28,
-                                ),
-                              ),
-                              Expanded(
-                                child: TextFormFieldCustom(
-                                    context,
-                                    textControllerCorreo,
-                                    'Ej. Sistemas@lajaguadeIbirico-Cesar.gov.co',
-                                    'Correo eléctronico',
-                                    100,
-                                    TextInputType.emailAddress,
-                                    null,
-                                    true,
-                                    null,
-                                    _focusNodeCorreo),
                               ),
                             ],
                           ),
                         ),
                         Padding(
                           padding: tamanio_padding,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 30, 15, 0),
-                                child: FaIcon(
-                                  FontAwesomeIcons.phone,
-                                  color: FlutterFlowTheme.of(context).grayicon,
-                                  size: 25,
-                                ),
-                              ),
-                              Expanded(
-                                child: TextFormFieldCustom(
-                                    context,
-                                    textControllerTelefono_1,
-                                    'Ej.3104562222',
-                                    'Número de teléfono*',
-                                    10,
-                                    TextInputType.phone,
-                                    inputNumero,
-                                    false,
-                                    null,
-                                    _focusNodeTelefono_1),
-                              ),
-                            ],
+                          child: Divider(
+                            height: 2,
+                            thickness: 1,
+                            color: Color(0x94ABB3BA),
                           ),
                         ),
-                        Padding(
-                          padding: tamanio_padding,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 30, 15, 0),
-                                child: FaIcon(
-                                  FontAwesomeIcons.phone,
-                                  color: FlutterFlowTheme.of(context).grayicon,
-                                  size: 25,
-                                ),
+                        Column(
+                          children: [
+                            Padding(
+                              padding: tamanio_padding,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 30, 15, 0),
+                                    child: FaIcon(
+                                      FontAwesomeIcons.suitcase,
+                                      color:
+                                          FlutterFlowTheme.of(context).grayicon,
+                                      size: 25,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: TextFormFieldCustom(
+                                        context,
+                                        textControllerCargo,
+                                        '',
+                                        'Cargo',
+                                        100,
+                                        TextInputType.name,
+                                        null,
+                                        true,
+                                        null,
+                                        _focusNodeCargo),
+                                  ),
+                                ],
                               ),
-                              Expanded(
-                                child: TextFormFieldCustom(
-                                    context,
-                                    textControllerTelefono_2,
-                                    '',
-                                    'Número de teléfono alternativo',
-                                    10,
-                                    TextInputType.phone,
-                                    inputNumero,
-                                    false,
-                                    null,
-                                    _focusNodeTelefono_2),
+                            ),
+                            Padding(
+                              padding: tamanio_padding,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 30, 15, 0),
+                                    child: Icon(
+                                      Icons.mail,
+                                      color:
+                                          FlutterFlowTheme.of(context).grayicon,
+                                      size: 28,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: TextFormFieldCustom(
+                                        context,
+                                        textControllerCorreo,
+                                        'Ej. Sistemas@lajaguadeIbirico-Cesar.gov.co',
+                                        'Correo eléctronico',
+                                        100,
+                                        TextInputType.emailAddress,
+                                        null,
+                                        true,
+                                        null,
+                                        _focusNodeCorreo),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: tamanio_padding,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 30, 16, 0),
-                                child: FaIcon(
-                                  FontAwesomeIcons.globe,
-                                  color: FlutterFlowTheme.of(context).grayicon,
-                                  size: 25,
-                                ),
+                            ),
+                            Padding(
+                              padding: tamanio_padding,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 30, 15, 0),
+                                    child: FaIcon(
+                                      FontAwesomeIcons.phone,
+                                      color:
+                                          FlutterFlowTheme.of(context).grayicon,
+                                      size: 25,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: TextFormFieldCustom(
+                                        context,
+                                        textControllerTelefono_1,
+                                        'Ej.3104562222',
+                                        'Número de teléfono*',
+                                        10,
+                                        TextInputType.phone,
+                                        inputNumero,
+                                        false,
+                                        null,
+                                        _focusNodeTelefono_1),
+                                  ),
+                                ],
                               ),
-                              Expanded(
-                                child: TextFormFieldCustom(
-                                    context,
-                                    textControllerEnlaceSIGEP,
-                                    'Ej. https://www.funcionpublica.gov.co/web/sigep/hdv/-/directorio/S2138649-0690-4/view',
-                                    'Enlace al SIGEP',
-                                    150,
-                                    TextInputType.url,
-                                    null,
-                                    false,
-                                    null,
-                                    _focusNodeEnlaceSIGEP),
+                            ),
+                            Padding(
+                              padding: tamanio_padding,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 30, 15, 0),
+                                    child: FaIcon(
+                                      FontAwesomeIcons.phone,
+                                      color:
+                                          FlutterFlowTheme.of(context).grayicon,
+                                      size: 25,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: TextFormFieldCustom(
+                                        context,
+                                        textControllerTelefono_2,
+                                        '',
+                                        'Número de teléfono alternativo',
+                                        10,
+                                        TextInputType.phone,
+                                        inputNumero,
+                                        false,
+                                        null,
+                                        _focusNodeTelefono_2),
+                                  ),
+                                ],
                               ),
-                              FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30,
-                                borderWidth: 1,
-                                buttonSize: 45,
-                                icon: Icon(
-                                  Icons.content_paste,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  size: 30,
-                                ),
-                                onPressed: () {
-                                  Clipboard.getData(Clipboard.kTextPlain)
-                                      .then((value) {
-                                    if (value != null) {
-                                      if (value.text!.trim().isNotEmpty) {
-                                        textControllerEnlaceSIGEP.text =
-                                            value.text!.trim();
-                                      }
-                                    }
-                                  });
-                                },
+                            ),
+                            Padding(
+                              padding: tamanio_padding,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 30, 16, 0),
+                                    child: FaIcon(
+                                      FontAwesomeIcons.globe,
+                                      color:
+                                          FlutterFlowTheme.of(context).grayicon,
+                                      size: 25,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: TextFormFieldCustom(
+                                        context,
+                                        textControllerEnlaceSIGEP,
+                                        'Ej. https://www.funcionpublica.gov.co/web/sigep/hdv/-/directorio/S2138649-0690-4/view',
+                                        'Enlace al SIGEP',
+                                        150,
+                                        TextInputType.url,
+                                        null,
+                                        false,
+                                        null,
+                                        _focusNodeEnlaceSIGEP),
+                                  ),
+                                  FlutterFlowIconButton(
+                                    borderColor: Colors.transparent,
+                                    borderRadius: 30,
+                                    borderWidth: 1,
+                                    buttonSize: 45,
+                                    icon: Icon(
+                                      Icons.content_paste,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      size: 30,
+                                    ),
+                                    onPressed: () {
+                                      Clipboard.getData(Clipboard.kTextPlain)
+                                          .then((value) {
+                                        if (value != null) {
+                                          if (value.text!.trim().isNotEmpty) {
+                                            textControllerEnlaceSIGEP.text =
+                                                value.text!.trim();
+                                          }
+                                        }
+                                      });
+                                    },
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+          if (blur)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(0),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: 4,
+                  sigmaY: 4,
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      SizedBox(
+                        width: 120,
+                        height: 120,
+                        child: CircularProgressIndicator(
+                          color: FlutterFlowTheme.of(context).primaryColor,
+                          strokeWidth: 12.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -897,31 +1014,29 @@ class _RegistrarFuncionarioPageWidgetState
     );
   }
 
-  Future<void> registrarActivo(ActivoController activoController,
-      BuildContext context, String? imagenUrl) async {
-    await activoController.addActivo(
-        context,
-        textControllerApellidos.text,
-        textControllerCedula.text,
-        textControllerNombres.text,
-        textControllerCorreo!.text,
-        imagenUrl,
-        estadoActivoOpcion,
-        dropDownValueArea!,
-        countControllerValue,
-        null,
-        null);
-    _loading = false;
+  Future<String> registrarFuncionario(
+      FuncionariosController funcionarioController,
+      BuildContext context,
+      String? imagenUrl) async {
+    var res = await funcionarioController.addFuncionario(
+        context: context,
+        apellidos: textControllerApellidos.text,
+        cedula: textControllerCedula.text,
+        nombres: textControllerNombres.text,
+        correo: textControllerCorreo!.text,
+        urlImagen: imagenUrl,
+        cargo: textControllerCargo.text,
+        idArea: dropDownValueArea!.id,
+        telefono1: textControllerTelefono_1.text,
+        telefono2: textControllerTelefono_2.text,
+        enlaceSIGEP: textControllerEnlaceSIGEP.text);
+    return res;
   }
 
-  Future<List<Categoria>> cargarCategorias() async {
-    CategoriaController categoriaController = CategoriaController();
-    listCategorias = await categoriaController.getCategorias(null);
-    for (var element in listCategorias) {
-      print('Lista categoria nombre: + ${element.nombre}');
-      print('Lista categoria url: ${element.urlImagen}');
-    }
-    return Future.value(listCategorias);
+  Future<List<Area>> cargarAreas() async {
+    FuncionariosController funcionarioController = FuncionariosController();
+    listAreas = await funcionarioController.getAreas();
+    return Future.value(listAreas);
   }
 
   Future pickImageFromGallery() async {
@@ -999,8 +1114,11 @@ class _RegistrarFuncionarioPageWidgetState
 
   Future pickImageDesktop() async {
     print("starting get image");
-    final FilePickerResult? pickedFile =
-        await FilePicker.platform.pickFiles(type: FileType.image);
+    final FilePickerResult? pickedFile = await FilePicker.platform.pickFiles(
+      dialogTitle: 'Seleccionar imagen',
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png', 'gif', 'gif', 'bmp', 'webp'],
+    );
     //final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     print("getting image Desktop.....");
     setState(() {
@@ -1031,23 +1149,36 @@ class _RegistrarFuncionarioPageWidgetState
           });
         }
       },
-      child: DottedBorder(
-        color: FlutterFlowTheme.of(context).grayicon,
-        strokeWidth: 2,
-        dashPattern: [10, 10],
-        child: Container(
-            width: 250,
-            height: 200,
-            decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: urlImagen != null && imageFile == null
-                    ? DecorationImage(
-                        fit: BoxFit.cover, image: NetworkImage(urlImagen))
-                    : null),
-            child: urlImagen == null || imageFile != null
-                ? _decideImageView(imageFile)
-                : null),
-      ),
+      child: (imageFile == null || imageFile.toString().isEmpty)
+          ? DottedBorder(
+              color: FlutterFlowTheme.of(context).grayicon,
+              strokeWidth: 2,
+              dashPattern: [10, 10],
+              child: Container(
+                  width: 250,
+                  height: 200,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: urlImagen != null && imageFile == null
+                          ? DecorationImage(
+                              fit: BoxFit.cover, image: NetworkImage(urlImagen))
+                          : null),
+                  child: _decideImageView(imageFile)))
+          : Container(
+              width: 250,
+              height: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                 border: Border.all(
+              color: FlutterFlowTheme.of(context).primaryText,
+              width: 2,
+            ),
+                  shape: BoxShape.rectangle,
+                  image: urlImagen != null && imageFile == null
+                      ? DecorationImage(
+                          fit: BoxFit.cover, image: NetworkImage(urlImagen))
+                      : null),
+              child: _decideImageView(imageFile)),
     );
   }
 
@@ -1060,11 +1191,14 @@ class _RegistrarFuncionarioPageWidgetState
         ),
       );
     } else {
-      return Image.file(
-        imageFile,
-        width: 250,
-        height: 200,
-        fit: BoxFit.cover,
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(10.0),
+        child: Image.file(
+          imageFile,
+          width: 250,
+          height: 200,
+          fit: BoxFit.cover,
+        ),
       );
     }
   }
