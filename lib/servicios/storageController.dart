@@ -48,7 +48,9 @@ class StorageController {
           )
           .then((value) => {});
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(milliseconds: 800),
         content: Text(
+          
           "Imagen subida con exitó",
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,

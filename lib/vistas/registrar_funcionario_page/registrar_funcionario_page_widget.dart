@@ -87,6 +87,7 @@ class _RegistrarFuncionarioPageWidgetState
   final String? id;
   int idArea = 0;
   int anchominimo = 640;
+  
 
   final Funcionario? funcionarioEditar;
   FocusNode _focusNodeCorreo = FocusNode();
@@ -110,10 +111,7 @@ class _RegistrarFuncionarioPageWidgetState
     LengthLimitingTextInputFormatter(10),
   ];
 
-  dynamic tamanio_padding = (Platform.isAndroid || Platform.isIOS)
-      ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
-      : EdgeInsetsDirectional.fromSTEB(80, 10, 80, 10);
-
+  
   _RegistrarFuncionarioPageWidgetState(
       this.operacionaRealizar, this.id, this.funcionarioEditar);
 
@@ -155,7 +153,11 @@ class _RegistrarFuncionarioPageWidgetState
 
   @override
   Widget build(BuildContext context) {
-    dynamic anchoColumnaWrap = (Platform.isAndroid || Platform.isIOS)
+    dynamic tamanio_padding = (MediaQuery.of(context).size.width< anchominimo)
+      ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
+      : EdgeInsetsDirectional.fromSTEB(80, 10, 80, 10);
+
+    dynamic anchoColumnaWrap = (MediaQuery.of(context).size.width< anchominimo)
         ? MediaQuery.of(context).size.width * 0.9
         : MediaQuery.of(context).size.width * 0.4;
     return Scaffold(
@@ -203,10 +205,11 @@ class _RegistrarFuncionarioPageWidgetState
                 if (imagenUrl != 'error') {
                   res = await registrarFuncionario(
                       funcionarioController, context, imagenUrl);
-                  setState(() {
+                  
+                  if (res == 'ok') {
+                    setState(() {
                     blur = false;
                   });
-                  if (res == 'ok') {
                     Timer(Duration(seconds: 3), () {
                       context.pop();
                     });
@@ -258,7 +261,7 @@ class _RegistrarFuncionarioPageWidgetState
             } else {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
-                  "No deje campos vacios",
+                  "No deje campos obligatorios (*) vacios",
                   style: FlutterFlowTheme.of(context).bodyText2.override(
                         fontFamily:
                             FlutterFlowTheme.of(context).bodyText2Family,
@@ -321,7 +324,7 @@ class _RegistrarFuncionarioPageWidgetState
               margin: (MediaQuery.of(context).size.width < anchominimo)
                   ? EdgeInsets.fromLTRB(0, 15, 0, 0)
                   : EdgeInsets.all(10),
-              height: (Platform.isAndroid || Platform.isIOS) ? null : 1000,
+              height: (MediaQuery.of(context).size.width < anchominimo) ? null : 1000,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -344,7 +347,7 @@ class _RegistrarFuncionarioPageWidgetState
                 key: _formKey,
                 child: Padding(
                   padding: (MediaQuery.of(context).size.width < anchominimo)
-                      ? EdgeInsetsDirectional.all(0)
+                      ? EdgeInsetsDirectional.all(10)
                       : EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
                   child: SingleChildScrollView(
                     child: Column(
@@ -369,7 +372,7 @@ class _RegistrarFuncionarioPageWidgetState
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 10, 20, 0),
                                     child: Text(
-                                      'Seleccione y suba una imagen',
+                                      'Seleccione una imagen',
                                       style:
                                           FlutterFlowTheme.of(context).title3,
                                     ),
@@ -447,7 +450,7 @@ class _RegistrarFuncionarioPageWidgetState
                                   Container(
                                     width: anchoColumnaWrap,
                                     child: Align(
-                                      alignment: AlignmentDirectional(0.05, 0),
+                                      alignment: AlignmentDirectional(0, 0),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
@@ -515,7 +518,7 @@ class _RegistrarFuncionarioPageWidgetState
                                                   30,
                                                   TextInputType.name,
                                                   null,
-                                                  false,
+                                                  true,
                                                   null,
                                                   _focusNodeNombre),
                                             ),
@@ -682,9 +685,9 @@ class _RegistrarFuncionarioPageWidgetState
                             ],
                           ),
                         ),
-                        Padding(
+                        (MediaQuery.of(context).size.width< anchominimo) ? Container() : Padding(
                           padding: tamanio_padding,
-                          child: Divider(
+                          child:   Divider(
                             height: 2,
                             thickness: 1,
                             color: Color(0x94ABB3BA),
@@ -712,8 +715,8 @@ class _RegistrarFuncionarioPageWidgetState
                                         context,
                                         textControllerCargo,
                                         '',
-                                        'Cargo',
-                                        100,
+                                        'Cargo*',
+                                        30,
                                         TextInputType.name,
                                         null,
                                         true,
@@ -747,7 +750,7 @@ class _RegistrarFuncionarioPageWidgetState
                                         100,
                                         TextInputType.emailAddress,
                                         null,
-                                        true,
+                                        false,
                                         null,
                                         _focusNodeCorreo),
                                   ),
@@ -778,7 +781,7 @@ class _RegistrarFuncionarioPageWidgetState
                                         10,
                                         TextInputType.phone,
                                         inputNumero,
-                                        false,
+                                        true,
                                         null,
                                         _focusNodeTelefono_1),
                                   ),
@@ -817,7 +820,9 @@ class _RegistrarFuncionarioPageWidgetState
                               ),
                             ),
                             Padding(
-                              padding: tamanio_padding,
+                              padding: (MediaQuery.of(context).size.width< anchominimo) ? EdgeInsetsDirectional.fromSTEB(
+                                        10, 10, 10, 65)
+                              :tamanio_padding,
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
