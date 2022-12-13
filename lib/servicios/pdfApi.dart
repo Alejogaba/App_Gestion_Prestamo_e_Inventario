@@ -55,15 +55,17 @@ class PdfApi {
   }
 
   static Widget buildTableActivo(List<Activo> listaActivo) {
-    final headers = ['Número Serial', 'Número de activo', 'Activo'];
+    final headers = ['Marca','Activo', 'Número de serial','Número de activo','Estado'];
 
     final data = listaActivo
         .map((activo) => [
+          activo.detalles,
+              activo.nombre,
               activo.idSerial,
               (activo.numActivo!.isEmpty || activo.numActivo == null)
                   ? 'No registrado'
                   : activo.numActivo,
-              activo.nombre
+                  definirEstadoActivo(activo.estado)  
             ])
         .toList();
 
@@ -77,7 +79,9 @@ class PdfApi {
       cellAlignments: {
         0: Alignment.centerLeft,
         1: Alignment.center,
-        2: Alignment.centerRight,
+        2: Alignment.center,
+        3: Alignment.center,
+        4: Alignment.centerRight,
       },
     );
   }
@@ -177,4 +181,22 @@ class PdfApi {
   }
 
 */
+
+
+
+static String definirEstadoActivo(int? estado) {
+  switch (estado) {
+    case 0:
+      return 'Bueno';
+
+    case 1:
+      return 'Regular';
+
+    case 2:
+      return 'Malo';
+
+    default:
+      return 'No definido';
+  }
+}
 }
