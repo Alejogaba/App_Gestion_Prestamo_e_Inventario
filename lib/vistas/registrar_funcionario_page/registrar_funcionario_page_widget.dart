@@ -77,6 +77,7 @@ class _RegistrarFuncionarioPageWidgetState
   bool _loading = false;
   bool _errorColor = false;
   bool _dropdownErrorColor = false;
+
   CategoriaController categoriaController = CategoriaController();
   late final _listaAreas = cargarAreas();
   int? numInventario;
@@ -85,7 +86,7 @@ class _RegistrarFuncionarioPageWidgetState
   final String? operacionaRealizar;
   final String? id;
   int idArea = 0;
-  int anchominimo=640;
+  int anchominimo = 640;
   
 
   final Funcionario? funcionarioEditar;
@@ -377,7 +378,8 @@ class _RegistrarFuncionarioPageWidgetState
                                     ),
                                   ),
                                   Container(
-                                    width: (MediaQuery.of(context).size.width < anchominimo)
+                                    width: (MediaQuery.of(context).size.width <
+                                            anchominimo)
                                         ? MediaQuery.of(context).size.width *
                                             0.9
                                         : MediaQuery.of(context).size.width *

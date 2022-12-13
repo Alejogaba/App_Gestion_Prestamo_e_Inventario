@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../flutter_flow/flutter_flow_widgets.dart';
 import '../components/caja_advertencia_widget.dart';
@@ -24,14 +25,14 @@ import 'package:page_transition/page_transition.dart';
 
 class ActivoPerfilPageWidget extends StatefulWidget {
   final String idActivo;
-  const ActivoPerfilPageWidget({
-    Key? key,
-    required this.idActivo,
-  }) : super(key: key);
+  final bool selectMode;
+  const ActivoPerfilPageWidget(
+      {Key? key, required this.idActivo, this.selectMode = false})
+      : super(key: key);
 
   @override
   _ActivoPerfilPageWidgetState createState() =>
-      _ActivoPerfilPageWidgetState(this.idActivo);
+      _ActivoPerfilPageWidgetState(this.idActivo, this.selectMode);
 }
 
 class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
@@ -261,8 +262,9 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
   late String idActivo;
   bool blur = false;
   ActivoController activoController = ActivoController();
+  bool selectMode;
 
-  _ActivoPerfilPageWidgetState(this.idActivo);
+  _ActivoPerfilPageWidgetState(this.idActivo, this.selectMode);
 
   @override
   void initState() {
@@ -281,8 +283,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-      //floatingActionButton: myFloatingButton().animateOnPageLoad(
-      // animationsMap['floatingActionButtonOnPageLoadAnimation']!),
+      floatingActionButton: myFloatingButton(selectMode: selectMode,idActivo: activo.idSerial,contextPadre: context).animateOnPageLoad(
+       animationsMap['floatingActionButtonOnPageLoadAnimation']!),
       body: GestureDetector(
         onTap: () => {FocusScope.of(context).unfocus()},
         child: Stack(
@@ -1038,31 +1040,43 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
 }
 
 class myFloatingButton extends StatelessWidget {
-  const myFloatingButton({
-    Key? key,
-  }) : super(key: key);
+  final bool selectMode;
+  final String idActivo;
+  final BuildContext contextPadre;
+  const myFloatingButton(
+      {Key? key, this.selectMode = false, this.idActivo = '',required this.contextPadre})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        print('FloatingActionButton pressed ...');
+    return FloatingActionButton.extended(
+      onPressed: () async {
+        if (selectMode) {
+          String? idFuncionario;
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          idFuncionario = prefs.getString('id_funcionario');
+          ActivoController activoController = ActivoController();
+          String res =
+              await activoController.asignarActivo(context, idFuncionario!, idActivo);
+          if(res.contains('ok'))
+            contextPadre.pop();
+        }
       },
       backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+      icon: Icon(
+        Icons.add_rounded,
+        color: FlutterFlowTheme.of(context).whiteColor,
+        size: 24,
+      ),
       elevation: 8,
-      child: FlutterFlowIconButton(
-        borderColor: Colors.transparent,
-        borderRadius: 30,
-        borderWidth: 1,
-        buttonSize: 60,
-        icon: Icon(
-          Icons.add,
-          color: FlutterFlowTheme.of(context).whiteColor,
-          size: 30,
-        ),
-        onPressed: () {
-          print('IconButton pressed ...');
-        },
+      label: Text(
+        (selectMode) ? 'Asignar este activo' : 'Asignar funcionario',
+        style: FlutterFlowTheme.of(context).bodyText1.override(
+              fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
+              color: FlutterFlowTheme.of(context).whiteColor,
+              useGoogleFonts: GoogleFonts.asMap()
+                  .containsKey(FlutterFlowTheme.of(context).bodyText1Family),
+            ),
       ),
     );
   }

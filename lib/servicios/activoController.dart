@@ -82,6 +82,61 @@ class ActivoController {
     }
   }
 
+  Future<String> asignarActivo(
+    context,
+    String idFuncionario,
+    String idActivo,
+  ) async {
+    try {
+      await supabase.from('FUNCIONARIOS_ACTIVOS').insert({
+        'ID_FUNCIONARIO': idFuncionario,
+        'ID_ACTIVO': idActivo,
+      }).then((value) async {
+        log('Nuevo activo asignado: $value');
+        await supabase
+            .from('ACTIVOS')
+            .update({'ESTA_ASIGNADO': true}).match({'ID_SERIAL': idActivo});
+        await supabase
+            .from('FUNCIONARIOS')
+            .update({'TIENE_ACTIVOS': true}).match({'CEDULA': idFuncionario});
+      });
+      log("Asignado con exito");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "Activo asignado con exitó",
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+      ));
+      return 'ok';
+    } on Exception catch (error) {
+      StorageController storageController = StorageController();
+      var errorTraducido = await storageController.traducir(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          errorTraducido,
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      log(error.toString());
+      return 'error';
+    } catch (e) {
+      log(e.toString());
+      return 'error';
+    }
+  }
+
   Stream<SupabaseStreamEvent> getActivoStream(String? categoria) {
     if(categoria!.contains('Todos')){
       final response = (categoria != null && categoria.length > 3)
@@ -143,6 +198,18 @@ class ActivoController {
       final data =
           (await supabase.from('ACTIVOS').delete().eq('ID_SERIAL', idSerial));
       log('Eliminando:$data');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'errorTraducido',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
       return 'ok';
     } on Exception catch (error) {
       StorageController storageController = StorageController();
@@ -166,6 +233,125 @@ class ActivoController {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           'Ha ocurrido un error inesperado al intentar eliminar el activo',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      return 'error';
+    }
+  }
+
+  Future<String> quitarActivoFuncionario(context, String idActivo) async {
+    try {
+      final data = (await supabase
+          .from('FUNCIONARIOS_ACTIVOS')
+          .delete()
+          .match({ 'ID_ACTIVO': idActivo}).then((value) async{
+             await supabase
+            .from('ACTIVOS')
+            .update({'ESTA_ASIGNADO': false}).match({'ID_SERIAL': idActivo});
+          }));
+      log('Eliminando:$data');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Se ha quitado con exitó',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor));
+      return 'ok';
+    } on Exception catch (error) {
+      StorageController storageController = StorageController();
+      var errorTraducido = await storageController.traducir(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          errorTraducido,
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      log(error.toString());
+      return 'error';
+    } catch (e) {
+      log(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Ha ocurrido un error inesperado',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      return 'error';
+    }
+  }
+
+  Future<String> quitarFuncionarioActivo(context, String idFuncionario,int cantidadActivos) async {
+    try {
+      final data = (await supabase
+          .from('FUNCIONARIOS_ACTIVOS')
+          .delete()
+          .match({ 'ID_FUNCIONARIO': idFuncionario}).then((value) async{
+            if(cantidadActivos<2){
+              await supabase
+            .from('FUNCIONARIOS')
+            .update({'TIENE_ACTIVOS': false}).match({'CEDULA': idFuncionario});
+            }
+            
+          }));
+      log('Eliminando:$data');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Se ha quitado con exitó',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor));
+      return 'ok';
+    } on Exception catch (error) {
+      StorageController storageController = StorageController();
+      var errorTraducido = await storageController.traducir(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          errorTraducido,
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      log(error.toString());
+      return 'error';
+    } catch (e) {
+      log(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Ha ocurrido un error inesperado',
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,

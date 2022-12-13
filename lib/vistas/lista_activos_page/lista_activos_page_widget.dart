@@ -19,13 +19,15 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ListaActivosPageWidget extends StatefulWidget {
   final String nombreCategoria;
-  const ListaActivosPageWidget({Key? key, required this.nombreCategoria})
+  final bool selectMode;
+  const ListaActivosPageWidget(
+      {Key? key, required this.nombreCategoria, this.selectMode = false})
       : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
   _ListaActivosPageWidgetState createState() =>
-      _ListaActivosPageWidgetState(this.nombreCategoria);
+      _ListaActivosPageWidgetState(this.nombreCategoria, this.selectMode);
 }
 
 class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
@@ -36,8 +38,9 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   var a;
   ActivoController activoController = ActivoController();
   List<Activo> listaActivos = [];
+  bool selectMode;
 
-  _ListaActivosPageWidgetState(this.nombreCategoria);
+  _ListaActivosPageWidgetState(this.nombreCategoria, this.selectMode);
 
   @override
   void initState() {
@@ -400,7 +403,8 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                     (index) {
                                                   return GestureDetector(
                                                     onTap: () {
-                                                      context.pushNamed(
+                                                      if(selectMode){
+                                                        context.replaceNamed(
                                                         'activoPerfilPage',
                                                         queryParams: {
                                                           'idActivo':
@@ -410,9 +414,35 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                                         index])
                                                                 .idSerial,
                                                             ParamType.String,
-                                                          )
+                                                          ),
+                                                          'selectMode':
+                                                              serializeParam(
+                                                            selectMode,
+                                                            ParamType.bool,
+                                                          ),
                                                         },
                                                       );
+                                                      }else{
+                                                        context.pushNamed(
+                                                        'activoPerfilPage',
+                                                        queryParams: {
+                                                          'idActivo':
+                                                              serializeParam(
+                                                            Activo.fromMap(
+                                                                    snapshot.data![
+                                                                        index])
+                                                                .idSerial,
+                                                            ParamType.String,
+                                                          ),
+                                                          'selectMode':
+                                                              serializeParam(
+                                                            selectMode,
+                                                            ParamType.bool,
+                                                          ),
+                                                        },
+                                                      );
+                                                      }
+                                                      
                                                     },
                                                     child: tarjetaActivo(
                                                         context,
