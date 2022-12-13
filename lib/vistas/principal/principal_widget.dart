@@ -22,15 +22,15 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:web_scraper/web_scraper.dart';
 
 class PrincipalWidget extends StatefulWidget {
+  final bool selectMode;
+
   const PrincipalWidget({
     Key? key,
-    this.selectMode,
+    this.selectMode = false,
   }) : super(key: key);
 
-  final bool? selectMode;
-
   @override
-  _PrincipalWidgetState createState() => _PrincipalWidgetState();
+  _PrincipalWidgetState createState() => _PrincipalWidgetState(this.selectMode);
 }
 
 class _PrincipalWidgetState extends State<PrincipalWidget> {
@@ -43,6 +43,9 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final prefs = SharedPreferences.getInstance();
   bool local = false;
+  bool selectMode;
+
+  _PrincipalWidgetState(this.selectMode);
 
   @override
   void initState() {
@@ -73,7 +76,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
         ),
       ),
       floatingActionButton: Padding(
-        padding:  EdgeInsets.only(bottom: 50.0, right: 16),
+        padding: EdgeInsets.only(bottom: 50.0, right: 16),
         child: SpeedDial(
           //Speed dial menu
           //margin bottom
@@ -369,7 +372,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                                       .data![index].urlImagen,
                                                   constraints.maxWidth,
                                                   listCategoriasLocal[index]
-                                                      .descripcion!);
+                                                      .descripcion!,selectMode);
                                               return temp;
                                             },
                                             scrollDirection: Axis.vertical,
@@ -457,21 +460,42 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
 }
 
 Widget itemCategoria(BuildContext context, String? nombre, String? url,
-    constraints, String descripcion) {
+    constraints, String descripcion, bool selectMode) {
   log("Dibujando item categoria");
 
   return GestureDetector(
     onTap: () {
-      log('Nombre Categoria: $nombre');
-      context.pushNamed(
+      if(selectMode){
+        context.replaceNamed(
         'listaActivosPage',
         queryParams: {
           'nombreCategoria': serializeParam(
             nombre!,
             ParamType.String,
           ),
+          'selectMode': serializeParam(
+            selectMode,
+            ParamType.bool,
+          ),
         }.withoutNulls,
       );
+      }else{
+        context.pushNamed(
+        'listaActivosPage',
+        queryParams: {
+          'nombreCategoria': serializeParam(
+            nombre!,
+            ParamType.String,
+          ),
+          'selectMode': serializeParam(
+            selectMode,
+            ParamType.bool,
+          ),
+        }.withoutNulls,
+      );
+      }
+      log('Nombre Categoria: $nombre');
+      
     },
     child: Padding(
       padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),

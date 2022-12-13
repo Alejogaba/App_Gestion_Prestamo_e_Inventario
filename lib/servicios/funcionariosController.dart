@@ -238,4 +238,45 @@ class FuncionariosController {
       return 'error';
     }
   }
+
+  Future<String> eliminarFuncionario(context, String id) async {
+    try {
+      final data =
+          (await supabase.from('FUNCIONARIOS').delete().eq('CEDULA', id));
+      log('Eliminando:$data');
+      return 'ok';
+    } on Exception catch (error) {
+      StorageController storageController = StorageController();
+      var errorTraducido = await storageController.traducir(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          errorTraducido,
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      log(error.toString());
+      return 'error';
+    } catch (e) {
+      log(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Ha ocurrido un error inesperado al intentar eliminar al funcionario',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      return 'error';
+    }
+  }
 }
