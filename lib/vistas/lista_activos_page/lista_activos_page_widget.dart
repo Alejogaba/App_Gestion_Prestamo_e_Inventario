@@ -181,7 +181,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                       color: FlutterFlowTheme.of(context).primaryText),
                   automaticallyImplyLeading: false,
                   title: AutoSizeText(
-                    nombreCategoria,
+                    (nombreCategoria.isEmpty) ? 'Activos' : nombreCategoria,
                     style: FlutterFlowTheme.of(context).bodyText1.override(
                           fontFamily:
                               FlutterFlowTheme.of(context).bodyText1Family,

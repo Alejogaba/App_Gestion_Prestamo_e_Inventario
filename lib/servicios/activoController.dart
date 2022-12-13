@@ -17,7 +17,7 @@ class ActivoController {
   final supabase =
       SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
 
-  Future<void> addActivo(
+  Future<String> addActivo(
       context,
       String idSerial,
       String? numInventario,
@@ -36,7 +36,7 @@ class ActivoController {
         'ID_SERIAL': idSerial.toUpperCase(),
         'NUM_ACTIVO': numInventario,
         'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
-        'DETALLES': detalles,
+        'DETALLES': utilidades.mayusculaPrimeraLetra(detalles!),
         'URL_IMAGEN': urlImagen,
         'ESTADO': estado,
         'NOMBRE_CATEGORIA': utilidades.mayusculaTodasPrimerasLetras(categoria),
@@ -46,6 +46,7 @@ class ActivoController {
       }).then((value) => log('Nueva activo registrado: $value'));
       log("Registrado con exito");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        duration: const Duration(seconds: 1),
         content: Text(
           "Activo registrado con exitó",
           style: FlutterFlowTheme.of(context).bodyText2.override(
@@ -57,6 +58,7 @@ class ActivoController {
         ),
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
       ));
+      return 'ok';
     } on Exception catch (error) {
       StorageController storageController = StorageController();
       var errorTraducido = await storageController.traducir(error.toString());
@@ -73,13 +75,25 @@ class ActivoController {
         backgroundColor: Colors.redAccent,
       ));
       log(error.toString());
+      return 'error';
     } catch (e) {
       log(e.toString());
+      return 'error';
     }
   }
 
   Stream<SupabaseStreamEvent> getActivoStream(String? categoria) {
-    final response = (categoria != null && categoria.length > 3)
+    if(categoria!.contains('Todos')){
+      final response = (categoria != null && categoria.length > 3)
+        ? supabase
+            .from('ACTIVOS')
+            .stream(primaryKey: ['ID_SERIAL'])
+            .order('FECHA_CREADO', ascending: false)
+        : supabase.from('ACTIVOS').stream(
+            primaryKey: ['ID_SERIAL']).order('FECHA_CREADO', ascending: false);
+    return response;
+    }else{
+      final response = (categoria != null && categoria.length > 3)
         ? supabase
             .from('ACTIVOS')
             .stream(primaryKey: ['ID_SERIAL'])
@@ -88,6 +102,9 @@ class ActivoController {
         : supabase.from('ACTIVOS').stream(
             primaryKey: ['ID_SERIAL']).order('FECHA_CREADO', ascending: false);
     return response;
+
+    }
+    
   }
 
   Future<Activo> buscarActivo(String idSerial) async {

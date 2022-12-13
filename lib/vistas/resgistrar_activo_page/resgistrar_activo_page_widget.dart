@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:ui';
 import 'package:app_gestion_prestamo_inventario/entidades/activo_impresora.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/estadoActivo.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
@@ -65,6 +66,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     EstadoActivo(2, 'Malo: Activo en mal estado o dañado'),
   ];
   File? imageFile;
+  int anchominimo = 640;
+  bool blur = false;
 
   String? urlImagen;
   final ImagePicker picker = ImagePicker();
@@ -98,10 +101,6 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   List<TextInputFormatter> inputFormater = <TextInputFormatter>[
     LengthLimitingTextInputFormatter(10),
   ];
-
-  dynamic tamanio_padding = (Platform.isAndroid || Platform.isIOS)
-      ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
-      : EdgeInsetsDirectional.fromSTEB(80, 10, 80, 10);
 
   _ResgistrarActivoPageWidgetState(this.operacionaRealizar, this.idSerial,
       this.categoria, this.activoEditar);
@@ -139,6 +138,10 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
 
   @override
   Widget build(BuildContext context) {
+    dynamic tamanio_padding = (MediaQuery.of(context).size.width < anchominimo)
+        ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
+        : EdgeInsetsDirectional.fromSTEB(80, 10, 80, 10);
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -163,7 +166,9 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
           onPressed: () async {
             if (_formKey.currentState!.validate() &&
                 dropDownValueCategoria != null) {
-              _loading = true;
+              setState(() {
+                blur = true;
+              });
               String? imagenUrl;
               log('serial: ${textControllerSerial.text.toString()}');
 
@@ -173,20 +178,49 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                     context,
                     imageFile!.path.toString(),
                     imageFile!,
-                    textControllerSerial.text,'activos');
+                    textControllerSerial.text,
+                    'activos');
                 ActivoController activoController = ActivoController();
+                String res = '';
                 // ignore: use_build_context_synchronously
-                await registrarActivo(activoController, context, imagenUrl);
-                Timer(Duration(seconds: 3), () {
-                  context.pop();
-                });
+                if (imagenUrl != 'error') {
+                  res = await registrarActivo(
+                      activoController, context, imagenUrl);
+                  
+                  if (res == 'ok') {
+                    setState(() {
+                    blur = false;
+                  });
+                    Timer(Duration(seconds: 3), () {
+                      context.pop();
+                    });
+                  }
+                } else {
+                  setState(() {
+                    blur = false;
+                  });
+                }
               } else {
                 ActivoController activoController = ActivoController();
-                await registrarActivo(activoController, context,
-                    'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png');
-                Timer(Duration(seconds: 3), () {
-                  context.pop();
-                });
+                String res = '';
+                if (imagenUrl != 'error') {
+                  res = await registrarActivo(
+                      activoController, context, 'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png'
+                );
+                  
+                  if (res == 'ok') {
+                    setState(() {
+                    blur = false;
+                  });
+                    Timer(Duration(seconds: 3), () {
+                      context.pop();
+                    });
+                  }
+                } else {
+                  setState(() {
+                    blur = false;
+                  });
+                }
               }
             } else if (dropDownValueCategoria == null) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -204,6 +238,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
               ));
               setState(() {
                 _errorColor = true;
+                blur = false;
               });
               Future.delayed(const Duration(milliseconds: 6000), () {
                 setState(() {
@@ -227,6 +262,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
               log('rojo');
               setState(() {
                 _errorColor = true;
+                blur = false;
               });
               Future.delayed(const Duration(milliseconds: 6000), () {
                 setState(() {
@@ -266,451 +302,369 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         centerTitle: false,
         elevation: 0,
       ),
-      body: Padding(
-        padding: defTamanoAncho(MediaQuery.of(context).size.width),
-        child: Container(
-          alignment: Alignment.topCenter,
-          margin: (Platform.isAndroid || Platform.isIOS)
-              ? null
-              : EdgeInsets.all(10),
-          height: (Platform.isAndroid || Platform.isIOS) ? null : 1000,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: FlutterFlowTheme.of(context).secondaryBackground,
-            borderRadius: (Platform.isAndroid || Platform.isIOS)
-                ? null
-                : BorderRadius.circular(30), //border corner radius
-            /*boxShadow: [
-              BoxShadow(
-                color: FlutterFlowTheme.of(context).boxShadow, //color of shadow
-                spreadRadius: 5, //spread radius
-                blurRadius: 7, // blur radius
-                offset: Offset(0, 2), // changes position of shadow
-                //first paramerter of offset is left-right
-                //second parameter is top to down
+      body: Stack(
+        children: [
+          Padding(
+            padding: defTamanoAncho(MediaQuery.of(context).size.width),
+            child: Container(
+              alignment: Alignment.topCenter,
+              margin: (MediaQuery.of(context).size.width < anchominimo)
+                  ? EdgeInsets.fromLTRB(0, 15, 0, 0)
+                  : EdgeInsets.all(10),
+              height: (Platform.isAndroid || Platform.isIOS) ? null : 1000,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).secondaryBackground,
+                borderRadius: (MediaQuery.of(context).size.width < anchominimo)
+                    ? null
+                    : BorderRadius.circular(30), //border corner radius
+                /*boxShadow: [
+                  BoxShadow(
+                    color: FlutterFlowTheme.of(context).boxShadow, //color of shadow
+                    spreadRadius: 5, //spread radius
+                    blurRadius: 7, // blur radius
+                    offset: Offset(0, 2), // changes position of shadow
+                    //first paramerter of offset is left-right
+                    //second parameter is top to down
+                  ),
+                  //you can set more BoxShadow() here
+                ],*/
               ),
-              //you can set more BoxShadow() here
-            ],*/
-          ),
-          child: Form(
-            key: _formKey,
-            child: Padding(
-              padding: (Platform.isAndroid || Platform.isIOS)
-                  ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
-                  : EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Column(
+              child: Form(
+                key: _formKey,
+                child: Padding(
+                  padding: (MediaQuery.of(context).size.width < anchominimo)
+                      ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
+                      : EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: tamanio_padding,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: TextFormFieldCustom(
-                                    context,
-                                    textControllerSerial,
-                                    'S/N',
-                                    'Número de serial*',
-                                    20,
-                                    TextInputType.text,
-                                    null,
-                                    true,
-                                    null,
-                                    _focusNodeIdSerial),
-                              ),
-                              Container(
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: (Platform.isAndroid || Platform.isIOS)
-                                      ? FlutterFlowTheme.of(context)
-                                          .secondaryBackground
-                                      : Colors.transparent,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color:
-                                        (Platform.isAndroid || Platform.isIOS)
+                        Column(
+                          children: [
+                            Padding(
+                              padding: tamanio_padding,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: TextFormFieldCustom(
+                                        context,
+                                        textControllerSerial,
+                                        'S/N',
+                                        'Número de serial*',
+                                        20,
+                                        TextInputType.text,
+                                        null,
+                                        true,
+                                        null,
+                                        _focusNodeIdSerial),
+                                  ),
+                                  Container(
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          (Platform.isAndroid || Platform.isIOS)
+                                              ? FlutterFlowTheme.of(context)
+                                                  .secondaryBackground
+                                              : Colors.transparent,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: (Platform.isAndroid ||
+                                                Platform.isIOS)
                                             ? FlutterFlowTheme.of(context)
                                                 .secondaryBackground
                                             : Colors.transparent,
-                                    width: 0,
-                                  ),
-                                ),
-                                child: FlutterFlowIconButton(
-                                  fillColor:
-                                      (Platform.isAndroid || Platform.isIOS)
-                                          ? Color(0x00F1F4F8)
-                                          : FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                  borderColor: Colors.transparent,
-                                  borderRadius: 30,
-                                  borderWidth: 1,
-                                  buttonSize: 60,
-                                  icon: FaIcon(
-                                    FontAwesomeIcons.barcode,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    size: 30,
-                                  ),
-                                  onPressed: () async {
-                                    if (Platform.isAndroid || Platform.isIOS) {
-                                      String res = await FlutterBarcodeScanner
-                                          .scanBarcode(
-                                              '#C62828', // scanning line color
-                                              'Cancel', // cancel button text
-                                              true, // whether to show the flash icon
-                                              ScanMode.BARCODE);
-                                      textControllerSerial.text =
-                                          res.trim().replaceAll(".", "");
-                                    } else {
-                                      Clipboard.getData(Clipboard.kTextPlain)
-                                          .then((value) {
-                                        if (value != null) {
-                                          if (value.text!.trim().isNotEmpty) {
-                                            textControllerSerial.text = value
-                                                .text!
-                                                .trim()
-                                                .replaceAll(".", "");
-                                          }
+                                        width: 0,
+                                      ),
+                                    ),
+                                    child: FlutterFlowIconButton(
+                                      fillColor:
+                                          (Platform.isAndroid || Platform.isIOS)
+                                              ? Color(0x00F1F4F8)
+                                              : FlutterFlowTheme.of(context)
+                                                  .secondaryBackground,
+                                      borderColor: Colors.transparent,
+                                      borderRadius: 30,
+                                      borderWidth: 1,
+                                      buttonSize: 60,
+                                      icon: FaIcon(
+                                        FontAwesomeIcons.barcode,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        size: 30,
+                                      ),
+                                      onPressed: () async {
+                                        if (Platform.isAndroid ||
+                                            Platform.isIOS) {
+                                          String res = await FlutterBarcodeScanner
+                                              .scanBarcode(
+                                                  '#C62828', // scanning line color
+                                                  'Cancel', // cancel button text
+                                                  true, // whether to show the flash icon
+                                                  ScanMode.BARCODE);
+                                          textControllerSerial.text =
+                                              res.trim().replaceAll(".", "");
+                                        } else {
+                                          Clipboard.getData(
+                                                  Clipboard.kTextPlain)
+                                              .then((value) {
+                                            if (value != null) {
+                                              if (value.text!
+                                                  .trim()
+                                                  .isNotEmpty) {
+                                                textControllerSerial.text =
+                                                    value.text!
+                                                        .trim()
+                                                        .replaceAll(".", "");
+                                              }
+                                            }
+                                          });
                                         }
-                                      });
-                                    }
-                                  },
-                                ),
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 10, 12),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: tamanio_padding,
+                                      child: TextFormFieldCustom(
+                                          context,
+                                          textControllerN_inventario,
+                                          'Ej.0134',
+                                          'Número de inventario',
+                                          4,
+                                          TextInputType.number,
+                                          inputNumero,
+                                          false,
+                                          const FaIcon(
+                                            FontAwesomeIcons.boxOpen,
+                                            color: Color(0xFFAD8762),
+                                            size: 30,
+                                          ),
+                                          _focusNodeNinventario),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 5, 10, 12),
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 5, 10, 5),
                           child: Row(
-                            mainAxisSize: MainAxisSize.max,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Expanded(
                                 child: Padding(
                                   padding: tamanio_padding,
                                   child: TextFormFieldCustom(
                                       context,
-                                      textControllerN_inventario,
-                                      'Ej.0134',
-                                      'Número de inventario',
-                                      4,
-                                      TextInputType.number,
-                                      inputNumero,
-                                      false,
-                                      const FaIcon(
-                                        FontAwesomeIcons.boxOpen,
-                                        color: Color(0xFFAD8762),
-                                        size: 30,
-                                      ),
-                                      _focusNodeNinventario),
+                                      textControllerNombre,
+                                      'Ej.Impresora mp203',
+                                      'Nombre*',
+                                      30,
+                                      TextInputType.text,
+                                      null,
+                                      true,
+                                      null,
+                                      _focusNodeNombre),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 10, 5),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: tamanio_padding,
-                              child: TextFormFieldCustom(
-                                  context,
-                                  textControllerNombre,
-                                  'Ej.Impresora mp203',
-                                  'Nombre*',
-                                  30,
-                                  TextInputType.text,
-                                  null,
-                                  true,
-                                  null,
-                                  _focusNodeNombre),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                      child: Wrap(
-                        spacing: 0,
-                        runSpacing: 2,
-                        alignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.start,
-                        direction: Axis.horizontal,
-                        runAlignment: WrapAlignment.center,
-                        verticalDirection: VerticalDirection.down,
-                        clipBehavior: Clip.none,
-                        children: [
-                          Column(
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                          child: Wrap(
+                            spacing: 0,
+                            runSpacing: 2,
+                            alignment: WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            direction: Axis.horizontal,
+                            runAlignment: WrapAlignment.center,
+                            verticalDirection: VerticalDirection.down,
+                            clipBehavior: Clip.none,
                             children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                                child: Text(
-                                  'Seleccione o suba una imagen',
-                                  style: FlutterFlowTheme.of(context).title3,
-                                ),
-                              ),
-                              Container(
-                                width: (Platform.isAndroid || Platform.isIOS)
-                                    ? MediaQuery.of(context).size.width * 0.8
-                                    : MediaQuery.of(context).size.width * 0.2,
-                                child: Center(
-                                  child: Padding(
+                              Column(
+                                children: [
+                                  Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 16, 0, 14),
-                                    child: Center(
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: imagenPerfil(
-                                            context, urlImagen, imageFile),
-                                      ),
+                                        0, 10, 0, 0),
+                                    child: Text(
+                                      'Seleccione una imagen del activo',
+                                      style:
+                                          FlutterFlowTheme.of(context).title3,
                                     ),
                                   ),
-                                ),
-                              ),
-                              FFButtonWidget(
-                                onPressed: () async {
-                                  var url = Uri.parse(
-                                      'https://www.google.com/search?tbm=isch&q=${textControllerNombre.text.toString()}');
-                                  if (!await launchUrl(
-                                    url,
-                                    mode: LaunchMode.externalApplication,
-                                  )) {
-                                    throw 'No se puede abrir $url';
-                                  }
-                                },
-                                text: 'Buscar en la web',
-                                icon: FaIcon(
-                                  FontAwesomeIcons.externalLinkAlt,
-                                  color:
-                                      FlutterFlowTheme.of(context).whiteColor,
-                                  size: 20,
-                                ),
-                                options: FFButtonOptions(
-                                  width: 160,
-                                  height: 50,
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryColor,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .bodyText2
-                                      .override(
-                                        fontFamily: 'Lexend Deca',
-                                        color: FlutterFlowTheme.of(context)
-                                            .whiteColor,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.normal,
-                                        useGoogleFonts: GoogleFonts.asMap()
-                                            .containsKey(
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyText2Family),
-                                      ),
-                                  elevation: 3,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Container(
-                                width: (Platform.isAndroid || Platform.isIOS)
-                                    ? MediaQuery.of(context).size.width * 0.9
-                                    : MediaQuery.of(context).size.width * 0.6,
-                                child: Align(
-                                  alignment: AlignmentDirectional(0.05, 0),
-                                  child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 30, 0, 0),
-                                      child: TextFormFieldCustom(
-                                          context,
-                                          textControllerDetalles,
-                                          'Ej.Impresora LaserJet MP203 marca HP',
-                                          'Detalles',
-                                          150,
-                                          TextInputType.multiline,
-                                          null,
-                                          false,
-                                          null,
-                                          _focusNodeDetalles)),
-                                ),
-                              ),
-                              Container(
-                                width: (Platform.isAndroid || Platform.isIOS)
-                                    ? MediaQuery.of(context).size.width * 0.9
-                                    : MediaQuery.of(context).size.width * 0.6,
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 12, 0, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Align(
-                                          alignment: AlignmentDirectional(0, 0),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 16, 0, 10),
-                                            child: FlutterFlowDropDown<
-                                                EstadoActivo>(
-                                              initialOption: listEstados[0],
-                                              value: dropDownValueEstadoActivo,
-                                              options: List.generate(
-                                                  listEstados.length,
-                                                  (index) => DropdownMenuItem(
-                                                      value: listEstados[index],
-                                                      child: Text(
-                                                        listEstados[index]
-                                                            .descripcion
-                                                            .toString(),
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText1
-                                                                .override(
-                                                                  fontFamily: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyText2Family,
-                                                                  fontSize: 18,
-                                                                  useGoogleFonts: GoogleFonts
-                                                                          .asMap()
-                                                                      .containsKey(
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .bodyText1Family),
-                                                                ),
-                                                      ))),
-                                              onChanged: (val) => setState(() {
-                                                dropDownValueEstadoActivo = val;
-                                                estadoActivoOpcion = val!.id!;
-                                              }),
-                                              height: 50,
-                                              textStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText1
-                                                      .override(
-                                                        fontFamily:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText1Family,
-                                                        fontSize: 18,
-                                                        useGoogleFonts: GoogleFonts
-                                                                .asMap()
-                                                            .containsKey(
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyText1Family),
-                                                      ),
-                                              hintText:
-                                                  listEstados[0].descripcion,
-                                              fillColor:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryBackground,
-                                              elevation: 2,
-                                              borderColor:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              borderWidth: 2,
-                                              borderRadius: 8,
-                                              margin: EdgeInsetsDirectional
-                                                  .fromSTEB(12, 4, 12, 4),
-                                              hidesUnderline: true,
-                                            ),
+                                  Container(
+                                    width: (Platform.isAndroid ||
+                                            Platform.isIOS)
+                                        ? MediaQuery.of(context).size.width *
+                                            0.8
+                                        : MediaQuery.of(context).size.width *
+                                            0.2,
+                                    child: Center(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 16, 0, 14),
+                                        child: Center(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            child: imagenPerfil(
+                                                context, urlImagen, imageFile),
                                           ),
                                         ),
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
+                                  FFButtonWidget(
+                                    onPressed: () async {
+                                      var url = Uri.parse(
+                                          'https://www.google.com/search?tbm=isch&q=${textControllerNombre.text.toString()}');
+                                      if (!await launchUrl(
+                                        url,
+                                        mode: LaunchMode.externalApplication,
+                                      )) {
+                                        throw 'No se puede abrir $url';
+                                      }
+                                    },
+                                    text: 'Buscar en la web',
+                                    icon: FaIcon(
+                                      FontAwesomeIcons.externalLinkAlt,
+                                      color: FlutterFlowTheme.of(context)
+                                          .whiteColor,
+                                      size: 20,
+                                    ),
+                                    options: FFButtonOptions(
+                                      width: 160,
+                                      height: 50,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryColor,
+                                      textStyle: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Lexend Deca',
+                                            color: FlutterFlowTheme.of(context)
+                                                .whiteColor,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.normal,
+                                            useGoogleFonts: GoogleFonts.asMap()
+                                                .containsKey(
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText2Family),
+                                          ),
+                                      elevation: 3,
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Container(
-                                width: (Platform.isAndroid || Platform.isIOS)
-                                    ? MediaQuery.of(context).size.width * 0.9
-                                    : MediaQuery.of(context).size.width * 0.6,
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 12, 0, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Align(
-                                          alignment: AlignmentDirectional(0, 0),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 16, 0, 20),
-                                            child:
-                                                FutureBuilder<List<Categoria>>(
-                                              future: _listaCategorias,
-                                              builder: (BuildContext context,
-                                                  snapshot) {
-                                                return FlutterFlowDropDown<
-                                                    String>(
-                                                  value: dropDownValueCategoria,
-                                                  options: (snapshot
-                                                                  .connectionState ==
-                                                              ConnectionState
-                                                                  .done &&
-                                                          listCategorias
-                                                              .isNotEmpty)
-                                                      ? List.generate(
-                                                          snapshot.data!.length,
-                                                          (index) =>
-                                                              DropdownMenuItem(
-                                                                  value: snapshot
-                                                                      .data![
-                                                                          index]
-                                                                      .nombre,
-                                                                  child: Text(
-                                                                    snapshot
-                                                                        .data![
-                                                                            index]
-                                                                        .nombre
-                                                                        .toString(),
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyText1
-                                                                        .override(
-                                                                          fontFamily:
-                                                                              FlutterFlowTheme.of(context).bodyText2Family,
-                                                                          fontSize:
-                                                                              18,
-                                                                          useGoogleFonts:
-                                                                              GoogleFonts.asMap().containsKey(FlutterFlowTheme.of(context).bodyText1Family),
-                                                                        ),
-                                                                  )))
-                                                      : List.generate(
-                                                          0,
-                                                          (index) =>
-                                                              DropdownMenuItem(
-                                                                  value: null,
-                                                                  child: Text(
-                                                                      ''))),
-                                                  onChanged: (val) => setState(
-                                                      () =>
-                                                          dropDownValueCategoria =
-                                                              val),
+                              Column(
+                                children: [
+                                  Container(
+                                    width: (Platform.isAndroid ||
+                                            Platform.isIOS)
+                                        ? MediaQuery.of(context).size.width *
+                                            0.9
+                                        : MediaQuery.of(context).size.width *
+                                            0.6,
+                                    child: Align(
+                                      alignment: AlignmentDirectional(0.05, 0),
+                                      child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 30, 0, 0),
+                                          child: TextFormFieldCustom(
+                                              context,
+                                              textControllerDetalles,
+                                              'Ej.Impresora LaserJet MP203 marca HP',
+                                              'Detalles',
+                                              150,
+                                              TextInputType.multiline,
+                                              null,
+                                              false,
+                                              null,
+                                              _focusNodeDetalles)),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: (Platform.isAndroid ||
+                                            Platform.isIOS)
+                                        ? MediaQuery.of(context).size.width *
+                                            0.9
+                                        : MediaQuery.of(context).size.width *
+                                            0.6,
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 12, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: Align(
+                                              alignment:
+                                                  AlignmentDirectional(0, 0),
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 16, 0, 10),
+                                                child: FlutterFlowDropDown<
+                                                    EstadoActivo>(
+                                                  initialOption: listEstados[0],
+                                                  value:
+                                                      dropDownValueEstadoActivo,
+                                                  options: List.generate(
+                                                      listEstados.length,
+                                                      (index) =>
+                                                          DropdownMenuItem(
+                                                              value:
+                                                                  listEstados[
+                                                                      index],
+                                                              child: Text(
+                                                                listEstados[
+                                                                        index]
+                                                                    .descripcion
+                                                                    .toString(),
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText1
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          FlutterFlowTheme.of(context)
+                                                                              .bodyText2Family,
+                                                                      fontSize:
+                                                                          18,
+                                                                      useGoogleFonts: GoogleFonts
+                                                                              .asMap()
+                                                                          .containsKey(
+                                                                              FlutterFlowTheme.of(context).bodyText1Family),
+                                                                    ),
+                                                              ))),
+                                                  onChanged: (val) =>
+                                                      setState(() {
+                                                    dropDownValueEstadoActivo =
+                                                        val;
+                                                    estadoActivoOpcion =
+                                                        val!.id!;
+                                                  }),
                                                   height: 50,
                                                   textStyle:
                                                       FlutterFlowTheme.of(
@@ -720,7 +674,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                             fontFamily:
                                                                 FlutterFlowTheme.of(
                                                                         context)
-                                                                    .bodyText2Family,
+                                                                    .bodyText1Family,
                                                             fontSize: 18,
                                                             useGoogleFonts: GoogleFonts
                                                                     .asMap()
@@ -729,148 +683,299 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                                             context)
                                                                         .bodyText1Family),
                                                           ),
-                                                  hintText: 'Categoria*',
+                                                  hintText: listEstados[0]
+                                                      .descripcion,
                                                   fillColor:
                                                       FlutterFlowTheme.of(
                                                               context)
                                                           .primaryBackground,
                                                   elevation: 2,
                                                   borderColor:
-                                                      _dropdownErrorColor
-                                                          ? Colors.redAccent
-                                                          : FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryText,
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .secondaryText,
                                                   borderWidth: 2,
                                                   borderRadius: 8,
                                                   margin: EdgeInsetsDirectional
                                                       .fromSTEB(12, 4, 12, 4),
                                                   hidesUnderline: true,
-                                                );
-                                              },
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
+                                  Container(
+                                    width: (Platform.isAndroid ||
+                                            Platform.isIOS)
+                                        ? MediaQuery.of(context).size.width *
+                                            0.9
+                                        : MediaQuery.of(context).size.width *
+                                            0.6,
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 12, 0, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: Align(
+                                              alignment:
+                                                  AlignmentDirectional(0, 0),
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 16, 0, 20),
+                                                child: FutureBuilder<
+                                                    List<Categoria>>(
+                                                  future: _listaCategorias,
+                                                  builder:
+                                                      (BuildContext context,
+                                                          snapshot) {
+                                                    return FlutterFlowDropDown<
+                                                        String>(
+                                                      value:
+                                                          dropDownValueCategoria,
+                                                      options: (snapshot.connectionState ==
+                                                                  ConnectionState
+                                                                      .done &&
+                                                              listCategorias
+                                                                  .isNotEmpty)
+                                                          ? List.generate(
+                                                              snapshot
+                                                                  .data!.length,
+                                                              (index) =>
+                                                                  DropdownMenuItem(
+                                                                      value: snapshot
+                                                                          .data![
+                                                                              index]
+                                                                          .nombre,
+                                                                      child:
+                                                                          Text(
+                                                                        snapshot
+                                                                            .data![index]
+                                                                            .nombre
+                                                                            .toString(),
+                                                                        style: FlutterFlowTheme.of(context)
+                                                                            .bodyText1
+                                                                            .override(
+                                                                              fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                                                                              fontSize: 18,
+                                                                              useGoogleFonts: GoogleFonts.asMap().containsKey(FlutterFlowTheme.of(context).bodyText1Family),
+                                                                            ),
+                                                                      )))
+                                                          : List.generate(
+                                                              0,
+                                                              (index) =>
+                                                                  DropdownMenuItem(
+                                                                      value:
+                                                                          null,
+                                                                      child: Text(
+                                                                          ''))),
+                                                      onChanged: (val) =>
+                                                          setState(() =>
+                                                              dropDownValueCategoria =
+                                                                  val),
+                                                      height: 50,
+                                                      textStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText2Family,
+                                                                fontSize: 18,
+                                                                useGoogleFonts: GoogleFonts
+                                                                        .asMap()
+                                                                    .containsKey(
+                                                                        FlutterFlowTheme.of(context)
+                                                                            .bodyText1Family),
+                                                              ),
+                                                      hintText: 'Categoria*',
+                                                      fillColor:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryBackground,
+                                                      elevation: 2,
+                                                      borderColor:
+                                                          _dropdownErrorColor
+                                                              ? Colors.redAccent
+                                                              : FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .secondaryText,
+                                                      borderWidth: 2,
+                                                      borderRadius: 8,
+                                                      margin:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  12, 4, 12, 4),
+                                                      hidesUnderline: true,
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: tamanio_padding,
-                      child: Divider(
-                        height: 2,
-                        thickness: 1,
-                        color: Color(0x94ABB3BA),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text(
-                                  'Cantidad: ',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyText1
-                                      .override(
-                                        fontFamily: FlutterFlowTheme.of(context)
-                                            .bodyText1Family,
-                                        fontSize: 18,
-                                        useGoogleFonts: GoogleFonts.asMap()
-                                            .containsKey(
+                        ),
+                        Padding(
+                          padding: tamanio_padding,
+                          child: Divider(
+                            height: 2,
+                            thickness: 1,
+                            color: Color(0x94ABB3BA),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      'Cantidad: ',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1
+                                          .override(
+                                            fontFamily:
                                                 FlutterFlowTheme.of(context)
-                                                    .bodyText1Family),
-                                      ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 12, 0, 0),
-                                  child: Container(
-                                    width: 160,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      borderRadius: BorderRadius.circular(40),
-                                      shape: BoxShape.rectangle,
-                                      border: Border.all(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
-                                      ),
+                                                    .bodyText1Family,
+                                            fontSize: 18,
+                                            useGoogleFonts: GoogleFonts.asMap()
+                                                .containsKey(
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1Family),
+                                          ),
                                     ),
-                                    child: FlutterFlowCountController(
-                                      decrementIconBuilder: (enabled) => FaIcon(
-                                        FontAwesomeIcons.minus,
-                                        color: enabled
-                                            ? Color(0xA9D43538)
-                                            : FlutterFlowTheme.of(context)
-                                                .boxShadow,
-                                        size: 20,
-                                      ),
-                                      incrementIconBuilder: (enabled) => FaIcon(
-                                        FontAwesomeIcons.plus,
-                                        color: enabled
-                                            ? FlutterFlowTheme.of(context)
-                                                .primaryColor
-                                            : FlutterFlowTheme.of(context)
-                                                .boxShadow,
-                                        size: 20,
-                                      ),
-                                      countBuilder: (count) => Text(
-                                        count.toString(),
-                                        style: FlutterFlowTheme.of(context)
-                                            .title2
-                                            .override(
-                                              fontFamily:
-                                                  FlutterFlowTheme.of(context)
-                                                      .title2Family,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 12, 0, 0),
+                                      child: Container(
+                                        width: 160,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          shape: BoxShape.rectangle,
+                                          border: Border.all(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                            width: 1,
+                                          ),
+                                        ),
+                                        child: FlutterFlowCountController(
+                                          decrementIconBuilder: (enabled) =>
+                                              FaIcon(
+                                            FontAwesomeIcons.minus,
+                                            color: enabled
+                                                ? Color(0xA9D43538)
+                                                : FlutterFlowTheme.of(context)
+                                                    .boxShadow,
+                                            size: 20,
+                                          ),
+                                          incrementIconBuilder: (enabled) =>
+                                              FaIcon(
+                                            FontAwesomeIcons.plus,
+                                            color: enabled
+                                                ? FlutterFlowTheme.of(context)
+                                                    .primaryColor
+                                                : FlutterFlowTheme.of(context)
+                                                    .boxShadow,
+                                            size: 20,
+                                          ),
+                                          countBuilder: (count) => Text(
+                                            count.toString(),
+                                            style: FlutterFlowTheme.of(context)
+                                                .title2
+                                                .override(
+                                                  fontFamily:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .title2Family,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
                                                       .primaryText,
-                                              useGoogleFonts:
-                                                  GoogleFonts.asMap()
+                                                  useGoogleFonts: GoogleFonts
+                                                          .asMap()
                                                       .containsKey(
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .title2Family),
-                                            ),
+                                                ),
+                                          ),
+                                          count: countControllerValue ??= 1,
+                                          updateCount: (count) => setState(() =>
+                                              countControllerValue = count),
+                                          stepSize: 1,
+                                          minimum: 1,
+                                          maximum: 99,
+                                        ),
                                       ),
-                                      count: countControllerValue ??= 1,
-                                      updateCount: (count) => setState(
-                                          () => countControllerValue = count),
-                                      stepSize: 1,
-                                      minimum: 1,
-                                      maximum: 99,
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+          if (blur)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(0),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaX: 4,
+                  sigmaY: 4,
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    // ignore: prefer_const_literals_to_create_immutables
+                    children: [
+                      SizedBox(
+                        width: 120,
+                        height: 120,
+                        child: CircularProgressIndicator(
+                          color: FlutterFlowTheme.of(context).primaryColor,
+                          strokeWidth: 12.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -977,9 +1082,9 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     );
   }
 
-  Future<void> registrarActivo(ActivoController activoController,
+  Future<String> registrarActivo(ActivoController activoController,
       BuildContext context, String? imagenUrl) async {
-    await activoController.addActivo(
+    String res = await activoController.addActivo(
         context,
         textControllerSerial.text,
         textControllerN_inventario.text,
@@ -991,7 +1096,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         countControllerValue,
         null,
         null);
-    _loading = false;
+    return res;
   }
 
   Future<List<Categoria>> cargarCategorias() async {
@@ -1153,8 +1258,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
 EdgeInsetsGeometry defTamanoAncho(screenSize) {
   if (screenSize > 440 && screenSize < 640) {
     return EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0);
-  } else{
+  } else {
     return EdgeInsetsDirectional.fromSTEB(50, 50, 50, 50);
-  } 
+  }
 }
-
