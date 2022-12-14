@@ -77,11 +77,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'loginPage',
               builder: (context, params) => LoginPageWidget(),
             ),
-            FFRoute(
-              name: 'addItem',
-              path: 'addItem',
-              builder: (context, params) => AddItemWidget(),
-            ),
+            
             FFRoute(
               name: 'AjustesPage',
               path: 'ajustesPage',

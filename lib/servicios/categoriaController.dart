@@ -5,7 +5,7 @@ import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart
 
 import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supabase/supabase.dart';

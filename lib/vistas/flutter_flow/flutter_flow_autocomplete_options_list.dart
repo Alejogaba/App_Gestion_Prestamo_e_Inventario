@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:substring_highlight/substring_highlight.dart';
+//import 'package:substring_highlight/substring_highlight.dart';
 
 class AutocompleteOptionsList extends StatelessWidget {
   const AutocompleteOptionsList({
@@ -65,13 +65,13 @@ class AutocompleteOptionsList extends StatelessWidget {
                         ? optionHighlightColor ?? Theme.of(context).focusColor
                         : optionBackgroundColor,
                     padding: const EdgeInsets.all(16.0),
-                    child: SubstringHighlight(
+                    child:/* SubstringHighlight(
                       text: option,
                       term: textController.text,
                       textStyle: textStyle,
                       textAlign: textAlign,
                       textStyleHighlight: textHighlightStyle ?? textStyle,
-                    ),
+                    ),*/Container(),
                   );
                 }),
               );

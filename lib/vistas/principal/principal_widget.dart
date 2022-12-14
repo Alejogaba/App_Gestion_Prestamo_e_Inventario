@@ -19,7 +19,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:web_scraper/web_scraper.dart';
+
 
 class PrincipalWidget extends StatefulWidget {
   final bool selectMode;
@@ -613,7 +613,7 @@ Widget _loader(BuildContext context, String url) {
 bool esEscritorio(BuildContext context) {
   return responsiveVisibility(context: context, desktop: true);
 }
-
+/*
 webScraper() async {
   final webScraper = WebScraper('https://www.google.com');
   if (await webScraper.loadFullURL(
@@ -623,7 +623,7 @@ webScraper() async {
     log('SCRAPER: $elements');
   }
 }
-
+*/
 Widget loading(context) {
   return Padding(
     padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 24),

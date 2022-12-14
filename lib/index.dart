@@ -1,7 +1,6 @@
 // Export pages
 export 'vistas/principal/principal_widget.dart' show PrincipalWidget;
 export 'vistas/login_page/login_page_widget.dart' show LoginPageWidget;
-export 'vistas/add_item/add_item_widget.dart' show AddItemWidget;
 export 'vistas/ajustes_page/ajustes_page_widget.dart' show AjustesPageWidget;
 export 'vistas/lista_funcionarios_page/lista_funcionarios_page_widget.dart'
     show ListaFuncionariosPageWidget;

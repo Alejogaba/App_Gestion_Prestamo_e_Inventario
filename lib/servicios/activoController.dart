@@ -5,7 +5,7 @@ import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sqflite/sqflite.dart';
+//import 'package:sqflite/sqflite.dart';
 // ignore: implementation_imports
 import 'package:supabase/src/supabase_stream_builder.dart';
 import 'package:supabase/supabase.dart';
@@ -184,9 +184,6 @@ class ActivoController {
       } else {
         return Activo.fromMap(data);
       }
-    } on DatabaseException catch (e) {
-      log(e.result.toString());
-      return activoVacio;
     } catch (e) {
       log(e.toString());
       return activoVacio;

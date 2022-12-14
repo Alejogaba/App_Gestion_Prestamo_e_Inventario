@@ -7,7 +7,7 @@ import 'package:app_gestion_prestamo_inventario/entidades/funcionario.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sqflite/sqflite.dart';
+//import 'package:sqflite/sqflite.dart';
 // ignore: implementation_imports
 import 'package:supabase/src/supabase_stream_builder.dart';
 import 'package:supabase/supabase.dart';
@@ -144,9 +144,6 @@ class FuncionariosController {
       } else {
         return Funcionario.fromMap(data);
       }
-    } on DatabaseException catch (e) {
-      log(e.result.toString());
-      return funcionarioVacio;
     } catch (e) {
       log(e.toString());
       return funcionarioVacio;
@@ -165,9 +162,7 @@ class FuncionariosController {
       } else {
         return Area.fromMap(data);
       }
-    } on DatabaseException catch (e) {
-      log(e.result.toString());
-      return vacio;
+     
     } catch (e) {
       log(e.toString());
       return vacio;
