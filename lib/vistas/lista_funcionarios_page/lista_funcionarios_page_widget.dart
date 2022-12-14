@@ -4,11 +4,7 @@ import 'dart:io';
 import 'package:app_gestion_prestamo_inventario/entidades/area.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/funcionario.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/funcionariosController.dart';
-import 'package:blinkid_flutter/microblink_scanner.dart';
-import 'package:blinkid_flutter/overlay_settings.dart';
-import 'package:blinkid_flutter/overlays/blinkid_overlays.dart';
-import 'package:blinkid_flutter/recognizer.dart';
-import 'package:cnic_scanner/model/cnic_model.dart';
+
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -19,11 +15,11 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:cnic_scanner/cnic_scanner.dart';
+
 import 'package:path_provider/path_provider.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 
@@ -96,9 +92,9 @@ class _ListaFuncionariosPageWidgetState
               label: 'Buscar por código de barras',
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () async {
-                var res = await scanCnic(ImageSource.camera);
+               /* var res = await scanCnic(ImageSource.camera);
 
-                log('https://pub.dev/packages/barcode_scan2/install');
+                log('https://pub.dev/packages/barcode_scan2/install');*/
               },
             ),
             SpeedDialChild(
@@ -334,7 +330,7 @@ class _ListaFuncionariosPageWidgetState
       ),
     );
   }
-
+/*
   Future<void> scanCnic(ImageSource imageSource) async {
     /// you will need to pass one argument of "ImageSource" as shown here
     CnicModel cnicModel =
@@ -345,7 +341,7 @@ class _ListaFuncionariosPageWidgetState
       log(cnicModel.cnicHolderName);
     });
   }
-
+*/
   static Future<String> rutaArchivostemporales() async {
     var _tempDirectory = await getTemporaryDirectory();
     return _tempDirectory.path;

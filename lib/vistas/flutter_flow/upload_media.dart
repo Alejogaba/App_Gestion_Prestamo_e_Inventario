@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mime_type/mime_type.dart';
+
 import 'flutter_flow_util.dart';
 
 const allowedFormats = {'image/png', 'image/jpeg', 'video/mp4', 'image/gif'};
-
+/*
 class SelectedMedia {
   const SelectedMedia(this.storagePath, this.bytes);
   final String storagePath;
@@ -241,3 +241,4 @@ void showUploadMessage(BuildContext context, String message,
       ),
     );
 }
+*/

@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:app_gestion_prestamo_inventario/entidades/usuario.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
+//import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
 import '../../assets/constantes.dart' as constantes;
@@ -12,7 +12,7 @@ const _googleClientId =
 
 
 enum AppOAuthProvider { google }
-
+/*
 extension Button on AppOAuthProvider {
   Buttons get button {
     switch (this) {
@@ -21,7 +21,7 @@ extension Button on AppOAuthProvider {
     }
   }
 }
-
+*/
 class AuthService {
   final client = SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
 
