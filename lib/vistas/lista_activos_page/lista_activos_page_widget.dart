@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import '../../servicios/pdfApi.dart';
@@ -31,7 +32,7 @@ class ListaActivosPageWidget extends StatefulWidget {
 }
 
 class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
-  TextEditingController? textController;
+  TextEditingController? textControllerBusqueda;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final String nombreCategoria;
   var id = '';
@@ -45,298 +46,213 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    textControllerBusqueda = TextEditingController();
     log('CATEGORIA DE LA LISTA:$nombreCategoria');
   }
 
   @override
   void dispose() {
-    textController?.dispose();
+    textControllerBusqueda?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Activo>>(
-        future: activoController.getActivosList(nombreCategoria),
-        builder: (context, snapshot1) {
-          return Scaffold(
-            key: scaffoldKey,
-            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-            floatingActionButton: Padding(
-              padding: const EdgeInsets.only(bottom: 50.0),
-              child: SpeedDial(
-                //Speed dial menu
-                //margin bottom
-                icon: Icons.menu, //icon on Floating action button
-                activeIcon: Icons.close, //icon when menu is expanded on button
-                backgroundColor: FlutterFlowTheme.of(context)
-                    .primaryColor, //background color of button
-                foregroundColor:
-                    Colors.white, //font color, icon color in button
-                activeBackgroundColor: FlutterFlowTheme.of(context)
-                    .primaryColor, //background color when menu is expanded
-                activeForegroundColor: Colors.white,
-                buttonSize: const Size(56.0, 56), //button size
-                visible: true,
-                closeManually: false,
-                curve: Curves.bounceIn,
-                overlayColor: Colors.black,
-                overlayOpacity: 0.5,
-                onOpen: () => print('OPENING DIAL'), // action when menu opens
-                onClose: () => print('DIAL CLOSED'), //action when menu closes
+    return Scaffold(
+      key: scaffoldKey,
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 50.0),
+        child: SpeedDial(
+          //Speed dial menu
+          //margin bottom
+          icon: Icons.menu, //icon on Floating action button
+          activeIcon: Icons.close, //icon when menu is expanded on button
+          backgroundColor: FlutterFlowTheme.of(context)
+              .primaryColor, //background color of button
+          foregroundColor: Colors.white, //font color, icon color in button
+          activeBackgroundColor: FlutterFlowTheme.of(context)
+              .primaryColor, //background color when menu is expanded
+          activeForegroundColor: Colors.white,
+          buttonSize: const Size(56.0, 56), //button size
+          visible: true,
+          closeManually: false,
+          curve: Curves.bounceIn,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+          onOpen: () => print('OPENING DIAL'), // action when menu opens
+          onClose: () => print('DIAL CLOSED'), //action when menu closes
 
-                elevation: 8.0, //shadow elevation of button
-                shape: CircleBorder(), //shape of button
+          elevation: 8.0, //shadow elevation of button
+          shape: CircleBorder(), //shape of button
 
-                children: [
-                  SpeedDialChild(
-                    //speed dial child
-                    child: Icon(FontAwesomeIcons.barcode),
-                    backgroundColor: Color.fromARGB(255, 7, 133, 36),
-                    foregroundColor: Colors.white,
-                    label: 'Buscar por código de barras',
-                    labelStyle: TextStyle(fontSize: 18.0),
-                    onTap: () async {
-                      await FlutterBarcodeScanner.scanBarcode(
-                              '#C62828', // scanning line color
-                              'Cancelar', // cancel button text
-                              true, // whether to show the flash icon
-                              ScanMode.BARCODE)
-                          .then((value) async {
-                        if (value != null) {
-                          ActivoController activoController =
-                              ActivoController();
-                          var res = await activoController.buscarActivo(value);
-                          if (res.idSerial.isEmpty) {
-                            // ignore: use_build_context_synchronously
-                            context.pushNamed(
-                              'registraractivopage',
-                              queryParams: {
-                                'idSerial': serializeParam(
-                                  value.trim().replaceAll(".", ""),
-                                  ParamType.String,
-                                )
-                              },
-                            );
-                          } else {
-                            // ignore: use_build_context_synchronously
-                            context.pushNamed(
-                              'activoPerfilPage',
-                              queryParams: {
-                                'idActivo': serializeParam(
-                                  res.idSerial,
-                                  ParamType.String,
-                                )
-                              },
-                            );
-                          }
-                        }
-                      });
-                    },
-                  ),
-                  SpeedDialChild(
-                    child: Icon(Icons.add),
-                    backgroundColor: Color.fromARGB(255, 7, 133, 107),
-                    foregroundColor: Colors.white,
-                    label: 'Registrar nuevo activo',
-                    labelStyle: TextStyle(fontSize: 18.0),
-                    onTap: () => context.pushNamed(
-                      'registraractivopage',
-                      queryParams: {
-                        'idSerial': serializeParam(
-                          null,
-                          ParamType.String,
-                        )
-                      },
-                    ),
-                  ),
-                  SpeedDialChild(
-                    child: Icon(Icons.category_rounded),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Color.fromARGB(255, 6, 113, 122),
-                    label: 'Crear nueva categoria',
-                    labelStyle: TextStyle(fontSize: 18.0),
-                    onTap: () => context.pushNamed('registrarcategoriapage'),
-                  ),
-
-                  //add more menu item childs here
-                ],
+          children: [
+            SpeedDialChild(
+              //speed dial child
+              child: Icon(FontAwesomeIcons.barcode),
+              backgroundColor: Color.fromARGB(255, 7, 133, 36),
+              foregroundColor: Colors.white,
+              label: 'Buscar por código de barras',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () async {
+                await FlutterBarcodeScanner.scanBarcode(
+                        '#C62828', // scanning line color
+                        'Cancelar', // cancel button text
+                        true, // whether to show the flash icon
+                        ScanMode.BARCODE)
+                    .then((value) async {
+                  if (value != null) {
+                    ActivoController activoController = ActivoController();
+                    var res = await activoController.buscarActivo(value);
+                    if (res.idSerial.isEmpty) {
+                      // ignore: use_build_context_synchronously
+                      context.pushNamed(
+                        'registraractivopage',
+                        queryParams: {
+                          'idSerial': serializeParam(
+                            value.trim().replaceAll(".", ""),
+                            ParamType.String,
+                          )
+                        },
+                      );
+                    } else {
+                      // ignore: use_build_context_synchronously
+                      context.pushNamed(
+                        'activoPerfilPage',
+                        queryParams: {
+                          'idActivo': serializeParam(
+                            res.idSerial,
+                            ParamType.String,
+                          )
+                        },
+                      );
+                    }
+                  }
+                });
+              },
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.add),
+              backgroundColor: Color.fromARGB(255, 7, 133, 107),
+              foregroundColor: Colors.white,
+              label: 'Registrar nuevo activo',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => context.pushNamed(
+                'registraractivopage',
+                queryParams: {
+                  'idSerial': serializeParam(
+                    null,
+                    ParamType.String,
+                  )
+                },
               ),
             ),
-            body: NestedScrollView(
-              headerSliverBuilder: (context, _) => [
-                SliverAppBar(
-                  pinned: true,
-                  floating: false,
-                  leading: InkWell(
-                    onTap: () async {
-                      context.pop();
-                    },
-                    child: Icon(
-                      Icons.chevron_left_rounded,
-                      color: FlutterFlowTheme.of(context).whiteColor,
-                      size: 30,
-                    ),
+            SpeedDialChild(
+              child: Icon(Icons.category_rounded),
+              foregroundColor: Colors.white,
+              backgroundColor: Color.fromARGB(255, 6, 113, 122),
+              label: 'Crear nueva categoria',
+              labelStyle: TextStyle(fontSize: 18.0),
+              onTap: () => context.pushNamed('registrarcategoriapage'),
+            ),
+
+            //add more menu item childs here
+          ],
+        ),
+      ),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, _) => [
+          SliverAppBar(
+            pinned: true,
+            floating: false,
+            leading: InkWell(
+              onTap: () async {
+                context.pop();
+              },
+              child: Icon(
+                Icons.chevron_left_rounded,
+                color: FlutterFlowTheme.of(context).whiteColor,
+                size: 30,
+              ),
+            ),
+            backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+            iconTheme:
+                IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
+            automaticallyImplyLeading: false,
+            title: AutoSizeText(
+              (nombreCategoria.isEmpty) ? 'Activos' : nombreCategoria,
+              style: FlutterFlowTheme.of(context).bodyText1.override(
+                    fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
+                    color: FlutterFlowTheme.of(context).whiteColor,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600,
+                    useGoogleFonts: GoogleFonts.asMap().containsKey(
+                        FlutterFlowTheme.of(context).bodyText1Family),
                   ),
-                  backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-                  iconTheme: IconThemeData(
-                      color: FlutterFlowTheme.of(context).primaryText),
-                  automaticallyImplyLeading: false,
-                  title: AutoSizeText(
-                    (nombreCategoria.isEmpty) ? 'Activos' : nombreCategoria,
-                    style: FlutterFlowTheme.of(context).bodyText1.override(
-                          fontFamily:
-                              FlutterFlowTheme.of(context).bodyText1Family,
-                          color: FlutterFlowTheme.of(context).whiteColor,
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600,
-                          useGoogleFonts: GoogleFonts.asMap().containsKey(
-                              FlutterFlowTheme.of(context).bodyText1Family),
-                        ),
-                  ),
-                  actions: [
-                    FlutterFlowIconButton(
-                      borderColor: Colors.transparent,
-                      borderRadius: 30,
-                      borderWidth: 1,
-                      buttonSize: 60,
-                      icon: FaIcon(
-                        FontAwesomeIcons.filePdf,
-                        color: FlutterFlowTheme.of(context).whiteColor,
-                        size: 30,
-                      ),
-                      onPressed: () async {
-                        await PdfApi.generarTablaActivo(listaActivos);
-                      },
-                    ),
-                  ],
-                  centerTitle: false,
-                  elevation: 4,
-                )
-              ],
-              body: Builder(
-                builder: (context) {
-                  return GestureDetector(
-                    onTap: () => FocusScope.of(context).unfocus(),
-                    child: Stack(
+            ),
+            actions: [
+              FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 30,
+                borderWidth: 1,
+                buttonSize: 60,
+                icon: FaIcon(
+                  FontAwesomeIcons.filePdf,
+                  color: FlutterFlowTheme.of(context).whiteColor,
+                  size: 30,
+                ),
+                onPressed: () async {
+                  await PdfApi.generarTablaActivo(listaActivos);
+                },
+              ),
+            ],
+            centerTitle: false,
+            elevation: 4,
+          )
+        ],
+        body: Builder(
+          builder: (context) {
+            return GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SingleChildScrollView(
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              SingleChildScrollView(
-                                child: Column(
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16, 0, 16, 0),
+                                child: Row(
                                   mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          16, 0, 16, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Expanded(
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 12, 0, 0),
-                                              child: TextFormField(
-                                                controller: textController,
-                                                onChanged: (_) =>
-                                                    EasyDebounce.debounce(
-                                                  'textController',
-                                                  Duration(
-                                                      milliseconds: 2000),
-                                                  () => setState(() {}),
-                                                ),
-                                                obscureText: false,
-                                                decoration: InputDecoration(
-                                                  labelText:
-                                                      'Buscar activo...',
-                                                  labelStyle: FlutterFlowTheme
-                                                          .of(context)
-                                                      .bodyText2
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color:
-                                                            Color(0xFF57636C),
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        useGoogleFonts: GoogleFonts
-                                                                .asMap()
-                                                            .containsKey(
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyText2Family),
-                                                      ),
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryText,
-                                                      width: 1,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                  ),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryText,
-                                                      width: 1,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                  ),
-                                                  errorBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color:
-                                                          Color(0x00000000),
-                                                      width: 1,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                  ),
-                                                  focusedErrorBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color:
-                                                          Color(0x00000000),
-                                                      width: 1,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                  ),
-                                                  filled: true,
-                                                  fillColor: FlutterFlowTheme
-                                                          .of(context)
-                                                      .secondaryBackground,
-                                                  prefixIcon: Icon(
-                                                    Icons.search_rounded,
-                                                    color: Color(0xFF57636C),
-                                                  ),
-                                                ),
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyText1
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 12, 0, 0),
+                                        child: TextFormField(
+                                          controller: textControllerBusqueda,
+                                          onChanged: (_) =>
+                                              EasyDebounce.debounce(
+                                            'textController',
+                                            Duration(milliseconds: 2000),
+                                            () => setState(() {}),
+                                          ),
+                                          obscureText: false,
+                                          decoration: InputDecoration(
+                                            labelText: 'Buscar activo...',
+                                            labelStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyText2
                                                     .override(
                                                       fontFamily: 'Poppins',
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
+                                                      color: Color(0xFF57636C),
                                                       fontSize: 18,
                                                       fontWeight:
                                                           FontWeight.normal,
@@ -345,130 +261,175 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                           .containsKey(
                                                               FlutterFlowTheme.of(
                                                                       context)
-                                                                  .bodyText1Family),
+                                                                  .bodyText2Family),
                                                     ),
-                                                maxLines: null,
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                width: 1,
                                               ),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            errorBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            focusedErrorBorder:
+                                                OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color: Color(0x00000000),
+                                                width: 1,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            filled: true,
+                                            fillColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondaryBackground,
+                                            prefixIcon: Icon(
+                                              Icons.search_rounded,
+                                              color: Color(0xFF57636C),
                                             ),
                                           ),
-                                        ],
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText1
+                                              .override(
+                                                fontFamily: 'Poppins',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.normal,
+                                                useGoogleFonts: GoogleFonts
+                                                        .asMap()
+                                                    .containsKey(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyText1Family),
+                                              ),
+                                          maxLines: null,
+                                        ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 12, 0, 44),
-                                      child: FutureBuilder<List<Activo>>(
-                                          future: activoController
-                                              .getActivosList(
-                                                  nombreCategoria),
-                                          builder: (context,
-                                              
-                                                  snapshot) {
-                                            if (!snapshot.hasData ||
-                                                snapshot.hasError ||
-                                                snapshot.data!.isEmpty)
-                                              return Container();
-
-                                              listaActivos.clear();
-                                              snapshot.data!.forEach((data) {
-                                                listaActivos
-                                                    .add(data);
-                                                log('Añadiendo activo: ${data.nombre}');
-                                                Text(data
-                                                    .nombre
-                                                    .toString());
-                                              });
-
-                                            return Wrap(
-                                              spacing: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.03,
-                                              runSpacing: 15,
-                                              alignment: WrapAlignment.start,
-                                              crossAxisAlignment:
-                                                  WrapCrossAlignment.start,
-                                              direction: Axis.horizontal,
-                                              runAlignment:
-                                                  WrapAlignment.start,
-                                              verticalDirection:
-                                                  VerticalDirection.down,
-                                              clipBehavior: Clip.none,
-                                              children: List.generate(
-                                                  snapshot.data!.length,
-                                                  (index) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    if(selectMode){
-                                                      context.replaceNamed(
-                                                      'activoPerfilPage',
-                                                      queryParams: {
-                                                        'idActivo':
-                                                            serializeParam(
-                                                                  snapshot.data![
-                                                                      index]
-                                                              .idSerial,
-                                                          ParamType.String,
-                                                        ),
-                                                        'selectMode':
-                                                            serializeParam(
-                                                          selectMode,
-                                                          ParamType.bool,
-                                                        ),
-                                                      },
-                                                    );
-                                                    }else{
-                                                      context.pushNamed(
-                                                      'activoPerfilPage',
-                                                      queryParams: {
-                                                        'idActivo':
-                                                            serializeParam(
-                                                         
-                                                                  snapshot.data![
-                                                                      index]
-                                                              .idSerial,
-                                                          ParamType.String,
-                                                        ),
-                                                        'selectMode':
-                                                            serializeParam(
-                                                          selectMode,
-                                                          ParamType.bool,
-                                                        ),
-                                                      },
-                                                    );
-                                                    }
-                                                    
-                                                  },
-                                                  child: tarjetaActivo(
-                                                      context,
-                                                      snapshot
-                                                          .data![index]),
-                                                );
-                                              }),
-                                            );
-                                          }),
                                     ),
                                   ],
                                 ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 12, 0, 44),
+                                child: FutureBuilder<List<Activo>>(
+                                    future: activoController.getActivosList(
+                                        textControllerBusqueda!.text,
+                                        nombreCategoria),
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData ||
+                                          snapshot.hasError ||
+                                          snapshot.data!.isEmpty)
+                                        return Container();
+
+                                      listaActivos.clear();
+                                      snapshot.data!.forEach((data) {
+                                        listaActivos.add(data);
+                                        log('Añadiendo activo: ${data.nombre}');
+                                        Text(data.nombre.toString());
+                                      });
+
+                                      return Wrap(
+                                        spacing:
+                                            MediaQuery.of(context).size.width *
+                                                0.03,
+                                        runSpacing: 15,
+                                        alignment: WrapAlignment.start,
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.start,
+                                        direction: Axis.horizontal,
+                                        runAlignment: WrapAlignment.start,
+                                        verticalDirection:
+                                            VerticalDirection.down,
+                                        clipBehavior: Clip.none,
+                                        children: List.generate(
+                                            snapshot.data!.length, (index) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              if (selectMode) {
+                                                context.replaceNamed(
+                                                  'activoPerfilPage',
+                                                  queryParams: {
+                                                    'idActivo': serializeParam(
+                                                      snapshot.data![index]
+                                                          .idSerial,
+                                                      ParamType.String,
+                                                    ),
+                                                    'selectMode':
+                                                        serializeParam(
+                                                      selectMode,
+                                                      ParamType.bool,
+                                                    ),
+                                                  },
+                                                );
+                                              } else {
+                                                context.pushNamed(
+                                                  'activoPerfilPage',
+                                                  queryParams: {
+                                                    'idActivo': serializeParam(
+                                                      snapshot.data![index]
+                                                          .idSerial,
+                                                      ParamType.String,
+                                                    ),
+                                                    'selectMode':
+                                                        serializeParam(
+                                                      selectMode,
+                                                      ParamType.bool,
+                                                    ),
+                                                  },
+                                                );
+                                              }
+                                            },
+                                            child: tarjetaActivo(
+                                                context, snapshot.data![index]),
+                                          );
+                                        }),
+                                      );
+                                    }),
                               ),
                             ],
                           ),
                         ),
                       ],
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
-            ),
-          );
-        });
+            );
+          },
+        ),
+      ),
+    );
   }
 }
 
 Widget tarjetaActivo(context, Activo activo) {
   return Container(
     width: 185,
-    height: 200,
+    height: 213,
     decoration: BoxDecoration(
       color: FlutterFlowTheme.of(context).secondaryBackground,
       boxShadow: [
@@ -492,11 +453,41 @@ Widget tarjetaActivo(context, Activo activo) {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              activo.urlImagen,
+            child: FastCachedImage(
               width: double.infinity,
               height: 125,
+              url: activo.urlImagen,
               fit: BoxFit.cover,
+              fadeInDuration: const Duration(seconds: 1),
+              errorBuilder: (context, exception, stacktrace) {
+                log(stacktrace.toString());
+                return Image.asset(
+                  'assets/images/nodisponible.png',
+                  width: double.infinity,
+                  height: 125,
+                  fit: BoxFit.cover,
+                );
+              },
+              loadingBuilder: (context, progress) {
+                return Container(
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      if (progress.isDownloading && progress.totalBytes != null)
+                        Text(
+                            '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
+                            style: const TextStyle(color: Color(0xFF006D38))),
+                      SizedBox(
+                          width: 120,
+                          height: 120,
+                          child: CircularProgressIndicator(
+                              color: const Color(0xFF006D38),
+                              value: progress.progressPercentage.value)),
+                    ],
+                  ),
+                );
+              },
             ),
           ),
           Padding(

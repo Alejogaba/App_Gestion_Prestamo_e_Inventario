@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,7 +21,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
-
 class PrincipalWidget extends StatefulWidget {
   final bool selectMode;
 
@@ -34,7 +34,7 @@ class PrincipalWidget extends StatefulWidget {
 }
 
 class _PrincipalWidgetState extends State<PrincipalWidget> {
-  TextEditingController? searchController;
+  TextEditingController? textControllerBusqueda;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   CategoriaController categoriaController = CategoriaController();
   List<Categoria> listCategoriasLocal = [];
@@ -50,13 +50,13 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   @override
   void initState() {
     super.initState();
-    searchController = TextEditingController();
+    textControllerBusqueda = TextEditingController();
     _cargarlistaLocal();
   }
 
   @override
   void dispose() {
-    searchController?.dispose();
+    textControllerBusqueda?.dispose();
     super.dispose();
   }
 
@@ -174,245 +174,366 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
           ],
         ),
       ),
-      body: NestedScrollView(
-        headerSliverBuilder: (context, _) => [
-          SliverAppBar(
-            pinned: false,
-            floating: true,
-            snap: false,
-            backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-            iconTheme:
-                IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
-            automaticallyImplyLeading: false,
-            title: AutoSizeText(
-              'Bienvenido',
-              style: FlutterFlowTheme.of(context).bodyText1.override(
-                    fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
-                    color: FlutterFlowTheme.of(context).whiteColor,
-                    fontSize: 28,
-                    fontWeight: FontWeight.normal,
-                    useGoogleFonts: GoogleFonts.asMap().containsKey(
-                        FlutterFlowTheme.of(context).bodyText1Family),
-                  ),
-            ),
-            actions: [
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: Icon(
-                  Icons.notifications_none,
-                  color: FlutterFlowTheme.of(context).whiteColor,
-                  size: 30,
-                ),
-                onPressed: () {
-                  print('IconButton pressed ...');
-                },
+      body: SafeArea(
+        child: NestedScrollView(
+          headerSliverBuilder: (context, _) => [
+            SliverAppBar(
+              pinned: true,
+              floating: true,
+              snap: true,
+              backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+              iconTheme: IconThemeData(
+                  color: FlutterFlowTheme.of(context).primaryText),
+              automaticallyImplyLeading: false,
+              title: AutoSizeText(
+                'Activos',
+                style: FlutterFlowTheme.of(context).bodyText1.override(
+                      fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
+                      color: FlutterFlowTheme.of(context).whiteColor,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      useGoogleFonts: GoogleFonts.asMap().containsKey(
+                          FlutterFlowTheme.of(context).bodyText1Family),
+                    ),
               ),
-            ],
-            centerTitle: false,
-            elevation: 4,
+              actions: [],
+              centerTitle: false,
+              elevation: 4,
+            )
+          ],
+          body: SafeArea(
+            child: Builder(
+              builder: (context) {
+                return GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: Stack(
+                    children: [
+                      SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        16, 0, 16, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 12, 0, 0),
+                                            child: TextFormField(
+                                              controller:
+                                                  textControllerBusqueda,
+                                              onChanged: (_) =>
+                                                  EasyDebounce.debounce(
+                                                'textController',
+                                                Duration(milliseconds: 2000),
+                                                () => setState(() {}),
+                                              ),
+                                              obscureText: false,
+                                              decoration: InputDecoration(
+                                                labelText: 'Buscar activo...',
+                                                labelStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText2
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          color:
+                                                              Color(0xFF57636C),
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          useGoogleFonts: GoogleFonts
+                                                                  .asMap()
+                                                              .containsKey(
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyText2Family),
+                                                        ),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryText,
+                                                    width: 1,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryText,
+                                                    width: 1,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Color(0x00000000),
+                                                    width: 1,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                focusedErrorBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Color(0x00000000),
+                                                    width: 1,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                filled: true,
+                                                fillColor:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                                prefixIcon: Icon(
+                                                  Icons.search_rounded,
+                                                  color: Color(0xFF57636C),
+                                                ),
+                                              ),
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText1
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText1Family),
+                                                      ),
+                                              maxLines: null,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 12, 0, 44),
+                                    child: FutureBuilder<List<Categoria>>(
+                                        future:
+                                            categoriaController.getCategorias(
+                                                textControllerBusqueda!.text),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return _loading(context);
+                                          } else if (snapshot.connectionState ==
+                                                  ConnectionState.done &&
+                                              snapshot.hasData &&
+                                              snapshot.data!.isNotEmpty) {
+                                            listCategoriasLocal.clear();
+                                            snapshot.data!.forEach((data) {
+                                              listCategoriasLocal.add(data);
+                                              log('Añadiendo: ${data.nombre}');
+                                              Text(data.nombre.toString());
+                                            });
+
+                                            return Wrap(
+                                              spacing: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.01,
+                                              runSpacing: 15,
+                                              alignment: WrapAlignment.start,
+                                              crossAxisAlignment:
+                                                  WrapCrossAlignment.start,
+                                              direction: Axis.horizontal,
+                                              runAlignment: WrapAlignment.start,
+                                              verticalDirection:
+                                                  VerticalDirection.down,
+                                              clipBehavior: Clip.none,
+                                              children: List.generate(
+                                                  snapshot.data!.length,
+                                                  (index) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    if (selectMode) {
+                                                      context.replaceNamed(
+                                                        'listaActivosPage',
+                                                        queryParams: {
+                                                          'nombreCategoria':
+                                                              serializeParam(
+                                                            snapshot
+                                                                .data![index]
+                                                                .nombre,
+                                                            ParamType.String,
+                                                          ),
+                                                          'selectMode':
+                                                              serializeParam(
+                                                            selectMode,
+                                                            ParamType.bool,
+                                                          ),
+                                                        }.withoutNulls,
+                                                      );
+                                                    } else {
+                                                      context.pushNamed(
+                                                        'listaActivosPage',
+                                                        queryParams: {
+                                                          'nombreCategoria':
+                                                              serializeParam(
+                                                            snapshot
+                                                                .data![index]
+                                                                .nombre,
+                                                            ParamType.String,
+                                                          ),
+                                                          'selectMode':
+                                                              serializeParam(
+                                                            selectMode,
+                                                            ParamType.bool,
+                                                          ),
+                                                        }.withoutNulls,
+                                                      );
+                                                    }
+                                                  },
+                                                  child: tarjetaCategoria(
+                                                      context,
+                                                      snapshot.data![index]),
+                                                );
+                                              }),
+                                            );
+                                          } else {
+                                            return Container();
+                                          }
+                                        }),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget tarjetaCategoria(context, Categoria categoria) {
+    return Container(
+      width: 350,
+      height: 213,
+      decoration: BoxDecoration(
+        color: FlutterFlowTheme.of(context).secondaryBackground,
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 4,
+            color: FlutterFlowTheme.of(context).boxShadow,
+            offset: Offset(0, 2),
           )
         ],
-        body: Builder(
-          builder: (context) {
-            return GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Stack(
-                children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: FlutterFlowTheme.of(context).secondaryText,
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsetsDirectional.fromSTEB(4, 4, 4, 4),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: FastCachedImage(
+                width: double.infinity,
+                height: 125,
+                url: categoria.urlImagen!,
+                fit: BoxFit.cover,
+                fadeInDuration: const Duration(seconds: 1),
+                errorBuilder: (context, exception, stacktrace) {
+                  log(stacktrace.toString());
+                  return Image.asset(
+                    'assets/images/nodisponible.png',
+                    width: double.infinity,
+                    height: 125,
+                    fit: BoxFit.cover,
+                  );
+                },
+                loadingBuilder: (context, progress) {
+                  return Container(
+                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                    child: Stack(
+                      alignment: Alignment.center,
                       children: [
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              16, 12, 16, 0),
-                          child: TextFormField(
-                            controller: searchController,
-                            onChanged: (value) => EasyDebounce.debounce(
-                              'textController',
-                              const Duration(milliseconds: 1000),
-                              () => setState(() {
-                                busquedaCategoria = value;
-                              }),
-                            ),
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              labelText: 'Buscar categoria...',
-                              labelStyle: FlutterFlowTheme.of(context)
-                                  .bodyText2
-                                  .override(
-                                    fontFamily: 'Outfit',
-                                    color: Color(0xFF57636C),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal,
-                                    useGoogleFonts: GoogleFonts.asMap()
-                                        .containsKey(
-                                            FlutterFlowTheme.of(context)
-                                                .bodyText2Family),
-                                  ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryText,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryText,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0x00000000),
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              filled: true,
-                              fillColor: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              prefixIcon: Icon(
-                                Icons.search_rounded,
-                                color: Color(0xFF57636C),
-                              ),
-                            ),
-                            style: FlutterFlowTheme.of(context)
-                                .bodyText1
-                                .override(
-                                  fontFamily: 'Outfit',
-                                  color: Color(0xFF14181B),
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                  useGoogleFonts: GoogleFonts.asMap()
-                                      .containsKey(
-                                          FlutterFlowTheme.of(context)
-                                              .bodyText1Family),
-                                ),
-                            maxLines: null,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              16, 8, 16, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0, 4, 0, 4),
-                                child: Text(
-                                  'Categorias',
-                                  style: FlutterFlowTheme.of(context)
-                                      .subtitle2
-                                      .override(
-                                        fontFamily: 'Outfit',
-                                        color: Color(0xFF57636C),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        useGoogleFonts:
-                                            GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(
-                                                            context)
-                                                        .subtitle2Family),
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        FutureBuilder<List<Categoria>>(
-                          future: listaCategoriasOnline,
-                          builder: ((context, snapshot) {
-                            int i = 0;
-                            List<Widget> temp = [];
-
-                            log('Estado de conexion connctionState:$snapshot.connectionState');
-
-                            if (snapshot.connectionState ==
-                                    ConnectionState.done &&
-                                snapshot.data!.length > 0) {
-                              log('Cargando lista Online');
-                              _guardarlistaLocal(snapshot.data);
-                              return Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    16, 16, 16, 0),
-                                child: LayoutBuilder(
-                                  builder: (context, constraints) {
-                                    log(constraints.maxWidth.toString());
-                                    return GridView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: snapshot.data!.length,
-                                      itemBuilder: (context, index) {
-                                        var temp = itemCategoria(
-                                            context,
-                                            snapshot.data![index].nombre,
-                                            snapshot
-                                                .data![index].urlImagen,
-                                            constraints.maxWidth,
-                                            listCategoriasLocal[index]
-                                                .descripcion!,selectMode);
-                                        return temp;
-                                      },
-                                      scrollDirection: Axis.vertical,
-                                      padding: EdgeInsets.zero,
-                                      gridDelegate:
-                                          // ignore: prefer_const_constructors
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount:
-                                                  defCantidadColumnas(
-                                                      constraints
-                                                          .maxWidth),
-                                              mainAxisSpacing: 10,
-                                              crossAxisSpacing: 10,
-                                              childAspectRatio: 1.4),
-                                    );
-                                  },
-                                ),
-                              );
-                            } else if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return loading(context);
-                            } else if (snapshot.hasError) {
-                              log('Error: ${snapshot.error}');
-                              return Container();
-                            } else {
-                              log('Error de conexion: ${snapshot.error}');
-                            }
-                            for (var element in listCategoriasLocal) {
-                              print(
-                                  'Lista LOCAL categoria nombre: + ${element.nombre}');
-                              print(
-                                  'Lista LOCAL categoria url: ${element.urlImagen}');
-                            }
-                            log('Usando cache local');
-                            return Container();
-                          }),
-                        ),
+                        if (progress.isDownloading &&
+                            progress.totalBytes != null)
+                          Text(
+                              '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
+                              style: const TextStyle(color: Color(0xFF006D38))),
+                        SizedBox(
+                            width: 120,
+                            height: 120,
+                            child: CircularProgressIndicator(
+                                color: const Color(0xFF006D38),
+                                value: progress.progressPercentage.value)),
                       ],
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
-            );
-          },
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(5, 6, 0, 0),
+              child: Text(
+                overflow: TextOverflow.ellipsis,
+                categoria.nombre.toString(),
+                style: FlutterFlowTheme.of(context).subtitle1.override(
+                      fontFamily: 'Poppins',
+                      color: FlutterFlowTheme.of(context).primaryText,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      useGoogleFonts: GoogleFonts.asMap().containsKey(
+                          FlutterFlowTheme.of(context).subtitle1Family),
+                    ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(3, 2, 0, 1),
+              child: Text(
+                overflow: TextOverflow.clip,
+                (categoria.descripcion == null) ? '' : categoria.descripcion!,
+                style: FlutterFlowTheme.of(context).bodyText2.override(
+                      fontSize: 15,
+                      fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                      color: FlutterFlowTheme.of(context).grayicon,
+                      useGoogleFonts: GoogleFonts.asMap().containsKey(
+                          FlutterFlowTheme.of(context).bodyText2Family),
+                    ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -458,37 +579,36 @@ Widget itemCategoria(BuildContext context, String? nombre, String? url,
 
   return GestureDetector(
     onTap: () {
-      if(selectMode){
+      if (selectMode) {
         context.replaceNamed(
-        'listaActivosPage',
-        queryParams: {
-          'nombreCategoria': serializeParam(
-            nombre!,
-            ParamType.String,
-          ),
-          'selectMode': serializeParam(
-            selectMode,
-            ParamType.bool,
-          ),
-        }.withoutNulls,
-      );
-      }else{
+          'listaActivosPage',
+          queryParams: {
+            'nombreCategoria': serializeParam(
+              nombre!,
+              ParamType.String,
+            ),
+            'selectMode': serializeParam(
+              selectMode,
+              ParamType.bool,
+            ),
+          }.withoutNulls,
+        );
+      } else {
         context.pushNamed(
-        'listaActivosPage',
-        queryParams: {
-          'nombreCategoria': serializeParam(
-            nombre!,
-            ParamType.String,
-          ),
-          'selectMode': serializeParam(
-            selectMode,
-            ParamType.bool,
-          ),
-        }.withoutNulls,
-      );
+          'listaActivosPage',
+          queryParams: {
+            'nombreCategoria': serializeParam(
+              nombre!,
+              ParamType.String,
+            ),
+            'selectMode': serializeParam(
+              selectMode,
+              ParamType.bool,
+            ),
+          }.withoutNulls,
+        );
       }
       log('Nombre Categoria: $nombre');
-      
     },
     child: Padding(
       padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
@@ -606,6 +726,7 @@ Widget _loader(BuildContext context, String url) {
 bool esEscritorio(BuildContext context) {
   return responsiveVisibility(context: context, desktop: true);
 }
+
 /*
 webScraper() async {
   final webScraper = WebScraper('https://www.google.com');
@@ -618,6 +739,26 @@ webScraper() async {
 }
 */
 Widget loading(context) {
+  return Padding(
+    padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 24),
+    child: Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          width: 100,
+          height: 100,
+          child: CircularProgressIndicator(
+            color: FlutterFlowTheme.of(context).primaryColor,
+            strokeWidth: 10.0,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _loading(context) {
   return Padding(
     padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 24),
     child: Row(

@@ -161,22 +161,25 @@ class ActivoController {
     
   }
 
-  Future<List<Activo>> getActivosList(String? nombre) async {
+  Future<List<Activo>> getActivosList(String? nombre,String? categoria) async {
     try{
-    if (nombre == null || nombre.trim() == '') {
-     
+    if (nombre == null || nombre.trim().isEmpty) {
        
         final data =
-            await supabase.from('ACTIVOS').select('*') as List<dynamic>;
+             (categoria!=null&&categoria.isNotEmpty&&!(categoria.contains('Todos'))) ? await supabase.from('ACTIVOS').select('*').eq('NOMBRE_CATEGORIA', categoria)
+            .order('FECHA_CREADO', ascending: false) as List<dynamic>: await supabase.from('ACTIVOS').select('*') 
+            .order('FECHA_CREADO', ascending: false) as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Activo.fromMap(e)).toList();
       
-    } else {
+    }else {
       
-        List<Activo> listaCategoria = [];
-        final data = await supabase.from('ACTIVOS').select('*').textSearch(
+        final data = (categoria!=null&&categoria.isNotEmpty&&!(categoria.contains('Todos'))) ? await supabase.from('ACTIVOS').select('*').textSearch(
                 'NOMBRE',
-                "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'")
+                "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'").eq('NOMBRE_CATEGORIA', categoria).order('FECHA_CREADO', ascending: false)
+            as List<dynamic> : await supabase.from('ACTIVOS').select('*').textSearch(
+                'NOMBRE',
+                "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'").order('FECHA_CREADO', ascending: false)
             as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Activo.fromMap(e)).toList();

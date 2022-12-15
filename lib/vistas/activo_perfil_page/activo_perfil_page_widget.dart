@@ -281,14 +281,18 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-     left: false,
-     right:false,
-     bottom: false,
+      left: false,
+      right: false,
+      bottom: false,
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-        floatingActionButton: myFloatingButton(selectMode: selectMode,idActivo: activo.idSerial,contextPadre: context).animateOnPageLoad(
-         animationsMap['floatingActionButtonOnPageLoadAnimation']!),
+        floatingActionButton: myFloatingButton(
+                selectMode: selectMode,
+                idActivo: activo.idSerial,
+                contextPadre: context)
+            .animateOnPageLoad(
+                animationsMap['floatingActionButtonOnPageLoadAnimation']!),
         body: GestureDetector(
           onTap: () => {FocusScope.of(context).unfocus()},
           child: Stack(
@@ -318,14 +322,16 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                              0, 0, 24, 0),
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 0, 24, 0),
                                           child: Container(
                                             width: 40,
                                             height: 40,
                                             decoration: BoxDecoration(
-                                              color: FlutterFlowTheme.of(context)
-                                                  .primaryBackground,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryBackground,
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                               border: Border.all(
@@ -359,16 +365,15 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      0, 0, 24, 0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 0, 24, 0),
                                               child: Container(
                                                 width: 40,
                                                 height: 40,
                                                 decoration: BoxDecoration(
-                                                  color:
-                                                      FlutterFlowTheme.of(context)
-                                                          .primaryBackground,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryBackground,
                                                   borderRadius:
                                                       BorderRadius.circular(8),
                                                   border: Border.all(
@@ -379,7 +384,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   ),
                                                 ),
                                                 child: FlutterFlowIconButton(
-                                                  borderColor: Colors.transparent,
+                                                  borderColor:
+                                                      Colors.transparent,
                                                   borderRadius: 30,
                                                   buttonSize: 46,
                                                   fillColor: Color(0x00F1F4F8),
@@ -395,16 +401,15 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                               ),
                                             ),
                                             Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      0, 0, 24, 0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 0, 24, 0),
                                               child: Container(
                                                 width: 40,
                                                 height: 40,
                                                 decoration: BoxDecoration(
-                                                  color:
-                                                      FlutterFlowTheme.of(context)
-                                                          .primaryBackground,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryBackground,
                                                   borderRadius:
                                                       BorderRadius.circular(8),
                                                   border: Border.all(
@@ -415,7 +420,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   ),
                                                 ),
                                                 child: FlutterFlowIconButton(
-                                                  borderColor: Colors.transparent,
+                                                  borderColor:
+                                                      Colors.transparent,
                                                   borderRadius: 30,
                                                   buttonSize: 46,
                                                   icon: Icon(
@@ -438,19 +444,21 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                   ),
                                 ),
                                 Padding(
-                                  padding:
-                                      EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 20, 0, 0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Container(
-                                        width: MediaQuery.of(context).size.width *
-                                            0.9,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.9,
                                         height: 320,
                                         decoration: BoxDecoration(
                                           color: Color(0xFFDBE2E7),
-                                          borderRadius: BorderRadius.circular(16),
+                                          borderRadius:
+                                              BorderRadius.circular(16),
                                         ),
                                         child: Stack(
                                           children: [
@@ -462,11 +470,12 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   await Navigator.push(
                                                     context,
                                                     PageTransition(
-                                                      type:
-                                                          PageTransitionType.fade,
+                                                      type: PageTransitionType
+                                                          .fade,
                                                       child:
                                                           FlutterFlowExpandedImageView(
-                                                        image: CachedNetworkImage(
+                                                        image:
+                                                            CachedNetworkImage(
                                                           imageUrl:
                                                               activo.urlImagen,
                                                           fit: BoxFit.contain,
@@ -480,12 +489,15 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                 },
                                                 child: Hero(
                                                   tag: 'mainImage',
-                                                  transitionOnUserGestures: true,
+                                                  transitionOnUserGestures:
+                                                      true,
                                                   child: ClipRRect(
                                                     borderRadius:
-                                                        BorderRadius.circular(16),
+                                                        BorderRadius.circular(
+                                                            16),
                                                     child: CachedNetworkImage(
-                                                      imageUrl: activo.urlImagen,
+                                                      imageUrl:
+                                                          activo.urlImagen,
                                                       width: double.infinity,
                                                       height: double.infinity,
                                                       fit: BoxFit.cover,
@@ -554,18 +566,18 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                 color: Color(0xFF8B97A2),
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.normal,
-                                                useGoogleFonts:
-                                                    GoogleFonts.asMap()
-                                                        .containsKey(
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText2Family),
+                                                useGoogleFonts: GoogleFonts
+                                                        .asMap()
+                                                    .containsKey(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyText2Family),
                                               ),
                                         ),
                                       ),
                                     ],
-                                  ).animateOnPageLoad(
-                                      animationsMap['rowOnPageLoadAnimation1']!),
+                                  ).animateOnPageLoad(animationsMap[
+                                      'rowOnPageLoadAnimation1']!),
                                 ),
                                 (activo.numActivo != null)
                                     ? Padding(
@@ -580,12 +592,12 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                               size: 24,
                                             ),
                                             Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      8, 0, 0, 0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(8, 0, 0, 0),
                                               child: Text(
                                                 (activo.numActivo == null ||
-                                                        activo.numActivo!.isEmpty)
+                                                        activo
+                                                            .numActivo!.isEmpty)
                                                     ? 'Nro inventario: No disponible'
                                                     : 'Nro inventario: ${activo.numActivo!}',
                                                 style: FlutterFlowTheme.of(
@@ -623,19 +635,22 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                             .bodyText2
                                             .override(
                                               fontFamily: 'Lexend Deca',
-                                              color: FlutterFlowTheme.of(context)
-                                                  .primaryText,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
-                                              useGoogleFonts: GoogleFonts.asMap()
-                                                  .containsKey(
-                                                      FlutterFlowTheme.of(context)
-                                                          .bodyText2Family),
+                                              useGoogleFonts:
+                                                  GoogleFonts.asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2Family),
                                             ),
                                       ),
                                     ],
-                                  ).animateOnPageLoad(
-                                      animationsMap['rowOnPageLoadAnimation3']!),
+                                  ).animateOnPageLoad(animationsMap[
+                                      'rowOnPageLoadAnimation3']!),
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -645,8 +660,9 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                     children: [
                                       Expanded(
                                         child: Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                              0, 0, 0, 24),
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 0, 0, 24),
                                           child: Text(
                                             (activo.detalles != null)
                                                 ? activo.detalles!
@@ -684,14 +700,17 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                             .bodyText2
                                             .override(
                                               fontFamily: 'Poppins',
-                                              color: FlutterFlowTheme.of(context)
-                                                  .primaryText,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
-                                              useGoogleFonts: GoogleFonts.asMap()
-                                                  .containsKey(
-                                                      FlutterFlowTheme.of(context)
-                                                          .bodyText2Family),
+                                              useGoogleFonts:
+                                                  GoogleFonts.asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2Family),
                                             ),
                                       ),
                                       Padding(
@@ -706,18 +725,18 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                 color: Color(0xFF8B97A2),
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.normal,
-                                                useGoogleFonts:
-                                                    GoogleFonts.asMap()
-                                                        .containsKey(
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText2Family),
+                                                useGoogleFonts: GoogleFonts
+                                                        .asMap()
+                                                    .containsKey(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyText2Family),
                                               ),
                                         ),
                                       ),
                                     ],
-                                  ).animateOnPageLoad(
-                                      animationsMap['rowOnPageLoadAnimation4']!),
+                                  ).animateOnPageLoad(animationsMap[
+                                      'rowOnPageLoadAnimation4']!),
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -741,12 +760,12 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                         .primaryText,
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
-                                                useGoogleFonts:
-                                                    GoogleFonts.asMap()
-                                                        .containsKey(
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText2Family),
+                                                useGoogleFonts: GoogleFonts
+                                                        .asMap()
+                                                    .containsKey(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyText2Family),
                                               ),
                                         ),
                                       ),
@@ -763,8 +782,9 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                       Align(
                                         alignment: AlignmentDirectional(0, 0),
                                         child: Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                              2, 0, 0, 3),
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  2, 0, 0, 3),
                                           child: Text(
                                             definirEstadoActivo(activo.estado),
                                             textAlign: TextAlign.center,
@@ -787,8 +807,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                         ),
                                       ),
                                     ],
-                                  ).animateOnPageLoad(
-                                      animationsMap['rowOnPageLoadAnimation5']!),
+                                  ).animateOnPageLoad(animationsMap[
+                                      'rowOnPageLoadAnimation5']!),
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -804,14 +824,17 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                             .bodyText2
                                             .override(
                                               fontFamily: 'Lexend Deca',
-                                              color: FlutterFlowTheme.of(context)
-                                                  .primaryText,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
-                                              useGoogleFonts: GoogleFonts.asMap()
-                                                  .containsKey(
-                                                      FlutterFlowTheme.of(context)
-                                                          .bodyText2Family),
+                                              useGoogleFonts:
+                                                  GoogleFonts.asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2Family),
                                             ),
                                       ),
                                       Padding(
@@ -828,24 +851,24 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                 color: Color(0xFF8B97A2),
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.normal,
-                                                useGoogleFonts:
-                                                    GoogleFonts.asMap()
-                                                        .containsKey(
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText2Family),
+                                                useGoogleFonts: GoogleFonts
+                                                        .asMap()
+                                                    .containsKey(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyText2Family),
                                               ),
                                         ),
                                       ),
                                     ],
-                                  ).animateOnPageLoad(
-                                      animationsMap['rowOnPageLoadAnimation6']!),
+                                  ).animateOnPageLoad(animationsMap[
+                                      'rowOnPageLoadAnimation6']!),
                                 ),
                                 //TituloListafFuncionariosAsignados(animationsMap: animationsMap),
                                 //ListaFuncionariosAsignados(animationsMap: animationsMap),
                                 Padding(
-                                  padding:
-                                      EdgeInsetsDirectional.fromSTEB(0, 60, 0, 0),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 60, 0, 0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [],
@@ -876,7 +899,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                       children: [
                         Align(
                           alignment: AlignmentDirectional(0, 0),
-    
+
                           child: _cajaAdvertencia(
                             context,
                             '¿Esta seguro que desea eliminar este activo?',
@@ -953,7 +976,10 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                   padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                   child: FFButtonWidget(
                     onPressed: () {
-                      eliminarObjeto(context, objetoaEliminar, id);
+                      var res = eliminarObjeto(context, objetoaEliminar, id);
+                      if (res == 'ok') {
+                        context.pop();
+                      }
                     },
                     text: 'Sí, deseo eliminar este $objetoaEliminar',
                     options: FFButtonOptions(
@@ -1024,14 +1050,15 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
     );
   }
 
-  eliminarObjeto(context, String objeto, String id) async {
+  Future<String> eliminarObjeto(context, String objeto, String id) async {
     switch (objeto) {
       case 'activo':
         ActivoController activoController = ActivoController();
         final res = await activoController.eliminarActivo(context, id);
-        if (res == 'ok') context.pop;
-        break;
+        return 'ok';
+
       default:
+        return 'error';
     }
   }
 
@@ -1049,7 +1076,10 @@ class myFloatingButton extends StatelessWidget {
   final String idActivo;
   final BuildContext contextPadre;
   const myFloatingButton(
-      {Key? key, this.selectMode = false, this.idActivo = '',required this.contextPadre})
+      {Key? key,
+      this.selectMode = false,
+      this.idActivo = '',
+      required this.contextPadre})
       : super(key: key);
 
   @override
@@ -1061,10 +1091,9 @@ class myFloatingButton extends StatelessWidget {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           idFuncionario = prefs.getString('id_funcionario');
           ActivoController activoController = ActivoController();
-          String res =
-              await activoController.asignarActivo(context, idFuncionario!, idActivo);
-          if(res.contains('ok'))
-            contextPadre.pop();
+          String res = await activoController.asignarActivo(
+              context, idFuncionario!, idActivo);
+          if (res.contains('ok')) contextPadre.pop();
         }
       },
       backgroundColor: FlutterFlowTheme.of(context).primaryColor,

@@ -26,7 +26,7 @@ class CategoriaController {
       try {
         List<Categoria> listaCategoria = [];
         final data =
-            await client.from('CATEGORIAS').select('*') as List<dynamic>;
+            await client.from('CATEGORIAS').select('*').order('ORDEN', ascending: true) as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Categoria.fromMap(e)).toList();
       } on PostgrestException catch (error) {
@@ -41,7 +41,7 @@ class CategoriaController {
         List<Categoria> listaCategoria = [];
         final data = await client.from('CATEGORIAS').select('*').textSearch(
                 'NOMBRE',
-                "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'")
+                "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'").order('ORDEN', ascending: true)
             as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Categoria.fromMap(e)).toList();

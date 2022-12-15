@@ -630,7 +630,7 @@ class _FuncionarioPerfilPageWidgetState
                                           ),
                                         ],
                                       ),
-                                      (funcionario.correo == null ||
+                                      (funcionario.correo == null &&
                                               funcionario.correo!.isEmpty)
                                           ? Container()
                                           : Padding(
@@ -759,10 +759,17 @@ class _FuncionarioPerfilPageWidgetState
                                                                       size: 22,
                                                                     ),
                                                                     onPressed:
-                                                                        () {
-                                                                      print(
-                                                                          'IconButton pressed ...');
-                                                                    },
+                                                                        () async {
+                                                                  await launchUrl(Uri(
+                                                                      scheme: 'mailto',
+                                                                      path: funcionario.correo,
+                                                                      query: {
+                                                                        'subject':
+                                                                            'Asunto',
+                                                                        'body':
+                                                                            ' ',
+                                                                      }.entries.map((MapEntry<String, String> e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}').join('&')));
+                                                                },
                                                                   ),
                                                                 ),
                                                               ),
@@ -960,10 +967,13 @@ class _FuncionarioPerfilPageWidgetState
                                                               .primaryText,
                                                           size: 22,
                                                         ),
-                                                        onPressed: () {
-                                                          print(
-                                                              'IconButton pressed ...');
-                                                        },
+                                                        onPressed: ()  async{
+                                                      await launchUrl(Uri(
+                                                        scheme: 'tel',
+                                                        path: funcionario
+                                                            .telefono1,
+                                                      ));
+                                                    },
                                                       ),
                                                     ),
                                                   ),
@@ -978,7 +988,7 @@ class _FuncionarioPerfilPageWidgetState
                                 ),
                               ],
                             ),
-                            if (funcionario.telefono2 != null ||
+                            if (funcionario.telefono2 != null &&
                                 funcionario.telefono2!.isNotEmpty)
                               Column(
                                 mainAxisSize: MainAxisSize.max,
@@ -1171,10 +1181,13 @@ class _FuncionarioPerfilPageWidgetState
                                                                 .primaryText,
                                                             size: 22,
                                                           ),
-                                                          onPressed: () {
-                                                            print(
-                                                                'IconButton pressed ...');
-                                                          },
+                                                          onPressed: ()  async {
+                                                        await launchUrl(Uri(
+                                                          scheme: 'tel',
+                                                          path: funcionario
+                                                              .telefono2,
+                                                        ));
+                                                      },
                                                         ),
                                                       ),
                                                     ),
@@ -1189,8 +1202,8 @@ class _FuncionarioPerfilPageWidgetState
                                   ),
                                 ],
                               ),
-                            if (funcionario.enlaceSIGEP != null ||
-                                funcionario.enlaceSIGEP!.isNotEmpty)
+                            (funcionario.enlaceSIGEP != null &&
+                                funcionario.enlaceSIGEP!.isNotEmpty) ?
                               Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
@@ -1353,22 +1366,21 @@ class _FuncionarioPerfilPageWidgetState
                                                                             0,
                                                                             4,
                                                                             0),
-                                                                        child: SelectionArea(
-                                                                            child: Text(
+                                                                        child: Text(
                                                                           funcionario
-                                                                              .enlaceSIGEP!,
+                                                                          .enlaceSIGEP!,
                                                                           textAlign:
-                                                                              TextAlign.justify,
+                                                                          TextAlign.justify,
                                                                           maxLines:
-                                                                              3,
+                                                                          3,
                                                                           style: FlutterFlowTheme.of(context)
-                                                                              .bodyText2
-                                                                              .override(
-                                                                                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
-                                                                                color: FlutterFlowTheme.of(context).grayicon,
-                                                                                useGoogleFonts: GoogleFonts.asMap().containsKey(FlutterFlowTheme.of(context).bodyText2Family),
-                                                                              ),
-                                                                        )),
+                                                                          .bodyText2
+                                                                          .override(
+                                                                            fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                                                                            color: FlutterFlowTheme.of(context).grayicon,
+                                                                            useGoogleFonts: GoogleFonts.asMap().containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+                                                                          ),
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   ],
@@ -1404,7 +1416,7 @@ class _FuncionarioPerfilPageWidgetState
                                         'containerOnPageLoadAnimation1']!),
                                   ),
                                 ],
-                              ),
+                              ):Container(),
                           ],
                         ),
                         Row(
