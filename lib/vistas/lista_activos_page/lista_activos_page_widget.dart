@@ -57,9 +57,9 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: activoController.getActivoStream(nombreCategoria),
-        builder: (context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+    return FutureBuilder<List<Activo>>(
+        future: activoController.getActivosList(nombreCategoria),
+        builder: (context, snapshot1) {
           return Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -358,15 +358,14 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0, 12, 0, 44),
-                                        child: StreamBuilder(
-                                            stream: activoController
-                                                .getActivoStream(
+                                        child: 
+                                        
+                                        FutureBuilder<List<Activo>>(
+                                            future: activoController
+                                                .getActivosList(
                                                     nombreCategoria),
                                             builder: (context,
-                                                AsyncSnapshot<
-                                                        List<
-                                                            Map<String,
-                                                                dynamic>>>
+                                                
                                                     snapshot) {
                                               if (!snapshot.hasData ||
                                                   snapshot.hasError ||
@@ -376,9 +375,9 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                               listaActivos.clear();
                                               snapshot.data!.forEach((data) {
                                                 listaActivos
-                                                    .add(Activo.fromMap(data));
-                                                log('Añadiendo activo: ${Activo.fromMap(data).nombre}');
-                                                Text(Activo.fromMap(data)
+                                                    .add(data);
+                                                log('Añadiendo activo: ${data.nombre}');
+                                                Text(data
                                                     .nombre
                                                     .toString());
                                               });
@@ -409,9 +408,9 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                         queryParams: {
                                                           'idActivo':
                                                               serializeParam(
-                                                            Activo.fromMap(
+                                                            
                                                                     snapshot.data![
-                                                                        index])
+                                                                        index]
                                                                 .idSerial,
                                                             ParamType.String,
                                                           ),
@@ -428,9 +427,9 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                         queryParams: {
                                                           'idActivo':
                                                               serializeParam(
-                                                            Activo.fromMap(
+                                                            
                                                                     snapshot.data![
-                                                                        index])
+                                                                        index]
                                                                 .idSerial,
                                                             ParamType.String,
                                                           ),
@@ -446,8 +445,8 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                     },
                                                     child: tarjetaActivo(
                                                         context,
-                                                        Activo.fromMap(snapshot
-                                                            .data![index])),
+                                                        snapshot
+                                                            .data![index]),
                                                   );
                                                 }),
                                               );

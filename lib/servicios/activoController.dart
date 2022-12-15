@@ -162,6 +162,36 @@ class ActivoController {
     
   }
 
+  Future<List<Activo>> getActivosList(String? nombre) async {
+    try{
+    if (nombre == null || nombre.trim() == '') {
+     
+       
+        final data =
+            await supabase.from('ACTIVOS').select('*') as List<dynamic>;
+        log('Datos: $data');
+        return (data).map((e) => Activo.fromMap(e)).toList();
+      
+    } else {
+      
+        List<Activo> listaCategoria = [];
+        final data = await supabase.from('ACTIVOS').select('*').textSearch(
+                'NOMBRE',
+                "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'")
+            as List<dynamic>;
+        log('Datos: $data');
+        return (data).map((e) => Activo.fromMap(e)).toList();
+      
+    }
+    }on PostgrestException catch (error) {
+        log(error.message);
+        return [];
+      } catch (error) {
+        log('Error al cargar activos: $error');
+        return [];
+      }
+  }
+
   Future<Activo> buscarActivo(String idSerial) async {
     Activo activoVacio = Activo(
         '',
