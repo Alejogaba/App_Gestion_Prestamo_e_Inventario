@@ -115,7 +115,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                         true, // whether to show the flash icon
                         ScanMode.BARCODE)
                     .then((value) async {
-                  if (value != null) {
+                  if (value != null && value.length > 4) {
                     ActivoController activoController = ActivoController();
                     var res = await activoController.buscarActivo(value);
                     if (res.idSerial.isEmpty) {
@@ -224,194 +224,187 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                   SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SingleChildScrollView(
-                          child: Column(
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              16, 12, 16, 0),
+                          child: TextFormField(
+                            controller: searchController,
+                            onChanged: (value) => EasyDebounce.debounce(
+                              'textController',
+                              const Duration(milliseconds: 1000),
+                              () => setState(() {
+                                busquedaCategoria = value;
+                              }),
+                            ),
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              labelText: 'Buscar categoria...',
+                              labelStyle: FlutterFlowTheme.of(context)
+                                  .bodyText2
+                                  .override(
+                                    fontFamily: 'Outfit',
+                                    color: Color(0xFF57636C),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.normal,
+                                    useGoogleFonts: GoogleFonts.asMap()
+                                        .containsKey(
+                                            FlutterFlowTheme.of(context)
+                                                .bodyText2Family),
+                                  ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0x00000000),
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              filled: true,
+                              fillColor: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              prefixIcon: Icon(
+                                Icons.search_rounded,
+                                color: Color(0xFF57636C),
+                              ),
+                            ),
+                            style: FlutterFlowTheme.of(context)
+                                .bodyText1
+                                .override(
+                                  fontFamily: 'Outfit',
+                                  color: Color(0xFF14181B),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
+                                  useGoogleFonts: GoogleFonts.asMap()
+                                      .containsKey(
+                                          FlutterFlowTheme.of(context)
+                                              .bodyText1Family),
+                                ),
+                            maxLines: null,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              16, 8, 16, 0),
+                          child: Row(
                             mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
                             children: [
                               Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(
-                                    16, 12, 16, 0),
-                                child: TextFormField(
-                                  controller: searchController,
-                                  onChanged: (value) => EasyDebounce.debounce(
-                                    'textController',
-                                    const Duration(milliseconds: 1000),
-                                    () => setState(() {
-                                      busquedaCategoria = value;
-                                    }),
-                                  ),
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                    labelText: 'Buscar categoria...',
-                                    labelStyle: FlutterFlowTheme.of(context)
-                                        .bodyText2
-                                        .override(
-                                          fontFamily: 'Outfit',
-                                          color: Color(0xFF57636C),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.normal,
-                                          useGoogleFonts: GoogleFonts.asMap()
-                                              .containsKey(
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText2Family),
-                                        ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0x00000000),
-                                        width: 1,
-                                      ),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    filled: true,
-                                    fillColor: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    prefixIcon: Icon(
-                                      Icons.search_rounded,
-                                      color: Color(0xFF57636C),
-                                    ),
-                                  ),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0, 4, 0, 4),
+                                child: Text(
+                                  'Categorias',
                                   style: FlutterFlowTheme.of(context)
-                                      .bodyText1
+                                      .subtitle2
                                       .override(
                                         fontFamily: 'Outfit',
-                                        color: Color(0xFF14181B),
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.normal,
-                                        useGoogleFonts: GoogleFonts.asMap()
-                                            .containsKey(
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyText1Family),
+                                        color: Color(0xFF57636C),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        useGoogleFonts:
+                                            GoogleFonts.asMap()
+                                                .containsKey(
+                                                    FlutterFlowTheme.of(
+                                                            context)
+                                                        .subtitle2Family),
                                       ),
-                                  maxLines: null,
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    16, 8, 16, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 4, 0, 4),
-                                      child: Text(
-                                        'Categorias',
-                                        style: FlutterFlowTheme.of(context)
-                                            .subtitle2
-                                            .override(
-                                              fontFamily: 'Outfit',
-                                              color: Color(0xFF57636C),
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                              useGoogleFonts:
-                                                  GoogleFonts.asMap()
-                                                      .containsKey(
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .subtitle2Family),
-                                            ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              FutureBuilder<List<Categoria>>(
-                                future: listaCategoriasOnline,
-                                builder: ((context, snapshot) {
-                                  int i = 0;
-                                  List<Widget> temp = [];
-
-                                  log('Estado de conexion connctionState:$snapshot.connectionState');
-
-                                  if (snapshot.connectionState ==
-                                          ConnectionState.done &&
-                                      snapshot.data!.length > 0) {
-                                    log('Cargando lista Online');
-                                    _guardarlistaLocal(snapshot.data);
-                                    return Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          16, 16, 16, 0),
-                                      child: LayoutBuilder(
-                                        builder: (context, constraints) {
-                                          log(constraints.maxWidth.toString());
-                                          return GridView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: snapshot.data!.length,
-                                            itemBuilder: (context, index) {
-                                              var temp = itemCategoria(
-                                                  context,
-                                                  snapshot.data![index].nombre,
-                                                  snapshot
-                                                      .data![index].urlImagen,
-                                                  constraints.maxWidth,
-                                                  listCategoriasLocal[index]
-                                                      .descripcion!,selectMode);
-                                              return temp;
-                                            },
-                                            scrollDirection: Axis.vertical,
-                                            padding: EdgeInsets.zero,
-                                            gridDelegate:
-                                                // ignore: prefer_const_constructors
-                                                SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount:
-                                                        defCantidadColumnas(
-                                                            constraints
-                                                                .maxWidth),
-                                                    mainAxisSpacing: 10,
-                                                    crossAxisSpacing: 10,
-                                                    childAspectRatio: 1.4),
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  } else if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return loading(context);
-                                  } else if (snapshot.hasError) {
-                                    log('Error: ${snapshot.error}');
-                                    return Container();
-                                  } else {
-                                    log('Error de conexion: ${snapshot.error}');
-                                  }
-                                  for (var element in listCategoriasLocal) {
-                                    print(
-                                        'Lista LOCAL categoria nombre: + ${element.nombre}');
-                                    print(
-                                        'Lista LOCAL categoria url: ${element.urlImagen}');
-                                  }
-                                  log('Usando cache local');
-                                  return Container();
-                                }),
                               ),
                             ],
                           ),
+                        ),
+                        FutureBuilder<List<Categoria>>(
+                          future: listaCategoriasOnline,
+                          builder: ((context, snapshot) {
+                            int i = 0;
+                            List<Widget> temp = [];
+
+                            log('Estado de conexion connctionState:$snapshot.connectionState');
+
+                            if (snapshot.connectionState ==
+                                    ConnectionState.done &&
+                                snapshot.data!.length > 0) {
+                              log('Cargando lista Online');
+                              _guardarlistaLocal(snapshot.data);
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16, 16, 16, 0),
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    log(constraints.maxWidth.toString());
+                                    return GridView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder: (context, index) {
+                                        var temp = itemCategoria(
+                                            context,
+                                            snapshot.data![index].nombre,
+                                            snapshot
+                                                .data![index].urlImagen,
+                                            constraints.maxWidth,
+                                            listCategoriasLocal[index]
+                                                .descripcion!,selectMode);
+                                        return temp;
+                                      },
+                                      scrollDirection: Axis.vertical,
+                                      padding: EdgeInsets.zero,
+                                      gridDelegate:
+                                          // ignore: prefer_const_constructors
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount:
+                                                  defCantidadColumnas(
+                                                      constraints
+                                                          .maxWidth),
+                                              mainAxisSpacing: 10,
+                                              crossAxisSpacing: 10,
+                                              childAspectRatio: 1.4),
+                                    );
+                                  },
+                                ),
+                              );
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return loading(context);
+                            } else if (snapshot.hasError) {
+                              log('Error: ${snapshot.error}');
+                              return Container();
+                            } else {
+                              log('Error de conexion: ${snapshot.error}');
+                            }
+                            for (var element in listCategoriasLocal) {
+                              print(
+                                  'Lista LOCAL categoria nombre: + ${element.nombre}');
+                              print(
+                                  'Lista LOCAL categoria url: ${element.urlImagen}');
+                            }
+                            log('Usando cache local');
+                            return Container();
+                          }),
                         ),
                       ],
                     ),

@@ -217,127 +217,50 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
               ],
               body: Builder(
                 builder: (context) {
-                  return SafeArea(
-                    child: GestureDetector(
-                      onTap: () => FocusScope.of(context).unfocus(),
-                      child: Stack(
-                        children: [
-                          SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            16, 0, 16, 0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Expanded(
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(0, 12, 0, 0),
-                                                child: TextFormField(
-                                                  controller: textController,
-                                                  onChanged: (_) =>
-                                                      EasyDebounce.debounce(
-                                                    'textController',
-                                                    Duration(
-                                                        milliseconds: 2000),
-                                                    () => setState(() {}),
-                                                  ),
-                                                  obscureText: false,
-                                                  decoration: InputDecoration(
-                                                    labelText:
-                                                        'Buscar activo...',
-                                                    labelStyle: FlutterFlowTheme
-                                                            .of(context)
-                                                        .bodyText2
-                                                        .override(
-                                                          fontFamily: 'Poppins',
-                                                          color:
-                                                              Color(0xFF57636C),
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          useGoogleFonts: GoogleFonts
-                                                                  .asMap()
-                                                              .containsKey(
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyText2Family),
-                                                        ),
-                                                    enabledBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
-                                                        width: 1,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                    ),
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
-                                                        width: 1,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                    ),
-                                                    errorBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color:
-                                                            Color(0x00000000),
-                                                        width: 1,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                    ),
-                                                    focusedErrorBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color:
-                                                            Color(0x00000000),
-                                                        width: 1,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                    ),
-                                                    filled: true,
-                                                    fillColor: FlutterFlowTheme
-                                                            .of(context)
-                                                        .secondaryBackground,
-                                                    prefixIcon: Icon(
-                                                      Icons.search_rounded,
-                                                      color: Color(0xFF57636C),
-                                                    ),
-                                                  ),
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyText1
+                  return GestureDetector(
+                    onTap: () => FocusScope.of(context).unfocus(),
+                    child: Stack(
+                      children: [
+                        SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          16, 0, 16, 0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 12, 0, 0),
+                                              child: TextFormField(
+                                                controller: textController,
+                                                onChanged: (_) =>
+                                                    EasyDebounce.debounce(
+                                                  'textController',
+                                                  Duration(
+                                                      milliseconds: 2000),
+                                                  () => setState(() {}),
+                                                ),
+                                                obscureText: false,
+                                                decoration: InputDecoration(
+                                                  labelText:
+                                                      'Buscar activo...',
+                                                  labelStyle: FlutterFlowTheme
+                                                          .of(context)
+                                                      .bodyText2
                                                       .override(
                                                         fontFamily: 'Poppins',
                                                         color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
+                                                            Color(0xFF57636C),
                                                         fontSize: 18,
                                                         fontWeight:
                                                             FontWeight.normal,
@@ -346,121 +269,196 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                             .containsKey(
                                                                 FlutterFlowTheme.of(
                                                                         context)
-                                                                    .bodyText1Family),
+                                                                    .bodyText2Family),
                                                       ),
-                                                  maxLines: null,
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText,
+                                                      width: 1,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText,
+                                                      width: 1,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                  ),
+                                                  errorBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color:
+                                                          Color(0x00000000),
+                                                      width: 1,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                  ),
+                                                  focusedErrorBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                      color:
+                                                          Color(0x00000000),
+                                                      width: 1,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                  ),
+                                                  filled: true,
+                                                  fillColor: FlutterFlowTheme
+                                                          .of(context)
+                                                      .secondaryBackground,
+                                                  prefixIcon: Icon(
+                                                    Icons.search_rounded,
+                                                    color: Color(0xFF57636C),
+                                                  ),
                                                 ),
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyText1
+                                                    .override(
+                                                      fontFamily: 'Poppins',
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      useGoogleFonts: GoogleFonts
+                                                              .asMap()
+                                                          .containsKey(
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyText1Family),
+                                                    ),
+                                                maxLines: null,
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 12, 0, 44),
-                                        child: StreamBuilder(
-                                            stream: activoController
-                                                .getActivoStream(
-                                                    nombreCategoria),
-                                            builder: (context,
-                                                AsyncSnapshot<
-                                                        List<
-                                                            Map<String,
-                                                                dynamic>>>
-                                                    snapshot) {
-                                              if (!snapshot.hasData ||
-                                                  snapshot.hasError ||
-                                                  snapshot.data!.isEmpty)
-                                                return Container();
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 12, 0, 44),
+                                      child: StreamBuilder(
+                                          stream: activoController
+                                              .getActivoStream(
+                                                  nombreCategoria),
+                                          builder: (context,
+                                              AsyncSnapshot<
+                                                      List<
+                                                          Map<String,
+                                                              dynamic>>>
+                                                  snapshot) {
+                                            if (!snapshot.hasData ||
+                                                snapshot.hasError ||
+                                                snapshot.data!.isEmpty)
+                                              return Container();
 
-                                              listaActivos.clear();
-                                              snapshot.data!.forEach((data) {
-                                                listaActivos
-                                                    .add(Activo.fromMap(data));
-                                                log('Añadiendo activo: ${Activo.fromMap(data).nombre}');
-                                                Text(Activo.fromMap(data)
-                                                    .nombre
-                                                    .toString());
-                                              });
+                                            listaActivos.clear();
+                                            snapshot.data!.forEach((data) {
+                                              listaActivos
+                                                  .add(Activo.fromMap(data));
+                                              log('Añadiendo activo: ${Activo.fromMap(data).nombre}');
+                                              Text(Activo.fromMap(data)
+                                                  .nombre
+                                                  .toString());
+                                            });
 
-                                              return Wrap(
-                                                spacing: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.05,
-                                                runSpacing: 10,
-                                                alignment: WrapAlignment.start,
-                                                crossAxisAlignment:
-                                                    WrapCrossAlignment.start,
-                                                direction: Axis.horizontal,
-                                                runAlignment:
-                                                    WrapAlignment.start,
-                                                verticalDirection:
-                                                    VerticalDirection.down,
-                                                clipBehavior: Clip.none,
-                                                children: List.generate(
-                                                    snapshot.data!.length,
-                                                    (index) {
-                                                  return GestureDetector(
-                                                    onTap: () {
-                                                      if(selectMode){
-                                                        context.replaceNamed(
-                                                        'activoPerfilPage',
-                                                        queryParams: {
-                                                          'idActivo':
-                                                              serializeParam(
-                                                            Activo.fromMap(
-                                                                    snapshot.data![
-                                                                        index])
-                                                                .idSerial,
-                                                            ParamType.String,
-                                                          ),
-                                                          'selectMode':
-                                                              serializeParam(
-                                                            selectMode,
-                                                            ParamType.bool,
-                                                          ),
-                                                        },
-                                                      );
-                                                      }else{
-                                                        context.pushNamed(
-                                                        'activoPerfilPage',
-                                                        queryParams: {
-                                                          'idActivo':
-                                                              serializeParam(
-                                                            Activo.fromMap(
-                                                                    snapshot.data![
-                                                                        index])
-                                                                .idSerial,
-                                                            ParamType.String,
-                                                          ),
-                                                          'selectMode':
-                                                              serializeParam(
-                                                            selectMode,
-                                                            ParamType.bool,
-                                                          ),
-                                                        },
-                                                      );
-                                                      }
-                                                      
-                                                    },
-                                                    child: tarjetaActivo(
-                                                        context,
-                                                        Activo.fromMap(snapshot
-                                                            .data![index])),
-                                                  );
-                                                }),
-                                              );
-                                            }),
-                                      ),
-                                    ],
-                                  ),
+                                            return Wrap(
+                                              spacing: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.03,
+                                              runSpacing: 15,
+                                              alignment: WrapAlignment.start,
+                                              crossAxisAlignment:
+                                                  WrapCrossAlignment.start,
+                                              direction: Axis.horizontal,
+                                              runAlignment:
+                                                  WrapAlignment.start,
+                                              verticalDirection:
+                                                  VerticalDirection.down,
+                                              clipBehavior: Clip.none,
+                                              children: List.generate(
+                                                  snapshot.data!.length,
+                                                  (index) {
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    if(selectMode){
+                                                      context.replaceNamed(
+                                                      'activoPerfilPage',
+                                                      queryParams: {
+                                                        'idActivo':
+                                                            serializeParam(
+                                                          Activo.fromMap(
+                                                                  snapshot.data![
+                                                                      index])
+                                                              .idSerial,
+                                                          ParamType.String,
+                                                        ),
+                                                        'selectMode':
+                                                            serializeParam(
+                                                          selectMode,
+                                                          ParamType.bool,
+                                                        ),
+                                                      },
+                                                    );
+                                                    }else{
+                                                      context.pushNamed(
+                                                      'activoPerfilPage',
+                                                      queryParams: {
+                                                        'idActivo':
+                                                            serializeParam(
+                                                          Activo.fromMap(
+                                                                  snapshot.data![
+                                                                      index])
+                                                              .idSerial,
+                                                          ParamType.String,
+                                                        ),
+                                                        'selectMode':
+                                                            serializeParam(
+                                                          selectMode,
+                                                          ParamType.bool,
+                                                        ),
+                                                      },
+                                                    );
+                                                    }
+                                                    
+                                                  },
+                                                  child: tarjetaActivo(
+                                                      context,
+                                                      Activo.fromMap(snapshot
+                                                          .data![index])),
+                                                );
+                                              }),
+                                            );
+                                          }),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   );
                 },
@@ -473,8 +471,8 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
 
 Widget tarjetaActivo(context, Activo activo) {
   return Container(
-    width: 210,
-    height: 215,
+    width: 185,
+    height: 200,
     decoration: BoxDecoration(
       color: FlutterFlowTheme.of(context).secondaryBackground,
       boxShadow: [
@@ -508,6 +506,7 @@ Widget tarjetaActivo(context, Activo activo) {
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(5, 6, 0, 0),
             child: Text(
+              overflow: TextOverflow.ellipsis,
               activo.nombre.toString(),
               style: FlutterFlowTheme.of(context).subtitle1,
             ),
