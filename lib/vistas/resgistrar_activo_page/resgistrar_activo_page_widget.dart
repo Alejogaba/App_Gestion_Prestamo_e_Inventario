@@ -142,6 +142,10 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
         : EdgeInsetsDirectional.fromSTEB(80, 10, 80, 10);
 
+    dynamic anchoColumnaWrap = (MediaQuery.of(context).size.width < anchominimo)
+        ? MediaQuery.of(context).size.width * 0.9
+        : MediaQuery.of(context).size.width * 0.4;
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -186,11 +190,11 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                 if (imagenUrl != 'error') {
                   res = await registrarActivo(
                       activoController, context, imagenUrl);
-                  
+
                   if (res == 'ok') {
                     setState(() {
-                    blur = false;
-                  });
+                      blur = false;
+                    });
                     Timer(Duration(seconds: 3), () {
                       context.pop();
                     });
@@ -204,14 +208,13 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                 ActivoController activoController = ActivoController();
                 String res = '';
                 if (imagenUrl != 'error') {
-                  res = await registrarActivo(
-                      activoController, context, 'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png'
-                );
-                  
+                  res = await registrarActivo(activoController, context,
+                      'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png');
+
                   if (res == 'ok') {
                     setState(() {
-                    blur = false;
-                  });
+                      blur = false;
+                    });
                     Timer(Duration(seconds: 3), () {
                       context.pop();
                     });
@@ -311,7 +314,9 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
               margin: (MediaQuery.of(context).size.width < anchominimo)
                   ? EdgeInsets.fromLTRB(0, 15, 0, 0)
                   : EdgeInsets.all(10),
-              height: (Platform.isAndroid || Platform.isIOS) ? null : 1000,
+              height: (MediaQuery.of(context).size.width < anchominimo)
+                  ? null
+                  : 1000,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -499,7 +504,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                 children: [
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 10, 0, 0),
+                                        0, 10, 20, 0),
                                     child: Text(
                                       'Seleccione una imagen del activo',
                                       style:
@@ -507,10 +512,10 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                     ),
                                   ),
                                   Container(
-                                    width: (Platform.isAndroid ||
-                                            Platform.isIOS)
+                                    width: (MediaQuery.of(context).size.width <
+                                            anchominimo)
                                         ? MediaQuery.of(context).size.width *
-                                            0.8
+                                            0.9
                                         : MediaQuery.of(context).size.width *
                                             0.2,
                                     child: Center(
@@ -577,12 +582,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                               Column(
                                 children: [
                                   Container(
-                                    width: (Platform.isAndroid ||
-                                            Platform.isIOS)
-                                        ? MediaQuery.of(context).size.width *
-                                            0.9
-                                        : MediaQuery.of(context).size.width *
-                                            0.6,
+                                    width: anchoColumnaWrap,
                                     child: Align(
                                       alignment: AlignmentDirectional(0.05, 0),
                                       child: Padding(
@@ -603,12 +603,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                     ),
                                   ),
                                   Container(
-                                    width: (Platform.isAndroid ||
-                                            Platform.isIOS)
-                                        ? MediaQuery.of(context).size.width *
-                                            0.9
-                                        : MediaQuery.of(context).size.width *
-                                            0.6,
+                                    width: anchoColumnaWrap,
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 12, 0, 0),
@@ -708,12 +703,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                     ),
                                   ),
                                   Container(
-                                    width: (Platform.isAndroid ||
-                                            Platform.isIOS)
-                                        ? MediaQuery.of(context).size.width *
-                                            0.9
-                                        : MediaQuery.of(context).size.width *
-                                            0.6,
+                                    width: anchoColumnaWrap,
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 12, 0, 0),
@@ -1106,6 +1096,9 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
       print('Lista categoria nombre: + ${element.nombre}');
       print('Lista categoria url: ${element.urlImagen}');
     }
+    if(listCategorias!= null && listCategorias.length>0){
+      listCategorias.removeWhere((item) => item.nombre == 'Todos los activos');
+    }
     return Future.value(listCategorias);
   }
 
@@ -1256,7 +1249,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
 }
 
 EdgeInsetsGeometry defTamanoAncho(screenSize) {
-  if (screenSize > 440 && screenSize < 640) {
+  if (screenSize < 640) {
     return EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0);
   } else {
     return EdgeInsetsDirectional.fromSTEB(50, 50, 50, 50);

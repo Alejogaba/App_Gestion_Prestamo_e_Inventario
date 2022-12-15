@@ -280,489 +280,545 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-      floatingActionButton: myFloatingButton(selectMode: selectMode,idActivo: activo.idSerial,contextPadre: context).animateOnPageLoad(
-       animationsMap['floatingActionButtonOnPageLoadAnimation']!),
-      body: GestureDetector(
-        onTap: () => {FocusScope.of(context).unfocus()},
-        child: Stack(
-          children: [
-            Stack(
-              children: [
-                GestureDetector(
-                  onTap: () => setState(() {
-                    blur = false;
-                  }),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Align(
-                                alignment: AlignmentDirectional(0, 0),
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      20, 15, 0, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 24, 0),
-                                        child: Container(
-                                          width: 40,
-                                          height: 40,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBackground,
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            border: Border.all(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              width: 1,
+    return SafeArea(
+     left: false,
+     right:false,
+     bottom: false,
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+        floatingActionButton: myFloatingButton(selectMode: selectMode,idActivo: activo.idSerial,contextPadre: context).animateOnPageLoad(
+         animationsMap['floatingActionButtonOnPageLoadAnimation']!),
+        body: GestureDetector(
+          onTap: () => {FocusScope.of(context).unfocus()},
+          child: Stack(
+            children: [
+              Stack(
+                children: [
+                  GestureDetector(
+                    onTap: () => setState(() {
+                      blur = false;
+                    }),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Align(
+                                  alignment: AlignmentDirectional(0, 0),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        20, 15, 0, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(
+                                              0, 0, 24, 0),
+                                          child: Container(
+                                            width: 40,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              color: FlutterFlowTheme.of(context)
+                                                  .primaryBackground,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                width: 1,
+                                              ),
                                             ),
-                                          ),
-                                          child: FlutterFlowIconButton(
-                                            borderColor: Colors.transparent,
-                                            borderRadius: 30,
-                                            buttonSize: 46,
-                                            fillColor: Color(0x00F1F4F8),
-                                            icon: Icon(
-                                              Icons.delete_outlined,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
-                                              size: 20,
+                                            child: FlutterFlowIconButton(
+                                              borderColor: Colors.transparent,
+                                              borderRadius: 30,
+                                              buttonSize: 46,
+                                              fillColor: Color(0x00F1F4F8),
+                                              icon: Icon(
+                                                Icons.delete_outlined,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                size: 20,
+                                              ),
+                                              onPressed: () async {
+                                                setState(() {
+                                                  blur = true;
+                                                });
+                                              },
                                             ),
-                                            onPressed: () async {
-                                              setState(() {
-                                                blur = true;
-                                              });
-                                            },
                                           ),
                                         ),
-                                      ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 0, 24, 0),
-                                            child: Container(
-                                              width: 40,
-                                              height: 40,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                border: Border.all(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryText,
-                                                  width: 1,
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  EdgeInsetsDirectional.fromSTEB(
+                                                      0, 0, 24, 0),
+                                              child: Container(
+                                                width: 40,
+                                                height: 40,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      FlutterFlowTheme.of(context)
+                                                          .primaryBackground,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  border: Border.all(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryText,
+                                                    width: 1,
+                                                  ),
                                                 ),
-                                              ),
-                                              child: FlutterFlowIconButton(
-                                                borderColor: Colors.transparent,
-                                                borderRadius: 30,
-                                                buttonSize: 46,
-                                                fillColor: Color(0x00F1F4F8),
-                                                icon: Icon(
-                                                  Icons.edit,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  size: 16,
+                                                child: FlutterFlowIconButton(
+                                                  borderColor: Colors.transparent,
+                                                  borderRadius: 30,
+                                                  buttonSize: 46,
+                                                  fillColor: Color(0x00F1F4F8),
+                                                  icon: Icon(
+                                                    Icons.edit,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    size: 16,
+                                                  ),
+                                                  onPressed: () async {},
                                                 ),
-                                                onPressed: () async {},
                                               ),
                                             ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 0, 24, 0),
-                                            child: Container(
-                                              width: 40,
-                                              height: 40,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                border: Border.all(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryText,
-                                                  width: 1,
+                                            Padding(
+                                              padding:
+                                                  EdgeInsetsDirectional.fromSTEB(
+                                                      0, 0, 24, 0),
+                                              child: Container(
+                                                width: 40,
+                                                height: 40,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      FlutterFlowTheme.of(context)
+                                                          .primaryBackground,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  border: Border.all(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryText,
+                                                    width: 1,
+                                                  ),
+                                                ),
+                                                child: FlutterFlowIconButton(
+                                                  borderColor: Colors.transparent,
+                                                  borderRadius: 30,
+                                                  buttonSize: 46,
+                                                  icon: Icon(
+                                                    Icons.close_rounded,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    size: 20,
+                                                  ),
+                                                  onPressed: () {
+                                                    context.pop();
+                                                  },
                                                 ),
                                               ),
-                                              child: FlutterFlowIconButton(
-                                                borderColor: Colors.transparent,
-                                                borderRadius: 30,
-                                                buttonSize: 46,
-                                                icon: Icon(
-                                                  Icons.close_rounded,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  size: 20,
-                                                ),
-                                                onPressed: () {
-                                                  context.pop();
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: MediaQuery.of(context).size.width *
+                                            0.9,
+                                        height: 320,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFFDBE2E7),
+                                          borderRadius: BorderRadius.circular(16),
+                                        ),
+                                        child: Stack(
+                                          children: [
+                                            Align(
+                                              alignment:
+                                                  AlignmentDirectional(0, 0),
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  await Navigator.push(
+                                                    context,
+                                                    PageTransition(
+                                                      type:
+                                                          PageTransitionType.fade,
+                                                      child:
+                                                          FlutterFlowExpandedImageView(
+                                                        image: CachedNetworkImage(
+                                                          imageUrl:
+                                                              activo.urlImagen,
+                                                          fit: BoxFit.contain,
+                                                        ),
+                                                        allowRotation: false,
+                                                        tag: 'mainImage',
+                                                        useHeroAnimation: true,
+                                                      ),
+                                                    ),
+                                                  );
                                                 },
+                                                child: Hero(
+                                                  tag: 'mainImage',
+                                                  transitionOnUserGestures: true,
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(16),
+                                                    child: CachedNetworkImage(
+                                                      imageUrl: activo.urlImagen,
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.9,
-                                      height: 320,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFFDBE2E7),
-                                        borderRadius: BorderRadius.circular(16),
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          Align(
-                                            alignment:
-                                                AlignmentDirectional(0, 0),
-                                            child: InkWell(
-                                              onTap: () async {
-                                                await Navigator.push(
-                                                  context,
-                                                  PageTransition(
-                                                    type:
-                                                        PageTransitionType.fade,
-                                                    child:
-                                                        FlutterFlowExpandedImageView(
-                                                      image: CachedNetworkImage(
-                                                        imageUrl:
-                                                            activo.urlImagen,
-                                                        fit: BoxFit.contain,
-                                                      ),
-                                                      allowRotation: false,
-                                                      tag: 'mainImage',
-                                                      useHeroAnimation: true,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              child: Hero(
-                                                tag: 'mainImage',
-                                                transitionOnUserGestures: true,
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(16),
-                                                  child: CachedNetworkImage(
-                                                    imageUrl: activo.urlImagen,
-                                                    width: double.infinity,
-                                                    height: double.infinity,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    24, 12, 24, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        activo.nombre,
-                                        style: FlutterFlowTheme.of(context)
-                                            .title1
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              useGoogleFonts:
-                                                  GoogleFonts.asMap()
-                                                      .containsKey(
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .title1Family),
-                                            ),
-                                      ).animateOnPageLoad(animationsMap[
-                                          'textOnPageLoadAnimation1']!),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    24, 10, 24, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          2, 0, 0, 0),
-                                      child: FaIcon(
-                                        FontAwesomeIcons.barcode,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        size: 24,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          8, 0, 0, 0),
-                                      child: Text(
-                                        'S/N: ${activo.idSerial}',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText2
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              color: Color(0xFF8B97A2),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal,
-                                              useGoogleFonts:
-                                                  GoogleFonts.asMap()
-                                                      .containsKey(
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyText2Family),
-                                            ),
-                                      ),
-                                    ),
-                                  ],
-                                ).animateOnPageLoad(
-                                    animationsMap['rowOnPageLoadAnimation1']!),
-                              ),
-                              (activo.numActivo != null)
-                                  ? Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          24, 8, 24, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          FaIcon(
-                                            FontAwesomeIcons.boxOpen,
-                                            color: Color(0xFFAD8762),
-                                            size: 24,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    8, 0, 0, 0),
-                                            child: Text(
-                                              (activo.numActivo == null ||
-                                                      activo.numActivo!.isEmpty)
-                                                  ? 'Nro inventario: No disponible'
-                                                  : 'Nro inventario: ${activo.numActivo!}',
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyText2
-                                                  .override(
-                                                    fontFamily: 'Lexend Deca',
-                                                    color: Color(0xFF8B97A2),
-                                                    fontSize: 14,
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                    useGoogleFonts: GoogleFonts
-                                                            .asMap()
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 12, 24, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          activo.nombre,
+                                          style: FlutterFlowTheme.of(context)
+                                              .title1
+                                              .override(
+                                                fontFamily: 'Poppins',
+                                                useGoogleFonts:
+                                                    GoogleFonts.asMap()
                                                         .containsKey(
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyText2Family),
-                                                  ),
-                                            ),
-                                          ),
-                                        ],
-                                      ).animateOnPageLoad(animationsMap[
-                                          'rowOnPageLoadAnimation2']!),
-                                    )
-                                  : Row(),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    24, 12, 24, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Text(
-                                      'DETALLES',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText2
-                                          .override(
-                                            fontFamily: 'Lexend Deca',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyText2Family),
-                                          ),
-                                    ),
-                                  ],
-                                ).animateOnPageLoad(
-                                    animationsMap['rowOnPageLoadAnimation3']!),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    24, 4, 24, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
+                                                                .title1Family),
+                                              ),
+                                        ).animateOnPageLoad(animationsMap[
+                                            'textOnPageLoadAnimation1']!),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 10, 24, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 0, 24),
+                                            2, 0, 0, 0),
+                                        child: FaIcon(
+                                          FontAwesomeIcons.barcode,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                          size: 24,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            8, 0, 0, 0),
                                         child: Text(
-                                          (activo.detalles != null)
-                                              ? activo.detalles!
-                                              : 'Sin detalles...',
+                                          'S/N: ${activo.idSerial}',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText2
                                               .override(
                                                 fontFamily: 'Poppins',
                                                 color: Color(0xFF8B97A2),
-                                                fontSize: 16,
+                                                fontSize: 14,
                                                 fontWeight: FontWeight.normal,
-                                                useGoogleFonts: GoogleFonts
-                                                        .asMap()
-                                                    .containsKey(
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyText2Family),
+                                                useGoogleFonts:
+                                                    GoogleFonts.asMap()
+                                                        .containsKey(
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyText2Family),
                                               ),
-                                        ).animateOnPageLoad(animationsMap[
-                                            'textOnPageLoadAnimation2']!),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ).animateOnPageLoad(
+                                      animationsMap['rowOnPageLoadAnimation1']!),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    24, 0, 24, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Text(
-                                      'CATEGORIA: ',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText2
-                                          .override(
-                                            fontFamily: 'Poppins',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyText2Family),
-                                          ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          2, 0, 0, 0),
-                                      child: Text(
-                                        activo.categoria,
+                                (activo.numActivo != null)
+                                    ? Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            24, 8, 24, 0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            FaIcon(
+                                              FontAwesomeIcons.boxOpen,
+                                              color: Color(0xFFAD8762),
+                                              size: 24,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  EdgeInsetsDirectional.fromSTEB(
+                                                      8, 0, 0, 0),
+                                              child: Text(
+                                                (activo.numActivo == null ||
+                                                        activo.numActivo!.isEmpty)
+                                                    ? 'Nro inventario: No disponible'
+                                                    : 'Nro inventario: ${activo.numActivo!}',
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyText2
+                                                    .override(
+                                                      fontFamily: 'Lexend Deca',
+                                                      color: Color(0xFF8B97A2),
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      useGoogleFonts: GoogleFonts
+                                                              .asMap()
+                                                          .containsKey(
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyText2Family),
+                                                    ),
+                                              ),
+                                            ),
+                                          ],
+                                        ).animateOnPageLoad(animationsMap[
+                                            'rowOnPageLoadAnimation2']!),
+                                      )
+                                    : Row(),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 12, 24, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Text(
+                                        'DETALLES',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText2
                                             .override(
                                               fontFamily: 'Lexend Deca',
-                                              color: Color(0xFF8B97A2),
+                                              color: FlutterFlowTheme.of(context)
+                                                  .primaryText,
                                               fontSize: 16,
-                                              fontWeight: FontWeight.normal,
-                                              useGoogleFonts:
-                                                  GoogleFonts.asMap()
+                                              fontWeight: FontWeight.bold,
+                                              useGoogleFonts: GoogleFonts.asMap()
+                                                  .containsKey(
+                                                      FlutterFlowTheme.of(context)
+                                                          .bodyText2Family),
+                                            ),
+                                      ),
+                                    ],
+                                  ).animateOnPageLoad(
+                                      animationsMap['rowOnPageLoadAnimation3']!),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 4, 24, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(
+                                              0, 0, 0, 24),
+                                          child: Text(
+                                            (activo.detalles != null)
+                                                ? activo.detalles!
+                                                : 'Sin detalles...',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText2
+                                                .override(
+                                                  fontFamily: 'Poppins',
+                                                  color: Color(0xFF8B97A2),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.normal,
+                                                  useGoogleFonts: GoogleFonts
+                                                          .asMap()
                                                       .containsKey(
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .bodyText2Family),
-                                            ),
+                                                ),
+                                          ).animateOnPageLoad(animationsMap[
+                                              'textOnPageLoadAnimation2']!),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ).animateOnPageLoad(
-                                    animationsMap['rowOnPageLoadAnimation4']!),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    24, 16, 24, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 0, 0, 1),
-                                      child: Text(
-                                        'ESTADO: ',
-                                        textAlign: TextAlign.center,
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Text(
+                                        'CATEGORIA: ',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText2
                                             .override(
                                               fontFamily: 'Poppins',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryText,
+                                              color: FlutterFlowTheme.of(context)
+                                                  .primaryText,
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
-                                              useGoogleFonts:
-                                                  GoogleFonts.asMap()
+                                              useGoogleFonts: GoogleFonts.asMap()
+                                                  .containsKey(
+                                                      FlutterFlowTheme.of(context)
+                                                          .bodyText2Family),
+                                            ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            2, 0, 0, 0),
+                                        child: Text(
+                                          activo.categoria,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText2
+                                              .override(
+                                                fontFamily: 'Lexend Deca',
+                                                color: Color(0xFF8B97A2),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.normal,
+                                                useGoogleFonts:
+                                                    GoogleFonts.asMap()
+                                                        .containsKey(
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyText2Family),
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                  ).animateOnPageLoad(
+                                      animationsMap['rowOnPageLoadAnimation4']!),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 16, 24, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 0, 1),
+                                        child: Text(
+                                          'ESTADO: ',
+                                          textAlign: TextAlign.center,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText2
+                                              .override(
+                                                fontFamily: 'Poppins',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                useGoogleFonts:
+                                                    GoogleFonts.asMap()
+                                                        .containsKey(
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyText2Family),
+                                              ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            4, 0, 0, 2.4),
+                                        child: FaIcon(
+                                          FontAwesomeIcons.solidCircle,
+                                          color:
+                                              definirColorEstado(activo.estado),
+                                          size: 10,
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: AlignmentDirectional(0, 0),
+                                        child: Padding(
+                                          padding: EdgeInsetsDirectional.fromSTEB(
+                                              2, 0, 0, 3),
+                                          child: Text(
+                                            definirEstadoActivo(activo.estado),
+                                            textAlign: TextAlign.center,
+                                            maxLines: 2,
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText2
+                                                .override(
+                                                  fontFamily: 'Poppins',
+                                                  color: Color(0xFF8B97A2),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.normal,
+                                                  useGoogleFonts: GoogleFonts
+                                                          .asMap()
                                                       .containsKey(
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .bodyText2Family),
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ).animateOnPageLoad(
+                                      animationsMap['rowOnPageLoadAnimation5']!),
+                                ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 16, 24, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'UNIDADES DISPONIBLES:',
+                                        textAlign: TextAlign.center,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText2
+                                            .override(
+                                              fontFamily: 'Lexend Deca',
+                                              color: FlutterFlowTheme.of(context)
+                                                  .primaryText,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              useGoogleFonts: GoogleFonts.asMap()
+                                                  .containsKey(
+                                                      FlutterFlowTheme.of(context)
+                                                          .bodyText2Family),
                                             ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          4, 0, 0, 2.4),
-                                      child: FaIcon(
-                                        FontAwesomeIcons.solidCircle,
-                                        color:
-                                            definirColorEstado(activo.estado),
-                                        size: 10,
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: AlignmentDirectional(0, 0),
-                                      child: Padding(
+                                      Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            2, 0, 0, 3),
+                                            6, 0, 0, 0),
                                         child: Text(
-                                          definirEstadoActivo(activo.estado),
+                                          activo.cantidad.toString(),
                                           textAlign: TextAlign.center,
                                           maxLines: 2,
                                           style: FlutterFlowTheme.of(context)
@@ -770,122 +826,71 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                               .override(
                                                 fontFamily: 'Poppins',
                                                 color: Color(0xFF8B97A2),
-                                                fontSize: 16,
+                                                fontSize: 20,
                                                 fontWeight: FontWeight.normal,
-                                                useGoogleFonts: GoogleFonts
-                                                        .asMap()
-                                                    .containsKey(
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyText2Family),
+                                                useGoogleFonts:
+                                                    GoogleFonts.asMap()
+                                                        .containsKey(
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyText2Family),
                                               ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ).animateOnPageLoad(
-                                    animationsMap['rowOnPageLoadAnimation5']!),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    24, 16, 24, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'UNIDADES DISPONIBLES:',
-                                      textAlign: TextAlign.center,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText2
-                                          .override(
-                                            fontFamily: 'Lexend Deca',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyText2Family),
-                                          ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          6, 0, 0, 0),
-                                      child: Text(
-                                        activo.cantidad.toString(),
-                                        textAlign: TextAlign.center,
-                                        maxLines: 2,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText2
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              color: Color(0xFF8B97A2),
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.normal,
-                                              useGoogleFonts:
-                                                  GoogleFonts.asMap()
-                                                      .containsKey(
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyText2Family),
-                                            ),
-                                      ),
-                                    ),
-                                  ],
-                                ).animateOnPageLoad(
-                                    animationsMap['rowOnPageLoadAnimation6']!),
-                              ),
-                              //TituloListafFuncionariosAsignados(animationsMap: animationsMap),
-                              //ListaFuncionariosAsignados(animationsMap: animationsMap),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 60, 0, 0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [],
+                                    ],
+                                  ).animateOnPageLoad(
+                                      animationsMap['rowOnPageLoadAnimation6']!),
                                 ),
-                              ),
-                            ],
+                                //TituloListafFuncionariosAsignados(animationsMap: animationsMap),
+                                //ListaFuncionariosAsignados(animationsMap: animationsMap),
+                                Padding(
+                                  padding:
+                                      EdgeInsetsDirectional.fromSTEB(0, 60, 0, 0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-            if (blur)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(0),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: 4,
-                    sigmaY: 4,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    // ignore: prefer_const_literals_to_create_immutables
-                    children: [
-                      Align(
-                        alignment: AlignmentDirectional(0, 0),
-
-                        child: _cajaAdvertencia(
-                          context,
-                          '¿Esta seguro que desea eliminar este activo?',
-                          'activo',
-                          activo.idSerial.toString(),
-                        ),
-                        //. animateOnActionTrigger(animationsMap['cajaAdvertenciaOnActionTriggerAnimation']!,hasBeenTriggered: true),
-                      ),
-                    ],
-                  ),
-                ),
+                ],
               ),
-          ],
+              if (blur)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(0),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: 4,
+                      sigmaY: 4,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        Align(
+                          alignment: AlignmentDirectional(0, 0),
+    
+                          child: _cajaAdvertencia(
+                            context,
+                            '¿Esta seguro que desea eliminar este activo?',
+                            'activo',
+                            activo.idSerial.toString(),
+                          ),
+                          //. animateOnActionTrigger(animationsMap['cajaAdvertenciaOnActionTriggerAnimation']!,hasBeenTriggered: true),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

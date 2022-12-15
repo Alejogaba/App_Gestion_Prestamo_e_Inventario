@@ -4,11 +4,13 @@ import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/flutter_flow/flutter_flow_util.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:open_filex/open_filex.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:open_filex/open_filex.dart' as OpenFile;
 
 class PdfApi {
   static Future<void> generarTablaActivo(List<Activo> listaActivo) async {
@@ -28,8 +30,8 @@ class PdfApi {
     ));
 
     if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
-      saveDocumentDesktop(name: 'reporte', pdf: pdf);
-    }else{
+      saveDocumentDesktop(name: 'reporte de activos.pdf', pdf: pdf);
+    } else {
       saveDocumentMobile(name: 'Reporte de activos.pdf', pdf: pdf);
     }
   }
@@ -55,17 +57,23 @@ class PdfApi {
   }
 
   static Widget buildTableActivo(List<Activo> listaActivo) {
-    final headers = ['Marca','Activo', 'Número de serial','Número de activo','Estado'];
+    final headers = [
+      'Marca',
+      'Activo',
+      'Número de serial',
+      'Número de activo',
+      'Estado'
+    ];
 
     final data = listaActivo
         .map((activo) => [
-          activo.detalles,
+              activo.detalles,
               activo.nombre,
               activo.idSerial,
               (activo.numActivo!.isEmpty || activo.numActivo == null)
                   ? 'No registrado'
                   : activo.numActivo,
-                  definirEstadoActivo(activo.estado)  
+              definirEstadoActivo(activo.estado)
             ])
         .toList();
 
@@ -98,7 +106,6 @@ class PdfApi {
         ],
       );
 
-   
   static Future<void> saveDocumentMobile({
     required String name,
     required Document pdf,
@@ -106,22 +113,23 @@ class PdfApi {
     final bytes = await pdf.save();
 
     final dir = await getExternalStorageDirectory();
-    final file = File('${dir!.path}/$name');
+    final File file = File('${dir!.path}/$name');
 
     await file.writeAsBytes(bytes);
 
     final Uri uri = Uri.file(file.path);
 
-      if (!File(uri.toFilePath()).existsSync()) {
-        throw '$uri does not exist!';
-      }
-      if (!await launchUrl(uri)) {
-        throw 'Could not launch $uri';
-      }
+    if (!File(uri.toFilePath()).existsSync()) {
+      log('abrir archivo 1');
     }
-  
+    //if (!await launchUrl(uri)) {
+    //  log('abrir archivo 2');}
+    final result = await OpenFile.OpenFilex.open(file.path);
+    var _openResult = 'Desconocido';
+    _openResult = "type=${result.type}  message=${result.message}";
+    log('Resultado OpenResult: $_openResult');
+  }
 
-  
   static Future<void> saveDocumentDesktop({
     String? name,
     Document? pdf,
@@ -182,21 +190,19 @@ class PdfApi {
 
 */
 
+  static String definirEstadoActivo(int? estado) {
+    switch (estado) {
+      case 0:
+        return 'Bueno';
 
+      case 1:
+        return 'Regular';
 
-static String definirEstadoActivo(int? estado) {
-  switch (estado) {
-    case 0:
-      return 'Bueno';
+      case 2:
+        return 'Malo';
 
-    case 1:
-      return 'Regular';
-
-    case 2:
-      return 'Malo';
-
-    default:
-      return 'No definido';
+      default:
+        return 'No definido';
+    }
   }
-}
 }

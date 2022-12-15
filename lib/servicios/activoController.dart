@@ -42,7 +42,6 @@ class ActivoController {
         'NOMBRE_CATEGORIA': utilidades.mayusculaTodasPrimerasLetras(categoria),
         'CANTIDAD': cantidad,
         'CAPACIDAD': capacidad,
-        'FECHA_CREADO': fechaCreado,
       }).then((value) => log('Nueva activo registrado: $value'));
       log("Registrado con exito");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
