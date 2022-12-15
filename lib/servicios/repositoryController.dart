@@ -31,7 +31,7 @@ class RepositoryController {
       final data = (await supabase
               .from('versiones')
               .select()
-              .match({'es_ultima_version': true}).order('fecha',ascending: false).maybeSingle())
+              .order('fecha',ascending: false).maybeSingle())
           as Map<String, dynamic>?;
       if (data == null) {
         return activoVacio;
