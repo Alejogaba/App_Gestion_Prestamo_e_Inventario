@@ -501,7 +501,8 @@ class _RegistrarCategoriaPageWidgetState
   }
 
   Future captureImageFromCamera() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera,
+    imageQuality: 90);
     setState(() {
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
