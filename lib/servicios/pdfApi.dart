@@ -13,13 +13,19 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:open_filex/open_filex.dart' as OpenFile;
 
 class PdfApi {
-  static Future<void> generarTablaActivo(List<Activo> listaActivo) async {
+  static Future<void> generarTablaActivo(List<Activo> listaActivo,
+      {String tipoActivo = ''}) async {
     final pdf = Document();
+    if (!(tipoActivo.contains('Todos')) && tipoActivo.isNotEmpty) {
+      tipoActivo = ' - $tipoActivo';
+    } else {
+      tipoActivo = '';
+    }
 
     pdf.addPage(MultiPage(
       build: (context) => [
         SizedBox(height: 0.1 * PdfPageFormat.cm),
-        buildTitle("Reporte de activos", 24, FontWeight.bold),
+        buildTitle("Reporte de activos$tipoActivo", 24, FontWeight.bold),
         buildTitle(
             "Fecha y hora en que se genero este reporte: " +
                 DateFormat.yMd().add_jm().format(DateTime.now()),

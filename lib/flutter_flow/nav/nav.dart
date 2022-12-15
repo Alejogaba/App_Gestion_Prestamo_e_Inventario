@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_gestion_prestamo_inventario/vistas/ajustes_page/actualizar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
@@ -84,6 +85,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => params.isEmpty
                   ? NavBarPage(initialPage: 'AjustesPage')
                   : AjustesPageWidget(),
+            ),
+            FFRoute(
+              name: 'ActualizarPage',
+              path: 'actualizarPage',
+             builder: (context, params) => ActualizarPageWidget(),
             ),
             FFRoute(
               name: 'ListaFuncionariosPage',

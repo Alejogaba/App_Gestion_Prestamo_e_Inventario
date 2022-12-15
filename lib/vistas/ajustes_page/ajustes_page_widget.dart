@@ -405,7 +405,9 @@ class _AjustesPageWidgetState extends State<AjustesPageWidget>
               children: [
                 FFButtonWidget(
                   onPressed: () {
-                    print('Button pressed ...');
+                   context.pushNamed(
+                        'actualizarPage',
+                      );
                   },
                   text: 'Cerrar Sesión',
                   options: FFButtonOptions(

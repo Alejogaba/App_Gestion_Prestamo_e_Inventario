@@ -124,8 +124,8 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       //'ListaPrestamosPage': ListaPrestamosPageWidget(),
       'principal': PrincipalWidget(),
-      //'AjustesPage': AjustesPageWidget(),
       'ListaFuncionariosPage': ListaFuncionariosPageWidget(),
+      'AjustesPage': AjustesPageWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
     return Scaffold(
@@ -184,31 +184,31 @@ class _NavBarPageState extends State<NavBarPage> {
                 ],
               ),
             ),
-            /*FloatingNavbarItem(
-              customWidget: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    currentIndex == 2
-                        ? FontAwesomeIcons.cog
-                        : FontAwesomeIcons.cog,
-                    color: currentIndex == 2
-                        ? FlutterFlowTheme.of(context).tertiaryColor
-                        : FlutterFlowTheme.of(context).secondaryText,
-                    size: 30,
-                  ),
-                ],
-              ),
-            ),*/
             FloatingNavbarItem(
               customWidget: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
                     currentIndex == 3
+                        ? FontAwesomeIcons.gear
+                        : FontAwesomeIcons.gear,
+                    color: currentIndex == 3
+                        ? FlutterFlowTheme.of(context).tertiaryColor
+                        : FlutterFlowTheme.of(context).secondaryText,
+                    size: 30,
+                  ),
+                ],
+              ),
+            ),
+            FloatingNavbarItem(
+              customWidget: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    currentIndex == 2
                         ? FontAwesomeIcons.userTie
                         : FontAwesomeIcons.userTie,
-                    color: currentIndex == 3
+                    color: currentIndex == 2
                         ? FlutterFlowTheme.of(context).tertiaryColor
                         : FlutterFlowTheme.of(context).secondaryText,
                     size: 30,

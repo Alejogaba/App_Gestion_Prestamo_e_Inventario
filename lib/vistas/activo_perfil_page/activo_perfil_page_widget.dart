@@ -630,7 +630,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Text(
-                                        'DETALLES',
+                                        'MARCA',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText2
                                             .override(

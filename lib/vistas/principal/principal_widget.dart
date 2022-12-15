@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:app_gestion_prestamo_inventario/entidades/version.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
+import 'package:app_gestion_prestamo_inventario/servicios/repositoryController.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +22,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class PrincipalWidget extends StatefulWidget {
   final bool selectMode;
@@ -39,6 +42,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   CategoriaController categoriaController = CategoriaController();
   List<Categoria> listCategoriasLocal = [];
   String busquedaCategoria = '';
+  Version version = Version('', '', false);
   late final listaCategoriasOnline = cargarCategorias();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final prefs = SharedPreferences.getInstance();
@@ -50,6 +54,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   @override
   void initState() {
     super.initState();
+    validarVersion();
     textControllerBusqueda = TextEditingController();
     _cargarlistaLocal();
   }
@@ -118,7 +123,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                   if (value != null && value.length > 4) {
                     ActivoController activoController = ActivoController();
                     var res = await activoController.buscarActivo(value);
-                    if (res.idSerial.isEmpty) {
+                    if (res.idSerial.length < 4) {
                       // ignore: use_build_context_synchronously
                       context.pushNamed(
                         'registraractivopage',
@@ -137,7 +142,11 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                           'idActivo': serializeParam(
                             res.idSerial,
                             ParamType.String,
-                          )
+                          ),
+                          'selectMode': serializeParam(
+                            false,
+                            ParamType.bool,
+                          ),
                         },
                       );
                     }
@@ -776,4 +785,27 @@ Widget _loading(context) {
       ],
     ),
   );
+}
+
+void validarVersion() async {
+  Version nulo = Version('', '', false);
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  RepositoryController repositoryController = RepositoryController();
+
+  Version ultima_version_servidor = await repositoryController.buscarVersion();
+  String version_local = packageInfo.version;
+  String buildNumber = packageInfo.buildNumber;
+  log('Version local: $version_local');
+  log('Version servidor: ${ultima_version_servidor.version}');
+  log('BuildNumber: $buildNumber');
+
+  if (ultima_version_servidor.version != '') {
+    if (ultima_version_servidor.version == '$version_local+$buildNumber') {
+      log('El sistema esta actualizado');
+    } else {
+      log('Hay una acualizacion disponible');
+    }
+  } else {
+    log('No se pudo determinar la version');
+  }
 }

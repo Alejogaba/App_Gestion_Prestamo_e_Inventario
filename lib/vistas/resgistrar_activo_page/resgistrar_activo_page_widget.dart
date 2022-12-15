@@ -485,8 +485,30 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                       _focusNodeNombre),
                                 ),
                               ),
+                              Container(
+                                    width: anchoColumnaWrap,
+                                    child: Align(
+                                      alignment: AlignmentDirectional(0.05, 0),
+                                      child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 30, 0, 0),
+                                          child: TextFormFieldCustom(
+                                              context,
+                                              textControllerDetalles,
+                                              'Ej.HP',
+                                              'Marca',
+                                              150,
+                                              TextInputType.multiline,
+                                              null,
+                                              true,
+                                              null,
+                                              _focusNodeDetalles)),
+                                    ),
+                                  ),
                             ],
                           ),
+                          
                         ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
@@ -581,27 +603,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                               ),
                               Column(
                                 children: [
-                                  Container(
-                                    width: anchoColumnaWrap,
-                                    child: Align(
-                                      alignment: AlignmentDirectional(0.05, 0),
-                                      child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 30, 0, 0),
-                                          child: TextFormFieldCustom(
-                                              context,
-                                              textControllerDetalles,
-                                              'Ej.Impresora LaserJet MP203 marca HP',
-                                              'Detalles',
-                                              150,
-                                              TextInputType.multiline,
-                                              null,
-                                              false,
-                                              null,
-                                              _focusNodeDetalles)),
-                                    ),
-                                  ),
+                                  
                                   Container(
                                     width: anchoColumnaWrap,
                                     child: Padding(

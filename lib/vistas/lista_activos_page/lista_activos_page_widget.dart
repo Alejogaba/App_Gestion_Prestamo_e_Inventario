@@ -104,7 +104,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                   if (value != null) {
                     ActivoController activoController = ActivoController();
                     var res = await activoController.buscarActivo(value);
-                    if (res.idSerial.isEmpty) {
+                     if (res.idSerial.length < 4) {
                       // ignore: use_build_context_synchronously
                       context.pushNamed(
                         'registraractivopage',
@@ -123,7 +123,11 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                           'idActivo': serializeParam(
                             res.idSerial,
                             ParamType.String,
-                          )
+                          ),
+                          'selectMode': serializeParam(
+                            false,
+                            ParamType.bool,
+                          ),
                         },
                       );
                     }
@@ -202,7 +206,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                   size: 30,
                 ),
                 onPressed: () async {
-                  await PdfApi.generarTablaActivo(listaActivos);
+                  await PdfApi.generarTablaActivo(listaActivos,tipoActivo: nombreCategoria);
                 },
               ),
             ],
