@@ -68,6 +68,8 @@ dependencies:
   package_info_plus: ^3.0.2
 
   image_compression: ^1.0.3
+  adaptive_dialog: ^1.8.0+1
+  logger: ^1.1.0
   
 
 

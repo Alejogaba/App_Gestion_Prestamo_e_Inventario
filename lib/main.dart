@@ -189,10 +189,10 @@ class _NavBarPageState extends State<NavBarPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    currentIndex == 3
-                        ? FontAwesomeIcons.gear
-                        : FontAwesomeIcons.gear,
-                    color: currentIndex == 3
+                    currentIndex == 2
+                        ? FontAwesomeIcons.userTie
+                        : FontAwesomeIcons.userTie,
+                    color: currentIndex == 2
                         ? FlutterFlowTheme.of(context).tertiaryColor
                         : FlutterFlowTheme.of(context).secondaryText,
                     size: 30,
@@ -205,17 +205,17 @@ class _NavBarPageState extends State<NavBarPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    currentIndex == 2
-                        ? FontAwesomeIcons.userTie
-                        : FontAwesomeIcons.userTie,
-                    color: currentIndex == 2
+                    currentIndex == 3
+                        ? FontAwesomeIcons.gear
+                        : FontAwesomeIcons.gear,
+                    color: currentIndex == 3
                         ? FlutterFlowTheme.of(context).tertiaryColor
                         : FlutterFlowTheme.of(context).secondaryText,
                     size: 30,
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

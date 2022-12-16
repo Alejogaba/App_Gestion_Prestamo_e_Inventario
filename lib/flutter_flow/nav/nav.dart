@@ -89,7 +89,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'ActualizarPage',
               path: 'actualizarPage',
-             builder: (context, params) => ActualizarPageWidget(),
+             builder: (context, params) => ActualizarPageWidget(url: params.getParam('url', ParamType.String)),
             ),
             FFRoute(
               name: 'ListaFuncionariosPage',

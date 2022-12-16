@@ -1,15 +1,20 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:app_gestion_prestamo_inventario/flutter_flow/flutter_flow_theme.dart';
+import 'package:app_gestion_prestamo_inventario/flutter_flow/nav/nav.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:update_app/bean/download_process.dart';
 
 import 'package:update_app/update_app.dart';
 
-
 class ActualizarPageWidget extends StatefulWidget {
+  final String url;
+  const ActualizarPageWidget({Key? key, required this.url}) : super(key: key);
   @override
-  _ActualizarPageWidgetState createState() => _ActualizarPageWidgetState();
+  _ActualizarPageWidgetState createState() =>
+      _ActualizarPageWidgetState(this.url);
 }
 
 class _ActualizarPageWidgetState extends State<ActualizarPageWidget> {
@@ -21,18 +26,26 @@ class _ActualizarPageWidgetState extends State<ActualizarPageWidget> {
 
   //下载状态
   String downloadStatus = "";
+  String url;
+
+  _ActualizarPageWidgetState(this.url);
 
   @override
   void initState() {
     super.initState();
+    //download(context, url);
   }
 
   @override
-  Widget build(BuildContext? context) {
+  Widget build(BuildContext context1) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Update app'),
+          title: const Text(
+            'Actualizar aplicacion',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Theme.of(context1).primaryColor,
         ),
         body: Center(
           child: Column(
@@ -43,12 +56,12 @@ class _ActualizarPageWidgetState extends State<ActualizarPageWidget> {
                 width: 200,
                 height: 200,
                 child: CircularProgressIndicator(
+                  color: FlutterFlowTheme.of(context1).primaryColor,
                   value: downloadProcess,
                   strokeWidth: 10,
                 ),
               ),
-              Text("Download status: $downloadStatus"),
-              Text("Please replace the download url with your own address"),
+              Text("Estado de descarga: $downloadStatus"),
             ],
           ),
         ),
@@ -57,21 +70,13 @@ class _ActualizarPageWidgetState extends State<ActualizarPageWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  'click right bottom download button download!',
-                  style: TextStyle(color: Theme.of(context!).primaryColor),
-                ),
-                Text('Adapt to Android 6.0'),
-                Text('Adapt to Android 7.0'),
-                Text('Adapt to Android 8.0'),
-                Text('Adapt to Android 9.0'),
-                Text('Adapt to Android 10.0'),
-                Text('Adapt to Android 10.0'),
-                Text('Add download progress monitoring'),
+                Text('Descargando...'),
               ],
             )),
         floatingActionButton: FloatingActionButton(
-          onPressed: download,
+          onPressed: () {
+            download(context1, url);
+          },
           child: Icon(Icons.file_download),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -85,11 +90,8 @@ class _ActualizarPageWidgetState extends State<ActualizarPageWidget> {
     super.dispose();
   }
 
-  void download() async {
-    var downloadId = await UpdateApp.updateApp(
-        url:
-            "https://github.com/Alejogaba/App_Gestion_Prestamo_e_Inventario/releases/download/App-release/app-release.apk",
-        appleId: "375380948");
+  void download(BuildContext context1, String url) async {
+    var downloadId = await UpdateApp.updateApp(url: url, appleId: "375380948");
 
     //本地已有一样的apk, 下载成功
     if (downloadId == 0) {
@@ -110,7 +112,7 @@ class _ActualizarPageWidgetState extends State<ActualizarPageWidget> {
     }
 
     //正在下载文件
-    timer = Timer.periodic(Duration(milliseconds: 100), (timer) async {
+    timer = Timer.periodic(Duration(milliseconds: 50), (timer) async {
       var process = await UpdateApp.downloadProcess(downloadId: downloadId);
       //更新界面状态
       setState(() {
@@ -122,6 +124,10 @@ class _ActualizarPageWidgetState extends State<ActualizarPageWidget> {
           process.status == ProcessState.STATUS_FAILED) {
         //如果已经下载成功, 取消计时
         timer.cancel();
+        if (process.status == ProcessState.STATUS_SUCCESSFUL) {
+          // ignore: use_build_context_synchronously
+          context.pop();
+        }
       }
     });
   }

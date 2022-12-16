@@ -46,6 +46,9 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      
+    });
     textControllerBusqueda = TextEditingController();
     log('CATEGORIA DE LA LISTA:$nombreCategoria');
   }
@@ -130,7 +133,11 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                           ),
                         },
                       );
+                      
                     }
+                    setState(() {
+                        
+                      });
                   }
                 });
               },
@@ -406,6 +413,9 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                   },
                                                 );
                                               }
+                                              setState(() {
+                                                
+                                              });
                                             },
                                             child: tarjetaActivo(
                                                 context, snapshot.data![index]),

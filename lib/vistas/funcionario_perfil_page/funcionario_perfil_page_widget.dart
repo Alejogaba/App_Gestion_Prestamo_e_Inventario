@@ -1826,7 +1826,10 @@ class _FuncionarioPerfilPageWidgetState
                     onPressed: () {
                       FuncionariosController funcionarioController =
                           FuncionariosController();
-                      funcionarioController.eliminarFuncionario(context, id);
+                      var res = funcionarioController.eliminarFuncionario(context, id);
+                      if(res =='ok'){
+                        context.pop();
+                      }
                     },
                     text: 'Sí, deseo eliminar a este funcionario',
                     options: FFButtonOptions(

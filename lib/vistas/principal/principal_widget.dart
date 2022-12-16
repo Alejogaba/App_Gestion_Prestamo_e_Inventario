@@ -23,6 +23,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:logger/logger.dart';
 
 class PrincipalWidget extends StatefulWidget {
   final bool selectMode;
@@ -37,6 +39,9 @@ class PrincipalWidget extends StatefulWidget {
 }
 
 class _PrincipalWidgetState extends State<PrincipalWidget> {
+  var logger = Logger(
+    printer: PrettyPrinter(),
+  );
   TextEditingController? textControllerBusqueda;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   CategoriaController categoriaController = CategoriaController();
@@ -54,7 +59,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   @override
   void initState() {
     super.initState();
-    validarVersion();
+    validarVersion(context, logger);
     textControllerBusqueda = TextEditingController();
     _cargarlistaLocal();
   }
@@ -787,7 +792,7 @@ Widget _loading(context) {
   );
 }
 
-void validarVersion() async {
+void validarVersion(BuildContext context, Logger logger) async {
   Version nulo = Version('', '', false);
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   RepositoryController repositoryController = RepositoryController();
@@ -807,5 +812,24 @@ void validarVersion() async {
     }
   } else {
     log('No se pudo determinar la version');
+  }
+  final result = await showOkAlertDialog(
+      context: context,
+      title: 'Actualización disponible',
+      message: 'Hay una nueva versión disponible',
+      okLabel: 'Actualizar',
+      style: AdaptiveStyle.iOS);
+  logger.i(result.name.toString());
+  if (result.name.toString() == 'ok') {
+    // ignore: use_build_context_synchronously
+    context.pushNamed(
+      'actualizarPage',
+      queryParams: {
+        'url': serializeParam(
+          ultima_version_servidor.urlAndroid,
+          ParamType.String,
+        ),
+      },
+    );
   }
 }

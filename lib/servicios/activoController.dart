@@ -229,7 +229,7 @@ class ActivoController {
       log('Eliminando:$data');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          'errorTraducido',
+          'Eliminado con exitó',
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,
@@ -237,7 +237,7 @@ class ActivoController {
                     .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
               ),
         ),
-        backgroundColor: Colors.redAccent,
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
       ));
       return 'ok';
     } on Exception catch (error) {
