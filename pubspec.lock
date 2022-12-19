@@ -113,6 +113,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
+  colombia_holidays:
+    dependency: "direct main"
+    description:
+      name: colombia_holidays
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.2"
   convert:
     dependency: transitive
     description:
@@ -315,13 +322,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  go_router:
+  go_router_flow:
     dependency: "direct main"
     description:
-      name: go_router
+      name: go_router_flow
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.4"
+    version: "5.2.0+1"
   google_fonts:
     dependency: "direct main"
     description:
@@ -831,6 +838,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.2"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.3.61"
+  syncfusion_flutter_datepicker:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_datepicker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "20.3.61"
   synchronized:
     dependency: transitive
     description:

@@ -1,3 +1,5 @@
+import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
+
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -20,6 +22,7 @@ class ListaPrestamosPageWidget extends StatefulWidget {
 class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
   TextEditingController? textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  List<Activo> listActivos = [];
 
   @override
   void initState() {

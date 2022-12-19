@@ -19,7 +19,7 @@ export 'dart:math' show min, max;
 export 'dart:convert' show jsonEncode, jsonDecode;
 export 'package:intl/intl.dart';
 export 'package:page_transition/page_transition.dart';
-export 'custom_icons.dart' show FFIcons;
+export 'custom_icons.dart' show CustomIcons;
 export 'nav/nav.dart';
 
 T valueOrDefault<T>(T? value, T defaultValue) =>
@@ -142,7 +142,7 @@ dynamic getJsonField(
   String jsonPath, [
   bool isForList = false,
 ]) {
- /* final field = JsonPath(jsonPath).read(response);
+  /* final field = JsonPath(jsonPath).read(response);
   if (field.isEmpty) {
     return null;
   }

@@ -89,7 +89,7 @@ class ActivoController {
     try {
       await supabase.from('FUNCIONARIOS_ACTIVOS').insert({
         'ID_FUNCIONARIO': idFuncionario,
-        'ID_ACTIVO': idActivo,
+        'ID_SERIAL': idActivo,
       }).then((value) async {
         log('Nuevo activo asignado: $value');
         await supabase
@@ -275,12 +275,14 @@ class ActivoController {
     }
   }
 
+  
+
   Future<String> quitarActivoFuncionario(context, String idActivo) async {
     try {
       final data = (await supabase
           .from('FUNCIONARIOS_ACTIVOS')
           .delete()
-          .match({ 'ID_ACTIVO': idActivo}).then((value) async{
+          .match({ 'ID_SERIAL': idActivo}).then((value) async{
              await supabase
             .from('ACTIVOS')
             .update({'ESTA_ASIGNADO': false}).match({'ID_SERIAL': idActivo});
@@ -288,7 +290,7 @@ class ActivoController {
       log('Eliminando:$data');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          'Se ha quitado con exitó',
+          'Se ha quitado el activo',
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,

@@ -5,7 +5,9 @@ import 'package:app_gestion_prestamo_inventario/entidades/activo_funcionario.dar
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/area.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/funcionario.dart';
+import 'package:app_gestion_prestamo_inventario/entidades/prestamo.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
@@ -16,10 +18,84 @@ import 'package:supabase/supabase.dart';
 import '../../assets/constantes.dart' as constantes;
 import '../flutter_flow/flutter_flow_theme.dart';
 
-class FuncionariosController {
+class PrestamosController {
   Utilidades utilidades = Utilidades();
   final supabase =
       SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
+
+  Future<String> registrarPrestamo(
+    context,
+    String idActivo,
+    String idFuncionario,
+    DateTime fechaHoraInicio,{
+      bool entregado=false,
+      String? observacion,
+      DateTime? fechaHoraFinal
+    }
+  ) async {
+    try {
+      await supabase.from('PRESTAMOS').insert({
+        'ID_FUNCIONARIO': idFuncionario,
+        'ID_ACTIVO': idActivo,
+        'FECHA_HORA_INICIO': fechaHoraInicio.toString(),
+        'ENTREGADO': entregado,
+        'OBSERVACION': (observacion==null) ? null: 
+        utilidades.mayusculaPrimeraLetraFrase(observacion),
+        'FECHA_HORA_FINAL': (fechaHoraFinal==null) ? null : fechaHoraFinal.toString(),
+      }).then((value) async {
+        log('Nuevo activo prestado: $value');
+        await supabase
+            .from('ACTIVOS')
+            .update({'ESTA_PRESTADO': true}).match({'ID_SERIAL': idActivo});
+      });
+      log("Prestado con exito");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "Prestamo registrado con exitó",
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+      ));
+      return 'ok';
+    } on Exception catch (error) {
+      StorageController storageController = StorageController();
+      var errorTraducido = await storageController.traducir(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          errorTraducido,
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      log(error.toString());
+      return 'error';
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Ha ocurrido un error',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      log(e.toString());
+      return 'error';
+    }
+  }
 
   Future<String> addFuncionario(
       {context,
@@ -194,13 +270,14 @@ class FuncionariosController {
     }
   }
 
-  Future<List<ActivoFuncionario>> getActivosAsignados(String cedula) async {
+  Future<List<Prestamo>> getActivosPrestados(String cedula) async {
     try {
       final data = await supabase
-          .from('FUNCIONARIOS_ACTIVOS')
-          .select('*').eq('ID_FUNCIONARIO', cedula) as List<dynamic>;
+          .from('PRESTAMOS')
+          .select('*')
+          .eq('ID_FUNCIONARIO', cedula) as List<dynamic>;
       Logger().d('Datos funcionarios activos: $data');
-      return (data).map((e) => ActivoFuncionario.fromMap(e)).toList();
+      return (data).map((e) => Prestamo.fromMap(e)).toList();
     } on PostgrestException catch (error) {
       Logger().e(error.message);
       return [];

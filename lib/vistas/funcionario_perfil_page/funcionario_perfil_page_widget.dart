@@ -1,14 +1,20 @@
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:app_gestion_prestamo_inventario/entidades/activo_funcionario.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/funcionario.dart';
+import 'package:app_gestion_prestamo_inventario/entidades/prestamo.dart';
+import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/funcionariosController.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../entidades/activo.dart';
 import '../../entidades/area.dart';
 import '../../flutter_flow/flutter_flow_widgets.dart';
 import '../../flutter_flow/nav/serialization_util.dart';
+import '../../servicios/prestamosController.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -66,15 +72,19 @@ class _FuncionarioPerfilPageWidgetState
     ),
   };
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
   Funcionario funcionario;
   Area area;
   bool blur = false;
+  ActivoController activoController = ActivoController();
 
   _FuncionarioPerfilPageWidgetState(this.funcionario, this.area);
 
   @override
   void initState() {
     super.initState();
+    Logger().i('FUNCIONARIO TIENE ACTIVOS: ${funcionario.tieneActivos}');
+    cargarActivosAsignados(funcionario.cedula);
   }
 
   @override
@@ -86,23 +96,24 @@ class _FuncionarioPerfilPageWidgetState
         onPressed: () async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setString('id_funcionario', funcionario.cedula);
+          Logger().i('Antes del push');
           // ignore: use_build_context_synchronously
           context.pushNamed(
-            'principal',
+            'listaActivosPage',
             queryParams: {
+              'nombreCategoria': serializeParam(
+                'Todos los activos',
+                ParamType.String,
+              ),
               'selectMode': serializeParam(
                 true,
                 ParamType.bool,
               ),
             }.withoutNulls,
-            extra: <String, dynamic>{
-              kTransitionInfoKey: const TransitionInfo(
-                hasTransition: true,
-                transitionType: PageTransitionType.bottomToTop,
-                duration: Duration(milliseconds: 1000),
-              ),
-            },
           );
+          dynamic result;
+          GoRouter.of(context).addListener(result);
+          Logger().i('Despues del push');
         },
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         icon: Icon(
@@ -207,10 +218,7 @@ class _FuncionarioPerfilPageWidgetState
                                                                 .primaryText,
                                                         size: 22,
                                                       ),
-                                                      onPressed: () {
-                                                        print(
-                                                            'IconButton pressed ...');
-                                                      },
+                                                      onPressed: () {},
                                                     ),
                                                   ),
                                                 ),
@@ -335,8 +343,7 @@ class _FuncionarioPerfilPageWidgetState
                                                               size: 20,
                                                             ),
                                                             onPressed: () {
-                                                              print(
-                                                                  'IconButton pressed ...');
+                                                              context.pop();
                                                             },
                                                           ),
                                                         ),
@@ -760,16 +767,16 @@ class _FuncionarioPerfilPageWidgetState
                                                                     ),
                                                                     onPressed:
                                                                         () async {
-                                                                  await launchUrl(Uri(
-                                                                      scheme: 'mailto',
-                                                                      path: funcionario.correo,
-                                                                      query: {
-                                                                        'subject':
-                                                                            'Asunto',
-                                                                        'body':
-                                                                            ' ',
-                                                                      }.entries.map((MapEntry<String, String> e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}').join('&')));
-                                                                },
+                                                                      await launchUrl(Uri(
+                                                                          scheme: 'mailto',
+                                                                          path: funcionario.correo,
+                                                                          query: {
+                                                                            'subject':
+                                                                                'Asunto',
+                                                                            'body':
+                                                                                ' ',
+                                                                          }.entries.map((MapEntry<String, String> e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}').join('&')));
+                                                                    },
                                                                   ),
                                                                 ),
                                                               ),
@@ -967,13 +974,13 @@ class _FuncionarioPerfilPageWidgetState
                                                               .primaryText,
                                                           size: 22,
                                                         ),
-                                                        onPressed: ()  async{
-                                                      await launchUrl(Uri(
-                                                        scheme: 'tel',
-                                                        path: funcionario
-                                                            .telefono1,
-                                                      ));
-                                                    },
+                                                        onPressed: () async {
+                                                          await launchUrl(Uri(
+                                                            scheme: 'tel',
+                                                            path: funcionario
+                                                                .telefono1,
+                                                          ));
+                                                        },
                                                       ),
                                                     ),
                                                   ),
@@ -1181,13 +1188,13 @@ class _FuncionarioPerfilPageWidgetState
                                                                 .primaryText,
                                                             size: 22,
                                                           ),
-                                                          onPressed: ()  async {
-                                                        await launchUrl(Uri(
-                                                          scheme: 'tel',
-                                                          path: funcionario
-                                                              .telefono2,
-                                                        ));
-                                                      },
+                                                          onPressed: () async {
+                                                            await launchUrl(Uri(
+                                                              scheme: 'tel',
+                                                              path: funcionario
+                                                                  .telefono2,
+                                                            ));
+                                                          },
                                                         ),
                                                       ),
                                                     ),
@@ -1203,220 +1210,230 @@ class _FuncionarioPerfilPageWidgetState
                                 ],
                               ),
                             (funcionario.enlaceSIGEP != null &&
-                                funcionario.enlaceSIGEP!.isNotEmpty) ?
-                              Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Row(
+                                    funcionario.enlaceSIGEP!.isNotEmpty)
+                                ? Column(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    24, 12, 0, 8),
+                                            child: Text(
+                                              'ENLACE AL SIGEP',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText2
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
+                                                        fontSize: 12,
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText2Family),
+                                                      ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            24, 12, 0, 8),
-                                        child: Text(
-                                          'ENLACE AL SIGEP',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText2
-                                              .override(
-                                                fontFamily: 'Poppins',
+                                            20, 4, 20, 0),
+                                        child: InkWell(
+                                          onTap: () async {
+                                            await launchURL(
+                                                funcionario.enlaceSIGEP!);
+                                          },
+                                          onLongPress: () async {
+                                            HapticFeedback.mediumImpact();
+                                            await actions.copyToClipboard(
+                                                context,
+                                                funcionario.enlaceSIGEP);
+                                          },
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryBackground,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 2,
+                                                  color: Color(0x3E000000),
+                                                  offset: Offset(0, 1),
+                                                )
+                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
                                                 color:
                                                     FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                fontSize: 12,
-                                                useGoogleFonts: GoogleFonts
-                                                        .asMap()
-                                                    .containsKey(
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyText2Family),
+                                                        .secondaryText,
+                                                width: 1,
                                               ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        20, 4, 20, 0),
-                                    child: InkWell(
-                                      onTap: () async {
-                                        await launchURL(
-                                            funcionario.enlaceSIGEP!);
-                                      },
-                                      onLongPress: () async {
-                                        HapticFeedback.mediumImpact();
-                                        await actions.copyToClipboard(
-                                            context, funcionario.enlaceSIGEP);
-                                      },
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBackground,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              blurRadius: 2,
-                                              color: Color(0x3E000000),
-                                              offset: Offset(0, 1),
-                                            )
-                                          ],
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          border: Border.all(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                            width: 1,
-                                          ),
-                                        ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 8, 0, 8),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                12, 0, 12, 0),
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsetsDirectional
-                                                                  .fromSTEB(0,
-                                                                      0, 8, 0),
-                                                          child: Card(
-                                                            clipBehavior: Clip
-                                                                .antiAliasWithSaveLayer,
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .secondaryText,
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          8),
-                                                            ),
-                                                            child: Padding(
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 8, 0, 8),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(12, 0,
+                                                                    12, 0),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          children: [
+                                                            Padding(
                                                               padding:
                                                                   EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0,
+                                                                          0,
+                                                                          8,
+                                                                          0),
+                                                              child: Card(
+                                                                clipBehavior: Clip
+                                                                    .antiAliasWithSaveLayer,
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                shape:
+                                                                    RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8),
+                                                                ),
+                                                                child: Padding(
+                                                                  padding: EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           2,
                                                                           2,
                                                                           2,
                                                                           2),
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8),
-                                                                child:
-                                                                    Image.asset(
-                                                                  'assets/images/sigep.jpg',
-                                                                  width: 86,
-                                                                  height: 50,
-                                                                  fit: BoxFit
-                                                                      .contain,
+                                                                  child:
+                                                                      ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(8),
+                                                                    child: Image
+                                                                        .asset(
+                                                                      'assets/images/sigep.jpg',
+                                                                      width: 86,
+                                                                      height:
+                                                                          50,
+                                                                      fit: BoxFit
+                                                                          .contain,
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          child: Column(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Padding(
-                                                                padding:
-                                                                    EdgeInsetsDirectional
+                                                            Expanded(
+                                                              child: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .max,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0,
                                                                             4,
                                                                             0,
                                                                             0),
-                                                                child: Row(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .max,
-                                                                  children: [
-                                                                    Expanded(
-                                                                      child:
-                                                                          Padding(
-                                                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                                                            0,
-                                                                            0,
-                                                                            4,
-                                                                            0),
-                                                                        child: Text(
-                                                                          funcionario
-                                                                          .enlaceSIGEP!,
-                                                                          textAlign:
-                                                                          TextAlign.justify,
-                                                                          maxLines:
-                                                                          3,
-                                                                          style: FlutterFlowTheme.of(context)
-                                                                          .bodyText2
-                                                                          .override(
-                                                                            fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
-                                                                            color: FlutterFlowTheme.of(context).grayicon,
-                                                                            useGoogleFonts: GoogleFonts.asMap().containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+                                                                    child: Row(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize
+                                                                              .max,
+                                                                      children: [
+                                                                        Expanded(
+                                                                          child:
+                                                                              Padding(
+                                                                            padding: EdgeInsetsDirectional.fromSTEB(
+                                                                                0,
+                                                                                0,
+                                                                                4,
+                                                                                0),
+                                                                            child:
+                                                                                Text(
+                                                                              funcionario.enlaceSIGEP!,
+                                                                              textAlign: TextAlign.justify,
+                                                                              maxLines: 3,
+                                                                              style: FlutterFlowTheme.of(context).bodyText2.override(
+                                                                                    fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                                                                                    color: FlutterFlowTheme.of(context).grayicon,
+                                                                                    useGoogleFonts: GoogleFonts.asMap().containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+                                                                                  ),
+                                                                            ),
                                                                           ),
                                                                         ),
-                                                                      ),
+                                                                      ],
                                                                     ),
-                                                                  ],
-                                                                ),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          children: [
-                                                            Icon(
-                                                              Icons
-                                                                  .chevron_right_outlined,
-                                                              color: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .primaryText,
-                                                              size: 24,
+                                                            ),
+                                                            Column(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .max,
+                                                              children: [
+                                                                Icon(
+                                                                  Icons
+                                                                      .chevron_right_outlined,
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                  size: 24,
+                                                                ),
+                                                              ],
                                                             ),
                                                           ],
                                                         ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ).animateOnPageLoad(animationsMap[
+                                            'containerOnPageLoadAnimation1']!),
                                       ),
-                                    ).animateOnPageLoad(animationsMap[
-                                        'containerOnPageLoadAnimation1']!),
-                                  ),
-                                ],
-                              ):Container(),
+                                    ],
+                                  )
+                                : Container(),
                           ],
                         ),
                         Row(
@@ -1447,286 +1464,25 @@ class _FuncionarioPerfilPageWidgetState
                         ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 24),
-                          child: ListView(
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    20, 5, 20, 4),
-                                child: InkWell(
-                                  onTap: () async {
-                                    context.pushNamed(
-                                      'ActivoPerfilPage',
-                                      extra: <String, dynamic>{
-                                        kTransitionInfoKey: TransitionInfo(
-                                          hasTransition: true,
-                                          transitionType:
-                                              PageTransitionType.fade,
-                                          duration:
-                                              Duration(milliseconds: 1000),
-                                        ),
-                                      },
-                                    );
-                                  },
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 88,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 2,
-                                          color: Color(0x3E000000),
-                                          offset: Offset(0, 1),
-                                        )
-                                      ],
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        width: 1,
-                                      ),
-                                    ),
-                                    child: InkWell(
-                                      onTap: () async {
-                                        context.pushNamed(
-                                          'ActivoPerfilPage',
-                                          queryParams: {
-                                            'activoDatos': serializeParam(
-                                              functions.buscarActivoPorID('id'),
-                                              ParamType.String,
-                                            ),
-                                          }.withoutNulls,
-                                          extra: <String, dynamic>{
-                                            kTransitionInfoKey: TransitionInfo(
-                                              hasTransition: true,
-                                              transitionType:
-                                                  PageTransitionType.fade,
-                                              duration:
-                                                  Duration(milliseconds: 1000),
-                                            ),
-                                          },
-                                        );
-                                      },
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    8, 0, 12, 0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 0, 8, 2),
-                                                  child: Card(
-                                                    clipBehavior: Clip
-                                                        .antiAliasWithSaveLayer,
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .whiteColor,
-                                                    elevation: 2,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                    ),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      child: Image.network(
-                                                        'https://fotos.perfil.com/2021/06/25/hennessey-mammoth-1000-trx-asi-es-la-camioneta-mas-picante-y-potente-del-mundo-1195417.jpg',
-                                                        width: 73,
-                                                        height: 70,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        'Nombre',
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .subtitle1
-                                                                .override(
-                                                                  fontFamily: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .subtitle1Family,
-                                                                  fontSize: 15,
-                                                                  useGoogleFonts: GoogleFonts
-                                                                          .asMap()
-                                                                      .containsKey(
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .subtitle1Family),
-                                                                ),
-                                                      ),
-                                                      Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          FaIcon(
-                                                            FontAwesomeIcons
-                                                                .barcode,
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .grayicon,
-                                                            size: 15,
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        3,
-                                                                        1.4,
-                                                                        0,
-                                                                        1),
-                                                            child: Text(
-                                                              'S/N',
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyText2
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        FlutterFlowTheme.of(context)
-                                                                            .bodyText2Family,
-                                                                    fontSize:
-                                                                        13,
-                                                                    useGoogleFonts: GoogleFonts
-                                                                            .asMap()
-                                                                        .containsKey(
-                                                                            FlutterFlowTheme.of(context).bodyText2Family),
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0, 0, 0, 1),
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          children: [
-                                                            FaIcon(
-                                                              FontAwesomeIcons
-                                                                  .solidCircle,
-                                                              color: Color(
-                                                                  0xFF29993A),
-                                                              size: 9,
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          3,
-                                                                          0,
-                                                                          0,
-                                                                          1),
-                                                              child: Text(
-                                                                'Estado',
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyText2
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .bodyText2Family,
-                                                                      fontSize:
-                                                                          13,
-                                                                      useGoogleFonts: GoogleFonts
-                                                                              .asMap()
-                                                                          .containsKey(
-                                                                              FlutterFlowTheme.of(context).bodyText2Family),
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                FlutterFlowIconButton(
-                                                  borderColor:
-                                                      Colors.transparent,
-                                                  borderRadius: 30,
-                                                  buttonSize: 46,
-                                                  icon: Icon(
-                                                    Icons.delete_outline,
-                                                    color: Color(0xFFE62424),
-                                                    size: 24,
-                                                  ),
-                                                  onPressed: () async {
-                                                    var confirmDialogResponse =
-                                                        await showDialog<bool>(
-                                                              context: context,
-                                                              builder:
-                                                                  (alertDialogContext) {
-                                                                return AlertDialog(
-                                                                  title: Text(
-                                                                      'Advertencia'),
-                                                                  content: Text(
-                                                                      '¿Esta completamente seguro que desea quitar este activo?'),
-                                                                  actions: [
-                                                                    TextButton(
-                                                                      onPressed: () => Navigator.pop(
-                                                                          alertDialogContext,
-                                                                          false),
-                                                                      child: Text(
-                                                                          'Cancelar'),
-                                                                    ),
-                                                                    TextButton(
-                                                                      onPressed: () => Navigator.pop(
-                                                                          alertDialogContext,
-                                                                          true),
-                                                                      child: Text(
-                                                                          'Confirmar'),
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              },
-                                                            ) ??
-                                                            false;
-                                                  },
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ).animateOnPageLoad(animationsMap[
-                                    'containerOnPageLoadAnimation2']!),
-                              ),
-                            ],
+                          child: FutureBuilder<List<Activo>>(
+                            future: cargarActivosAsignados(funcionario.cedula),
+                            builder: (BuildContext context, snapshot) {
+                              Logger().i('Estado de conexion: ' +
+                                  snapshot.connectionState.toString());
+                              if (snapshot.connectionState ==
+                                      ConnectionState.done &&
+                                  snapshot.data!.length > 0) {
+                                return _tarjetaActivo(snapshot);
+                              } else {
+                                return Container();
+                              }
+                            },
                           ),
                         ),
+                        Padding(
+                          padding: EdgeInsets.all(30),
+                          child: Container(),
+                        )
                       ],
                     ),
                   ),
@@ -1764,6 +1520,246 @@ class _FuncionarioPerfilPageWidgetState
             ),
         ],
       ),
+    );
+  }
+
+  Widget _tarjetaActivo(snapshot) {
+    return ListView.builder(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      scrollDirection: Axis.vertical,
+      itemCount: snapshot.data!.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(20, 5, 20, 4),
+          child: InkWell(
+            onTap: () async {
+              Logger().w('inkWell onTap');
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: 88,
+              decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).primaryBackground,
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 2,
+                    color: Color(0x3E000000),
+                    offset: Offset(0, 1),
+                  )
+                ],
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: FlutterFlowTheme.of(context).secondaryText,
+                  width: 1,
+                ),
+              ),
+              child: InkWell(
+                onTap: () async {
+                  context.pushNamed(
+                    'activoPerfilPage',
+                    queryParams: {
+                      'idActivo': serializeParam(
+                        snapshot.data![index].idSerial,
+                        ParamType.String,
+                      ),
+                      'selectMode': serializeParam(
+                        false,
+                        ParamType.bool,
+                      ),
+                    }.withoutNulls,
+                  );
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(8, 0, 12, 0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 8, 2),
+                            child: Card(
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              color: FlutterFlowTheme.of(context).whiteColor,
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: FastCachedImage(
+                                  width: 73,
+                                  height: 70,
+                                  url: snapshot.data![index].urlImagen,
+                                  fit: BoxFit.cover,
+                                  fadeInDuration: const Duration(seconds: 1),
+                                  errorBuilder:
+                                      (context, exception, stacktrace) {
+                                    log(stacktrace.toString());
+                                    return Image.asset(
+                                      'assets/images/nodisponible.png',
+                                      width: 73,
+                                      height: 70,
+                                      fit: BoxFit.cover,
+                                    );
+                                  },
+                                  loadingBuilder: (context, progress) {
+                                    return Container(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          if (progress.isDownloading &&
+                                              progress.totalBytes != null)
+                                            Text(
+                                                '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
+                                                style: const TextStyle(
+                                                    color: Color(0xFF006D38))),
+                                          SizedBox(
+                                              width: 65,
+                                              height: 65,
+                                              child: CircularProgressIndicator(
+                                                  color:
+                                                      const Color(0xFF006D38),
+                                                  value: progress
+                                                      .progressPercentage
+                                                      .value)),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  snapshot.data![index].nombre.toString(),
+                                  style: FlutterFlowTheme.of(context)
+                                      .subtitle1
+                                      .override(
+                                        fontFamily: FlutterFlowTheme.of(context)
+                                            .subtitle1Family,
+                                        fontSize: 15,
+                                        useGoogleFonts: GoogleFonts.asMap()
+                                            .containsKey(
+                                                FlutterFlowTheme.of(context)
+                                                    .subtitle1Family),
+                                      ),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    FaIcon(
+                                      FontAwesomeIcons.barcode,
+                                      color:
+                                          FlutterFlowTheme.of(context).grayicon,
+                                      size: 15,
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              3, 1.4, 0, 1),
+                                      child: Text(
+                                        'S/N: ${snapshot.data![index].idSerial}',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText2
+                                            .override(
+                                              fontFamily:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText2Family,
+                                              fontSize: 13,
+                                              useGoogleFonts:
+                                                  GoogleFonts.asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2Family),
+                                            ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 1),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      const FaIcon(
+                                        FontAwesomeIcons.boxOpen,
+                                        color: Color(0xFFAD8762),
+                                        size: 9,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(3, 0, 0, 1),
+                                        child: Text(
+                                          (snapshot.data![index].numActivo!
+                                                  .isEmpty)
+                                              ? 'No registrado'
+                                              : snapshot
+                                                  .data![index].numActivo!,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText2
+                                              .override(
+                                                fontFamily:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText2Family,
+                                                fontSize: 13,
+                                                useGoogleFonts: GoogleFonts
+                                                        .asMap()
+                                                    .containsKey(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyText2Family),
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          FlutterFlowIconButton(
+                            borderColor: Colors.transparent,
+                            borderRadius: 30,
+                            buttonSize: 46,
+                            icon: Icon(
+                              Icons.delete_outline,
+                              color: Color(0xFFE62424),
+                              size: 24,
+                            ),
+                            onPressed: () async {
+                              var res = await activoController
+                                  .quitarActivoFuncionario(
+                                      context, snapshot.data![index].idSerial);
+                              if (res == 'ok') {
+                                setState(() {});
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation2']!),
+        );
+      },
     );
   }
 
@@ -1826,8 +1822,9 @@ class _FuncionarioPerfilPageWidgetState
                     onPressed: () {
                       FuncionariosController funcionarioController =
                           FuncionariosController();
-                      var res = funcionarioController.eliminarFuncionario(context, id);
-                      if(res =='ok'){
+                      var res = funcionarioController.eliminarFuncionario(
+                          context, id);
+                      if (res == 'ok') {
                         context.pop();
                       }
                     },
@@ -1899,4 +1896,33 @@ class _FuncionarioPerfilPageWidgetState
       ),
     );
   }
+}
+
+Future<List<Activo>> cargarActivosAsignados(String cedula) async {
+  List<Activo> listActivosAsignados = [];
+  FuncionariosController funcionariosController = FuncionariosController();
+  ActivoController activoController = ActivoController();
+  List<ActivoFuncionario> listFuncionariosActvos =
+      await funcionariosController.getActivosAsignados(cedula);
+  Logger().i('Cantidad de activos asignados:${listFuncionariosActvos.length}');
+  await Future.forEach(listFuncionariosActvos, (ActivoFuncionario value) async {
+    listActivosAsignados
+        .add(await activoController.buscarActivo(value.idSerial));
+  });
+  return Future.value(listActivosAsignados);
+}
+
+Future<List<Activo>> cargarActivosPrestados(String cedula) async {
+  List<Activo> listActivos = [];
+  PrestamosController prestamosController = PrestamosController();
+  ActivoController activoController = ActivoController();
+  List<Prestamo> listFuncionariosActvos =
+      await prestamosController.getActivosPrestados(cedula);
+  Logger().i('Cantidad de activos asignados:${listFuncionariosActvos.length}');
+  await Future.forEach(listFuncionariosActvos, (Prestamo value) async {
+    listActivos.add(await activoController.buscarActivo(value.idActivo));
+  });
+  Logger().i('Cantidad de activos asignados devueltos:' +
+      listActivos.length.toString());
+  return Future.value(listActivos);
 }

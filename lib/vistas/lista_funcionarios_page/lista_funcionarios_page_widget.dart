@@ -390,6 +390,7 @@ class tarjetaFuncionario extends StatelessWidget {
     Area area = Area(id: 1, nombre: 'Área', urlImagen: '');
     return GestureDetector(
       onTap: () {
+        log('push:${funcionario.tieneActivos}');
         context.pushNamed(
           'funcionarioPerfilPage',
           queryParams: {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,13 +28,17 @@ import 'package:page_transition/page_transition.dart';
 class ActivoPerfilPageWidget extends StatefulWidget {
   final String idActivo;
   final bool selectMode;
+  final bool? esPrestamo;
   const ActivoPerfilPageWidget(
-      {Key? key, required this.idActivo, this.selectMode = false})
+      {Key? key,
+      required this.idActivo,
+      this.selectMode = false,
+      this.esPrestamo})
       : super(key: key);
 
   @override
-  _ActivoPerfilPageWidgetState createState() =>
-      _ActivoPerfilPageWidgetState(this.idActivo, this.selectMode);
+  _ActivoPerfilPageWidgetState createState() => _ActivoPerfilPageWidgetState(
+      this.idActivo, this.selectMode, this.esPrestamo);
 }
 
 class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
@@ -44,7 +50,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
         VisibilityEffect(duration: 1500.ms),
         MoveEffect(
           curve: Curves.easeOut,
-          delay: 1500.ms,
+          delay: 300.ms,
           duration: 2000.ms,
           begin: Offset(0, 1000),
           end: Offset(0, 0),
@@ -263,8 +269,9 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
   bool blur = false;
   ActivoController activoController = ActivoController();
   bool selectMode;
+  bool? esPrestamo;
 
-  _ActivoPerfilPageWidgetState(this.idActivo, this.selectMode);
+  _ActivoPerfilPageWidgetState(this.idActivo, this.selectMode, this.esPrestamo);
 
   @override
   void initState() {
@@ -288,11 +295,13 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         floatingActionButton: myFloatingButton(
-                selectMode: selectMode,
-                idActivo: activo.idSerial,
-                contextPadre: context)
-            .animateOnPageLoad(
-                animationsMap['floatingActionButtonOnPageLoadAnimation']!),
+          selectMode: selectMode,
+          idActivo: activo.idSerial,
+          contextPadre: context,
+          activo: activo,
+          esPrestamo: esPrestamo,
+        ).animateOnPageLoad(
+            animationsMap['floatingActionButtonOnPageLoadAnimation']!),
         body: GestureDetector(
           onTap: () => {FocusScope.of(context).unfocus()},
           child: Stack(
@@ -1075,11 +1084,15 @@ class myFloatingButton extends StatelessWidget {
   final bool selectMode;
   final String idActivo;
   final BuildContext contextPadre;
+  final Activo? activo;
+  final bool? esPrestamo;
   const myFloatingButton(
       {Key? key,
       this.selectMode = false,
       this.idActivo = '',
-      required this.contextPadre})
+      required this.contextPadre,
+      this.activo,
+      this.esPrestamo})
       : super(key: key);
 
   @override
@@ -1087,13 +1100,22 @@ class myFloatingButton extends StatelessWidget {
     return FloatingActionButton.extended(
       onPressed: () async {
         if (selectMode) {
-          String? idFuncionario;
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          idFuncionario = prefs.getString('id_funcionario');
-          ActivoController activoController = ActivoController();
-          String res = await activoController.asignarActivo(
-              context, idFuncionario!, idActivo);
-          if (res.contains('ok')) contextPadre.pop();
+          if (esPrestamo == null) {
+            String? idFuncionario;
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            idFuncionario = prefs.getString('id_funcionario');
+            ActivoController activoController = ActivoController();
+            // ignore: use_build_context_synchronously
+            String res = await activoController.asignarActivo(
+                context, idFuncionario!, idActivo);
+            // ignore: use_build_context_synchronously
+            if (res.contains('ok')) contextPadre.pop();
+          } else {
+            if (esPrestamo!) {
+              log('retornando activo');
+              contextPadre.pop(activo);
+            }
+          }
         }
       },
       backgroundColor: FlutterFlowTheme.of(context).primaryColor,

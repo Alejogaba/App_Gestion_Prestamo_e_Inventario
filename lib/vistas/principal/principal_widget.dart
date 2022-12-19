@@ -456,7 +456,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   Widget tarjetaCategoria(context, Categoria categoria) {
     return Container(
       width: 350,
-      height: 213,
+      height: 216,
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).secondaryBackground,
         boxShadow: [
@@ -523,14 +523,14 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
               child: Text(
                 overflow: TextOverflow.ellipsis,
                 categoria.nombre.toString(),
-                style: FlutterFlowTheme.of(context).subtitle1.override(
-                      fontFamily: 'Poppins',
-                      color: FlutterFlowTheme.of(context).primaryText,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      useGoogleFonts: GoogleFonts.asMap().containsKey(
-                          FlutterFlowTheme.of(context).subtitle1Family),
-                    ),
+                style: FlutterFlowTheme.of(context).title3.override(
+                                fontFamily: 'Poppins',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                    FlutterFlowTheme.of(context).title3Family),
+                              ),
               ),
             ),
             Padding(
@@ -538,13 +538,17 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
               child: Text(
                 overflow: TextOverflow.clip,
                 (categoria.descripcion == null) ? '' : categoria.descripcion!,
-                style: FlutterFlowTheme.of(context).bodyText2.override(
-                      fontSize: 15,
-                      fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
-                      color: FlutterFlowTheme.of(context).grayicon,
-                      useGoogleFonts: GoogleFonts.asMap().containsKey(
-                          FlutterFlowTheme.of(context).bodyText2Family),
-                    ),
+                style:  FlutterFlowTheme.of(context)
+                                .bodyText2
+                                .override(
+                                  fontFamily: 'Poppins',
+                                  color: FlutterFlowTheme.of(context).grayicon,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                  useGoogleFonts: GoogleFonts.asMap()
+                                      .containsKey(FlutterFlowTheme.of(context)
+                                          .bodyText2Family),
+                                ),
               ),
             ),
           ],
@@ -809,11 +813,7 @@ void validarVersion(BuildContext context, Logger logger) async {
       log('El sistema esta actualizado');
     } else {
       log('Hay una acualizacion disponible');
-    }
-  } else {
-    log('No se pudo determinar la version');
-  }
-  final result = await showOkAlertDialog(
+      final result = await showOkAlertDialog(
       context: context,
       title: 'Actualización disponible',
       message: 'Hay una nueva versión disponible',
@@ -822,7 +822,8 @@ void validarVersion(BuildContext context, Logger logger) async {
   logger.i(result.name.toString());
   if (result.name.toString() == 'ok') {
     // ignore: use_build_context_synchronously
-    context.pushNamed(
+    if(Platform.isAndroid){
+      context.pushNamed(
       'actualizarPage',
       queryParams: {
         'url': serializeParam(
@@ -831,5 +832,12 @@ void validarVersion(BuildContext context, Logger logger) async {
         ),
       },
     );
+    }
+    
   }
+    }
+  } else {
+    log('No se pudo determinar la version');
+  }
+  
 }

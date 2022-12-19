@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:app_gestion_prestamo_inventario/vistas/ajustes_page/actualizar.dart';
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
+import 'package:go_router_flow/go_router_flow.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../flutter_flow_theme.dart';
@@ -13,7 +13,7 @@ import '../../main.dart';
 
 import 'serialization_util.dart';
 
-export 'package:go_router/go_router.dart';
+export 'package:go_router_flow/go_router_flow.dart';
 export 'serialization_util.dart';
 
 const kTransitionInfoKey = '__transition_info__';
@@ -122,7 +122,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => ActivoPerfilPageWidget(
                 idActivo: params.getParam('idActivo', ParamType.String),
                 selectMode:
-                      params.getParam('selectMode', ParamType.bool)
+                      params.getParam('selectMode', ParamType.bool),
+                      esPrestamo:
+                      params.getParam('esPrestamo', ParamType.bool)
               ),
             ),
             FFRoute(
@@ -132,7 +134,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   nombreCategoria:
                       params.getParam('nombreCategoria', ParamType.String),
                       selectMode:
-                      params.getParam('selectMode', ParamType.bool)),
+                      params.getParam('selectMode', ParamType.bool),
+                       esPrestamo:
+                      params.getParam('esPrestamo', ParamType.bool)),
+                      
             ),
             FFRoute(
               name: 'ListaPrestamosPage',

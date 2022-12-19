@@ -42,7 +42,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   file_picker: 5.2.2
-  go_router: ^5.1.10
   translator: ^0.1.7
   flutter_barcode_scanner: ^2.0.0
   flutter_speed_dial: ^6.2.0
@@ -70,6 +69,9 @@ dependencies:
   image_compression: ^1.0.3
   adaptive_dialog: ^1.8.0+1
   logger: ^1.1.0
+  go_router_flow: ^5.2.0+1
+  syncfusion_flutter_datepicker: ^20.3.61
+  colombia_holidays: ^2.0.2
   
 
 
@@ -128,9 +130,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
 fonts:
-- family:  CallIcons
+- family:  Borrow
   fonts:
-    - asset: fonts/CallIcons.ttf
+    - asset: assets/fonts/Borrow.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

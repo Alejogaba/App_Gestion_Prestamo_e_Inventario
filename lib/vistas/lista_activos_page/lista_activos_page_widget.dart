@@ -21,14 +21,18 @@ import 'package:google_fonts/google_fonts.dart';
 class ListaActivosPageWidget extends StatefulWidget {
   final String nombreCategoria;
   final bool selectMode;
+  final bool? esPrestamo;
   const ListaActivosPageWidget(
-      {Key? key, required this.nombreCategoria, this.selectMode = false})
+      {Key? key,
+      required this.nombreCategoria,
+      this.selectMode = false,
+      this.esPrestamo})
       : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _ListaActivosPageWidgetState createState() =>
-      _ListaActivosPageWidgetState(this.nombreCategoria, this.selectMode);
+  _ListaActivosPageWidgetState createState() => _ListaActivosPageWidgetState(
+      this.nombreCategoria, this.selectMode, this.esPrestamo);
 }
 
 class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
@@ -40,15 +44,15 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   ActivoController activoController = ActivoController();
   List<Activo> listaActivos = [];
   bool selectMode;
+  bool? esPrestamo;
 
-  _ListaActivosPageWidgetState(this.nombreCategoria, this.selectMode);
+  _ListaActivosPageWidgetState(
+      this.nombreCategoria, this.selectMode, this.esPrestamo);
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      
-    });
+    setState(() {});
     textControllerBusqueda = TextEditingController();
     log('CATEGORIA DE LA LISTA:$nombreCategoria');
   }
@@ -107,7 +111,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                   if (value != null) {
                     ActivoController activoController = ActivoController();
                     var res = await activoController.buscarActivo(value);
-                     if (res.idSerial.length < 4) {
+                    if (res.idSerial.length < 4) {
                       // ignore: use_build_context_synchronously
                       context.pushNamed(
                         'registraractivopage',
@@ -115,7 +119,11 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                           'idSerial': serializeParam(
                             value.trim().replaceAll(".", ""),
                             ParamType.String,
-                          )
+                          ),
+                          'selectMode': serializeParam(
+                            false,
+                            ParamType.bool,
+                          ),
                         },
                       );
                     } else {
@@ -131,13 +139,14 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                             false,
                             ParamType.bool,
                           ),
+                          'esPrestamo': serializeParam(
+                            esPrestamo,
+                            ParamType.bool,
+                          ),
                         },
                       );
-                      
                     }
-                    setState(() {
-                        
-                      });
+                    setState(() {});
                   }
                 });
               },
@@ -213,7 +222,8 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                   size: 30,
                 ),
                 onPressed: () async {
-                  await PdfApi.generarTablaActivo(listaActivos,tipoActivo: nombreCategoria);
+                  await PdfApi.generarTablaActivo(listaActivos,
+                      tipoActivo: nombreCategoria);
                 },
               ),
             ],
@@ -366,7 +376,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                       return Wrap(
                                         spacing:
                                             MediaQuery.of(context).size.width *
-                                                0.03,
+                                                0.01,
                                         runSpacing: 15,
                                         alignment: WrapAlignment.start,
                                         crossAxisAlignment:
@@ -379,9 +389,10 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                         children: List.generate(
                                             snapshot.data!.length, (index) {
                                           return GestureDetector(
-                                            onTap: () {
+                                            onTap: () async {
                                               if (selectMode) {
-                                                context.replaceNamed(
+                                                if (esPrestamo == null) {
+                                                  context.replaceNamed(
                                                   'activoPerfilPage',
                                                   queryParams: {
                                                     'idActivo': serializeParam(
@@ -394,8 +405,43 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                       selectMode,
                                                       ParamType.bool,
                                                     ),
+                                                    'esPrestamo':
+                                                        serializeParam(
+                                                      esPrestamo,
+                                                      ParamType.bool,
+                                                    ),
                                                   },
                                                 );
+                                                } else if (esPrestamo!) {
+                                                  final Activo? result =
+                                                      await context
+                                                          .pushNamed<Activo>(
+                                                    'activoPerfilPage',
+                                                    queryParams: {
+                                                      'idActivo':
+                                                          serializeParam(
+                                                        snapshot.data![index]
+                                                            .idSerial,
+                                                        ParamType.String,
+                                                      ),
+                                                      'selectMode':
+                                                          serializeParam(
+                                                        selectMode,
+                                                        ParamType.bool,
+                                                      ),
+                                                      'esPrestamo':
+                                                          serializeParam(
+                                                        esPrestamo,
+                                                        ParamType.bool,
+                                                      ),
+                                                    },
+                                                  );
+                                                  if (result != null) {
+                                                    // ignore: use_build_context_synchronously
+                                                    context.pop(result);
+                                                  }
+                                                }
+                                                
                                               } else {
                                                 context.pushNamed(
                                                   'activoPerfilPage',
@@ -410,12 +456,15 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                       selectMode,
                                                       ParamType.bool,
                                                     ),
+                                                    'esPrestamo':
+                                                        serializeParam(
+                                                      esPrestamo,
+                                                      ParamType.bool,
+                                                    ),
                                                   },
                                                 );
                                               }
-                                              setState(() {
-                                                
-                                              });
+                                              setState(() {});
                                             },
                                             child: tarjetaActivo(
                                                 context, snapshot.data![index]),

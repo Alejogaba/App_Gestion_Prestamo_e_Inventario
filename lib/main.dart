@@ -5,6 +5,8 @@ import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart' as prefs;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
@@ -15,7 +17,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
-import 'flutter_flow/custom_icons.dart';
+import 'flutter_flow/custom_icons.dart' as custom_icons;
 import 'assets/constantes.dart' as constantes;
 import 'vistas/ajustes_page/ajustes_page_widget.dart';
 import 'vistas/flutter_flow/customIcons.dart';
@@ -23,6 +25,7 @@ import 'vistas/lista_funcionarios_page/lista_funcionarios_page_widget.dart';
 import 'vistas/lista_prestamos_page/lista_prestamos_page_widget.dart';
 import 'vistas/principal/principal_widget.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   await Supabase.initialize(
@@ -43,7 +46,6 @@ void main() async {
       path: _tempDirectory.path, clearCacheAfter: const Duration(days: 15));
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterFlowTheme.initialize();
-
   runApp(MyApp());
 }
 
@@ -74,6 +76,7 @@ class _MyAppState extends State<MyApp> {
     Future.delayed(Duration(seconds: 1),
         () => setState(() => _appStateNotifier.stopShowingSplashImage()));
   }
+  
 
   void setLocale(String language) {
     setState(() => _locale = createLocale(language));
@@ -87,6 +90,14 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+      ],
+     supportedLocales: [
+          const Locale('es'),
+      ],
+      locale: const Locale('es'),
       title: 'InventariadoApp',
       theme: ThemeData(brightness: Brightness.light),
       darkTheme: ThemeData(brightness: Brightness.dark),
@@ -111,7 +122,6 @@ class NavBarPage extends StatefulWidget {
 class _NavBarPageState extends State<NavBarPage> {
   String _currentPageName = 'principal';
   late Widget? _currentPage;
-
   @override
   void initState() {
     super.initState();
@@ -122,21 +132,17 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      //'ListaPrestamosPage': ListaPrestamosPageWidget(),
+      'ListaPrestamosPage': ListaPrestamosPageWidget(),
       'principal': PrincipalWidget(),
       'ListaFuncionariosPage': ListaFuncionariosPageWidget(),
-      'AjustesPage': AjustesPageWidget(),
+      //'AjustesPage': AjustesPageWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
     return Scaffold(
       body: _currentPage ?? tabs[_currentPageName],
       extendBody: true,
       bottomNavigationBar: Visibility(
-        visible: responsiveVisibility(
-          context: context,
-          desktop: true,
-          phone: true,
-        ),
+        visible: true,
         child: FloatingNavbar(
           currentIndex: currentIndex,
           onTap: (i) => setState(() {
@@ -154,22 +160,22 @@ class _NavBarPageState extends State<NavBarPage> {
           width: MediaQuery.of(context).size.width * 1,
           elevation: 0,
           items: [
-            /*FloatingNavbarItem(
+            FloatingNavbarItem(
               customWidget: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    currentIndex == 2
-                        ? FontAwesomeIcons.cog
-                        : FontAwesomeIcons.cog,
-                    color: currentIndex == 2
+                    currentIndex == 0
+                        ? FontAwesomeIcons.handHolding
+                        : FontAwesomeIcons.handHolding,
+                    color: currentIndex == 0
                         ? FlutterFlowTheme.of(context).tertiaryColor
                         : FlutterFlowTheme.of(context).secondaryText,
                     size: 30,
                   ),
                 ],
               ),
-            ),*/
+            ),
             FloatingNavbarItem(
               customWidget: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -200,7 +206,7 @@ class _NavBarPageState extends State<NavBarPage> {
                 ],
               ),
             ),
-            FloatingNavbarItem(
+            /*FloatingNavbarItem(
               customWidget: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -215,7 +221,7 @@ class _NavBarPageState extends State<NavBarPage> {
                   ),
                 ],
               ),
-            ),
+            ),*/
           ],
         ),
       ),

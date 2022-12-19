@@ -1,0 +1,3727 @@
+{
+    "years": [
+      {
+        "year": 2022,
+        "holidays": [
+          { "date": "01/01/2022", "name": "Año Nuevo", "static": false },
+          {
+            "date": "10/01/2022",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "21/03/2022", "name": "Día de San José", "static": true },
+          { "date": "14/04/2022", "name": "Jueves Santo", "static": false },
+          { "date": "15/04/2022", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2022", "name": "Día del Trabajo", "static": false },
+          { "date": "30/05/2022", "name": "Ascensión del Señor", "static": true },
+          { "date": "20/06/2022", "name": "Corphus Christi", "static": true },
+          {
+            "date": "27/06/2022",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "04/07/2022",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2022",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2022", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "15/08/2022",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "17/10/2022", "name": "Día de la Raza", "static": true },
+          { "date": "07/11/2022", "name": "Todos los Santos", "static": true },
+          {
+            "date": "14/11/2022",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2022",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2022", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2023,
+        "holidays": [
+          { "date": "01/01/2023", "name": "Año Nuevo", "static": false },
+          {
+            "date": "09/01/2023",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "20/03/2023", "name": "Día de San José", "static": true },
+          { "date": "06/04/2023", "name": "Jueves Santo", "static": false },
+          { "date": "07/04/2023", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2023", "name": "Día del Trabajo", "static": false },
+          { "date": "22/05/2023", "name": "Ascensión del Señor", "static": true },
+          { "date": "12/06/2023", "name": "Corphus Christi", "static": true },
+          {
+            "date": "19/06/2023",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "03/07/2023",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2023",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2023", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "21/08/2023",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "16/10/2023", "name": "Día de la Raza", "static": true },
+          { "date": "06/11/2023", "name": "Todos los Santos", "static": true },
+          {
+            "date": "13/11/2023",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2023",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2023", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2024,
+        "holidays": [
+          { "date": "01/01/2024", "name": "Año Nuevo", "static": false },
+          {
+            "date": "08/01/2024",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "25/03/2024", "name": "Día de San José", "static": true },
+          { "date": "28/03/2024", "name": "Jueves Santo", "static": false },
+          { "date": "29/03/2024", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2024", "name": "Día del Trabajo", "static": false },
+          { "date": "13/05/2024", "name": "Ascensión del Señor", "static": true },
+          { "date": "03/06/2024", "name": "Corphus Christi", "static": true },
+          {
+            "date": "10/06/2024",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "01/07/2024",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2024",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2024", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "19/08/2024",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "14/10/2024", "name": "Día de la Raza", "static": true },
+          { "date": "04/11/2024", "name": "Todos los Santos", "static": true },
+          {
+            "date": "11/11/2024",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2024",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2024", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2025,
+        "holidays": [
+          { "date": "01/01/2025", "name": "Año Nuevo", "static": false },
+          {
+            "date": "06/01/2025",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "24/03/2025", "name": "Día de San José", "static": true },
+          { "date": "17/04/2025", "name": "Jueves Santo", "static": false },
+          { "date": "18/04/2025", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2025", "name": "Día del Trabajo", "static": false },
+          { "date": "02/06/2025", "name": "Ascensión del Señor", "static": true },
+          { "date": "23/06/2025", "name": "Corphus Christi", "static": true },
+          {
+            "date": "30/06/2025",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "30/06/2025",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2025",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2025", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "18/08/2025",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "13/10/2025", "name": "Día de la Raza", "static": true },
+          { "date": "03/11/2025", "name": "Todos los Santos", "static": true },
+          {
+            "date": "17/11/2025",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2025",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2025", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2026,
+        "holidays": [
+          { "date": "01/01/2026", "name": "Año Nuevo", "static": false },
+          {
+            "date": "12/01/2026",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "23/03/2026", "name": "Día de San José", "static": true },
+          { "date": "02/04/2026", "name": "Jueves Santo", "static": false },
+          { "date": "03/04/2026", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2026", "name": "Día del Trabajo", "static": false },
+          { "date": "18/05/2026", "name": "Ascensión del Señor", "static": true },
+          { "date": "08/06/2026", "name": "Corphus Christi", "static": true },
+          {
+            "date": "15/06/2026",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "29/06/2026",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2026",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2026", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "17/08/2026",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "12/10/2026", "name": "Día de la Raza", "static": true },
+          { "date": "02/11/2026", "name": "Todos los Santos", "static": true },
+          {
+            "date": "16/11/2026",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2026",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2026", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2027,
+        "holidays": [
+          { "date": "01/01/2027", "name": "Año Nuevo", "static": false },
+          {
+            "date": "11/01/2027",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "22/03/2027", "name": "Día de San José", "static": true },
+          { "date": "25/03/2027", "name": "Jueves Santo", "static": false },
+          { "date": "26/03/2027", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2027", "name": "Día del Trabajo", "static": false },
+          { "date": "10/05/2027", "name": "Ascensión del Señor", "static": true },
+          { "date": "31/05/2027", "name": "Corphus Christi", "static": true },
+          {
+            "date": "07/06/2027",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "05/07/2027",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2027",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2027", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "16/08/2027",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "18/10/2027", "name": "Día de la Raza", "static": true },
+          { "date": "01/11/2027", "name": "Todos los Santos", "static": true },
+          {
+            "date": "15/11/2027",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2027",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2027", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2028,
+        "holidays": [
+          { "date": "01/01/2028", "name": "Año Nuevo", "static": false },
+          {
+            "date": "10/01/2028",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "20/03/2028", "name": "Día de San José", "static": true },
+          { "date": "13/04/2028", "name": "Jueves Santo", "static": false },
+          { "date": "14/04/2028", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2028", "name": "Día del Trabajo", "static": false },
+          { "date": "29/05/2028", "name": "Ascensión del Señor", "static": true },
+          { "date": "19/06/2028", "name": "Corphus Christi", "static": true },
+          {
+            "date": "26/06/2028",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "03/07/2028",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2028",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2028", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "21/08/2028",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "16/10/2028", "name": "Día de la Raza", "static": true },
+          { "date": "06/11/2028", "name": "Todos los Santos", "static": true },
+          {
+            "date": "13/11/2028",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2028",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2028", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2029,
+        "holidays": [
+          { "date": "01/01/2029", "name": "Año Nuevo", "static": false },
+          {
+            "date": "08/01/2029",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "19/03/2029", "name": "Día de San José", "static": true },
+          { "date": "29/03/2029", "name": "Jueves Santo", "static": false },
+          { "date": "30/03/2029", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2029", "name": "Día del Trabajo", "static": false },
+          { "date": "14/05/2029", "name": "Ascensión del Señor", "static": true },
+          { "date": "04/06/2029", "name": "Corphus Christi", "static": true },
+          {
+            "date": "11/06/2029",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "02/07/2029",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2029",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2029", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "20/08/2029",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "15/10/2029", "name": "Día de la Raza", "static": true },
+          { "date": "05/11/2029", "name": "Todos los Santos", "static": true },
+          {
+            "date": "12/11/2029",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2029",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2029", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2030,
+        "holidays": [
+          { "date": "01/01/2030", "name": "Año Nuevo", "static": false },
+          {
+            "date": "07/01/2030",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "25/03/2030", "name": "Día de San José", "static": true },
+          { "date": "18/04/2030", "name": "Jueves Santo", "static": false },
+          { "date": "19/04/2030", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2030", "name": "Día del Trabajo", "static": false },
+          { "date": "03/06/2030", "name": "Ascensión del Señor", "static": true },
+          { "date": "24/06/2030", "name": "Corphus Christi", "static": true },
+          {
+            "date": "01/07/2030",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "01/07/2030",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2030",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2030", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "19/08/2030",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "14/10/2030", "name": "Día de la Raza", "static": true },
+          { "date": "04/11/2030", "name": "Todos los Santos", "static": true },
+          {
+            "date": "11/11/2030",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2030",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2030", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2031,
+        "holidays": [
+          { "date": "01/01/2031", "name": "Año Nuevo", "static": false },
+          {
+            "date": "06/01/2031",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "24/03/2031", "name": "Día de San José", "static": true },
+          { "date": "10/04/2031", "name": "Jueves Santo", "static": false },
+          { "date": "11/04/2031", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2031", "name": "Día del Trabajo", "static": false },
+          { "date": "26/05/2031", "name": "Ascensión del Señor", "static": true },
+          { "date": "16/06/2031", "name": "Corphus Christi", "static": true },
+          {
+            "date": "23/06/2031",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "30/06/2031",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2031",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2031", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "18/08/2031",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "13/10/2031", "name": "Día de la Raza", "static": true },
+          { "date": "03/11/2031", "name": "Todos los Santos", "static": true },
+          {
+            "date": "17/11/2031",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2031",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2031", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2032,
+        "holidays": [
+          { "date": "01/01/2032", "name": "Año Nuevo", "static": false },
+          {
+            "date": "12/01/2032",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "22/03/2032", "name": "Día de San José", "static": true },
+          { "date": "25/03/2032", "name": "Jueves Santo", "static": false },
+          { "date": "26/03/2032", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2032", "name": "Día del Trabajo", "static": false },
+          { "date": "10/05/2032", "name": "Ascensión del Señor", "static": true },
+          { "date": "31/05/2032", "name": "Corphus Christi", "static": true },
+          {
+            "date": "07/06/2032",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "05/07/2032",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2032",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2032", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "16/08/2032",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "18/10/2032", "name": "Día de la Raza", "static": true },
+          { "date": "01/11/2032", "name": "Todos los Santos", "static": true },
+          {
+            "date": "15/11/2032",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2032",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2032", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2033,
+        "holidays": [
+          { "date": "01/01/2033", "name": "Año Nuevo", "static": false },
+          {
+            "date": "10/01/2033",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "21/03/2033", "name": "Día de San José", "static": true },
+          { "date": "14/04/2033", "name": "Jueves Santo", "static": false },
+          { "date": "15/04/2033", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2033", "name": "Día del Trabajo", "static": false },
+          { "date": "30/05/2033", "name": "Ascensión del Señor", "static": true },
+          { "date": "20/06/2033", "name": "Corphus Christi", "static": true },
+          {
+            "date": "27/06/2033",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "04/07/2033",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2033",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2033", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "15/08/2033",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "17/10/2033", "name": "Día de la Raza", "static": true },
+          { "date": "07/11/2033", "name": "Todos los Santos", "static": true },
+          {
+            "date": "14/11/2033",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2033",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2033", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2034,
+        "holidays": [
+          { "date": "01/01/2034", "name": "Año Nuevo", "static": false },
+          {
+            "date": "09/01/2034",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "20/03/2034", "name": "Día de San José", "static": true },
+          { "date": "06/04/2034", "name": "Jueves Santo", "static": false },
+          { "date": "07/04/2034", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2034", "name": "Día del Trabajo", "static": false },
+          { "date": "22/05/2034", "name": "Ascensión del Señor", "static": true },
+          { "date": "12/06/2034", "name": "Corphus Christi", "static": true },
+          {
+            "date": "19/06/2034",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "03/07/2034",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2034",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2034", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "21/08/2034",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "16/10/2034", "name": "Día de la Raza", "static": true },
+          { "date": "06/11/2034", "name": "Todos los Santos", "static": true },
+          {
+            "date": "13/11/2034",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2034",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2034", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2035,
+        "holidays": [
+          { "date": "01/01/2035", "name": "Año Nuevo", "static": false },
+          {
+            "date": "08/01/2035",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "19/03/2035", "name": "Día de San José", "static": true },
+          { "date": "22/03/2035", "name": "Jueves Santo", "static": false },
+          { "date": "23/03/2035", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2035", "name": "Día del Trabajo", "static": false },
+          { "date": "07/05/2035", "name": "Ascensión del Señor", "static": true },
+          { "date": "28/05/2035", "name": "Corphus Christi", "static": true },
+          {
+            "date": "04/06/2035",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "02/07/2035",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2035",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2035", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "20/08/2035",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "15/10/2035", "name": "Día de la Raza", "static": true },
+          { "date": "05/11/2035", "name": "Todos los Santos", "static": true },
+          {
+            "date": "12/11/2035",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2035",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2035", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2036,
+        "holidays": [
+          { "date": "01/01/2036", "name": "Año Nuevo", "static": false },
+          {
+            "date": "07/01/2036",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "24/03/2036", "name": "Día de San José", "static": true },
+          { "date": "10/04/2036", "name": "Jueves Santo", "static": false },
+          { "date": "11/04/2036", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2036", "name": "Día del Trabajo", "static": false },
+          { "date": "26/05/2036", "name": "Ascensión del Señor", "static": true },
+          { "date": "16/06/2036", "name": "Corphus Christi", "static": true },
+          {
+            "date": "23/06/2036",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "30/06/2036",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2036",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2036", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "18/08/2036",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "13/10/2036", "name": "Día de la Raza", "static": true },
+          { "date": "03/11/2036", "name": "Todos los Santos", "static": true },
+          {
+            "date": "17/11/2036",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2036",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2036", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2037,
+        "holidays": [
+          { "date": "01/01/2037", "name": "Año Nuevo", "static": false },
+          {
+            "date": "12/01/2037",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "23/03/2037", "name": "Día de San José", "static": true },
+          { "date": "02/04/2037", "name": "Jueves Santo", "static": false },
+          { "date": "03/04/2037", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2037", "name": "Día del Trabajo", "static": false },
+          { "date": "18/05/2037", "name": "Ascensión del Señor", "static": true },
+          { "date": "08/06/2037", "name": "Corphus Christi", "static": true },
+          {
+            "date": "15/06/2037",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "29/06/2037",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2037",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2037", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "17/08/2037",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "12/10/2037", "name": "Día de la Raza", "static": true },
+          { "date": "02/11/2037", "name": "Todos los Santos", "static": true },
+          {
+            "date": "16/11/2037",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2037",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2037", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2038,
+        "holidays": [
+          { "date": "01/01/2038", "name": "Año Nuevo", "static": false },
+          {
+            "date": "11/01/2038",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "22/03/2038", "name": "Día de San José", "static": true },
+          { "date": "22/04/2038", "name": "Jueves Santo", "static": false },
+          { "date": "23/04/2038", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2038", "name": "Día del Trabajo", "static": false },
+          { "date": "07/06/2038", "name": "Ascensión del Señor", "static": true },
+          { "date": "28/06/2038", "name": "Corphus Christi", "static": true },
+          {
+            "date": "05/07/2038",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "05/07/2038",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2038",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2038", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "16/08/2038",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "18/10/2038", "name": "Día de la Raza", "static": true },
+          { "date": "01/11/2038", "name": "Todos los Santos", "static": true },
+          {
+            "date": "15/11/2038",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2038",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2038", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2039,
+        "holidays": [
+          { "date": "01/01/2039", "name": "Año Nuevo", "static": false },
+          {
+            "date": "10/01/2039",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "21/03/2039", "name": "Día de San José", "static": true },
+          { "date": "07/04/2039", "name": "Jueves Santo", "static": false },
+          { "date": "08/04/2039", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2039", "name": "Día del Trabajo", "static": false },
+          { "date": "23/05/2039", "name": "Ascensión del Señor", "static": true },
+          { "date": "13/06/2039", "name": "Corphus Christi", "static": true },
+          {
+            "date": "20/06/2039",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "04/07/2039",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2039",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2039", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "15/08/2039",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "17/10/2039", "name": "Día de la Raza", "static": true },
+          { "date": "07/11/2039", "name": "Todos los Santos", "static": true },
+          {
+            "date": "14/11/2039",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2039",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2039", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2040,
+        "holidays": [
+          { "date": "01/01/2040", "name": "Año Nuevo", "static": false },
+          {
+            "date": "09/01/2040",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "19/03/2040", "name": "Día de San José", "static": true },
+          { "date": "29/03/2040", "name": "Jueves Santo", "static": false },
+          { "date": "30/03/2040", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2040", "name": "Día del Trabajo", "static": false },
+          { "date": "14/05/2040", "name": "Ascensión del Señor", "static": true },
+          { "date": "04/06/2040", "name": "Corphus Christi", "static": true },
+          {
+            "date": "11/06/2040",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "02/07/2040",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2040",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2040", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "20/08/2040",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "15/10/2040", "name": "Día de la Raza", "static": true },
+          { "date": "05/11/2040", "name": "Todos los Santos", "static": true },
+          {
+            "date": "12/11/2040",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2040",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2040", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2041,
+        "holidays": [
+          { "date": "01/01/2041", "name": "Año Nuevo", "static": false },
+          {
+            "date": "07/01/2041",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "25/03/2041", "name": "Día de San José", "static": true },
+          { "date": "18/04/2041", "name": "Jueves Santo", "static": false },
+          { "date": "19/04/2041", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2041", "name": "Día del Trabajo", "static": false },
+          { "date": "03/06/2041", "name": "Ascensión del Señor", "static": true },
+          { "date": "24/06/2041", "name": "Corphus Christi", "static": true },
+          {
+            "date": "01/07/2041",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "01/07/2041",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2041",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2041", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "19/08/2041",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "14/10/2041", "name": "Día de la Raza", "static": true },
+          { "date": "04/11/2041", "name": "Todos los Santos", "static": true },
+          {
+            "date": "11/11/2041",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2041",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2041", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2042,
+        "holidays": [
+          { "date": "01/01/2042", "name": "Año Nuevo", "static": false },
+          {
+            "date": "06/01/2042",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "24/03/2042", "name": "Día de San José", "static": true },
+          { "date": "03/04/2042", "name": "Jueves Santo", "static": false },
+          { "date": "04/04/2042", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2042", "name": "Día del Trabajo", "static": false },
+          { "date": "19/05/2042", "name": "Ascensión del Señor", "static": true },
+          { "date": "09/06/2042", "name": "Corphus Christi", "static": true },
+          {
+            "date": "16/06/2042",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "30/06/2042",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2042",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2042", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "18/08/2042",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "13/10/2042", "name": "Día de la Raza", "static": true },
+          { "date": "03/11/2042", "name": "Todos los Santos", "static": true },
+          {
+            "date": "17/11/2042",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2042",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2042", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2043,
+        "holidays": [
+          { "date": "01/01/2043", "name": "Año Nuevo", "static": false },
+          {
+            "date": "12/01/2043",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "23/03/2043", "name": "Día de San José", "static": true },
+          { "date": "26/03/2043", "name": "Jueves Santo", "static": false },
+          { "date": "27/03/2043", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2043", "name": "Día del Trabajo", "static": false },
+          { "date": "11/05/2043", "name": "Ascensión del Señor", "static": true },
+          { "date": "01/06/2043", "name": "Corphus Christi", "static": true },
+          {
+            "date": "08/06/2043",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "29/06/2043",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2043",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2043", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "17/08/2043",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "12/10/2043", "name": "Día de la Raza", "static": true },
+          { "date": "02/11/2043", "name": "Todos los Santos", "static": true },
+          {
+            "date": "16/11/2043",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2043",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2043", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2044,
+        "holidays": [
+          { "date": "01/01/2044", "name": "Año Nuevo", "static": false },
+          {
+            "date": "11/01/2044",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "21/03/2044", "name": "Día de San José", "static": true },
+          { "date": "14/04/2044", "name": "Jueves Santo", "static": false },
+          { "date": "15/04/2044", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2044", "name": "Día del Trabajo", "static": false },
+          { "date": "30/05/2044", "name": "Ascensión del Señor", "static": true },
+          { "date": "20/06/2044", "name": "Corphus Christi", "static": true },
+          {
+            "date": "27/06/2044",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "04/07/2044",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2044",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2044", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "15/08/2044",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "17/10/2044", "name": "Día de la Raza", "static": true },
+          { "date": "07/11/2044", "name": "Todos los Santos", "static": true },
+          {
+            "date": "14/11/2044",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2044",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2044", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2045,
+        "holidays": [
+          { "date": "01/01/2045", "name": "Año Nuevo", "static": false },
+          {
+            "date": "09/01/2045",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "20/03/2045", "name": "Día de San José", "static": true },
+          { "date": "06/04/2045", "name": "Jueves Santo", "static": false },
+          { "date": "07/04/2045", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2045", "name": "Día del Trabajo", "static": false },
+          { "date": "22/05/2045", "name": "Ascensión del Señor", "static": true },
+          { "date": "12/06/2045", "name": "Corphus Christi", "static": true },
+          {
+            "date": "19/06/2045",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "03/07/2045",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2045",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2045", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "21/08/2045",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "16/10/2045", "name": "Día de la Raza", "static": true },
+          { "date": "06/11/2045", "name": "Todos los Santos", "static": true },
+          {
+            "date": "13/11/2045",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2045",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2045", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2046,
+        "holidays": [
+          { "date": "01/01/2046", "name": "Año Nuevo", "static": false },
+          {
+            "date": "08/01/2046",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "19/03/2046", "name": "Día de San José", "static": true },
+          { "date": "22/03/2046", "name": "Jueves Santo", "static": false },
+          { "date": "23/03/2046", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2046", "name": "Día del Trabajo", "static": false },
+          { "date": "07/05/2046", "name": "Ascensión del Señor", "static": true },
+          { "date": "28/05/2046", "name": "Corphus Christi", "static": true },
+          {
+            "date": "04/06/2046",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "02/07/2046",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2046",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2046", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "20/08/2046",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "15/10/2046", "name": "Día de la Raza", "static": true },
+          { "date": "05/11/2046", "name": "Todos los Santos", "static": true },
+          {
+            "date": "12/11/2046",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2046",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2046", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2047,
+        "holidays": [
+          { "date": "01/01/2047", "name": "Año Nuevo", "static": false },
+          {
+            "date": "07/01/2047",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "25/03/2047", "name": "Día de San José", "static": true },
+          { "date": "11/04/2047", "name": "Jueves Santo", "static": false },
+          { "date": "12/04/2047", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2047", "name": "Día del Trabajo", "static": false },
+          { "date": "27/05/2047", "name": "Ascensión del Señor", "static": true },
+          { "date": "17/06/2047", "name": "Corphus Christi", "static": true },
+          {
+            "date": "24/06/2047",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "01/07/2047",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2047",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2047", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "19/08/2047",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "14/10/2047", "name": "Día de la Raza", "static": true },
+          { "date": "04/11/2047", "name": "Todos los Santos", "static": true },
+          {
+            "date": "11/11/2047",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2047",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2047", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2048,
+        "holidays": [
+          { "date": "01/01/2048", "name": "Año Nuevo", "static": false },
+          {
+            "date": "06/01/2048",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "23/03/2048", "name": "Día de San José", "static": true },
+          { "date": "02/04/2048", "name": "Jueves Santo", "static": false },
+          { "date": "03/04/2048", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2048", "name": "Día del Trabajo", "static": false },
+          { "date": "18/05/2048", "name": "Ascensión del Señor", "static": true },
+          { "date": "08/06/2048", "name": "Corphus Christi", "static": true },
+          {
+            "date": "15/06/2048",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "29/06/2048",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2048",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2048", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "17/08/2048",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "12/10/2048", "name": "Día de la Raza", "static": true },
+          { "date": "02/11/2048", "name": "Todos los Santos", "static": true },
+          {
+            "date": "16/11/2048",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2048",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2048", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2049,
+        "holidays": [
+          { "date": "01/01/2049", "name": "Año Nuevo", "static": false },
+          {
+            "date": "11/01/2049",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "22/03/2049", "name": "Día de San José", "static": true },
+          { "date": "22/04/2049", "name": "Jueves Santo", "static": false },
+          { "date": "23/04/2049", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2049", "name": "Día del Trabajo", "static": false },
+          { "date": "07/06/2049", "name": "Ascensión del Señor", "static": true },
+          { "date": "28/06/2049", "name": "Corphus Christi", "static": true },
+          {
+            "date": "05/07/2049",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "05/07/2049",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2049",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2049", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "16/08/2049",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "18/10/2049", "name": "Día de la Raza", "static": true },
+          { "date": "01/11/2049", "name": "Todos los Santos", "static": true },
+          {
+            "date": "15/11/2049",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2049",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2049", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2050,
+        "holidays": [
+          { "date": "01/01/2050", "name": "Año Nuevo", "static": false },
+          {
+            "date": "10/01/2050",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "21/03/2050", "name": "Día de San José", "static": true },
+          { "date": "07/04/2050", "name": "Jueves Santo", "static": false },
+          { "date": "08/04/2050", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2050", "name": "Día del Trabajo", "static": false },
+          { "date": "23/05/2050", "name": "Ascensión del Señor", "static": true },
+          { "date": "13/06/2050", "name": "Corphus Christi", "static": true },
+          {
+            "date": "20/06/2050",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "04/07/2050",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2050",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2050", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "15/08/2050",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "17/10/2050", "name": "Día de la Raza", "static": true },
+          { "date": "07/11/2050", "name": "Todos los Santos", "static": true },
+          {
+            "date": "14/11/2050",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2050",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2050", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2051,
+        "holidays": [
+          { "date": "01/01/2051", "name": "Año Nuevo", "static": false },
+          {
+            "date": "09/01/2051",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "20/03/2051", "name": "Día de San José", "static": true },
+          { "date": "30/03/2051", "name": "Jueves Santo", "static": false },
+          { "date": "31/03/2051", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2051", "name": "Día del Trabajo", "static": false },
+          { "date": "15/05/2051", "name": "Ascensión del Señor", "static": true },
+          { "date": "05/06/2051", "name": "Corphus Christi", "static": true },
+          {
+            "date": "12/06/2051",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "03/07/2051",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2051",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2051", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "21/08/2051",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "16/10/2051", "name": "Día de la Raza", "static": true },
+          { "date": "06/11/2051", "name": "Todos los Santos", "static": true },
+          {
+            "date": "13/11/2051",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2051",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2051", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2052,
+        "holidays": [
+          { "date": "01/01/2052", "name": "Año Nuevo", "static": false },
+          {
+            "date": "08/01/2052",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "25/03/2052", "name": "Día de San José", "static": true },
+          { "date": "18/04/2052", "name": "Jueves Santo", "static": false },
+          { "date": "19/04/2052", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2052", "name": "Día del Trabajo", "static": false },
+          { "date": "03/06/2052", "name": "Ascensión del Señor", "static": true },
+          { "date": "24/06/2052", "name": "Corphus Christi", "static": true },
+          {
+            "date": "01/07/2052",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "01/07/2052",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2052",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2052", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "19/08/2052",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "14/10/2052", "name": "Día de la Raza", "static": true },
+          { "date": "04/11/2052", "name": "Todos los Santos", "static": true },
+          {
+            "date": "11/11/2052",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2052",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2052", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2053,
+        "holidays": [
+          { "date": "01/01/2053", "name": "Año Nuevo", "static": false },
+          {
+            "date": "06/01/2053",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "24/03/2053", "name": "Día de San José", "static": true },
+          { "date": "03/04/2053", "name": "Jueves Santo", "static": false },
+          { "date": "04/04/2053", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2053", "name": "Día del Trabajo", "static": false },
+          { "date": "19/05/2053", "name": "Ascensión del Señor", "static": true },
+          { "date": "09/06/2053", "name": "Corphus Christi", "static": true },
+          {
+            "date": "16/06/2053",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "30/06/2053",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2053",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2053", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "18/08/2053",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "13/10/2053", "name": "Día de la Raza", "static": true },
+          { "date": "03/11/2053", "name": "Todos los Santos", "static": true },
+          {
+            "date": "17/11/2053",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2053",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2053", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2054,
+        "holidays": [
+          { "date": "01/01/2054", "name": "Año Nuevo", "static": false },
+          {
+            "date": "12/01/2054",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "23/03/2054", "name": "Día de San José", "static": true },
+          { "date": "26/03/2054", "name": "Jueves Santo", "static": false },
+          { "date": "27/03/2054", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2054", "name": "Día del Trabajo", "static": false },
+          { "date": "11/05/2054", "name": "Ascensión del Señor", "static": true },
+          { "date": "01/06/2054", "name": "Corphus Christi", "static": true },
+          {
+            "date": "08/06/2054",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "29/06/2054",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2054",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2054", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "17/08/2054",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "12/10/2054", "name": "Día de la Raza", "static": true },
+          { "date": "02/11/2054", "name": "Todos los Santos", "static": true },
+          {
+            "date": "16/11/2054",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2054",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2054", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2055,
+        "holidays": [
+          { "date": "01/01/2055", "name": "Año Nuevo", "static": false },
+          {
+            "date": "11/01/2055",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "22/03/2055", "name": "Día de San José", "static": true },
+          { "date": "15/04/2055", "name": "Jueves Santo", "static": false },
+          { "date": "16/04/2055", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2055", "name": "Día del Trabajo", "static": false },
+          { "date": "31/05/2055", "name": "Ascensión del Señor", "static": true },
+          { "date": "21/06/2055", "name": "Corphus Christi", "static": true },
+          {
+            "date": "28/06/2055",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "05/07/2055",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2055",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2055", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "16/08/2055",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "18/10/2055", "name": "Día de la Raza", "static": true },
+          { "date": "01/11/2055", "name": "Todos los Santos", "static": true },
+          {
+            "date": "15/11/2055",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2055",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2055", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2056,
+        "holidays": [
+          { "date": "01/01/2056", "name": "Año Nuevo", "static": false },
+          {
+            "date": "10/01/2056",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "20/03/2056", "name": "Día de San José", "static": true },
+          { "date": "30/03/2056", "name": "Jueves Santo", "static": false },
+          { "date": "31/03/2056", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2056", "name": "Día del Trabajo", "static": false },
+          { "date": "15/05/2056", "name": "Ascensión del Señor", "static": true },
+          { "date": "05/06/2056", "name": "Corphus Christi", "static": true },
+          {
+            "date": "12/06/2056",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "03/07/2056",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2056",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2056", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "21/08/2056",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "16/10/2056", "name": "Día de la Raza", "static": true },
+          { "date": "06/11/2056", "name": "Todos los Santos", "static": true },
+          {
+            "date": "13/11/2056",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2056",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2056", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2057,
+        "holidays": [
+          { "date": "01/01/2057", "name": "Año Nuevo", "static": false },
+          {
+            "date": "08/01/2057",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "19/03/2057", "name": "Día de San José", "static": true },
+          { "date": "19/04/2057", "name": "Jueves Santo", "static": false },
+          { "date": "20/04/2057", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2057", "name": "Día del Trabajo", "static": false },
+          { "date": "04/06/2057", "name": "Ascensión del Señor", "static": true },
+          { "date": "25/06/2057", "name": "Corphus Christi", "static": true },
+          {
+            "date": "02/07/2057",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "02/07/2057",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2057",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2057", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "20/08/2057",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "15/10/2057", "name": "Día de la Raza", "static": true },
+          { "date": "05/11/2057", "name": "Todos los Santos", "static": true },
+          {
+            "date": "12/11/2057",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2057",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2057", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2058,
+        "holidays": [
+          { "date": "01/01/2058", "name": "Año Nuevo", "static": false },
+          {
+            "date": "07/01/2058",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "25/03/2058", "name": "Día de San José", "static": true },
+          { "date": "11/04/2058", "name": "Jueves Santo", "static": false },
+          { "date": "12/04/2058", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2058", "name": "Día del Trabajo", "static": false },
+          { "date": "27/05/2058", "name": "Ascensión del Señor", "static": true },
+          { "date": "17/06/2058", "name": "Corphus Christi", "static": true },
+          {
+            "date": "24/06/2058",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "01/07/2058",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2058",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2058", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "19/08/2058",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "14/10/2058", "name": "Día de la Raza", "static": true },
+          { "date": "04/11/2058", "name": "Todos los Santos", "static": true },
+          {
+            "date": "11/11/2058",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2058",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2058", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2059,
+        "holidays": [
+          { "date": "01/01/2059", "name": "Año Nuevo", "static": false },
+          {
+            "date": "06/01/2059",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "24/03/2059", "name": "Día de San José", "static": true },
+          { "date": "27/03/2059", "name": "Jueves Santo", "static": false },
+          { "date": "28/03/2059", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2059", "name": "Día del Trabajo", "static": false },
+          { "date": "12/05/2059", "name": "Ascensión del Señor", "static": true },
+          { "date": "02/06/2059", "name": "Corphus Christi", "static": true },
+          {
+            "date": "09/06/2059",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "30/06/2059",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2059",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2059", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "18/08/2059",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "13/10/2059", "name": "Día de la Raza", "static": true },
+          { "date": "03/11/2059", "name": "Todos los Santos", "static": true },
+          {
+            "date": "17/11/2059",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2059",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2059", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2060,
+        "holidays": [
+          { "date": "01/01/2060", "name": "Año Nuevo", "static": false },
+          {
+            "date": "12/01/2060",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "22/03/2060", "name": "Día de San José", "static": true },
+          { "date": "15/04/2060", "name": "Jueves Santo", "static": false },
+          { "date": "16/04/2060", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2060", "name": "Día del Trabajo", "static": false },
+          { "date": "31/05/2060", "name": "Ascensión del Señor", "static": true },
+          { "date": "21/06/2060", "name": "Corphus Christi", "static": true },
+          {
+            "date": "28/06/2060",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "05/07/2060",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2060",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2060", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "16/08/2060",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "18/10/2060", "name": "Día de la Raza", "static": true },
+          { "date": "01/11/2060", "name": "Todos los Santos", "static": true },
+          {
+            "date": "15/11/2060",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2060",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2060", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2061,
+        "holidays": [
+          { "date": "01/01/2061", "name": "Año Nuevo", "static": false },
+          {
+            "date": "10/01/2061",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "21/03/2061", "name": "Día de San José", "static": true },
+          { "date": "07/04/2061", "name": "Jueves Santo", "static": false },
+          { "date": "08/04/2061", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2061", "name": "Día del Trabajo", "static": false },
+          { "date": "23/05/2061", "name": "Ascensión del Señor", "static": true },
+          { "date": "13/06/2061", "name": "Corphus Christi", "static": true },
+          {
+            "date": "20/06/2061",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "04/07/2061",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2061",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2061", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "15/08/2061",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "17/10/2061", "name": "Día de la Raza", "static": true },
+          { "date": "07/11/2061", "name": "Todos los Santos", "static": true },
+          {
+            "date": "14/11/2061",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2061",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2061", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2062,
+        "holidays": [
+          { "date": "01/01/2062", "name": "Año Nuevo", "static": false },
+          {
+            "date": "09/01/2062",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "20/03/2062", "name": "Día de San José", "static": true },
+          { "date": "23/03/2062", "name": "Jueves Santo", "static": false },
+          { "date": "24/03/2062", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2062", "name": "Día del Trabajo", "static": false },
+          { "date": "08/05/2062", "name": "Ascensión del Señor", "static": true },
+          { "date": "29/05/2062", "name": "Corphus Christi", "static": true },
+          {
+            "date": "05/06/2062",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "03/07/2062",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2062",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2062", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "21/08/2062",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "16/10/2062", "name": "Día de la Raza", "static": true },
+          { "date": "06/11/2062", "name": "Todos los Santos", "static": true },
+          {
+            "date": "13/11/2062",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2062",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2062", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2063,
+        "holidays": [
+          { "date": "01/01/2063", "name": "Año Nuevo", "static": false },
+          {
+            "date": "08/01/2063",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "19/03/2063", "name": "Día de San José", "static": true },
+          { "date": "12/04/2063", "name": "Jueves Santo", "static": false },
+          { "date": "13/04/2063", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2063", "name": "Día del Trabajo", "static": false },
+          { "date": "28/05/2063", "name": "Ascensión del Señor", "static": true },
+          { "date": "18/06/2063", "name": "Corphus Christi", "static": true },
+          {
+            "date": "25/06/2063",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "02/07/2063",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2063",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2063", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "20/08/2063",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "15/10/2063", "name": "Día de la Raza", "static": true },
+          { "date": "05/11/2063", "name": "Todos los Santos", "static": true },
+          {
+            "date": "12/11/2063",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2063",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2063", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2064,
+        "holidays": [
+          { "date": "01/01/2064", "name": "Año Nuevo", "static": false },
+          {
+            "date": "07/01/2064",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "24/03/2064", "name": "Día de San José", "static": true },
+          { "date": "03/04/2064", "name": "Jueves Santo", "static": false },
+          { "date": "04/04/2064", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2064", "name": "Día del Trabajo", "static": false },
+          { "date": "19/05/2064", "name": "Ascensión del Señor", "static": true },
+          { "date": "09/06/2064", "name": "Corphus Christi", "static": true },
+          {
+            "date": "16/06/2064",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "30/06/2064",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2064",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2064", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "18/08/2064",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "13/10/2064", "name": "Día de la Raza", "static": true },
+          { "date": "03/11/2064", "name": "Todos los Santos", "static": true },
+          {
+            "date": "17/11/2064",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2064",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2064", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2065,
+        "holidays": [
+          { "date": "01/01/2065", "name": "Año Nuevo", "static": false },
+          {
+            "date": "12/01/2065",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "23/03/2065", "name": "Día de San José", "static": true },
+          { "date": "26/03/2065", "name": "Jueves Santo", "static": false },
+          { "date": "27/03/2065", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2065", "name": "Día del Trabajo", "static": false },
+          { "date": "11/05/2065", "name": "Ascensión del Señor", "static": true },
+          { "date": "01/06/2065", "name": "Corphus Christi", "static": true },
+          {
+            "date": "08/06/2065",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "29/06/2065",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2065",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2065", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "17/08/2065",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "12/10/2065", "name": "Día de la Raza", "static": true },
+          { "date": "02/11/2065", "name": "Todos los Santos", "static": true },
+          {
+            "date": "16/11/2065",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2065",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2065", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2066,
+        "holidays": [
+          { "date": "01/01/2066", "name": "Año Nuevo", "static": false },
+          {
+            "date": "11/01/2066",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "22/03/2066", "name": "Día de San José", "static": true },
+          { "date": "08/04/2066", "name": "Jueves Santo", "static": false },
+          { "date": "09/04/2066", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2066", "name": "Día del Trabajo", "static": false },
+          { "date": "24/05/2066", "name": "Ascensión del Señor", "static": true },
+          { "date": "14/06/2066", "name": "Corphus Christi", "static": true },
+          {
+            "date": "21/06/2066",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "05/07/2066",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2066",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2066", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "16/08/2066",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "18/10/2066", "name": "Día de la Raza", "static": true },
+          { "date": "01/11/2066", "name": "Todos los Santos", "static": true },
+          {
+            "date": "15/11/2066",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2066",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2066", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2067,
+        "holidays": [
+          { "date": "01/01/2067", "name": "Año Nuevo", "static": false },
+          {
+            "date": "10/01/2067",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "21/03/2067", "name": "Día de San José", "static": true },
+          { "date": "31/03/2067", "name": "Jueves Santo", "static": false },
+          { "date": "01/04/2067", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2067", "name": "Día del Trabajo", "static": false },
+          { "date": "16/05/2067", "name": "Ascensión del Señor", "static": true },
+          { "date": "06/06/2067", "name": "Corphus Christi", "static": true },
+          {
+            "date": "13/06/2067",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "04/07/2067",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2067",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2067", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "15/08/2067",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "17/10/2067", "name": "Día de la Raza", "static": true },
+          { "date": "07/11/2067", "name": "Todos los Santos", "static": true },
+          {
+            "date": "14/11/2067",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2067",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2067", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2068,
+        "holidays": [
+          { "date": "01/01/2068", "name": "Año Nuevo", "static": false },
+          {
+            "date": "09/01/2068",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "19/03/2068", "name": "Día de San José", "static": true },
+          { "date": "19/04/2068", "name": "Jueves Santo", "static": false },
+          { "date": "20/04/2068", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2068", "name": "Día del Trabajo", "static": false },
+          { "date": "04/06/2068", "name": "Ascensión del Señor", "static": true },
+          { "date": "25/06/2068", "name": "Corphus Christi", "static": true },
+          {
+            "date": "02/07/2068",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "02/07/2068",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2068",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2068", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "20/08/2068",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "15/10/2068", "name": "Día de la Raza", "static": true },
+          { "date": "05/11/2068", "name": "Todos los Santos", "static": true },
+          {
+            "date": "12/11/2068",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2068",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2068", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2069,
+        "holidays": [
+          { "date": "01/01/2069", "name": "Año Nuevo", "static": false },
+          {
+            "date": "07/01/2069",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "25/03/2069", "name": "Día de San José", "static": true },
+          { "date": "11/04/2069", "name": "Jueves Santo", "static": false },
+          { "date": "12/04/2069", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2069", "name": "Día del Trabajo", "static": false },
+          { "date": "27/05/2069", "name": "Ascensión del Señor", "static": true },
+          { "date": "17/06/2069", "name": "Corphus Christi", "static": true },
+          {
+            "date": "24/06/2069",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "01/07/2069",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2069",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2069", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "19/08/2069",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "14/10/2069", "name": "Día de la Raza", "static": true },
+          { "date": "04/11/2069", "name": "Todos los Santos", "static": true },
+          {
+            "date": "11/11/2069",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2069",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2069", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2070,
+        "holidays": [
+          { "date": "01/01/2070", "name": "Año Nuevo", "static": false },
+          {
+            "date": "06/01/2070",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "24/03/2070", "name": "Día de San José", "static": true },
+          { "date": "27/03/2070", "name": "Jueves Santo", "static": false },
+          { "date": "28/03/2070", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2070", "name": "Día del Trabajo", "static": false },
+          { "date": "12/05/2070", "name": "Ascensión del Señor", "static": true },
+          { "date": "02/06/2070", "name": "Corphus Christi", "static": true },
+          {
+            "date": "09/06/2070",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "30/06/2070",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2070",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2070", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "18/08/2070",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "13/10/2070", "name": "Día de la Raza", "static": true },
+          { "date": "03/11/2070", "name": "Todos los Santos", "static": true },
+          {
+            "date": "17/11/2070",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2070",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2070", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2071,
+        "holidays": [
+          { "date": "01/01/2071", "name": "Año Nuevo", "static": false },
+          {
+            "date": "12/01/2071",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "23/03/2071", "name": "Día de San José", "static": true },
+          { "date": "16/04/2071", "name": "Jueves Santo", "static": false },
+          { "date": "17/04/2071", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2071", "name": "Día del Trabajo", "static": false },
+          { "date": "01/06/2071", "name": "Ascensión del Señor", "static": true },
+          { "date": "22/06/2071", "name": "Corphus Christi", "static": true },
+          {
+            "date": "29/06/2071",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "29/06/2071",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2071",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2071", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "17/08/2071",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "12/10/2071", "name": "Día de la Raza", "static": true },
+          { "date": "02/11/2071", "name": "Todos los Santos", "static": true },
+          {
+            "date": "16/11/2071",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2071",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2071", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2072,
+        "holidays": [
+          { "date": "01/01/2072", "name": "Año Nuevo", "static": false },
+          {
+            "date": "11/01/2072",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "21/03/2072", "name": "Día de San José", "static": true },
+          { "date": "07/04/2072", "name": "Jueves Santo", "static": false },
+          { "date": "08/04/2072", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2072", "name": "Día del Trabajo", "static": false },
+          { "date": "23/05/2072", "name": "Ascensión del Señor", "static": true },
+          { "date": "13/06/2072", "name": "Corphus Christi", "static": true },
+          {
+            "date": "20/06/2072",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "04/07/2072",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2072",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2072", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "15/08/2072",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "17/10/2072", "name": "Día de la Raza", "static": true },
+          { "date": "07/11/2072", "name": "Todos los Santos", "static": true },
+          {
+            "date": "14/11/2072",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2072",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2072", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2073,
+        "holidays": [
+          { "date": "01/01/2073", "name": "Año Nuevo", "static": false },
+          {
+            "date": "09/01/2073",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "20/03/2073", "name": "Día de San José", "static": true },
+          { "date": "23/03/2073", "name": "Jueves Santo", "static": false },
+          { "date": "24/03/2073", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2073", "name": "Día del Trabajo", "static": false },
+          { "date": "08/05/2073", "name": "Ascensión del Señor", "static": true },
+          { "date": "29/05/2073", "name": "Corphus Christi", "static": true },
+          {
+            "date": "05/06/2073",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "03/07/2073",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2073",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2073", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "21/08/2073",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "16/10/2073", "name": "Día de la Raza", "static": true },
+          { "date": "06/11/2073", "name": "Todos los Santos", "static": true },
+          {
+            "date": "13/11/2073",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2073",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2073", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2074,
+        "holidays": [
+          { "date": "01/01/2074", "name": "Año Nuevo", "static": false },
+          {
+            "date": "08/01/2074",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "19/03/2074", "name": "Día de San José", "static": true },
+          { "date": "12/04/2074", "name": "Jueves Santo", "static": false },
+          { "date": "13/04/2074", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2074", "name": "Día del Trabajo", "static": false },
+          { "date": "28/05/2074", "name": "Ascensión del Señor", "static": true },
+          { "date": "18/06/2074", "name": "Corphus Christi", "static": true },
+          {
+            "date": "25/06/2074",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "02/07/2074",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2074",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2074", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "20/08/2074",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "15/10/2074", "name": "Día de la Raza", "static": true },
+          { "date": "05/11/2074", "name": "Todos los Santos", "static": true },
+          {
+            "date": "12/11/2074",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2074",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2074", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2075,
+        "holidays": [
+          { "date": "01/01/2075", "name": "Año Nuevo", "static": false },
+          {
+            "date": "07/01/2075",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "25/03/2075", "name": "Día de San José", "static": true },
+          { "date": "04/04/2075", "name": "Jueves Santo", "static": false },
+          { "date": "05/04/2075", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2075", "name": "Día del Trabajo", "static": false },
+          { "date": "20/05/2075", "name": "Ascensión del Señor", "static": true },
+          { "date": "10/06/2075", "name": "Corphus Christi", "static": true },
+          {
+            "date": "17/06/2075",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "01/07/2075",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2075",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2075", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "19/08/2075",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "14/10/2075", "name": "Día de la Raza", "static": true },
+          { "date": "04/11/2075", "name": "Todos los Santos", "static": true },
+          {
+            "date": "11/11/2075",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2075",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2075", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2076,
+        "holidays": [
+          { "date": "01/01/2076", "name": "Año Nuevo", "static": false },
+          {
+            "date": "06/01/2076",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "23/03/2076", "name": "Día de San José", "static": true },
+          { "date": "23/04/2076", "name": "Jueves Santo", "static": false },
+          { "date": "24/04/2076", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2076", "name": "Día del Trabajo", "static": false },
+          { "date": "08/06/2076", "name": "Ascensión del Señor", "static": true },
+          { "date": "29/06/2076", "name": "Corphus Christi", "static": true },
+          {
+            "date": "06/07/2076",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "29/06/2076",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2076",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2076", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "17/08/2076",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "12/10/2076", "name": "Día de la Raza", "static": true },
+          { "date": "02/11/2076", "name": "Todos los Santos", "static": true },
+          {
+            "date": "16/11/2076",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2076",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2076", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2077,
+        "holidays": [
+          { "date": "01/01/2077", "name": "Año Nuevo", "static": false },
+          {
+            "date": "11/01/2077",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "22/03/2077", "name": "Día de San José", "static": true },
+          { "date": "08/04/2077", "name": "Jueves Santo", "static": false },
+          { "date": "09/04/2077", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2077", "name": "Día del Trabajo", "static": false },
+          { "date": "24/05/2077", "name": "Ascensión del Señor", "static": true },
+          { "date": "14/06/2077", "name": "Corphus Christi", "static": true },
+          {
+            "date": "21/06/2077",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "05/07/2077",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2077",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2077", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "16/08/2077",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "18/10/2077", "name": "Día de la Raza", "static": true },
+          { "date": "01/11/2077", "name": "Todos los Santos", "static": true },
+          {
+            "date": "15/11/2077",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2077",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2077", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2078,
+        "holidays": [
+          { "date": "01/01/2078", "name": "Año Nuevo", "static": false },
+          {
+            "date": "10/01/2078",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "21/03/2078", "name": "Día de San José", "static": true },
+          { "date": "31/03/2078", "name": "Jueves Santo", "static": false },
+          { "date": "01/04/2078", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2078", "name": "Día del Trabajo", "static": false },
+          { "date": "16/05/2078", "name": "Ascensión del Señor", "static": true },
+          { "date": "06/06/2078", "name": "Corphus Christi", "static": true },
+          {
+            "date": "13/06/2078",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "04/07/2078",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2078",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2078", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "15/08/2078",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "17/10/2078", "name": "Día de la Raza", "static": true },
+          { "date": "07/11/2078", "name": "Todos los Santos", "static": true },
+          {
+            "date": "14/11/2078",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2078",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2078", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2079,
+        "holidays": [
+          { "date": "01/01/2079", "name": "Año Nuevo", "static": false },
+          {
+            "date": "09/01/2079",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "20/03/2079", "name": "Día de San José", "static": true },
+          { "date": "20/04/2079", "name": "Jueves Santo", "static": false },
+          { "date": "21/04/2079", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2079", "name": "Día del Trabajo", "static": false },
+          { "date": "05/06/2079", "name": "Ascensión del Señor", "static": true },
+          { "date": "26/06/2079", "name": "Corphus Christi", "static": true },
+          {
+            "date": "03/07/2079",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "03/07/2079",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2079",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2079", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "21/08/2079",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "16/10/2079", "name": "Día de la Raza", "static": true },
+          { "date": "06/11/2079", "name": "Todos los Santos", "static": true },
+          {
+            "date": "13/11/2079",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2079",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2079", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2080,
+        "holidays": [
+          { "date": "01/01/2080", "name": "Año Nuevo", "static": false },
+          {
+            "date": "08/01/2080",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "25/03/2080", "name": "Día de San José", "static": true },
+          { "date": "04/04/2080", "name": "Jueves Santo", "static": false },
+          { "date": "05/04/2080", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2080", "name": "Día del Trabajo", "static": false },
+          { "date": "20/05/2080", "name": "Ascensión del Señor", "static": true },
+          { "date": "10/06/2080", "name": "Corphus Christi", "static": true },
+          {
+            "date": "17/06/2080",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "01/07/2080",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2080",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2080", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "19/08/2080",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "14/10/2080", "name": "Día de la Raza", "static": true },
+          { "date": "04/11/2080", "name": "Todos los Santos", "static": true },
+          {
+            "date": "11/11/2080",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2080",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2080", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2081,
+        "holidays": [
+          { "date": "01/01/2081", "name": "Año Nuevo", "static": false },
+          {
+            "date": "06/01/2081",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "24/03/2081", "name": "Día de San José", "static": true },
+          { "date": "27/03/2081", "name": "Jueves Santo", "static": false },
+          { "date": "28/03/2081", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2081", "name": "Día del Trabajo", "static": false },
+          { "date": "12/05/2081", "name": "Ascensión del Señor", "static": true },
+          { "date": "02/06/2081", "name": "Corphus Christi", "static": true },
+          {
+            "date": "09/06/2081",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "30/06/2081",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2081",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2081", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "18/08/2081",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "13/10/2081", "name": "Día de la Raza", "static": true },
+          { "date": "03/11/2081", "name": "Todos los Santos", "static": true },
+          {
+            "date": "17/11/2081",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2081",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2081", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2082,
+        "holidays": [
+          { "date": "01/01/2082", "name": "Año Nuevo", "static": false },
+          {
+            "date": "12/01/2082",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "23/03/2082", "name": "Día de San José", "static": true },
+          { "date": "16/04/2082", "name": "Jueves Santo", "static": false },
+          { "date": "17/04/2082", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2082", "name": "Día del Trabajo", "static": false },
+          { "date": "01/06/2082", "name": "Ascensión del Señor", "static": true },
+          { "date": "22/06/2082", "name": "Corphus Christi", "static": true },
+          {
+            "date": "29/06/2082",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "29/06/2082",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2082",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2082", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "17/08/2082",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "12/10/2082", "name": "Día de la Raza", "static": true },
+          { "date": "02/11/2082", "name": "Todos los Santos", "static": true },
+          {
+            "date": "16/11/2082",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2082",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2082", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2083,
+        "holidays": [
+          { "date": "01/01/2083", "name": "Año Nuevo", "static": false },
+          {
+            "date": "11/01/2083",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "22/03/2083", "name": "Día de San José", "static": true },
+          { "date": "01/04/2083", "name": "Jueves Santo", "static": false },
+          { "date": "02/04/2083", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2083", "name": "Día del Trabajo", "static": false },
+          { "date": "17/05/2083", "name": "Ascensión del Señor", "static": true },
+          { "date": "07/06/2083", "name": "Corphus Christi", "static": true },
+          {
+            "date": "14/06/2083",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "05/07/2083",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2083",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2083", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "16/08/2083",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "18/10/2083", "name": "Día de la Raza", "static": true },
+          { "date": "01/11/2083", "name": "Todos los Santos", "static": true },
+          {
+            "date": "15/11/2083",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2083",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2083", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2084,
+        "holidays": [
+          { "date": "01/01/2084", "name": "Año Nuevo", "static": false },
+          {
+            "date": "10/01/2084",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "20/03/2084", "name": "Día de San José", "static": true },
+          { "date": "23/03/2084", "name": "Jueves Santo", "static": false },
+          { "date": "24/03/2084", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2084", "name": "Día del Trabajo", "static": false },
+          { "date": "08/05/2084", "name": "Ascensión del Señor", "static": true },
+          { "date": "29/05/2084", "name": "Corphus Christi", "static": true },
+          {
+            "date": "05/06/2084",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "03/07/2084",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2084",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2084", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "21/08/2084",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "16/10/2084", "name": "Día de la Raza", "static": true },
+          { "date": "06/11/2084", "name": "Todos los Santos", "static": true },
+          {
+            "date": "13/11/2084",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2084",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2084", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2085,
+        "holidays": [
+          { "date": "01/01/2085", "name": "Año Nuevo", "static": false },
+          {
+            "date": "08/01/2085",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "19/03/2085", "name": "Día de San José", "static": true },
+          { "date": "12/04/2085", "name": "Jueves Santo", "static": false },
+          { "date": "13/04/2085", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2085", "name": "Día del Trabajo", "static": false },
+          { "date": "28/05/2085", "name": "Ascensión del Señor", "static": true },
+          { "date": "18/06/2085", "name": "Corphus Christi", "static": true },
+          {
+            "date": "25/06/2085",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "02/07/2085",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2085",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2085", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "20/08/2085",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "15/10/2085", "name": "Día de la Raza", "static": true },
+          { "date": "05/11/2085", "name": "Todos los Santos", "static": true },
+          {
+            "date": "12/11/2085",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2085",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2085", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2086,
+        "holidays": [
+          { "date": "01/01/2086", "name": "Año Nuevo", "static": false },
+          {
+            "date": "07/01/2086",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "25/03/2086", "name": "Día de San José", "static": true },
+          { "date": "28/03/2086", "name": "Jueves Santo", "static": false },
+          { "date": "29/03/2086", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2086", "name": "Día del Trabajo", "static": false },
+          { "date": "13/05/2086", "name": "Ascensión del Señor", "static": true },
+          { "date": "03/06/2086", "name": "Corphus Christi", "static": true },
+          {
+            "date": "10/06/2086",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "01/07/2086",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2086",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2086", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "19/08/2086",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "14/10/2086", "name": "Día de la Raza", "static": true },
+          { "date": "04/11/2086", "name": "Todos los Santos", "static": true },
+          {
+            "date": "11/11/2086",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2086",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2086", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2087,
+        "holidays": [
+          { "date": "01/01/2087", "name": "Año Nuevo", "static": false },
+          {
+            "date": "06/01/2087",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "24/03/2087", "name": "Día de San José", "static": true },
+          { "date": "17/04/2087", "name": "Jueves Santo", "static": false },
+          { "date": "18/04/2087", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2087", "name": "Día del Trabajo", "static": false },
+          { "date": "02/06/2087", "name": "Ascensión del Señor", "static": true },
+          { "date": "23/06/2087", "name": "Corphus Christi", "static": true },
+          {
+            "date": "30/06/2087",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "30/06/2087",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2087",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2087", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "18/08/2087",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "13/10/2087", "name": "Día de la Raza", "static": true },
+          { "date": "03/11/2087", "name": "Todos los Santos", "static": true },
+          {
+            "date": "17/11/2087",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2087",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2087", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2088,
+        "holidays": [
+          { "date": "01/01/2088", "name": "Año Nuevo", "static": false },
+          {
+            "date": "12/01/2088",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "22/03/2088", "name": "Día de San José", "static": true },
+          { "date": "08/04/2088", "name": "Jueves Santo", "static": false },
+          { "date": "09/04/2088", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2088", "name": "Día del Trabajo", "static": false },
+          { "date": "24/05/2088", "name": "Ascensión del Señor", "static": true },
+          { "date": "14/06/2088", "name": "Corphus Christi", "static": true },
+          {
+            "date": "21/06/2088",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "05/07/2088",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2088",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2088", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "16/08/2088",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "18/10/2088", "name": "Día de la Raza", "static": true },
+          { "date": "01/11/2088", "name": "Todos los Santos", "static": true },
+          {
+            "date": "15/11/2088",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2088",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2088", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2089,
+        "holidays": [
+          { "date": "01/01/2089", "name": "Año Nuevo", "static": false },
+          {
+            "date": "10/01/2089",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "21/03/2089", "name": "Día de San José", "static": true },
+          { "date": "31/03/2089", "name": "Jueves Santo", "static": false },
+          { "date": "01/04/2089", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2089", "name": "Día del Trabajo", "static": false },
+          { "date": "16/05/2089", "name": "Ascensión del Señor", "static": true },
+          { "date": "06/06/2089", "name": "Corphus Christi", "static": true },
+          {
+            "date": "13/06/2089",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "04/07/2089",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2089",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2089", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "15/08/2089",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "17/10/2089", "name": "Día de la Raza", "static": true },
+          { "date": "07/11/2089", "name": "Todos los Santos", "static": true },
+          {
+            "date": "14/11/2089",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2089",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2089", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2090,
+        "holidays": [
+          { "date": "01/01/2090", "name": "Año Nuevo", "static": false },
+          {
+            "date": "09/01/2090",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "20/03/2090", "name": "Día de San José", "static": true },
+          { "date": "13/04/2090", "name": "Jueves Santo", "static": false },
+          { "date": "14/04/2090", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2090", "name": "Día del Trabajo", "static": false },
+          { "date": "29/05/2090", "name": "Ascensión del Señor", "static": true },
+          { "date": "19/06/2090", "name": "Corphus Christi", "static": true },
+          {
+            "date": "26/06/2090",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "03/07/2090",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2090",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2090", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "21/08/2090",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "16/10/2090", "name": "Día de la Raza", "static": true },
+          { "date": "06/11/2090", "name": "Todos los Santos", "static": true },
+          {
+            "date": "13/11/2090",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2090",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2090", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2091,
+        "holidays": [
+          { "date": "01/01/2091", "name": "Año Nuevo", "static": false },
+          {
+            "date": "08/01/2091",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "19/03/2091", "name": "Día de San José", "static": true },
+          { "date": "05/04/2091", "name": "Jueves Santo", "static": false },
+          { "date": "06/04/2091", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2091", "name": "Día del Trabajo", "static": false },
+          { "date": "21/05/2091", "name": "Ascensión del Señor", "static": true },
+          { "date": "11/06/2091", "name": "Corphus Christi", "static": true },
+          {
+            "date": "18/06/2091",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "02/07/2091",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2091",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2091", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "20/08/2091",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "15/10/2091", "name": "Día de la Raza", "static": true },
+          { "date": "05/11/2091", "name": "Todos los Santos", "static": true },
+          {
+            "date": "12/11/2091",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2091",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2091", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2092,
+        "holidays": [
+          { "date": "01/01/2092", "name": "Año Nuevo", "static": false },
+          {
+            "date": "07/01/2092",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "24/03/2092", "name": "Día de San José", "static": true },
+          { "date": "27/03/2092", "name": "Jueves Santo", "static": false },
+          { "date": "28/03/2092", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2092", "name": "Día del Trabajo", "static": false },
+          { "date": "12/05/2092", "name": "Ascensión del Señor", "static": true },
+          { "date": "02/06/2092", "name": "Corphus Christi", "static": true },
+          {
+            "date": "09/06/2092",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "30/06/2092",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2092",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2092", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "18/08/2092",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "13/10/2092", "name": "Día de la Raza", "static": true },
+          { "date": "03/11/2092", "name": "Todos los Santos", "static": true },
+          {
+            "date": "17/11/2092",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2092",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2092", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2093,
+        "holidays": [
+          { "date": "01/01/2093", "name": "Año Nuevo", "static": false },
+          {
+            "date": "12/01/2093",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "23/03/2093", "name": "Día de San José", "static": true },
+          { "date": "09/04/2093", "name": "Jueves Santo", "static": false },
+          { "date": "10/04/2093", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2093", "name": "Día del Trabajo", "static": false },
+          { "date": "25/05/2093", "name": "Ascensión del Señor", "static": true },
+          { "date": "15/06/2093", "name": "Corphus Christi", "static": true },
+          {
+            "date": "22/06/2093",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "29/06/2093",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2093",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2093", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "17/08/2093",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "12/10/2093", "name": "Día de la Raza", "static": true },
+          { "date": "02/11/2093", "name": "Todos los Santos", "static": true },
+          {
+            "date": "16/11/2093",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2093",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2093", "name": "Día de Navidad", "static": false }
+        ]
+      },
+      {
+        "year": 2094,
+        "holidays": [
+          { "date": "01/01/2094", "name": "Año Nuevo", "static": false },
+          {
+            "date": "11/01/2094",
+            "name": "Día de los Reyes Magos",
+            "static": true
+          },
+          { "date": "22/03/2094", "name": "Día de San José", "static": true },
+          { "date": "01/04/2094", "name": "Jueves Santo", "static": false },
+          { "date": "02/04/2094", "name": "Viernes Santo", "static": false },
+          { "date": "01/05/2094", "name": "Día del Trabajo", "static": false },
+          { "date": "17/05/2094", "name": "Ascensión del Señor", "static": true },
+          { "date": "07/06/2094", "name": "Corphus Christi", "static": true },
+          {
+            "date": "14/06/2094",
+            "name": "Sagrado Corazón de Jesús",
+            "static": true
+          },
+          {
+            "date": "05/07/2094",
+            "name": "San Pedro y San Pablo",
+            "static": true
+          },
+          {
+            "date": "20/07/2094",
+            "name": "Día de la Independencia",
+            "static": false
+          },
+          { "date": "07/08/2094", "name": "Batalla de Boyacá", "static": false },
+          {
+            "date": "16/08/2094",
+            "name": "La Asunción de la Virgen",
+            "static": true
+          },
+          { "date": "18/10/2094", "name": "Día de la Raza", "static": true },
+          { "date": "01/11/2094", "name": "Todos los Santos", "static": true },
+          {
+            "date": "15/11/2094",
+            "name": "Independencia de Cartagena",
+            "static": true
+          },
+          {
+            "date": "08/12/2094",
+            "name": "Día de la Inmaculada Concepción",
+            "static": false
+          },
+          { "date": "25/12/2094", "name": "Día de Navidad", "static": false }
+        ]
+      }
+    ]
+  }
