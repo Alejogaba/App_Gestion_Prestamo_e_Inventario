@@ -34,6 +34,7 @@ class RegistrarFuncionarioPageWidget extends StatefulWidget {
   final String? operacionaRealizar;
   final String? id;
   final Funcionario? funcionarioEditar;
+
   const RegistrarFuncionarioPageWidget(
       {Key? key, this.operacionaRealizar, this.id, this.funcionarioEditar})
       : super(key: key);
@@ -87,7 +88,6 @@ class _RegistrarFuncionarioPageWidgetState
   final String? id;
   int idArea = 0;
   int anchominimo = 640;
-  
 
   final Funcionario? funcionarioEditar;
   FocusNode _focusNodeCorreo = FocusNode();
@@ -111,7 +111,6 @@ class _RegistrarFuncionarioPageWidgetState
     LengthLimitingTextInputFormatter(10),
   ];
 
-  
   _RegistrarFuncionarioPageWidgetState(
       this.operacionaRealizar, this.id, this.funcionarioEditar);
 
@@ -153,11 +152,11 @@ class _RegistrarFuncionarioPageWidgetState
 
   @override
   Widget build(BuildContext context) {
-    dynamic tamanio_padding = (MediaQuery.of(context).size.width< anchominimo)
-      ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
-      : EdgeInsetsDirectional.fromSTEB(80, 10, 80, 10);
+    dynamic tamanio_padding = (MediaQuery.of(context).size.width < anchominimo)
+        ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
+        : EdgeInsetsDirectional.fromSTEB(80, 10, 80, 10);
 
-    dynamic anchoColumnaWrap = (MediaQuery.of(context).size.width< anchominimo)
+    dynamic anchoColumnaWrap = (MediaQuery.of(context).size.width < anchominimo)
         ? MediaQuery.of(context).size.width * 0.9
         : MediaQuery.of(context).size.width * 0.4;
     return Scaffold(
@@ -205,11 +204,11 @@ class _RegistrarFuncionarioPageWidgetState
                 if (imagenUrl != 'error') {
                   res = await registrarFuncionario(
                       funcionarioController, context, imagenUrl);
-                  
+
                   if (res == 'ok') {
                     setState(() {
-                    blur = false;
-                  });
+                      blur = false;
+                    });
                     Timer(Duration(seconds: 3), () {
                       context.pop();
                     });
@@ -324,7 +323,9 @@ class _RegistrarFuncionarioPageWidgetState
               margin: (MediaQuery.of(context).size.width < anchominimo)
                   ? EdgeInsets.fromLTRB(0, 15, 0, 0)
                   : EdgeInsets.all(10),
-              height: (MediaQuery.of(context).size.width < anchominimo) ? null : 1000,
+              height: (MediaQuery.of(context).size.width < anchominimo)
+                  ? null
+                  : 1000,
               width: double.infinity,
               decoration: BoxDecoration(
                 color: FlutterFlowTheme.of(context).secondaryBackground,
@@ -685,14 +686,16 @@ class _RegistrarFuncionarioPageWidgetState
                             ],
                           ),
                         ),
-                        (MediaQuery.of(context).size.width< anchominimo) ? Container() : Padding(
-                          padding: tamanio_padding,
-                          child:   Divider(
-                            height: 2,
-                            thickness: 1,
-                            color: Color(0x94ABB3BA),
-                          ),
-                        ),
+                        (MediaQuery.of(context).size.width < anchominimo)
+                            ? Container()
+                            : Padding(
+                                padding: tamanio_padding,
+                                child: Divider(
+                                  height: 2,
+                                  thickness: 1,
+                                  color: Color(0x94ABB3BA),
+                                ),
+                              ),
                         Column(
                           children: [
                             Padding(
@@ -820,9 +823,11 @@ class _RegistrarFuncionarioPageWidgetState
                               ),
                             ),
                             Padding(
-                              padding: (MediaQuery.of(context).size.width< anchominimo) ? EdgeInsetsDirectional.fromSTEB(
-                                        10, 10, 10, 65)
-                              :tamanio_padding,
+                              padding: (MediaQuery.of(context).size.width <
+                                      anchominimo)
+                                  ? EdgeInsetsDirectional.fromSTEB(
+                                      10, 10, 10, 65)
+                                  : tamanio_padding,
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [

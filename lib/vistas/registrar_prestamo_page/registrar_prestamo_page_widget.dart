@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
+import 'package:app_gestion_prestamo_inventario/entidades/funcionario.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:logger/logger.dart';
 
@@ -30,6 +32,7 @@ class _RegistrarPrestamoPageWidgetState
   List<Activo> listActivos = [];
   List<TextEditingController> listaControladores = [];
   TextEditingController controladorObservacion = TextEditingController();
+  Funcionario? funcionario;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +62,8 @@ class _RegistrarPrestamoPageWidgetState
       ),
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-        iconTheme: IconThemeData(color: FlutterFlowTheme.of(context).whiteColor),
+        iconTheme:
+            IconThemeData(color: FlutterFlowTheme.of(context).whiteColor),
         automaticallyImplyLeading: false,
         leading: InkWell(
           onTap: () async {
@@ -118,7 +122,8 @@ class _RegistrarPrestamoPageWidgetState
                 itemCount: listActivos.length,
                 itemBuilder: (BuildContext context, int index) {
                   listaControladores.add(TextEditingController());
-                  return _tarjetaActivo(listActivos[index],listaControladores[index]);
+                  return _tarjetaActivo(
+                      listActivos[index], listaControladores[index]);
                 },
               ),
               Padding(
@@ -254,10 +259,9 @@ class _RegistrarPrestamoPageWidgetState
                                                         .bodyText2
                                                         .override(
                                                           fontFamily: 'Poppins',
-                                                          color:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .primaryText,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
                                                           fontSize: 18,
                                                           fontWeight:
                                                               FontWeight.normal,
@@ -329,12 +333,8 @@ class _RegistrarPrestamoPageWidgetState
                 ),
               ),
               GestureDetector(
-                onTap: () async{
-                  final Activo? result =
-                              await context.pushNamed<Activo>(
-                            'listaFuncionariosPage',
-                            
-                          );
+                onTap: () async {
+                 
                 },
                 child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 12),
@@ -358,11 +358,13 @@ class _RegistrarPrestamoPageWidgetState
                               ],
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: FlutterFlowTheme.of(context).secondaryText,
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
                               ),
                             ),
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
@@ -397,17 +399,17 @@ class _RegistrarPrestamoPageWidgetState
                                                 .title3
                                                 .override(
                                                   fontFamily: 'Poppins',
-                                                  color:
-                                                      FlutterFlowTheme.of(context)
-                                                          .primaryText,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.w500,
-                                                  useGoogleFonts:
-                                                      GoogleFonts.asMap()
-                                                          .containsKey(
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .title3Family),
+                                                  useGoogleFonts: GoogleFonts
+                                                          .asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .title3Family),
                                                 ),
                                           ),
                                           Padding(
@@ -417,22 +419,25 @@ class _RegistrarPrestamoPageWidgetState
                                             child: AutoSizeText(
                                               'cargo',
                                               textAlign: TextAlign.start,
-                                              style: FlutterFlowTheme.of(context)
-                                                  .bodyText2
-                                                  .override(
-                                                    fontFamily: 'Poppins',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .grayicon,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.normal,
-                                                    useGoogleFonts: GoogleFonts
-                                                            .asMap()
-                                                        .containsKey(
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText2
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyText2Family),
-                                                  ),
+                                                                .grayicon,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText2Family),
+                                                      ),
                                             ),
                                           ),
                                           Padding(
@@ -442,22 +447,25 @@ class _RegistrarPrestamoPageWidgetState
                                             child: AutoSizeText(
                                               'Area',
                                               textAlign: TextAlign.start,
-                                              style: FlutterFlowTheme.of(context)
-                                                  .bodyText2
-                                                  .override(
-                                                    fontFamily: 'Poppins',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .grayicon,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.normal,
-                                                    useGoogleFonts: GoogleFonts
-                                                            .asMap()
-                                                        .containsKey(
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText2
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyText2Family),
-                                                  ),
+                                                                .grayicon,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText2Family),
+                                                      ),
                                             ),
                                           ),
                                         ],
@@ -489,6 +497,172 @@ class _RegistrarPrestamoPageWidgetState
                       ),
                     ],
                   ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 25, 0, 12),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () async {
+                          final Funcionario? result =
+                              await context.pushNamed<Funcionario>(
+                            'listaSeleccionFuncionariosPage',
+                          );
+                          if (result != null) {
+                            Logger().i('Activo devuelto:${result.nombres}');
+                            if (funcionario!=null&&funcionario!.cedula!=result.cedula) {
+                              setState(() {
+                                funcionario = result;
+                              });
+                            }
+                          }
+                        },
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 3,
+                                  color: FlutterFlowTheme.of(context).boxShadow,
+                                  spreadRadius: 1,
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                              ),
+                            ),
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 1, 1, 1),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(6),
+                                      child: Image.network(
+                                        'https://www.iconsdb.com/icons/preview/light-gray/plus-4-xxl.png',
+                                        width: 80,
+                                        height: 80,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          8, 2, 4, 0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Añadir activo',
+                                            style: FlutterFlowTheme.of(context)
+                                                .title3
+                                                .override(
+                                                  fontFamily: 'Poppins',
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w500,
+                                                  useGoogleFonts: GoogleFonts
+                                                          .asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .title3Family),
+                                                ),
+                                          ),
+                                          FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(6, 0, 0, 6),
+                                                  child: Icon(
+                                                    Icons.touch_app,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    size: 30,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(5, 8, 8, 0),
+                                                  child: AutoSizeText(
+                                                    'Toca para seleccionar',
+                                                    textAlign: TextAlign.start,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyText2
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          useGoogleFonts: GoogleFonts
+                                                                  .asMap()
+                                                              .containsKey(
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyText2Family),
+                                                        ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 4, 0, 0),
+                                        child: Icon(
+                                          Icons.chevron_right_rounded,
+                                          color: Color(0xFF57636C),
+                                          size: 24,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Divider(
@@ -532,7 +706,8 @@ class _RegistrarPrestamoPageWidgetState
     );
   }
 
-  Widget _tarjetaActivo(Activo activo, TextEditingController controladorObservacion) {
+  Widget _tarjetaActivo(
+      Activo activo, TextEditingController controladorObservacion) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -633,18 +808,18 @@ class _RegistrarPrestamoPageWidgetState
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
-                                  padding:
-                                      EdgeInsetsDirectional.fromSTEB(6, 0, 0, 0),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      6, 0, 0, 0),
                                   child: FaIcon(
                                     FontAwesomeIcons.barcode,
-                                    color:
-                                        FlutterFlowTheme.of(context).primaryText,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
                                     size: 18,
                                   ),
                                 ),
                                 Padding(
-                                  padding:
-                                      EdgeInsetsDirectional.fromSTEB(5, 3, 8, 1),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      5, 3, 8, 1),
                                   child: AutoSizeText(
                                     'S/N: ${activo.idSerial}',
                                     textAlign: TextAlign.start,
@@ -672,8 +847,8 @@ class _RegistrarPrestamoPageWidgetState
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
-                                  padding:
-                                      EdgeInsetsDirectional.fromSTEB(3, 0, 0, 0),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      3, 0, 0, 0),
                                   child: FaIcon(
                                     FontAwesomeIcons.boxOpen,
                                     color: Color(0xFFAD8762),
@@ -681,10 +856,9 @@ class _RegistrarPrestamoPageWidgetState
                                   ),
                                 ),
                                 Padding(
-                                  padding:
-                                      EdgeInsetsDirectional.fromSTEB(5, 3, 8, 1),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      5, 3, 8, 1),
                                   child: AutoSizeText(
-                                    
                                     'N° inventario: ${(activo.numActivo!.isEmpty) ? 'No registrado' : activo.numActivo}',
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.ellipsis,
@@ -752,83 +926,59 @@ class _RegistrarPrestamoPageWidgetState
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                     child: Container(
-            width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.85,
-            child: TextFormField(
-              
-              controller: controladorObservacion,
-              autofocus: true,
-              obscureText: false,
-              decoration: InputDecoration(
-                                              
-                                              labelStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText2
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color: Color(0xFF57636C),
-                                                        fontSize: 18,
-                                                        
-                                                        
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        useGoogleFonts: GoogleFonts
-                                                                .asMap()
-                                                            .containsKey(
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyText2Family),
-                                                      ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color:
-                                                      FlutterFlowTheme.of(context)
-                                                        .grayicon,
-                                                  width: 1,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color:
-                                                      FlutterFlowTheme.of(context)
-                                                          .primaryText,
-                                                  width: 2,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              errorBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 1,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0x00000000),
-                                                  width: 1,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                              filled: true,
-                                              fillColor:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
-                                              
-                                            ),
-              style: FlutterFlowTheme.of(context).bodyText1,
-            ),
+                      width: MediaQuery.of(context).size.width * 0.85,
+                      child: TextFormField(
+                        controller: controladorObservacion,
+                        autofocus: true,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          labelStyle: FlutterFlowTheme.of(context)
+                              .bodyText2
+                              .override(
+                                fontFamily: 'Poppins',
+                                color: Color(0xFF57636C),
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
+                                useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                    FlutterFlowTheme.of(context)
+                                        .bodyText2Family),
+                              ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).grayicon,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          filled: true,
+                          fillColor:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                        ),
+                        style: FlutterFlowTheme.of(context).bodyText1,
+                      ),
                     ),
                   ),
-                 
                 ],
               ),
             ],

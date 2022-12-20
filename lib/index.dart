@@ -4,6 +4,8 @@ export 'vistas/login_page/login_page_widget.dart' show LoginPageWidget;
 export 'vistas/ajustes_page/ajustes_page_widget.dart' show AjustesPageWidget;
 export 'vistas/lista_funcionarios_page/lista_funcionarios_page_widget.dart'
     show ListaFuncionariosPageWidget;
+export 'vistas/lista_funcionarios_page/lista_seleccion_funcionarios_page_widget.dart'
+    show ListaSeleccionFuncionariosPageWidget;
 export 'vistas/registrar_categoria_page/registrar_categoria_page_widget.dart'
     show RegistrarCategoriaPageWidget;
 export 'vistas/registrar_funcionario_page/registrar_funcionario_page_widget.dart'

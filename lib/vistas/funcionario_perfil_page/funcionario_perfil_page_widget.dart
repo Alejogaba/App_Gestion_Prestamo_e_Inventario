@@ -34,13 +34,18 @@ import 'package:url_launcher/url_launcher.dart';
 class FuncionarioPerfilPageWidget extends StatefulWidget {
   final Funcionario funcionario;
   final Area area;
+  final bool? selectMode;
   const FuncionarioPerfilPageWidget(
-      {Key? key, required this.funcionario, required this.area})
+      {Key? key,
+      required this.funcionario,
+      required this.area,
+      this.selectMode})
       : super(key: key);
 
   @override
   _FuncionarioPerfilPageWidgetState createState() =>
-      _FuncionarioPerfilPageWidgetState(this.funcionario, this.area);
+      _FuncionarioPerfilPageWidgetState(
+          this.funcionario, this.area, this.selectMode);
 }
 
 class _FuncionarioPerfilPageWidgetState
@@ -77,8 +82,10 @@ class _FuncionarioPerfilPageWidgetState
   Area area;
   bool blur = false;
   ActivoController activoController = ActivoController();
+  bool? selectMode;
 
-  _FuncionarioPerfilPageWidgetState(this.funcionario, this.area);
+  _FuncionarioPerfilPageWidgetState(
+      this.funcionario, this.area, this.selectMode);
 
   @override
   void initState() {
@@ -94,26 +101,33 @@ class _FuncionarioPerfilPageWidgetState
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString('id_funcionario', funcionario.cedula);
-          Logger().i('Antes del push');
           // ignore: use_build_context_synchronously
-          context.pushNamed(
-            'listaActivosPage',
-            queryParams: {
-              'nombreCategoria': serializeParam(
-                'Todos los activos',
-                ParamType.String,
-              ),
-              'selectMode': serializeParam(
-                true,
-                ParamType.bool,
-              ),
-            }.withoutNulls,
-          );
-          dynamic result;
-          GoRouter.of(context).addListener(result);
-          Logger().i('Despues del push');
+          if (selectMode != null && selectMode == true) {
+            try {
+              context.pop(funcionario);
+            } catch (e) {
+              Logger().e('Error en context.pop');
+            }
+            
+          } else {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setString('id_funcionario', funcionario.cedula);
+            Logger().i('Antes del push');
+            // ignore: use_build_context_synchronously
+            context.pushNamed(
+              'listaActivosPage',
+              queryParams: {
+                'nombreCategoria': serializeParam(
+                  'Todos los activos',
+                  ParamType.String,
+                ),
+                'selectMode': serializeParam(
+                  true,
+                  ParamType.bool,
+                ),
+              }.withoutNulls,
+            );
+          }
         },
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         icon: Icon(
@@ -123,7 +137,9 @@ class _FuncionarioPerfilPageWidgetState
         ),
         elevation: 8,
         label: Text(
-          'Asignar activo',
+          (selectMode != null && selectMode!)
+              ? 'Seleccionar funcionario'
+              : 'Asignar activo',
           style: FlutterFlowTheme.of(context).bodyText1.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
                 color: FlutterFlowTheme.of(context).whiteColor,
@@ -233,30 +249,37 @@ class _FuncionarioPerfilPageWidgetState
                                                                   0, 0, 24, 0),
                                                       child: InkWell(
                                                         onTap: () async {
-                                                          context.pushNamed(
-                                                            'RegistrarFuncionarioPage',
-                                                            queryParams: {
-                                                              'editMode':
-                                                                  serializeParam(
-                                                                true,
-                                                                ParamType.bool,
-                                                              ),
-                                                            }.withoutNulls,
-                                                            extra: <String,
-                                                                dynamic>{
-                                                              kTransitionInfoKey:
-                                                                  TransitionInfo(
-                                                                hasTransition:
-                                                                    true,
-                                                                transitionType:
-                                                                    PageTransitionType
-                                                                        .fade,
-                                                                duration: Duration(
-                                                                    milliseconds:
-                                                                        1000),
-                                                              ),
-                                                            },
-                                                          );
+                                                          (selectMode != null &&
+                                                                  selectMode!)
+                                                              ? log(
+                                                                  'asignar button')
+                                                              : context
+                                                                  .pushNamed(
+                                                                  'RegistrarFuncionarioPage',
+                                                                  queryParams: {
+                                                                    'editMode':
+                                                                        serializeParam(
+                                                                      true,
+                                                                      ParamType
+                                                                          .bool,
+                                                                    ),
+                                                                  }.withoutNulls,
+                                                                  extra: <
+                                                                      String,
+                                                                      dynamic>{
+                                                                    kTransitionInfoKey:
+                                                                        TransitionInfo(
+                                                                      hasTransition:
+                                                                          true,
+                                                                      transitionType:
+                                                                          PageTransitionType
+                                                                              .fade,
+                                                                      duration: Duration(
+                                                                          milliseconds:
+                                                                              1000),
+                                                                    ),
+                                                                  },
+                                                                );
                                                         },
                                                         child: Container(
                                                           width: 40,

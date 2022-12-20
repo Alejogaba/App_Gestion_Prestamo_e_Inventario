@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app_gestion_prestamo_inventario/vistas/ajustes_page/actualizar.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/lista_funcionarios_page/lista_seleccion_funcionarios_page_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:go_router_flow/go_router_flow.dart';
@@ -99,6 +100,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   : ListaFuncionariosPageWidget(),
             ),
             FFRoute(
+              name: 'ListaSeleccionFuncionariosPage',
+              path: 'listaSeleccionFuncionariosPage',
+              builder: (context, params) => ListaSeleccionFuncionariosPageWidget(),
+            ),
+            FFRoute(
               name: 'RegistrarCategoriaPage',
               path: 'registrarCategoriaPage',
               builder: (context, params) => RegistrarCategoriaPageWidget(),
@@ -114,7 +120,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'FuncionarioPerfilPage',
               path: 'funcionarioPerfilPage',
               builder: (context, params) => FuncionarioPerfilPageWidget(funcionario: params.getParam('funcionario', ParamType.Funcionario),
-              area: params.getParam('area', ParamType.Area),),
+              area: params.getParam('area', ParamType.Area),selectMode: params.getParam('selectMode', ParamType.bool)),
             ),
             FFRoute(
               name: 'ActivoPerfilPage',
