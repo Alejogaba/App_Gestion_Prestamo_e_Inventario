@@ -22,43 +22,35 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ListaActivosPageWidget extends StatefulWidget {
-  final String nombreCategoria;
-  final bool selectMode;
-  final bool? esPrestamo;
-  const ListaActivosPageWidget(
-      {Key? key,
-      required this.nombreCategoria,
-      this.selectMode = false,
-      this.esPrestamo})
+class ListaSeleccionFuncionariosPageWidget extends StatefulWidget {
+
+  const ListaSeleccionFuncionariosPageWidget(
+      {Key? key})
       : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _ListaActivosPageWidgetState createState() => _ListaActivosPageWidgetState(
-      this.nombreCategoria, this.selectMode, this.esPrestamo);
+  _ListaSeleccionFuncionariosPageWidgetState createState() => _ListaSeleccionFuncionariosPageWidgetState(
+      );
 }
 
-class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
+class _ListaSeleccionFuncionariosPageWidgetState extends State<ListaSeleccionFuncionariosPageWidget> {
   TextEditingController? textControllerBusqueda;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final String nombreCategoria;
+
   var id = '';
   var a;
   ActivoController activoController = ActivoController();
   List<Funcionario> listaFuncionario = [];
-  bool selectMode;
-  bool? esPrestamo;
+    bool? esPrestamo;
 
-  _ListaActivosPageWidgetState(
-      this.nombreCategoria, this.selectMode, this.esPrestamo);
+
 
   @override
   void initState() {
     super.initState();
     setState(() {});
     textControllerBusqueda = TextEditingController();
-    log('CATEGORIA DE LA LISTA:$nombreCategoria');
   }
 
   @override
@@ -91,8 +83,6 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
           curve: Curves.bounceIn,
           overlayColor: Colors.black,
           overlayOpacity: 0.5,
-          onOpen: () => print('OPENING DIAL'), // action when menu opens
-          onClose: () => print('DIAL CLOSED'), //action when menu closes
 
           elevation: 8.0, //shadow elevation of button
           shape: CircleBorder(), //shape of button
@@ -204,7 +194,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                 IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
             automaticallyImplyLeading: false,
             title: AutoSizeText(
-              (nombreCategoria.isEmpty) ? 'Activos' : nombreCategoria,
+              'Funcionarios',
               style: FlutterFlowTheme.of(context).bodyText1.override(
                     fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
                     color: FlutterFlowTheme.of(context).whiteColor,
@@ -406,7 +396,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                       ),
                                                       'selectMode':
                                                           serializeParam(
-                                                        selectMode,
+                                                        true,
                                                         ParamType.bool,
                                                       ),
                                                       'esPrestamo':
