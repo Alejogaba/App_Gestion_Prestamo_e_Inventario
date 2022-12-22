@@ -220,11 +220,12 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
                                     primary: false,
                                     shrinkWrap: true,
                                     scrollDirection: Axis.vertical,
-                                    itemCount: 10,
+                                    itemCount: snapshot.data!.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return tarjetaItem(
-                                          snapshot.data![index],_listadiasPendientes[index]);
+                                      log(_listadiasPendientes[index]);
+                                      return tarjetaItem(snapshot.data![index],
+                                          _listadiasPendientes[index]);
                                     },
                                   );
                                 } else {
@@ -255,10 +256,12 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
         .i('Cantidad de activos asignados:${listFuncionariosActvos.length}');
     await Future.forEach(listFuncionariosActvos, (Prestamo value) async {
       _listActivos.add(await activoController.buscarActivo(value.idActivo));
-      _listadiasPendientes.add(value.fechaHoraEntrega.toString());
+      log('fecha salidas: ${value.fechaHoraInicio}');
+      log('fecha entrega: ${value.fechaHoraEntrega.toString()}');
+      _listadiasPendientes
+          .add(_definirDias(value.fechaHoraInicio, value.fechaHoraEntrega!));
     });
-    Logger().i('Cantidad de activos asignados devueltos:' +
-        _listActivos.length.toString());
+
     return Future.value(_listActivos);
   }
 }
@@ -266,10 +269,8 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
 class tarjetaItem extends StatelessWidget {
   final Activo activo;
   final String diasPendientes;
-  const tarjetaItem(this.activo,this.diasPendientes,
-   {
-    Key? key
-  }) : super(key: key);
+  const tarjetaItem(this.activo, this.diasPendientes, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -301,45 +302,43 @@ class tarjetaItem extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: FastCachedImage(
+                    width: 80,
+                    height: 80,
+                    url: activo.urlImagen,
+                    fit: BoxFit.cover,
+                    fadeInDuration: const Duration(seconds: 1),
+                    errorBuilder: (context, exception, stacktrace) {
+                      log(stacktrace.toString());
+                      return Image.asset(
+                        'assets/images/nodisponible.png',
                         width: 80,
                         height: 80,
-                        url: activo.urlImagen,
                         fit: BoxFit.cover,
-                        fadeInDuration: const Duration(seconds: 1),
-                        errorBuilder: (context, exception, stacktrace) {
-                          log(stacktrace.toString());
-                          return Image.asset(
-                            'assets/images/nodisponible.png',
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.cover,
-                          );
-                        },
-                        loadingBuilder: (context, progress) {
-                          return Container(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                if (progress.isDownloading &&
-                                    progress.totalBytes != null)
-                                  Text(
-                                      '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
-                                      style: const TextStyle(
-                                          color: Color(0xFF006D38))),
-                                SizedBox(
-                                    width: 70,
-                                    height: 70,
-                                    child: CircularProgressIndicator(
-                                        color: const Color(0xFF006D38),
-                                        value:
-                                            progress.progressPercentage.value)),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                      );
+                    },
+                    loadingBuilder: (context, progress) {
+                      return Container(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            if (progress.isDownloading &&
+                                progress.totalBytes != null)
+                              Text(
+                                  '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
+                                  style: const TextStyle(
+                                      color: Color(0xFF006D38))),
+                            SizedBox(
+                                width: 70,
+                                height: 70,
+                                child: CircularProgressIndicator(
+                                    color: const Color(0xFF006D38),
+                                    value: progress.progressPercentage.value)),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
               Expanded(
@@ -355,7 +354,6 @@ class tarjetaItem extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: FlutterFlowTheme.of(context).title3.override(
                               fontFamily: 'Poppins',
-                              
                               color: FlutterFlowTheme.of(context).primaryText,
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
@@ -455,3 +453,141 @@ class tarjetaItem extends StatelessWidget {
     );
   }
 }
+
+String _definirDias(DateTime inicio, DateTime fin) {
+  DateTimeRange rango;
+  bool progamadoaFuturo= false;
+  bool atrasado= false;
+  DateTime now = DateTime.now();
+  int duracion;
+  if (inicio.isAfter(now)) {
+    progamadoaFuturo = true;
+  } else if(fin.isBefore(now)){
+    atrasado = true;
+  }
+  if (progamadoaFuturo) {
+    rango =
+        DateTimeRange(start: now, end: inicio);
+    duracion = rango.duration.inDays;
+    if (duracion<8) {
+      switch (duracion) {
+      case 1:
+        return 'Programado para mañana';
+      case 2:
+        return 'programado para pasado manñana';
+      default:
+        return 'Progamado para el ${definirDiaSemana(inicio.weekday)}';
+    }
+    } else {
+       return 'Progamado para dentro de $duracion días';
+    }
+  } else if(atrasado){
+    rango =
+        DateTimeRange(start: fin, end: now);
+    duracion = rango.duration.inDays;
+    if (duracion<8) {
+      switch (duracion) {
+        case 1:
+          return 'Debia entregarse ayer';
+        case 2:
+          return 'Debia entregarse antier';
+        default:
+          return 'Debia entregarse el ${definirDiaSemana(fin.weekday)}';
+      }
+    } else {
+       return 'Debia entregarse hace $duracion días';
+    }
+      
+    
+  } else{
+    rango =
+        DateTimeRange(start: now, end: fin);
+    duracion = rango.duration.inDays;
+    if (duracion<8) {
+      switch (duracion) {
+        case 0:
+          return 'Para entregar hoy';
+        case 1:
+          return 'Para entregar mañana';
+        case 2:
+          return 'Para entregar pasado mañana';
+        default:
+          return 'Para entregar el ${definirDiaSemana(fin.weekday)}';
+      }
+    } else {
+      return 'Para entregar dentro de $duracion días';
+    }
+      
+    
+  }
+
+  
+}
+  String definirDiaSemana(int numeroSemana) {
+    switch (numeroSemana) {
+      case 1:
+        return "Lunes";
+        break;
+      case 2:
+        return "Martes";
+        break;
+      case 3:
+        return "Miercoles";
+      case 4:
+        return "Jueves";
+        break;
+      case 5:
+        return "Viernes";
+        break;
+      case 6:
+        return "Sábado";
+        break;
+      case 7:
+        return "Domingo";
+        break;
+      default:
+        return "Indefinido";
+    }
+  }
+
+  String definirMes(int numMes) {
+    switch (numMes) {
+      case 1:
+        return "Enero";
+        break;
+      case 2:
+        return "Febrero";
+        break;
+      case 3:
+        return "Marzo";
+      case 4:
+        return "Abril";
+        break;
+      case 5:
+        return "Mayo";
+        break;
+      case 6:
+        return "Junio";
+        break;
+      case 7:
+        return "Julio";
+        break;
+      case 8:
+        return "Agosto";
+        break;
+      case 9:
+        return "Septiembre";
+        break;
+      case 10:
+        return "Octubre";
+        break;
+      case 11:
+        return "Noviembre";
+        break;
+      case 12:
+        return "Diciembre";
+        break;
+      default:
+        return "Indefinido";
+    }
+  }

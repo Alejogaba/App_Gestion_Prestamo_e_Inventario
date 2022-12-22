@@ -24,10 +24,10 @@ class PrestamosController {
       SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
 
   Future<String> registrarPrestamo(
-      context, String idActivo, String idFuncionario, DateTime fechaHoraInicio,
+      context, String idActivo, String idFuncionario, String? fechaHoraInicio,
       {bool entregado = false,
       String? observacion,
-      DateTime? fechaHoraFinal}) async {
+      String? fechaHoraFinal}) async {
     try {
       await supabase.from('PRESTAMOS').insert({
         'ID_FUNCIONARIO': idFuncionario,
@@ -38,7 +38,7 @@ class PrestamosController {
             ? null
             : utilidades.mayusculaPrimeraLetraFrase(observacion),
         'FECHA_HORA_FINAL':
-            (fechaHoraFinal == null) ? null : fechaHoraFinal.toString(),
+            (fechaHoraFinal == null) ? DateTime.now().add(const Duration(days: 1)).toString() : fechaHoraFinal.toString(),
       }).then((value) async {
         log('Nuevo activo prestado: $value');
         await supabase

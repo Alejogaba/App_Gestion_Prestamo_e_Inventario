@@ -18,7 +18,7 @@ class Prestamo {
       DateTime.parse(map['FECHA_HORA_INICIO'].toString()),
       map['ENTREGADO'] ?? false,
       observacion: map['OBSERVACION'] ?? '',
-      fechaHoraEntrega:(map['FECHA_HORA_ENTREGA']==null) ? null : DateTime.parse(map['FECHA_HORA_ENTREGA'].toString()),
+      fechaHoraEntrega:DateTime.parse(map['FECHA_HORA_FINAL'].toString()),
     );
   }
 }

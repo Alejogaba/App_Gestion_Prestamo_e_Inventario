@@ -1502,6 +1502,50 @@ class _FuncionarioPerfilPageWidgetState
                             },
                           ),
                         ),
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(24, 12, 0, 8),
+                              child: Text(
+                                'ACTIVOS PRESTADOS',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText2
+                                    .override(
+                                      fontFamily: FlutterFlowTheme.of(context)
+                                          .bodyText2Family,
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      useGoogleFonts: GoogleFonts.asMap()
+                                          .containsKey(
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyText2Family),
+                                    ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 24),
+                          child: FutureBuilder<List<Activo>>(
+                            future: cargarActivosPrestados(funcionario.cedula),
+                            builder: (BuildContext context, snapshot) {
+                              Logger().i('Estado de conexion: ' +
+                                  snapshot.connectionState.toString());
+                              if (snapshot.connectionState ==
+                                      ConnectionState.done &&
+                                  snapshot.data!.length > 0) {
+                                return _tarjetaActivo(snapshot);
+                              } else {
+                                return Container();
+                              }
+                            },
+                          ),
+                        ),
+
                         Padding(
                           padding: EdgeInsets.all(30),
                           child: Container(),
