@@ -1940,7 +1940,7 @@ Future<List<Activo>> cargarActivosPrestados(String cedula) async {
   PrestamosController prestamosController = PrestamosController();
   ActivoController activoController = ActivoController();
   List<Prestamo> listFuncionariosActvos =
-      await prestamosController.getActivosPrestados(cedula);
+      await prestamosController.getActivosPrestados(idFuncionario: cedula);
   Logger().i('Cantidad de activos asignados:${listFuncionariosActvos.length}');
   await Future.forEach(listFuncionariosActvos, (Prestamo value) async {
     listActivos.add(await activoController.buscarActivo(value.idActivo));
