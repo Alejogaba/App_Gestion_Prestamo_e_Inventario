@@ -1,5 +1,12 @@
-import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
+import 'dart:developer';
 
+import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:logger/logger.dart';
+
+import '../../entidades/prestamo.dart';
+import '../../servicios/activoController.dart';
+import '../../servicios/prestamosController.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -23,6 +30,7 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
   TextEditingController? textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List<Activo> listActivos = [];
+  List<String> _listadiasPendientes = [];
 
   @override
   void initState() {
@@ -201,16 +209,28 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
                         ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
-                          child: ListView.builder(
-                            padding: EdgeInsets.zero,
-                            primary: false,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount: 10,
-                            itemBuilder: (BuildContext context, int index) {
-                              return const tarjetaItem();
-                            },
-                          ),
+                          child: FutureBuilder<List<Activo>>(
+                              future: cargarActivosPrestados(),
+                              builder: (BuildContext context, snapshot) {
+                                if (snapshot.connectionState ==
+                                        ConnectionState.done &&
+                                    snapshot.data!.length > 0) {
+                                  return ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    primary: false,
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: 10,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return tarjetaItem(
+                                          snapshot.data![index],_listadiasPendientes[index]);
+                                    },
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              }),
                         ),
                       ],
                     ),
@@ -223,11 +243,32 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
       ),
     );
   }
+
+  Future<List<Activo>> cargarActivosPrestados() async {
+    List<Activo> _listActivos = [];
+    _listadiasPendientes = [];
+    PrestamosController prestamosController = PrestamosController();
+    ActivoController activoController = ActivoController();
+    List<Prestamo> listFuncionariosActvos =
+        await prestamosController.getActivosPrestados();
+    Logger()
+        .i('Cantidad de activos asignados:${listFuncionariosActvos.length}');
+    await Future.forEach(listFuncionariosActvos, (Prestamo value) async {
+      _listActivos.add(await activoController.buscarActivo(value.idActivo));
+      _listadiasPendientes.add(value.fechaHoraEntrega.toString());
+    });
+    Logger().i('Cantidad de activos asignados devueltos:' +
+        _listActivos.length.toString());
+    return Future.value(_listActivos);
+  }
 }
 
 class tarjetaItem extends StatelessWidget {
-  const tarjetaItem({
-    Key? key,
+  final Activo activo;
+  final String diasPendientes;
+  const tarjetaItem(this.activo,this.diasPendientes,
+   {
+    Key? key
   }) : super(key: key);
 
   @override
@@ -259,12 +300,46 @@ class tarjetaItem extends StatelessWidget {
                 padding: EdgeInsetsDirectional.fromSTEB(0, 1, 1, 1),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6),
-                  child: Image.network(
-                    'https://fotos.perfil.com/2021/06/25/hennessey-mammoth-1000-trx-asi-es-la-camioneta-mas-picante-y-potente-del-mundo-1195417.jpg',
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.cover,
-                  ),
+                  child: FastCachedImage(
+                        width: 80,
+                        height: 80,
+                        url: activo.urlImagen,
+                        fit: BoxFit.cover,
+                        fadeInDuration: const Duration(seconds: 1),
+                        errorBuilder: (context, exception, stacktrace) {
+                          log(stacktrace.toString());
+                          return Image.asset(
+                            'assets/images/nodisponible.png',
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                        loadingBuilder: (context, progress) {
+                          return Container(
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                if (progress.isDownloading &&
+                                    progress.totalBytes != null)
+                                  Text(
+                                      '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
+                                      style: const TextStyle(
+                                          color: Color(0xFF006D38))),
+                                SizedBox(
+                                    width: 70,
+                                    height: 70,
+                                    child: CircularProgressIndicator(
+                                        color: const Color(0xFF006D38),
+                                        value:
+                                            progress.progressPercentage.value)),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                 ),
               ),
               Expanded(
@@ -276,9 +351,11 @@ class tarjetaItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Nombre activo',
+                        '${activo.nombre} ${activo.detalles}',
+                        overflow: TextOverflow.ellipsis,
                         style: FlutterFlowTheme.of(context).title3.override(
                               fontFamily: 'Poppins',
+                              
                               color: FlutterFlowTheme.of(context).primaryText,
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
@@ -300,7 +377,7 @@ class tarjetaItem extends StatelessWidget {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(5, 3, 8, 1),
                             child: AutoSizeText(
-                              'S/N',
+                              'S/N: ${activo.idSerial}',
                               textAlign: TextAlign.start,
                               style: FlutterFlowTheme.of(context)
                                   .bodyText2
@@ -333,7 +410,7 @@ class tarjetaItem extends StatelessWidget {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(5, 3, 8, 1),
                             child: AutoSizeText(
-                              'Jose Pedro',
+                              diasPendientes,
                               textAlign: TextAlign.start,
                               style: FlutterFlowTheme.of(context)
                                   .bodyText2
