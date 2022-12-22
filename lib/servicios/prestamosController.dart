@@ -27,21 +27,21 @@ class PrestamosController {
     context,
     String idActivo,
     String idFuncionario,
-    DateTime fechaHoraInicio,{
+    String? fechaHoraInicio,{
       bool entregado=false,
       String? observacion,
-      DateTime? fechaHoraFinal
+      String? fechaHoraFinal
     }
   ) async {
     try {
       await supabase.from('PRESTAMOS').insert({
         'ID_FUNCIONARIO': idFuncionario,
         'ID_ACTIVO': idActivo,
-        'FECHA_HORA_INICIO': fechaHoraInicio.toString(),
+        'FECHA_HORA_INICIO': (fechaHoraInicio==null) ? DateTime.now().toString() : fechaHoraInicio,
         'ENTREGADO': entregado,
         'OBSERVACION': (observacion==null) ? null: 
         utilidades.mayusculaPrimeraLetraFrase(observacion),
-        'FECHA_HORA_FINAL': (fechaHoraFinal==null) ? null : fechaHoraFinal.toString(),
+        'FECHA_HORA_FINAL': (fechaHoraFinal==null) ? DateTime.now().add(const Duration(days: 1)).toString() : fechaHoraFinal,
       }).then((value) async {
         log('Nuevo activo prestado: $value');
         await supabase
@@ -49,18 +49,7 @@ class PrestamosController {
             .update({'ESTA_PRESTADO': true}).match({'ID_SERIAL': idActivo});
       });
       log("Prestado con exito");
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          "Prestamo registrado con exitó",
-          style: FlutterFlowTheme.of(context).bodyText2.override(
-                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
-                color: FlutterFlowTheme.of(context).tertiaryColor,
-                useGoogleFonts: GoogleFonts.asMap()
-                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
-              ),
-        ),
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-      ));
+    
       return 'ok';
     } on Exception catch (error) {
       StorageController storageController = StorageController();

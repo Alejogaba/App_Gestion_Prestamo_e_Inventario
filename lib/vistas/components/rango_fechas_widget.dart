@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:app_gestion_prestamo_inventario/flutter_flow/flutter_flow_util.dart';
+import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../flutter_flow/flutter_flow_theme.dart';
 
@@ -41,6 +43,21 @@ class _RangoFechasWidgetState extends State<RangoFechasWidget> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: SfDateRangePicker(
+            onSelectionChanged: (args) async {
+              if (args.value is PickerDateRange && args.value != null) {
+                final DateTime rangeStartDate = args.value.startDate;
+                DateTime rangeEndDate = rangeStartDate;
+                if (args.value.endDate != null) {
+                  rangeEndDate = args.value.endDate;
+                }
+                final DateTimeRange range =
+                    DateTimeRange(start: rangeStartDate, end: rangeEndDate);
+                Logger().i('El rango de fecha es:${range.duration.inDays}');
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setString('fecha_inicio', rangeStartDate.toString());
+                prefs.setString('fecha_fin', rangeEndDate.toString());
+              }
+            },
             initialDisplayDate: DateTime.now(),
             minDate: DateTime.now(),
             todayHighlightColor: FlutterFlowTheme.of(context).primaryColor,
@@ -57,7 +74,10 @@ class _RangoFechasWidgetState extends State<RangoFechasWidget> {
                 ),
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             selectableDayPredicate: (DateTime dateTime) {
-              if (dateTime.weekday == 7 || dateTime.weekday == 6 || (_listadiasFestivos.where((element) => element == dateTime)).isNotEmpty) {
+              if (dateTime.weekday == 7 ||
+                  dateTime.weekday == 6 ||
+                  (_listadiasFestivos.where((element) => element == dateTime))
+                      .isNotEmpty) {
                 return false;
               }
               return true;
@@ -65,7 +85,6 @@ class _RangoFechasWidgetState extends State<RangoFechasWidget> {
             enablePastDates: false,
             toggleDaySelection: true,
             showNavigationArrow: true,
-            
             rangeTextStyle: FlutterFlowTheme.of(context).bodyText1.override(
                   fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
                   fontSize: 16,
@@ -99,7 +118,6 @@ class _RangoFechasWidgetState extends State<RangoFechasWidget> {
                       width: 1),
                   shape: BoxShape.circle),
               specialDatesDecoration: BoxDecoration(
-                
                   color: const Color.fromARGB(255, 6, 113, 122),
                   border: Border.all(color: const Color(0xFF2B732F), width: 1),
                   shape: BoxShape.circle),
@@ -113,7 +131,6 @@ class _RangoFechasWidgetState extends State<RangoFechasWidget> {
                     useGoogleFonts: GoogleFonts.asMap().containsKey(
                         FlutterFlowTheme.of(context).bodyText1Family),
                   ),
-                
               blackoutDateTextStyle: TextStyle(
                   color: Colors.white, decoration: TextDecoration.lineThrough),
               specialDatesTextStyle: const TextStyle(color: Colors.white),

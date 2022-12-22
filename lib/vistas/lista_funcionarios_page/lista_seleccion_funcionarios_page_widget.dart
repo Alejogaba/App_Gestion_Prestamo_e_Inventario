@@ -23,18 +23,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ListaSeleccionFuncionariosPageWidget extends StatefulWidget {
-
-  const ListaSeleccionFuncionariosPageWidget(
-      {Key? key})
-      : super(key: key);
+  const ListaSeleccionFuncionariosPageWidget({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _ListaSeleccionFuncionariosPageWidgetState createState() => _ListaSeleccionFuncionariosPageWidgetState(
-      );
+  _ListaSeleccionFuncionariosPageWidgetState createState() =>
+      _ListaSeleccionFuncionariosPageWidgetState();
 }
 
-class _ListaSeleccionFuncionariosPageWidgetState extends State<ListaSeleccionFuncionariosPageWidget> {
+class _ListaSeleccionFuncionariosPageWidgetState
+    extends State<ListaSeleccionFuncionariosPageWidget> {
   TextEditingController? textControllerBusqueda;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -42,9 +40,7 @@ class _ListaSeleccionFuncionariosPageWidgetState extends State<ListaSeleccionFun
   var a;
   ActivoController activoController = ActivoController();
   List<Funcionario> listaFuncionario = [];
-    bool? esPrestamo;
-
-
+  bool? esPrestamo;
 
   @override
   void initState() {
@@ -215,9 +211,7 @@ class _ListaSeleccionFuncionariosPageWidgetState extends State<ListaSeleccionFun
                   color: FlutterFlowTheme.of(context).whiteColor,
                   size: 30,
                 ),
-                onPressed: () async {
-                  
-                },
+                onPressed: () async {},
               ),
             ],
             centerTitle: false,
@@ -350,7 +344,8 @@ class _ListaSeleccionFuncionariosPageWidgetState extends State<ListaSeleccionFun
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0, 12, 0, 44),
                                 child: FutureBuilder<List<Funcionario>>(
-                                    future: cargarFuncionarios(textControllerBusqueda),
+                                    future: cargarFuncionarios(
+                                        textControllerBusqueda),
                                     builder: (context, snapshot) {
                                       if (!snapshot.hasData ||
                                           snapshot.hasError ||
@@ -381,36 +376,34 @@ class _ListaSeleccionFuncionariosPageWidgetState extends State<ListaSeleccionFun
                                             snapshot.data!.length, (index) {
                                           return GestureDetector(
                                             onTap: () async {
-                                              
-                                           
-                                                  final Activo? result =
-                                                      await context
-                                                          .pushNamed<Activo>(
-                                                    'activoPerfilPage',
-                                                    queryParams: {
-                                                      'idActivo':
-                                                          serializeParam(
-                                                        snapshot.data![index]
-                                                            .nombres,
-                                                        ParamType.String,
-                                                      ),
-                                                      'selectMode':
-                                                          serializeParam(
-                                                        true,
-                                                        ParamType.bool,
-                                                      ),
-                                                      'esPrestamo':
-                                                          serializeParam(
-                                                        esPrestamo,
-                                                        ParamType.bool,
-                                                      ),
-                                                    },
-                                                  );
-                                                  if (result != null) {
-                                                    // ignore: use_build_context_synchronously
-                                                    context.pop(result);
-                                                  }
-                                                
+                                              final Funcionario? result =
+                                                  await context
+                                                      .pushNamed<Funcionario>(
+                                                'funcionarioPerfilPage',
+                                                queryParams: {
+                                                  'funcionario': serializeParam(
+                                                    snapshot.data![index],
+                                                    ParamType.Funcionario,
+                                                  ),
+                                                  'area': serializeParam(
+                                                    Area(
+                                                        id: 1,
+                                                        nombre:
+                                                            'Oficina de las TICs',
+                                                        urlImagen: ''),
+                                                    ParamType.Area,
+                                                  ),
+                                                  'selectMode': serializeParam(
+                                                    true,
+                                                    ParamType.bool,
+                                                  ),
+                                                },
+                                              );
+                                              if (result != null) {
+                                                // ignore: use_build_context_synchronously
+                                                context.pop(result);
+                                              }
+
                                               setState(() {});
                                             },
                                             child: tarjetaActivo(
@@ -598,7 +591,6 @@ Widget tarjetaActivo(context, Funcionario funcionario) {
     ),
   );
 }
-
 
 Future<Area> cargarArea(id) async {
   FuncionariosController funcionariosController = FuncionariosController();
