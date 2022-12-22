@@ -72,6 +72,7 @@ dependencies:
   go_router_flow: ^5.2.0+1
   syncfusion_flutter_datepicker: ^20.3.61
   colombia_holidays: ^2.0.2
+  flexi_chip: ^1.0.8
   
 
 

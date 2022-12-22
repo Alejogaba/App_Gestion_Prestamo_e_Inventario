@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:app_gestion_prestamo_inventario/assets/utilidades.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:logger/logger.dart';
@@ -31,6 +32,8 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List<Activo> listActivos = [];
   List<String> _listadiasPendientes = [];
+  List<String> _listaEstado = [];
+  Utilidades utilidades = Utilidades();
 
   @override
   void initState() {
@@ -88,6 +91,7 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
               ),
         ),
         actions: [
+          /*
           FlutterFlowIconButton(
             borderColor: Colors.transparent,
             borderRadius: 30,
@@ -99,7 +103,7 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
               size: 30,
             ),
             onPressed: () {},
-          ),
+          ),*/
         ],
         centerTitle: false,
         elevation: 4,
@@ -223,9 +227,12 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
                                     itemCount: snapshot.data!.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      log(_listadiasPendientes[index]);
-                                      return tarjetaItem(snapshot.data![index],
-                                          _listadiasPendientes[index]);
+                                      
+                                      return Opacity(
+                                        opacity: (_listadiasPendientes[index].contains('Entregado'))?0.4:1.0,
+                                        child: tarjetaItem(snapshot.data![index],
+                                            _listadiasPendientes[index]),
+                                      );
                                     },
                                   );
                                 } else {
@@ -256,10 +263,13 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
         .i('Cantidad de activos asignados:${listFuncionariosActvos.length}');
     await Future.forEach(listFuncionariosActvos, (Prestamo value) async {
       _listActivos.add(await activoController.buscarActivo(value.idActivo));
-      log('fecha salidas: ${value.fechaHoraInicio}');
-      log('fecha entrega: ${value.fechaHoraEntrega.toString()}');
-      _listadiasPendientes
-          .add(_definirDias(value.fechaHoraInicio, value.fechaHoraEntrega!));
+      if(value.entregado){
+        _listadiasPendientes.add('Entregado');
+      }else{
+      _listadiasPendientes.add(Utilidades.definirDias(
+          value.fechaHoraInicio, value.fechaHoraEntrega!));
+      }
+      
     });
 
     return Future.value(_listActivos);
@@ -269,9 +279,10 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
 class tarjetaItem extends StatelessWidget {
   final Activo activo;
   final String diasPendientes;
-  const tarjetaItem(this.activo, this.diasPendientes, {Key? key})
+  Utilidades utilidades = Utilidades();
+  tarjetaItem(this.activo, this.diasPendientes, {Key? key})
       : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -375,7 +386,7 @@ class tarjetaItem extends StatelessWidget {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(5, 3, 8, 1),
                             child: AutoSizeText(
-                              'S/N: ${activo.idSerial}',
+                              ' ${activo.idSerial}',
                               textAlign: TextAlign.start,
                               style: FlutterFlowTheme.of(context)
                                   .bodyText2
@@ -400,8 +411,9 @@ class tarjetaItem extends StatelessWidget {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(3, 0, 0, 0),
                             child: FaIcon(
-                              FontAwesomeIcons.userTie,
-                              color: FlutterFlowTheme.of(context).grayicon,
+                              FontAwesomeIcons.calendar,
+                              color: utilidades.defColorCalendario(
+                                  context, diasPendientes),
                               size: 18,
                             ),
                           ),
@@ -414,8 +426,8 @@ class tarjetaItem extends StatelessWidget {
                                   .bodyText2
                                   .override(
                                     fontFamily: 'Poppins',
-                                    color:
-                                        FlutterFlowTheme.of(context).grayicon,
+                                    color: utilidades.defColorCalendario(
+                                        context, diasPendientes),
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     useGoogleFonts: GoogleFonts.asMap()
@@ -453,141 +465,3 @@ class tarjetaItem extends StatelessWidget {
     );
   }
 }
-
-String _definirDias(DateTime inicio, DateTime fin) {
-  DateTimeRange rango;
-  bool progamadoaFuturo= false;
-  bool atrasado= false;
-  DateTime now = DateTime.now();
-  int duracion;
-  if (inicio.isAfter(now)) {
-    progamadoaFuturo = true;
-  } else if(fin.isBefore(now)){
-    atrasado = true;
-  }
-  if (progamadoaFuturo) {
-    rango =
-        DateTimeRange(start: now, end: inicio);
-    duracion = rango.duration.inDays;
-    if (duracion<8) {
-      switch (duracion) {
-      case 1:
-        return 'Programado para mañana';
-      case 2:
-        return 'programado para pasado manñana';
-      default:
-        return 'Progamado para el ${definirDiaSemana(inicio.weekday)}';
-    }
-    } else {
-       return 'Progamado para dentro de $duracion días';
-    }
-  } else if(atrasado){
-    rango =
-        DateTimeRange(start: fin, end: now);
-    duracion = rango.duration.inDays;
-    if (duracion<8) {
-      switch (duracion) {
-        case 1:
-          return 'Debia entregarse ayer';
-        case 2:
-          return 'Debia entregarse antier';
-        default:
-          return 'Debia entregarse el ${definirDiaSemana(fin.weekday)}';
-      }
-    } else {
-       return 'Debia entregarse hace $duracion días';
-    }
-      
-    
-  } else{
-    rango =
-        DateTimeRange(start: now, end: fin);
-    duracion = rango.duration.inDays;
-    if (duracion<8) {
-      switch (duracion) {
-        case 0:
-          return 'Para entregar hoy';
-        case 1:
-          return 'Para entregar mañana';
-        case 2:
-          return 'Para entregar pasado mañana';
-        default:
-          return 'Para entregar el ${definirDiaSemana(fin.weekday)}';
-      }
-    } else {
-      return 'Para entregar dentro de $duracion días';
-    }
-      
-    
-  }
-
-  
-}
-  String definirDiaSemana(int numeroSemana) {
-    switch (numeroSemana) {
-      case 1:
-        return "Lunes";
-        break;
-      case 2:
-        return "Martes";
-        break;
-      case 3:
-        return "Miercoles";
-      case 4:
-        return "Jueves";
-        break;
-      case 5:
-        return "Viernes";
-        break;
-      case 6:
-        return "Sábado";
-        break;
-      case 7:
-        return "Domingo";
-        break;
-      default:
-        return "Indefinido";
-    }
-  }
-
-  String definirMes(int numMes) {
-    switch (numMes) {
-      case 1:
-        return "Enero";
-        break;
-      case 2:
-        return "Febrero";
-        break;
-      case 3:
-        return "Marzo";
-      case 4:
-        return "Abril";
-        break;
-      case 5:
-        return "Mayo";
-        break;
-      case 6:
-        return "Junio";
-        break;
-      case 7:
-        return "Julio";
-        break;
-      case 8:
-        return "Agosto";
-        break;
-      case 9:
-        return "Septiembre";
-        break;
-      case 10:
-        return "Octubre";
-        break;
-      case 11:
-        return "Noviembre";
-        break;
-      case 12:
-        return "Diciembre";
-        break;
-      default:
-        return "Indefinido";
-    }
-  }

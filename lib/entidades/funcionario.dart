@@ -12,7 +12,7 @@ class Funcionario {
   String? telefono2;
   String? enlaceSIGEP;
   int idArea = 0;
-  bool? tieneActivos;
+  bool tieneActivos;
 
   Funcionario(
       {this.cedula = '',
@@ -25,7 +25,7 @@ class Funcionario {
       this.telefono2,
       this.idArea = 0,
       this.enlaceSIGEP = '',
-      this.tieneActivos});
+      required this.tieneActivos});
 
   factory Funcionario.fromMap(Map<String, dynamic> map) {
     return Funcionario(
@@ -39,7 +39,7 @@ class Funcionario {
       idArea: map['ID_AREA'] ?? 0,
       enlaceSIGEP: map['ENLACE_SIGEP'] ?? '',
       cargo: map['CARGO'] ?? '',
-      tieneActivos: parseBool(map['TIENE_ACTIVOS'].toString()),
+      tieneActivos: map['TIENE_ACTIVOS'],
     );
   }
 
@@ -61,6 +61,7 @@ class Funcionario {
       'idArea': serializedData['idArea'] ?? 0,
       'enlaceSIGEP': serializedData['enlaceSIGEP'] ?? '',
       'cargo': serializedData['cargo'] ?? '',
+      'tieneActivos' :serializedData['tieneActivos']
     };
     return Funcionario(
       cedula: data['cedula'] as String,
@@ -73,6 +74,7 @@ class Funcionario {
       idArea: data['idArea'] as int,
       enlaceSIGEP: data['enlaceSIGEP'] as String,
       cargo: data['cargo'] as String,
+      tieneActivos: data['tieneActivos'] as bool,
     );
   }
 
@@ -87,5 +89,6 @@ class Funcionario {
         'idArea': item.idArea,
         'enlaceSIGEP': item.enlaceSIGEP,
         'cargo': item.cargo,
+        'tieneActivos': item.tieneActivos,
       });
 }

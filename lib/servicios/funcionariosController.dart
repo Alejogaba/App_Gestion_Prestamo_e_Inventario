@@ -135,7 +135,7 @@ class FuncionariosController {
   }
 
   Future<Funcionario> buscarFuncionarioIndividual(String cedula) async {
-    Funcionario funcionarioVacio = Funcionario();
+    Funcionario funcionarioVacio = Funcionario(tieneActivos: false);
     try {
       final data = (await supabase
           .from('FUNCIONARIOS')

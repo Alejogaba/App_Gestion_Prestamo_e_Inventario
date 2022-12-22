@@ -83,9 +83,87 @@ class PrestamosController {
     }
   }
 
-  Future<List<Prestamo>> getActivosPrestados({String? idFuncionario, String? idActivo}) async {
+  Future<String> entregarPrestamo(context, String idFuncionario, String idActivo) async {
     try {
-      if (idFuncionario != null) {
+      final data = (await supabase
+          .from('PRESTAMOS')
+          .update({'ENTREGADO': true})
+          .match({ 'ID_FUNCIONARIO': idFuncionario,'ID_ACTIVO':idActivo}).then((value) async{
+             await supabase
+            .from('ACTIVOS')
+            .update({'ESTA_PRESTADO': false}).match({'ID_SERIAL': idActivo});
+          }));
+      log('Entregado:$data');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Marcado como entregado',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor));
+      return 'ok';
+    } on Exception catch (error) {
+      StorageController storageController = StorageController();
+      var errorTraducido = await storageController.traducir(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          errorTraducido,
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      log(error.toString());
+      return 'error';
+    } catch (e) {
+      log(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Ha ocurrido un error inesperado',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      return 'error';
+    }
+  }
+
+  Future<List<Prestamo>> getActivosPrestados({String? idFuncionario, String? idActivo, bool? soloMostarSinEntregar}) async {
+    try {
+      if(soloMostarSinEntregar!=null && soloMostarSinEntregar){
+         if (idFuncionario != null) {
+        final data = await supabase
+          .from('PRESTAMOS')
+          .select('*')
+          .match({'ID_FUNCIONARIO': idFuncionario,'ENTREGADO':false}) as List<dynamic>;
+      return (data).map((e) => Prestamo.fromMap(e)).toList();
+      } else if(idActivo != null) {
+        final data = await supabase
+          .from('PRESTAMOS')
+          .select('*')
+           .match({'ID_ACTIVO': idActivo,'ENTREGADO':false}) as List<dynamic>;
+      return (data).map((e) => Prestamo.fromMap(e)).toList();
+      }else{
+        final data = await supabase
+          .from('PRESTAMOS')
+          .select('*').match({'ENTREGADO':false}) as List<dynamic>;
+      return (data).map((e) => Prestamo.fromMap(e)).toList();
+      }
+      }else{
+        if (idFuncionario != null) {
         final data = await supabase
           .from('PRESTAMOS')
           .select('*')
@@ -103,6 +181,8 @@ class PrestamosController {
           .select('*') as List<dynamic>;
       return (data).map((e) => Prestamo.fromMap(e)).toList();
       }
+      }
+      
       
     } on PostgrestException catch (error) {
       Logger().e(error.message);
