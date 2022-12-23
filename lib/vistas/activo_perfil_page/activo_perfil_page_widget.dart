@@ -2,13 +2,25 @@ import 'dart:developer';
 
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/lista_funcionarios_page/lista_funcionarios_page_widget.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../assets/utilidades.dart';
+import '../../entidades/activo_funcionario.dart';
+import '../../entidades/area.dart';
+import '../../entidades/area.dart';
+import '../../entidades/funcionario.dart';
+import '../../entidades/prestamo.dart';
 import '../../flutter_flow/flutter_flow_widgets.dart';
+import '../../servicios/funcionariosController.dart';
+import '../../servicios/prestamosController.dart';
 import '../components/caja_advertencia_widget.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_expanded_image_view.dart';
@@ -44,6 +56,30 @@ class ActivoPerfilPageWidget extends StatefulWidget {
 class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
     with TickerProviderStateMixin {
   final animationsMap = {
+    'containerOnPageLoadAnimation2': AnimationInfo(
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        MoveEffect(
+          curve: Curves.easeOut,
+          delay: 1500.ms,
+          duration: 2000.ms,
+          begin: Offset(0, 1000),
+          end: Offset(0, 0),
+        ),
+      ],
+    ),
+    'containerOnPageLoadAnimation1': AnimationInfo(
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        MoveEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 1500.ms,
+          begin: Offset(-2000, 0),
+          end: Offset(0, 0),
+        ),
+      ],
+    ),
     'floatingActionButtonOnPageLoadAnimation': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
       effects: [
@@ -270,6 +306,11 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
   ActivoController activoController = ActivoController();
   bool selectMode;
   bool? esPrestamo;
+
+  PrestamosController prestamosController = PrestamosController();
+
+  bool tienePrestamos = false;
+  List<String> listaFechasEntrega = [];
 
   _ActivoPerfilPageWidgetState(this.idActivo, this.selectMode, this.esPrestamo);
 
@@ -821,7 +862,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 16, 24, 0),
+                                      24, 16, 0, 0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -875,18 +916,66 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                 ),
                                 //TituloListafFuncionariosAsignados(animationsMap: animationsMap),
                                 //ListaFuncionariosAsignados(animationsMap: animationsMap),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 60, 0, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [],
-                                  ),
-                                ),
+                               
+                                if (activo.estaAsignado != null && activo.estaAsignado!)
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 24),
+                            child: FutureBuilder<List<Funcionario>>(
+                              future:
+                                  cargarFuncionariosAsignados(activo.idSerial),
+                              builder: (BuildContext context, snapshot) {
+                                Logger().i('Estado de conexion: ' +
+                                    snapshot.connectionState.toString());
+                                if (snapshot.connectionState ==
+                                        ConnectionState.done &&
+                                    snapshot.data!.length > 0) {
+                                  return _tarjetaActivo(snapshot, false, []);
+                                } else {
+                                  return Container();
+                                }
+                              },
+                            ),
+                          ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 24),
+                          child: FutureBuilder<List<Funcionario>>(
+                            future:
+                                cargarFuncionariosPrestamos(activo.idSerial),
+                            builder: (BuildContext context, snapshot) {
+                              Logger().i('Estado de conexion: ' +
+                                  snapshot.connectionState.toString());
+                              if (snapshot.connectionState ==
+                                      ConnectionState.done &&
+                                  snapshot.data!.length > 0) {
+                                if (tienePrestamos == false) {
+                                  setState() {
+                                    tienePrestamos = true;
+                                  }
+                                }
+
+                                return _tarjetaActivo(
+                                    snapshot, true, listaFechasEntrega);
+                              } else {
+                                if (tienePrestamos) {
+                                  setState() {
+                                    tienePrestamos = false;
+                                  }
+                                }
+                                return Container();
+                              }
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(30),
+                          child: Container(),
+                        )
                               ],
                             ),
                           ),
                         ),
+                        
                       ],
                     ),
                   ),
@@ -926,6 +1015,421 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
         ),
       ),
     );
+  }
+
+  Widget _tarjetaActivo(AsyncSnapshot<List<Funcionario>> snapshot,
+      bool prestamo, List<String> fechaEntrega) {
+    Utilidades utilidades = Utilidades();
+    Area area = Area();
+    return Column(
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(24, 12, 0, 8),
+              child: Text(
+                (prestamo) ? 'ESTE ACTIVO SE PRESTO A' : 'ACTIVO ASIGNADO A',
+                style: FlutterFlowTheme.of(context).bodyText2.override(
+                      fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                      color: FlutterFlowTheme.of(context).primaryText,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      useGoogleFonts: GoogleFonts.asMap().containsKey(
+                          FlutterFlowTheme.of(context).bodyText2Family),
+                    ),
+              ),
+            ),
+          ],
+        ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
+        ListView.builder(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          itemCount: snapshot.data!.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(20, 5, 20, 4),
+              child: InkWell(
+                onTap: () async {
+                  Logger().w('inkWell onTap');
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 88,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).primaryBackground,
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 2,
+                        color: Color(0x3E000000),
+                        offset: Offset(0, 1),
+                      )
+                    ],
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: FlutterFlowTheme.of(context).secondaryText,
+                      width: 1,
+                    ),
+                  ),
+                  child: InkWell(
+                    onTap: () async {
+                      context.pushNamed(
+                        'funcionarioPerfilPage',
+                        queryParams: {
+                          'funcionario': serializeParam(
+                            snapshot.data![index],
+                            ParamType.Funcionario,
+                          ),
+                          'area': serializeParam(
+                            Area(
+                                id: 1,
+                                nombre: 'Oficina de las TICs',
+                                urlImagen: ''),
+                            ParamType.Area,
+                          )
+                        },
+                      );
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(8, 0, 12, 0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 8, 2),
+                                child: Card(
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  color:
+                                      FlutterFlowTheme.of(context).whiteColor,
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: FastCachedImage(
+                                      width: 73,
+                                      height: 70,
+                                      url: snapshot.data![index].urlImagen,
+                                      fit: BoxFit.cover,
+                                      fadeInDuration:
+                                          const Duration(seconds: 1),
+                                      errorBuilder:
+                                          (context, exception, stacktrace) {
+                                        log(stacktrace.toString());
+                                        return Image.asset(
+                                          'assets/images/nodisponible.png',
+                                          width: 73,
+                                          height: 70,
+                                          fit: BoxFit.cover,
+                                        );
+                                      },
+                                      loadingBuilder: (context, progress) {
+                                        return Container(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              if (progress.isDownloading &&
+                                                  progress.totalBytes != null)
+                                                Text(
+                                                    '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
+                                                    style: const TextStyle(
+                                                        color:
+                                                            Color(0xFF006D38))),
+                                              SizedBox(
+                                                  width: 65,
+                                                  height: 65,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                          color: const Color(
+                                                              0xFF006D38),
+                                                          value: progress
+                                                              .progressPercentage
+                                                              .value)),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      snapshot.data![index].nombres.toString(),
+                                      style: FlutterFlowTheme.of(context)
+                                          .subtitle1
+                                          .override(
+                                            fontFamily:
+                                                FlutterFlowTheme.of(context)
+                                                    .subtitle1Family,
+                                            fontSize: 15,
+                                            useGoogleFonts: GoogleFonts.asMap()
+                                                .containsKey(
+                                                    FlutterFlowTheme.of(context)
+                                                        .subtitle1Family),
+                                          ),
+                                    ),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        FaIcon(
+                                          FontAwesomeIcons.barcode,
+                                          color: FlutterFlowTheme.of(context)
+                                              .grayicon,
+                                          size: 15,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsetsDirectional
+                                              .fromSTEB(3, 1.4, 0, 1),
+                                          child: Text(
+                                            '${snapshot.data![index].cargo}',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText2
+                                                .override(
+                                                  fontFamily:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyText2Family,
+                                                  fontSize: 13,
+                                                  useGoogleFonts: GoogleFonts
+                                                          .asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2Family),
+                                                ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              0, 0, 0, 1),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          const FaIcon(
+                                            FontAwesomeIcons.boxOpen,
+                                            color: Color(0xFFAD8762),
+                                            size: 9,
+                                          ),
+                                          Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 4, 8, 0),
+                                            child: FutureBuilder<Area>(
+                                              future: cargarArea(
+                                                  snapshot.data![index].idArea),
+                                              initialData: area,
+                                              builder: ((context, snapshot) {
+                                                area = snapshot.data!;
+                                                return AutoSizeText(
+                                                  snapshot.data!.nombre,
+                                                  textAlign: TextAlign.start,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyText2
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .grayicon,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText2Family),
+                                                      ),
+                                                );
+                                              }),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    if (fechaEntrega.isNotEmpty && prestamo)
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .fromSTEB(0, 0, 0, 1),
+                                            child: FaIcon(
+                                              FontAwesomeIcons.calendar,
+                                              color:
+                                                  utilidades.defColorCalendario(
+                                                      context,
+                                                      fechaEntrega[index]),
+                                              size: 10,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsetsDirectional
+                                                .fromSTEB(3, 0, 0, 1),
+                                            child: AutoSizeText(
+                                              fechaEntrega[index],
+                                              textAlign: TextAlign.start,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText2
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color: utilidades
+                                                            .defColorCalendario(
+                                                                context,
+                                                                fechaEntrega[
+                                                                    index]),
+                                                        fontSize: 9,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText2Family),
+                                                      ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              (fechaEntrega.isNotEmpty && prestamo) ? _iconoEliminarEntregar(
+                                  fechaEntrega[index],
+                                  prestamo,
+                                  activo.idSerial,
+                                  snapshot.data![index].cedula):_iconoEliminarEntregar(
+                                  '',
+                                  prestamo,
+                                  activo.idSerial,
+                                  snapshot.data![index].cedula)
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ).animateOnPageLoad(
+                  animationsMap['containerOnPageLoadAnimation2']!),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _iconoEliminarEntregar(String fechaEntrega, bool prestamo,
+      String idSerial, String idFuncionario) {
+    if (prestamo && fechaEntrega.contains('Programado')) {
+      return FlutterFlowIconButton(
+        borderColor: Colors.transparent,
+        borderRadius: 30,
+        buttonSize: 46,
+        icon: const Icon(
+          Icons.cancel,
+          color: Color(0xFFE62424),
+          size: 24,
+        ),
+        onPressed: () async {
+          var res = await prestamosController.entregarPrestamo(
+              context, idFuncionario, idSerial);
+          if (res == 'ok') {
+            setState(() {});
+          }
+        },
+      );
+    } else if (prestamo) {
+      return FlutterFlowIconButton(
+        borderColor: Colors.transparent,
+        borderRadius: 30,
+        buttonSize: 46,
+        icon: const Icon(
+          FontAwesomeIcons.check,
+          color: Color.fromARGB(255, 7, 133, 36),
+          size: 24,
+        ),
+        onPressed: () async {
+          var res = await prestamosController.entregarPrestamo(
+              context, idFuncionario, idSerial);
+          if (res == 'ok') {
+            setState(() {});
+          }
+        },
+      );
+    } else {
+      return FlutterFlowIconButton(
+        borderColor: Colors.transparent,
+        borderRadius: 30,
+        buttonSize: 46,
+        icon: const Icon(
+          Icons.delete_outline,
+          color: Color(0xFFE62424),
+          size: 24,
+        ),
+        onPressed: () async {
+          var res =
+              await activoController.quitarActivoFuncionario(context, idSerial);
+          if (res == 'ok') {
+            setState(() {});
+          }
+        },
+      );
+    }
+  }
+
+  Future<List<Funcionario>> cargarFuncionariosPrestamos(String idActivo) async {
+    List<Funcionario> listaFuncionarios = [];
+    PrestamosController prestamosController = PrestamosController();
+    FuncionariosController funcionariosController = FuncionariosController();
+    List<Prestamo> listFuncionariosActvos = await prestamosController
+        .getActivosPrestados(idActivo: idActivo, soloMostarSinEntregar: true);
+    await Future.forEach(listFuncionariosActvos, (Prestamo value) async {
+      listaFuncionarios.add(await funcionariosController
+          .buscarFuncionarioIndividual(value.idFuncionario));
+      listaFechasEntrega.add(Utilidades.definirDias(
+          value.fechaHoraInicio, value.fechaHoraEntrega!));
+    });
+    Logger().i('Cantidad de activos asignados devueltos:' +
+        listaFuncionarios.length.toString());
+    return Future.value(listaFuncionarios);
+  }
+
+  Future<List<Funcionario>> cargarFuncionariosAsignados(String cedula) async {
+    List<Funcionario> listActivosAsignados = [];
+    FuncionariosController funcionariosController = FuncionariosController();
+    ActivoController activoController = ActivoController();
+    List<ActivoFuncionario> listFuncionariosActvos =
+        await activoController.getFuncionarioAsignado(idActivo);
+    await Future.forEach(listFuncionariosActvos,
+        (ActivoFuncionario value) async {
+      listActivosAsignados.add(await funcionariosController
+          .buscarFuncionarioIndividual(value.idFuncionaro));
+    });
+    return Future.value(listActivosAsignados);
   }
 
   Widget _cajaAdvertencia(context, mensaje, objetoaEliminar, id) {

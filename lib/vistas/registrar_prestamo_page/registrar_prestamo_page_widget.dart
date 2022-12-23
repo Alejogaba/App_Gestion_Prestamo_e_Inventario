@@ -73,23 +73,20 @@ class _RegistrarPrestamoPageWidgetState
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String? fecha_inicio = prefs.getString('fecha_incio');
               String? fecha_fin = prefs.getString('fecha_fin');
-              
+
               PrestamosController prestamosController = PrestamosController();
               List<String> listaRespuesta = [];
 
               listActivos.forEach((activo) async {
                 String result = await prestamosController.registrarPrestamo(
-                    context,
-                    activo.idSerial,
-                    funcionario!.cedula,
-                    fecha_inicio,
+                    context, activo.idSerial, funcionario!.cedula, fecha_inicio,
                     fechaHoraFinal: fecha_fin);
                 listaRespuesta.add(result);
               });
 
               String res = '';
 
-              if (listaRespuesta.every((element) => element=='ok')) {
+              if (listaRespuesta.every((element) => element == 'ok')) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(
                     "Prestamos registrados con exitó",
@@ -207,12 +204,15 @@ class _RegistrarPrestamoPageWidgetState
                       children: [
                         Text(
                           'Activos a prestar',
-                          style: FlutterFlowTheme.of(context).bodyText1.override(
-                                fontFamily:
-                                    FlutterFlowTheme.of(context).bodyText1Family,
+                          style: FlutterFlowTheme.of(context)
+                              .bodyText1
+                              .override(
+                                fontFamily: FlutterFlowTheme.of(context)
+                                    .bodyText1Family,
                                 fontSize: 18,
                                 useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                    FlutterFlowTheme.of(context).bodyText1Family),
+                                    FlutterFlowTheme.of(context)
+                                        .bodyText1Family),
                               ),
                         ),
                       ],
@@ -267,7 +267,8 @@ class _RegistrarPrestamoPageWidgetState
                               }
                             },
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
                               child: Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
@@ -276,19 +277,20 @@ class _RegistrarPrestamoPageWidgetState
                                   boxShadow: [
                                     BoxShadow(
                                       blurRadius: 3,
-                                      color: FlutterFlowTheme.of(context).boxShadow,
+                                      color: FlutterFlowTheme.of(context)
+                                          .boxShadow,
                                       spreadRadius: 1,
                                     )
                                   ],
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
-                                    color:
-                                        FlutterFlowTheme.of(context).secondaryText,
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
                                   ),
                                 ),
                                 child: Padding(
-                                  padding:
-                                      EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      8, 8, 8, 8),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
@@ -296,7 +298,8 @@ class _RegistrarPrestamoPageWidgetState
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0, 1, 1, 1),
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(6),
+                                          borderRadius:
+                                              BorderRadius.circular(6),
                                           child: Image.network(
                                             'https://www.iconsdb.com/icons/preview/light-gray/plus-4-xxl.png',
                                             width: 80,
@@ -307,8 +310,9 @@ class _RegistrarPrestamoPageWidgetState
                                       ),
                                       Expanded(
                                         child: Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                              8, 2, 4, 0),
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  8, 2, 4, 0),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
@@ -318,63 +322,74 @@ class _RegistrarPrestamoPageWidgetState
                                             children: [
                                               Text(
                                                 'Añadir activo',
-                                                style: FlutterFlowTheme.of(context)
-                                                    .title3
-                                                    .override(
-                                                      fontFamily: 'Poppins',
-                                                      color: FlutterFlowTheme.of(
-                                                              context)
-                                                          .primaryText,
-                                                      fontSize: 20,
-                                                      fontWeight: FontWeight.w500,
-                                                      useGoogleFonts: GoogleFonts
-                                                              .asMap()
-                                                          .containsKey(
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .title3Family),
-                                                    ),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .title3
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          useGoogleFonts: GoogleFonts
+                                                                  .asMap()
+                                                              .containsKey(
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .title3Family),
+                                                        ),
                                               ),
                                               FittedBox(
                                                 fit: BoxFit.scaleDown,
                                                 child: Row(
-                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
                                                   children: [
                                                     Padding(
-                                                      padding: EdgeInsetsDirectional
-                                                          .fromSTEB(6, 0, 0, 6),
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  6, 0, 0, 6),
                                                       child: Icon(
                                                         Icons.touch_app,
-                                                        color: FlutterFlowTheme.of(
-                                                                context)
-                                                            .primaryText,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryText,
                                                         size: 30,
                                                       ),
                                                     ),
                                                     Padding(
-                                                      padding: EdgeInsetsDirectional
-                                                          .fromSTEB(5, 8, 8, 0),
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  5, 8, 8, 0),
                                                       child: AutoSizeText(
                                                         'Toca para seleccionar',
-                                                        textAlign: TextAlign.start,
-                                                        style: FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyText2
-                                                            .override(
-                                                              fontFamily: 'Poppins',
-                                                              color: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .primaryText,
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight.normal,
-                                                              useGoogleFonts: GoogleFonts
-                                                                      .asMap()
-                                                                  .containsKey(
-                                                                      FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyText2Family),
-                                                            ),
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyText2
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryText,
+                                                                  fontSize: 18,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  useGoogleFonts: GoogleFonts
+                                                                          .asMap()
+                                                                      .containsKey(
+                                                                          FlutterFlowTheme.of(context)
+                                                                              .bodyText2Family),
+                                                                ),
                                                       ),
                                                     ),
                                                   ],
@@ -388,11 +403,13 @@ class _RegistrarPrestamoPageWidgetState
                                         mainAxisSize: MainAxisSize.max,
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
                                         children: [
                                           Padding(
-                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                0, 4, 0, 0),
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 4, 0, 0),
                                             child: Icon(
                                               Icons.chevron_right_rounded,
                                               color: Color(0xFF57636C),
@@ -424,12 +441,15 @@ class _RegistrarPrestamoPageWidgetState
                       children: [
                         Text(
                           'A quien se le prestará',
-                          style: FlutterFlowTheme.of(context).bodyText1.override(
-                                fontFamily:
-                                    FlutterFlowTheme.of(context).bodyText1Family,
+                          style: FlutterFlowTheme.of(context)
+                              .bodyText1
+                              .override(
+                                fontFamily: FlutterFlowTheme.of(context)
+                                    .bodyText1Family,
                                 fontSize: 18,
                                 useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                    FlutterFlowTheme.of(context).bodyText1Family),
+                                    FlutterFlowTheme.of(context)
+                                        .bodyText1Family),
                               ),
                         ),
                       ],
@@ -454,14 +474,15 @@ class _RegistrarPrestamoPageWidgetState
                             }
                           },
                           child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 12),
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 5, 0, 12),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Expanded(
                                   child: Padding(
-                                    padding:
-                                        EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        5, 5, 5, 5),
                                     child: Container(
                                       width: double.infinity,
                                       decoration: BoxDecoration(
@@ -488,9 +509,8 @@ class _RegistrarPrestamoPageWidgetState
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      0, 1, 1, 1),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 1, 1, 1),
                                               child: ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(6),
@@ -502,9 +522,10 @@ class _RegistrarPrestamoPageWidgetState
                                                   url: funcionario!.urlImagen,
                                                   fit: BoxFit.cover,
                                                   fadeInDuration:
-                                                      const Duration(seconds: 1),
-                                                  errorBuilder: (context, exception,
-                                                      stacktrace) {
+                                                      const Duration(
+                                                          seconds: 1),
+                                                  errorBuilder: (context,
+                                                      exception, stacktrace) {
                                                     log(stacktrace.toString());
                                                     return Image.asset(
                                                       'assets/images/nodisponible.png',
@@ -516,11 +537,12 @@ class _RegistrarPrestamoPageWidgetState
                                                   loadingBuilder:
                                                       (context, progress) {
                                                     return Container(
-                                                      color: FlutterFlowTheme.of(
-                                                              context)
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
                                                           .secondaryBackground,
                                                       child: Stack(
-                                                        alignment: Alignment.center,
+                                                        alignment:
+                                                            Alignment.center,
                                                         children: [
                                                           if (progress
                                                                   .isDownloading &&
@@ -549,11 +571,11 @@ class _RegistrarPrestamoPageWidgetState
                                             ),
                                             Expanded(
                                               child: Padding(
-                                                padding:
-                                                    EdgeInsetsDirectional.fromSTEB(
-                                                        8, 2, 4, 0),
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(8, 2, 4, 0),
                                                 child: Column(
-                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   crossAxisAlignment:
@@ -566,87 +588,98 @@ class _RegistrarPrestamoPageWidgetState
                                                                   .apellidos!
                                                                   .isNotEmpty)
                                                           ? '${funcionario!.nombres.split(' ')[0]} ${funcionario!.apellidos!.split(' ')[0]}'
-                                                          : funcionario!.nombres,
-                                                      style: FlutterFlowTheme.of(
-                                                              context)
-                                                          .title3
-                                                          .override(
-                                                            fontFamily: 'Poppins',
-                                                            color:
-                                                                FlutterFlowTheme.of(
+                                                          : funcionario!
+                                                              .nombres,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .title3
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                color: FlutterFlowTheme.of(
                                                                         context)
                                                                     .primaryText,
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            useGoogleFonts: GoogleFonts
-                                                                    .asMap()
-                                                                .containsKey(
-                                                                    FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .title3Family),
-                                                          ),
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                useGoogleFonts: GoogleFonts
+                                                                        .asMap()
+                                                                    .containsKey(
+                                                                        FlutterFlowTheme.of(context)
+                                                                            .title3Family),
+                                                              ),
                                                     ),
                                                     Padding(
-                                                      padding: EdgeInsetsDirectional
-                                                          .fromSTEB(0, 3, 8, 0),
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 3, 8, 0),
                                                       child: AutoSizeText(
                                                         funcionario!.cargo,
-                                                        textAlign: TextAlign.start,
-                                                        style: FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyText2
-                                                            .override(
-                                                              fontFamily: 'Poppins',
-                                                              color: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .grayicon,
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight.normal,
-                                                              useGoogleFonts: GoogleFonts
-                                                                      .asMap()
-                                                                  .containsKey(
-                                                                      FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyText2Family),
-                                                            ),
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyText2
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .grayicon,
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  useGoogleFonts: GoogleFonts
+                                                                          .asMap()
+                                                                      .containsKey(
+                                                                          FlutterFlowTheme.of(context)
+                                                                              .bodyText2Family),
+                                                                ),
                                                       ),
                                                     ),
                                                     Padding(
-                                                      padding: EdgeInsetsDirectional
-                                                          .fromSTEB(0, 4, 8, 0),
-                                                      child: FutureBuilder<Area>(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 4, 8, 0),
+                                                      child:
+                                                          FutureBuilder<Area>(
                                                         future: cargarArea(
-                                                            funcionario!.idArea),
+                                                            funcionario!
+                                                                .idArea),
                                                         initialData: area,
-                                                        builder:
-                                                            ((context, snapshot) {
+                                                        builder: ((context,
+                                                            snapshot) {
                                                           area = snapshot.data!;
                                                           return AutoSizeText(
-                                                            snapshot.data!.nombre,
+                                                            snapshot
+                                                                .data!.nombre,
                                                             textAlign:
                                                                 TextAlign.start,
-                                                            style:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyText2
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Poppins',
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .grayicon,
-                                                                      fontSize: 14,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal,
-                                                                      useGoogleFonts: GoogleFonts
-                                                                              .asMap()
-                                                                          .containsKey(
-                                                                              FlutterFlowTheme.of(context)
-                                                                                  .bodyText2Family),
-                                                                    ),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText2
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .grayicon,
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  useGoogleFonts: GoogleFonts
+                                                                          .asMap()
+                                                                      .containsKey(
+                                                                          FlutterFlowTheme.of(context)
+                                                                              .bodyText2Family),
+                                                                ),
                                                           );
                                                         }),
                                                       ),
@@ -658,7 +691,8 @@ class _RegistrarPrestamoPageWidgetState
                                             Column(
                                               mainAxisSize: MainAxisSize.max,
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
                                               children: [
@@ -696,8 +730,8 @@ class _RegistrarPrestamoPageWidgetState
                                       'listaSeleccionFuncionariosPage',
                                     );
                                     if (result != null) {
-                                      Logger()
-                                          .i('Activo devuelto:${result.nombres}');
+                                      Logger().i(
+                                          'Activo devuelto:${result.nombres}');
 
                                       setState(() {
                                         funcionario = result;
@@ -705,8 +739,8 @@ class _RegistrarPrestamoPageWidgetState
                                     }
                                   },
                                   child: Padding(
-                                    padding:
-                                        EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        5, 5, 5, 5),
                                     child: Container(
                                       width: double.infinity,
                                       decoration: BoxDecoration(
@@ -733,9 +767,8 @@ class _RegistrarPrestamoPageWidgetState
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      0, 1, 1, 1),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 1, 1, 1),
                                               child: ClipRRect(
                                                 borderRadius:
                                                     BorderRadius.circular(6),
@@ -749,11 +782,11 @@ class _RegistrarPrestamoPageWidgetState
                                             ),
                                             Expanded(
                                               child: Padding(
-                                                padding:
-                                                    EdgeInsetsDirectional.fromSTEB(
-                                                        8, 2, 4, 0),
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(8, 2, 4, 0),
                                                 child: Column(
-                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   crossAxisAlignment:
@@ -761,25 +794,26 @@ class _RegistrarPrestamoPageWidgetState
                                                   children: [
                                                     Text(
                                                       'Seleccionar funcionario',
-                                                      style: FlutterFlowTheme.of(
-                                                              context)
-                                                          .title3
-                                                          .override(
-                                                            fontFamily: 'Poppins',
-                                                            color:
-                                                                FlutterFlowTheme.of(
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .title3
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                color: FlutterFlowTheme.of(
                                                                         context)
                                                                     .primaryText,
-                                                            fontSize: 20,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            useGoogleFonts: GoogleFonts
-                                                                    .asMap()
-                                                                .containsKey(
-                                                                    FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .title3Family),
-                                                          ),
+                                                                fontSize: 20,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                                useGoogleFonts: GoogleFonts
+                                                                        .asMap()
+                                                                    .containsKey(
+                                                                        FlutterFlowTheme.of(context)
+                                                                            .title3Family),
+                                                              ),
                                                     ),
                                                     FittedBox(
                                                       fit: BoxFit.scaleDown,
@@ -791,7 +825,10 @@ class _RegistrarPrestamoPageWidgetState
                                                             padding:
                                                                 EdgeInsetsDirectional
                                                                     .fromSTEB(
-                                                                        6, 0, 0, 6),
+                                                                        6,
+                                                                        0,
+                                                                        0,
+                                                                        6),
                                                             child: Icon(
                                                               Icons.touch_app,
                                                               color: FlutterFlowTheme
@@ -804,11 +841,15 @@ class _RegistrarPrestamoPageWidgetState
                                                             padding:
                                                                 EdgeInsetsDirectional
                                                                     .fromSTEB(
-                                                                        5, 8, 8, 0),
+                                                                        5,
+                                                                        8,
+                                                                        8,
+                                                                        0),
                                                             child: AutoSizeText(
                                                               'Toca para seleccionar',
                                                               textAlign:
-                                                                  TextAlign.start,
+                                                                  TextAlign
+                                                                      .start,
                                                               style: FlutterFlowTheme
                                                                       .of(context)
                                                                   .bodyText2
@@ -818,15 +859,15 @@ class _RegistrarPrestamoPageWidgetState
                                                                     color: FlutterFlowTheme.of(
                                                                             context)
                                                                         .primaryText,
-                                                                    fontSize: 18,
+                                                                    fontSize:
+                                                                        18,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .normal,
                                                                     useGoogleFonts: GoogleFonts
                                                                             .asMap()
                                                                         .containsKey(
-                                                                            FlutterFlowTheme.of(context)
-                                                                                .bodyText2Family),
+                                                                            FlutterFlowTheme.of(context).bodyText2Family),
                                                                   ),
                                                             ),
                                                           ),
@@ -840,7 +881,8 @@ class _RegistrarPrestamoPageWidgetState
                                             Column(
                                               mainAxisSize: MainAxisSize.max,
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
                                               children: [

@@ -5,11 +5,13 @@ import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:logger/logger.dart';
 //import 'package:sqflite/sqflite.dart';
 // ignore: implementation_imports
 import 'package:supabase/src/supabase_stream_builder.dart';
 import 'package:supabase/supabase.dart';
 import '../../assets/constantes.dart' as constantes;
+import '../entidades/activo_funcionario.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 
 class ActivoController {
@@ -137,61 +139,72 @@ class ActivoController {
   }
 
   Stream<SupabaseStreamEvent> getActivoStream(String? categoria) {
-    if(categoria!.contains('Todos')){
+    if (categoria!.contains('Todos')) {
       final response = (categoria != null && categoria.length > 3)
-        ? supabase
-            .from('ACTIVOS')
-            .stream(primaryKey: ['ID_SERIAL'])
-            .order('FECHA_CREADO', ascending: false)
-        : supabase.from('ACTIVOS').stream(
-            primaryKey: ['ID_SERIAL']).order('FECHA_CREADO', ascending: false);
-    return response;
-    }else{
+          ? supabase.from('ACTIVOS').stream(
+              primaryKey: ['ID_SERIAL']).order('FECHA_CREADO', ascending: false)
+          : supabase.from('ACTIVOS').stream(primaryKey: ['ID_SERIAL']).order(
+              'FECHA_CREADO',
+              ascending: false);
+      return response;
+    } else {
       final response = (categoria != null && categoria.length > 3)
-        ? supabase
-            .from('ACTIVOS')
-            .stream(primaryKey: ['ID_SERIAL'])
-            .eq('NOMBRE_CATEGORIA', categoria)
-            .order('FECHA_CREADO', ascending: false)
-        : supabase.from('ACTIVOS').stream(
-            primaryKey: ['ID_SERIAL']).order('FECHA_CREADO', ascending: false);
-    return response;
-
+          ? supabase
+              .from('ACTIVOS')
+              .stream(primaryKey: ['ID_SERIAL'])
+              .eq('NOMBRE_CATEGORIA', categoria)
+              .order('FECHA_CREADO', ascending: false)
+          : supabase.from('ACTIVOS').stream(primaryKey: ['ID_SERIAL']).order(
+              'FECHA_CREADO',
+              ascending: false);
+      return response;
     }
-    
   }
 
-  Future<List<Activo>> getActivosList(String? nombre,String? categoria) async {
-    try{
-    if (nombre == null || nombre.trim().isEmpty) {
-       
-        final data =
-             (categoria!=null&&categoria.isNotEmpty&&!(categoria.contains('Todos'))) ? await supabase.from('ACTIVOS').select('*').eq('NOMBRE_CATEGORIA', categoria)
-            .order('FECHA_CREADO', ascending: false) as List<dynamic>: await supabase.from('ACTIVOS').select('*') 
-            .order('FECHA_CREADO', ascending: false) as List<dynamic>;
+  Future<List<Activo>> getActivosList(String? nombre, String? categoria) async {
+    try {
+      if (nombre == null || nombre.trim().isEmpty) {
+        final data = (categoria != null &&
+                categoria.isNotEmpty &&
+                !(categoria.contains('Todos')))
+            ? await supabase
+                .from('ACTIVOS')
+                .select('*')
+                .eq('NOMBRE_CATEGORIA', categoria)
+                .order('FECHA_CREADO', ascending: false) as List<dynamic>
+            : await supabase
+                .from('ACTIVOS')
+                .select('*')
+                .order('FECHA_CREADO', ascending: false) as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Activo.fromMap(e)).toList();
-      
-    }else {
-      
-        final data = (categoria!=null&&categoria.isNotEmpty&&!(categoria.contains('Todos'))) ? await supabase.from('ACTIVOS').select('*').textSearch(
-                'NOMBRE',
-                "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'").eq('NOMBRE_CATEGORIA', categoria).order('FECHA_CREADO', ascending: false)
-            as List<dynamic> : await supabase.from('ACTIVOS').select('*').textSearch(
-                'NOMBRE',
-                "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'").order('FECHA_CREADO', ascending: false)
-            as List<dynamic>;
+      } else {
+        final data = (categoria != null &&
+                categoria.isNotEmpty &&
+                !(categoria.contains('Todos')))
+            ? await supabase
+                .from('ACTIVOS')
+                .select('*')
+                .textSearch('NOMBRE',
+                    "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'")
+                .eq('NOMBRE_CATEGORIA', categoria)
+                .order('FECHA_CREADO', ascending: false) as List<dynamic>
+            : await supabase
+                .from('ACTIVOS')
+                .select('*')
+                .textSearch('NOMBRE',
+                    "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'")
+                .order('FECHA_CREADO', ascending: false) as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Activo.fromMap(e)).toList();
-      
-    }
-    }on PostgrestException catch (error) {
-        log(error.message);
-        return [];
-      } catch (error) {
-        log('Error al cargar activos: $error');
-        return [];
       }
+    } on PostgrestException catch (error) {
+      log(error.message);
+      return [];
+    } catch (error) {
+      log('Error al cargar activos: $error');
+      return [];
+    }
   }
 
   Future<Activo> buscarActivo(String idSerial) async {
@@ -275,30 +288,46 @@ class ActivoController {
     }
   }
 
-  
+  Future<List<ActivoFuncionario>> getFuncionarioAsignado(
+      String idActivo) async {
+    try {
+      final data = await supabase
+          .from('FUNCIONARIOS_ACTIVOS')
+          .select('*')
+          .eq('ID_SERIAL', idActivo) as List<dynamic>;
+      Logger().d('Datos funcionarios activos: $data');
+      return (data).map((e) => ActivoFuncionario.fromMap(e)).toList();
+    } on PostgrestException catch (error) {
+      Logger().e(error.message);
+      return [];
+    } catch (error) {
+      Logger().e('Error al cargar ACTIVOS ASIGNADOS: $error');
+      return [];
+    }
+  }
 
   Future<String> quitarActivoFuncionario(context, String idActivo) async {
     try {
       final data = (await supabase
           .from('FUNCIONARIOS_ACTIVOS')
           .delete()
-          .match({ 'ID_SERIAL': idActivo}).then((value) async{
-             await supabase
+          .match({'ID_SERIAL': idActivo}).then((value) async {
+        await supabase
             .from('ACTIVOS')
             .update({'ESTA_ASIGNADO': false}).match({'ID_SERIAL': idActivo});
-          }));
+      }));
       log('Eliminando:$data');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          'Se ha quitado el activo',
-          style: FlutterFlowTheme.of(context).bodyText2.override(
-                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
-                color: FlutterFlowTheme.of(context).tertiaryColor,
-                useGoogleFonts: GoogleFonts.asMap()
-                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
-              ),
-        ),
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor));
+          content: Text(
+            'Se ha quitado el activo',
+            style: FlutterFlowTheme.of(context).bodyText2.override(
+                  fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                  color: FlutterFlowTheme.of(context).tertiaryColor,
+                  useGoogleFonts: GoogleFonts.asMap().containsKey(
+                      FlutterFlowTheme.of(context).bodyText2Family),
+                ),
+          ),
+          backgroundColor: FlutterFlowTheme.of(context).primaryColor));
       return 'ok';
     } on Exception catch (error) {
       StorageController storageController = StorageController();
@@ -335,31 +364,30 @@ class ActivoController {
     }
   }
 
-  Future<String> quitarFuncionarioActivo(context, String idFuncionario,int cantidadActivos) async {
+  Future<String> quitarFuncionarioActivo(
+      context, String idFuncionario, int cantidadActivos) async {
     try {
       final data = (await supabase
           .from('FUNCIONARIOS_ACTIVOS')
           .delete()
-          .match({ 'ID_FUNCIONARIO': idFuncionario}).then((value) async{
-            if(cantidadActivos<2){
-              await supabase
-            .from('FUNCIONARIOS')
-            .update({'TIENE_ACTIVOS': false}).match({'CEDULA': idFuncionario});
-            }
-            
-          }));
+          .match({'ID_FUNCIONARIO': idFuncionario}).then((value) async {
+        if (cantidadActivos < 2) {
+          await supabase.from('FUNCIONARIOS').update(
+              {'TIENE_ACTIVOS': false}).match({'CEDULA': idFuncionario});
+        }
+      }));
       log('Eliminando:$data');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          'Se ha quitado con exitó',
-          style: FlutterFlowTheme.of(context).bodyText2.override(
-                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
-                color: FlutterFlowTheme.of(context).tertiaryColor,
-                useGoogleFonts: GoogleFonts.asMap()
-                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
-              ),
-        ),
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor));
+          content: Text(
+            'Se ha quitado con exitó',
+            style: FlutterFlowTheme.of(context).bodyText2.override(
+                  fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                  color: FlutterFlowTheme.of(context).tertiaryColor,
+                  useGoogleFonts: GoogleFonts.asMap().containsKey(
+                      FlutterFlowTheme.of(context).bodyText2Family),
+                ),
+          ),
+          backgroundColor: FlutterFlowTheme.of(context).primaryColor));
       return 'ok';
     } on Exception catch (error) {
       StorageController storageController = StorageController();

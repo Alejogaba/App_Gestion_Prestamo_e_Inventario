@@ -8,6 +8,7 @@ class Activo {
   String categoria;
   int cantidad = 1;
   String? capacidad;
+  bool? estaAsignado;
 
   Activo(
     this.idSerial,
@@ -19,6 +20,7 @@ class Activo {
     this.categoria,
     this.cantidad,
     this.capacidad,
+    {this.estaAsignado}
   );
 
   factory Activo.fromMap(Map<String, dynamic> map) {
@@ -32,8 +34,7 @@ class Activo {
       map['NOMBRE_CATEGORIA'] ?? '',
       map['CANTIDAD'] ?? '',
       map['CAPACIDAD'] ?? '',
+      estaAsignado: map['ESTA_ASIGNADO'] ?? false,
     );
   }
-
-  
 }

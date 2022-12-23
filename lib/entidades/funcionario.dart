@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-class Funcionario {
+class Funcionario{
   String cedula;
   String? apellidos;
   String nombres;

@@ -486,29 +486,27 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                 ),
                               ),
                               Container(
-                                    width: anchoColumnaWrap,
-                                    child: Align(
-                                      alignment: AlignmentDirectional(0.05, 0),
-                                      child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 30, 0, 0),
-                                          child: TextFormFieldCustom(
-                                              context,
-                                              textControllerDetalles,
-                                              'Ej.HP',
-                                              'Marca',
-                                              150,
-                                              TextInputType.multiline,
-                                              null,
-                                              true,
-                                              null,
-                                              _focusNodeDetalles)),
-                                    ),
-                                  ),
+                                width: anchoColumnaWrap,
+                                child: Align(
+                                  alignment: AlignmentDirectional(0.05, 0),
+                                  child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 30, 0, 0),
+                                      child: TextFormFieldCustom(
+                                          context,
+                                          textControllerDetalles,
+                                          'Ej.HP',
+                                          'Marca',
+                                          150,
+                                          TextInputType.multiline,
+                                          null,
+                                          true,
+                                          null,
+                                          _focusNodeDetalles)),
+                                ),
+                              ),
                             ],
                           ),
-                          
                         ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
@@ -603,7 +601,6 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                               ),
                               Column(
                                 children: [
-                                  
                                   Container(
                                     width: anchoColumnaWrap,
                                     child: Padding(
@@ -1098,7 +1095,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
       print('Lista categoria nombre: + ${element.nombre}');
       print('Lista categoria url: ${element.urlImagen}');
     }
-    if(listCategorias!= null && listCategorias.length>0){
+    if (listCategorias != null && listCategorias.length > 0) {
       listCategorias.removeWhere((item) => item.nombre == 'Todos los activos');
     }
     return Future.value(listCategorias);

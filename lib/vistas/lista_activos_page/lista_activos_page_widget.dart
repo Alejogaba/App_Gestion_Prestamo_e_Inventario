@@ -393,25 +393,26 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                               if (selectMode) {
                                                 if (esPrestamo == null) {
                                                   context.replaceNamed(
-                                                  'activoPerfilPage',
-                                                  queryParams: {
-                                                    'idActivo': serializeParam(
-                                                      snapshot.data![index]
-                                                          .idSerial,
-                                                      ParamType.String,
-                                                    ),
-                                                    'selectMode':
-                                                        serializeParam(
-                                                      selectMode,
-                                                      ParamType.bool,
-                                                    ),
-                                                    'esPrestamo':
-                                                        serializeParam(
-                                                      esPrestamo,
-                                                      ParamType.bool,
-                                                    ),
-                                                  },
-                                                );
+                                                    'activoPerfilPage',
+                                                    queryParams: {
+                                                      'idActivo':
+                                                          serializeParam(
+                                                        snapshot.data![index]
+                                                            .idSerial,
+                                                        ParamType.String,
+                                                      ),
+                                                      'selectMode':
+                                                          serializeParam(
+                                                        selectMode,
+                                                        ParamType.bool,
+                                                      ),
+                                                      'esPrestamo':
+                                                          serializeParam(
+                                                        esPrestamo,
+                                                        ParamType.bool,
+                                                      ),
+                                                    },
+                                                  );
                                                 } else if (esPrestamo!) {
                                                   final Activo? result =
                                                       await context
@@ -441,7 +442,6 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                     context.pop(result);
                                                   }
                                                 }
-                                                
                                               } else {
                                                 context.pushNamed(
                                                   'activoPerfilPage',

@@ -36,11 +36,9 @@ class _RegistrarCategoriaPageWidgetState
     extends State<RegistrarCategoriaPageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-
   TextEditingController textControllerNombre = TextEditingController();
   TextEditingController? textControllerDetalles = TextEditingController();
   TextEditingController? controladorimagenUrl = TextEditingController();
-
 
   List<Categoria> listCategorias = [];
   List<EstadoActivo> listEstados = [
@@ -95,9 +93,7 @@ class _RegistrarCategoriaPageWidgetState
     if (categoriaEditar != null) {
       textControllerNombre.text = categoriaEditar!.nombre.toString();
       urlImagen = categoriaEditar!.urlImagen.toString();
-    } else {
-      
-    }
+    } else {}
   }
 
   @override
@@ -133,7 +129,8 @@ class _RegistrarCategoriaPageWidgetState
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               _loading = true;
-              String imagenUrl = 'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png';
+              String imagenUrl =
+                  'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png';
               ;
               if (imageFile != null) {
                 StorageController storageController = StorageController();
@@ -141,26 +138,34 @@ class _RegistrarCategoriaPageWidgetState
                     context,
                     imageFile?.path.toString(),
                     imageFile!,
-                    textControllerNombre.text,'categorias');
-                if(imagenUrl.contains('https')){
-                   CategoriaController categoriaController = CategoriaController();
-                await registrarCategoria(categoriaController, context, textControllerNombre.text,
-                    imagenUrl,textControllerDetalles!.text);
-                Timer(Duration(seconds: 3), () {
-                  context.pop();
-                });
+                    textControllerNombre.text,
+                    'categorias');
+                if (imagenUrl.contains('https')) {
+                  CategoriaController categoriaController =
+                      CategoriaController();
+                  await registrarCategoria(
+                      categoriaController,
+                      context,
+                      textControllerNombre.text,
+                      imagenUrl,
+                      textControllerDetalles!.text);
+                  Timer(Duration(seconds: 3), () {
+                    context.pop();
+                  });
                 }
-               
               } else {
                 CategoriaController categoriaController = CategoriaController();
-                await registrarCategoria(categoriaController, context, textControllerNombre.text,
-                    'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png',textControllerDetalles!.text);
+                await registrarCategoria(
+                    categoriaController,
+                    context,
+                    textControllerNombre.text,
+                    'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png',
+                    textControllerDetalles!.text);
                 Timer(Duration(seconds: 3), () {
                   context.pop();
                 });
               }
-            }
-             else {
+            } else {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                   "No deje campos vacios",
@@ -350,7 +355,6 @@ class _RegistrarCategoriaPageWidgetState
                         ],
                       ),
                     ),
-                   
                   ],
                 ),
               ),
@@ -463,14 +467,13 @@ class _RegistrarCategoriaPageWidgetState
     );
   }
 
-  Future<void> registrarCategoria(CategoriaController activoCategoria,
-      BuildContext context, String nombre, String imagenUrl,String descripcion) async {
-    await activoCategoria.addCategoria(
-      context,
-      nombre,
-      imagenUrl,
-      descripcion
-    );
+  Future<void> registrarCategoria(
+      CategoriaController activoCategoria,
+      BuildContext context,
+      String nombre,
+      String imagenUrl,
+      String descripcion) async {
+    await activoCategoria.addCategoria(context, nombre, imagenUrl, descripcion);
     _loading = false;
   }
 
@@ -501,8 +504,8 @@ class _RegistrarCategoriaPageWidgetState
   }
 
   Future captureImageFromCamera() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera,
-    imageQuality: 90);
+    final pickedFile =
+        await picker.pickImage(source: ImageSource.camera, imageQuality: 90);
     setState(() {
       if (pickedFile != null) {
         imageFile = File(pickedFile.path);
