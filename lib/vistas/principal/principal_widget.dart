@@ -807,8 +807,9 @@ void validarVersion(BuildContext context, Logger logger) async {
   log('Version local: $version_local');
   log('Version servidor: ${ultima_version_servidor.version}');
   log('BuildNumber: $buildNumber');
+  
 
-  if (ultima_version_servidor.version != '') {
+  if (ultima_version_servidor.version.isNotEmpty) {
     if (ultima_version_servidor.version == '$version_local+$buildNumber') {
       log('El sistema esta actualizado');
     } else {
@@ -818,7 +819,7 @@ void validarVersion(BuildContext context, Logger logger) async {
       title: 'Actualización disponible',
       message: 'Hay una nueva versión disponible',
       okLabel: 'Actualizar',
-      style: AdaptiveStyle.iOS);
+      );
   logger.i(result.name.toString());
   if (result.name.toString() == 'ok') {
     // ignore: use_build_context_synchronously

@@ -33,7 +33,7 @@ class _ActualizarPageWidgetState extends State<ActualizarPageWidget> {
   @override
   void initState() {
     super.initState();
-    //download(context, url);
+    download(context, url);
   }
 
   @override

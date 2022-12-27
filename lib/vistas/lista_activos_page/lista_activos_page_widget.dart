@@ -222,8 +222,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                   size: 30,
                 ),
                 onPressed: () async {
-                  await PdfApi.generarTablaActivo(listaActivos,
-                      tipoActivo: nombreCategoria);
+                  await PdfApi().generarTablaActivo(listaActivos); // PdfApi.generarTablaActivo(listaActivos, tipoActivo: nombreCategoria);
                 },
               ),
             ],
