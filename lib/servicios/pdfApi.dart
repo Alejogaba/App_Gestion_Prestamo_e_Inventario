@@ -56,10 +56,11 @@ class PdfApi {
     }
   }
 
-  Future<void> generarHojaSalida(
+  Future<bool> generarHojaSalida(
       List<Activo> listaActivo, Funcionario funcionario,
       {String numConsecutivo = 'GTI - 000'}) async {
     final pdf = Document();
+    double separacionAltura = (listaActivo.length > 3) ? 0.5 : 1;
     String funcionarioArea = await cargarArea(funcionario.idArea);
 
     _logo1 = (await rootBundle.load('assets/images/logo-jagua-1.jpg'))
@@ -74,16 +75,16 @@ class PdfApi {
       margin: EdgeInsets.only(
           left: 2.5 * PdfPageFormat.cm,
           right: 2.5 * PdfPageFormat.cm,
-          bottom: 0.8 * PdfPageFormat.cm,
-          top: 0.8 * PdfPageFormat.cm),
+          bottom: 0.6 * PdfPageFormat.cm,
+          top: 0.6 * PdfPageFormat.cm),
       pageFormat: PdfPageFormat.letter,
       build: (context) => [
-        SizedBox(height: 1 * PdfPageFormat.cm),
+        SizedBox(height: separacionAltura * PdfPageFormat.cm),
         buildTextJustificado(
             "La Jagua de Ibirico, ${_formatDate(DateTime.now())}",
             11,
             FontWeight.normal),
-        SizedBox(height: 1.1 * PdfPageFormat.cm),
+        SizedBox(height: separacionAltura * PdfPageFormat.cm),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           pw.Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             buildTextJustificado("Señor", 11, FontWeight.bold),
@@ -119,23 +120,21 @@ class PdfApi {
           buildTextJustificado(
               "La Jagua de Ibirico, Cesar", 11, FontWeight.bold),
         ]),
-        SizedBox(height: 1.1 * PdfPageFormat.cm),
+        SizedBox(height: separacionAltura * PdfPageFormat.cm),
         buildTextJustificado(
             "REF: SALIDA DE EQUIPOS TECNOLOGICOS.", 11, FontWeight.bold),
-        SizedBox(height: 1.1 * PdfPageFormat.cm),
+        SizedBox(height: separacionAltura * PdfPageFormat.cm),
         buildTextJustificado(
             "Mediante la presente se le informa la autorización para la salida de los equipos a continuación:",
             12,
             FontWeight.normal),
-        SizedBox(height: 1.1 * PdfPageFormat.cm),
-        buildTableActivoPrestamo(
-          listaActivo,funcionarioArea
-        ),
+        SizedBox(height: separacionAltura * PdfPageFormat.cm),
+        buildTableActivoPrestamo(listaActivo, funcionarioArea),
         SizedBox(height: 0.5 * PdfPageFormat.cm),
         buildTableObservacion('Esta es una observacion'),
         SizedBox(height: 0.5 * PdfPageFormat.cm),
         buildTextJustificado("Cordialmente.", 11, FontWeight.normal),
-        SizedBox(height: 3 * PdfPageFormat.cm),
+        SizedBox(height: 2 * PdfPageFormat.cm),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           buildTextJustificado(
               "_________________________________", 11, FontWeight.bold),
@@ -147,9 +146,12 @@ class PdfApi {
     ));
 
     if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
-      saveDocumentDesktop(name: 'reporte de activos.pdf', pdf: pdf);
+      bool res =
+          await saveDocumentDesktop(name: 'Salida de activos.pdf', pdf: pdf);
+      return res;
     } else {
-      saveDocumentMobile(name: 'Reporte de activos.pdf', pdf: pdf);
+      saveDocumentMobile(name: 'Salida de activos.pdf', pdf: pdf);
+      return false;
     }
   }
 
@@ -257,7 +259,7 @@ class PdfApi {
         ),
         headerDecoration: const BoxDecoration(color: PdfColors.grey300),
         headerAlignment: Alignment.center,
-        cellHeight: 30,
+        cellHeight: 20,
         cellAlignment: Alignment.center,
         columnWidths: {
           0: FixedColumnWidth(35.0),
@@ -265,7 +267,7 @@ class PdfApi {
           2: FlexColumnWidth(),
           3: FixedColumnWidth(45.0),
           4: FlexColumnWidth(),
-          5: FixedColumnWidth(50.0),
+          5: FixedColumnWidth(100.0),
         });
   }
 
@@ -275,12 +277,12 @@ class PdfApi {
         headers: null,
         data: List<List<String>>.generate(1, (row) => products),
         border: const TableBorder(
-            left: BorderSide(),
-            right: BorderSide(),
-            top: BorderSide(),
-            bottom: BorderSide(),
-            horizontalInside: BorderSide(),
-            verticalInside: BorderSide()),
+            left: BorderSide(width: 0.6),
+            right: BorderSide(width: 0.6),
+            top: BorderSide(width: 0.6),
+            bottom: BorderSide(width: 0.6),
+            horizontalInside: BorderSide(width: 0.6),
+            verticalInside: BorderSide(width: 0.6)),
         headerStyle: TextStyle(
           fontWeight: FontWeight.normal,
         ),
@@ -340,13 +342,13 @@ class PdfApi {
     log('Resultado OpenResult: $_openResult');
   }
 
-  static Future<void> saveDocumentDesktop({
+  static Future<bool> saveDocumentDesktop({
     String? name,
     Document? pdf,
   }) async {
     String? pickedFile = await FilePicker.platform.saveFile(
         dialogTitle: 'Seleccione a ruta donde desea guardar el archivo:',
-        fileName: 'Reporte de activos.pdf',
+        fileName: name,
         type: FileType.custom,
         allowedExtensions: ['pdf']);
 
@@ -371,6 +373,9 @@ class PdfApi {
       if (!await launchUrl(uri)) {
         throw 'Could not launch $uri';
       }
+      return true;
+    } else {
+      return false;
     }
   }
 

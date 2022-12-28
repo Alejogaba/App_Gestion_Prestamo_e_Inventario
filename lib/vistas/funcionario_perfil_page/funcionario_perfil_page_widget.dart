@@ -190,11 +190,11 @@ class _FuncionarioPerfilPageWidgetState
                                             MainAxisAlignment.start,
                                         children: [
                                           Align(
-                                            alignment: AlignmentDirectional(0, 0),
+                                            alignment:
+                                                AlignmentDirectional(0, 0),
                                             child: Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      0, 25, 0, 10),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 25, 0, 10),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.max,
                                                 mainAxisAlignment:
@@ -202,8 +202,10 @@ class _FuncionarioPerfilPageWidgetState
                                                         .spaceBetween,
                                                 children: [
                                                   Padding(
-                                                    padding: EdgeInsetsDirectional
-                                                        .fromSTEB(0, 0, 24, 0),
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 0, 24, 0),
                                                     child: Container(
                                                       width: 40,
                                                       height: 40,
@@ -212,13 +214,12 @@ class _FuncionarioPerfilPageWidgetState
                                                                 .of(context)
                                                             .primaryBackground,
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                8),
+                                                            BorderRadius
+                                                                .circular(8),
                                                         border: Border.all(
-                                                          color:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .secondaryText,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondaryText,
                                                           width: 1,
                                                         ),
                                                       ),
@@ -232,10 +233,9 @@ class _FuncionarioPerfilPageWidgetState
                                                             Color(0x00F1F4F8),
                                                         icon: Icon(
                                                           Icons.delete_outlined,
-                                                          color:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .primaryText,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
                                                           size: 22,
                                                         ),
                                                         onPressed: () {},
@@ -249,18 +249,20 @@ class _FuncionarioPerfilPageWidgetState
                                                       Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0, 0, 24, 0),
+                                                                .fromSTEB(0, 0,
+                                                                    24, 0),
                                                         child: InkWell(
                                                           onTap: () async {
-                                                            (selectMode != null &&
+                                                            (selectMode !=
+                                                                        null &&
                                                                     selectMode!)
                                                                 ? log(
                                                                     'asignar button')
                                                                 : context
                                                                     .pushNamed(
                                                                     'RegistrarFuncionarioPage',
-                                                                    queryParams: {
+                                                                    queryParams:
+                                                                        {
                                                                       'editMode':
                                                                           serializeParam(
                                                                         true,
@@ -276,11 +278,9 @@ class _FuncionarioPerfilPageWidgetState
                                                                         hasTransition:
                                                                             true,
                                                                         transitionType:
-                                                                            PageTransitionType
-                                                                                .fade,
-                                                                        duration: Duration(
-                                                                            milliseconds:
-                                                                                1000),
+                                                                            PageTransitionType.fade,
+                                                                        duration:
+                                                                            Duration(milliseconds: 1000),
                                                                       ),
                                                                     },
                                                                   );
@@ -297,9 +297,10 @@ class _FuncionarioPerfilPageWidgetState
                                                                   BorderRadius
                                                                       .circular(
                                                                           8),
-                                                              border: Border.all(
-                                                                color: FlutterFlowTheme
-                                                                        .of(context)
+                                                              border:
+                                                                  Border.all(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
                                                                     .secondaryText,
                                                                 width: 1,
                                                               ),
@@ -314,8 +315,8 @@ class _FuncionarioPerfilPageWidgetState
                                                                   0x00F1F4F8),
                                                               icon: Icon(
                                                                 Icons.edit,
-                                                                color: FlutterFlowTheme
-                                                                        .of(context)
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
                                                                     .primaryText,
                                                                 size: 16,
                                                               ),
@@ -330,8 +331,8 @@ class _FuncionarioPerfilPageWidgetState
                                                       Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0, 0, 24, 0),
+                                                                .fromSTEB(0, 0,
+                                                                    24, 0),
                                                         child: InkWell(
                                                           onTap: () async {
                                                             context.pop();
@@ -348,9 +349,10 @@ class _FuncionarioPerfilPageWidgetState
                                                                   BorderRadius
                                                                       .circular(
                                                                           8),
-                                                              border: Border.all(
-                                                                color: FlutterFlowTheme
-                                                                        .of(context)
+                                                              border:
+                                                                  Border.all(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
                                                                     .secondaryText,
                                                                 width: 1,
                                                               ),
@@ -364,8 +366,8 @@ class _FuncionarioPerfilPageWidgetState
                                                               icon: Icon(
                                                                 Icons
                                                                     .close_rounded,
-                                                                color: FlutterFlowTheme
-                                                                        .of(context)
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
                                                                     .primaryText,
                                                                 size: 20,
                                                               ),
@@ -390,11 +392,13 @@ class _FuncionarioPerfilPageWidgetState
                                               mainAxisSize: MainAxisSize.max,
                                               children: [
                                                 Align(
-                                                  alignment: AlignmentDirectional(
-                                                      0, 0.05),
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          0, 0.05),
                                                   child: ClipRRect(
                                                     borderRadius:
-                                                        BorderRadius.circular(8),
+                                                        BorderRadius.circular(
+                                                            8),
                                                     child: (funcionario
                                                             .urlImagen.isEmpty)
                                                         ? Text(
@@ -421,8 +425,8 @@ class _FuncionarioPerfilPageWidgetState
                                                                 (context,
                                                                     progress) {
                                                               return Container(
-                                                                color: FlutterFlowTheme
-                                                                        .of(context)
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
                                                                     .secondaryBackground,
                                                                 child: Stack(
                                                                   alignment:
@@ -435,20 +439,17 @@ class _FuncionarioPerfilPageWidgetState
                                                                             null)
                                                                       Text(
                                                                           '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
-                                                                          style: const TextStyle(
-                                                                              color:
-                                                                                  Color(0xFF006D38))),
+                                                                          style:
+                                                                              const TextStyle(color: Color(0xFF006D38))),
                                                                     SizedBox(
                                                                         width:
                                                                             140,
                                                                         height:
                                                                             140,
                                                                         child: CircularProgressIndicator(
-                                                                            color: const Color(
-                                                                                0xFF006D38),
-                                                                            value: progress
-                                                                                .progressPercentage
-                                                                                .value)),
+                                                                            color:
+                                                                                const Color(0xFF006D38),
+                                                                            value: progress.progressPercentage.value)),
                                                                   ],
                                                                 ),
                                                               );
@@ -458,8 +459,10 @@ class _FuncionarioPerfilPageWidgetState
                                                 ),
                                                 Expanded(
                                                   child: Padding(
-                                                    padding: EdgeInsetsDirectional
-                                                        .fromSTEB(12, 0, 0, 0),
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                12, 0, 0, 0),
                                                     child: Column(
                                                       mainAxisSize:
                                                           MainAxisSize.max,
@@ -470,8 +473,8 @@ class _FuncionarioPerfilPageWidgetState
                                                         Padding(
                                                           padding:
                                                               EdgeInsetsDirectional
-                                                                  .fromSTEB(
-                                                                      0, 2, 0, 0),
+                                                                  .fromSTEB(0,
+                                                                      2, 0, 0),
                                                           child: AutoSizeText(
                                                             (funcionario.apellidos ==
                                                                     null)
@@ -493,15 +496,16 @@ class _FuncionarioPerfilPageWidgetState
                                                                       .containsKey(
                                                                           FlutterFlowTheme.of(context)
                                                                               .subtitle1Family),
-                                                                  lineHeight: 1.4,
+                                                                  lineHeight:
+                                                                      1.4,
                                                                 ),
                                                           ),
                                                         ),
                                                         Padding(
                                                           padding:
                                                               EdgeInsetsDirectional
-                                                                  .fromSTEB(0, 10,
-                                                                      0, 0),
+                                                                  .fromSTEB(0,
+                                                                      10, 0, 0),
                                                           child: Text(
                                                             funcionario.cargo,
                                                             style: FlutterFlowTheme
@@ -525,8 +529,8 @@ class _FuncionarioPerfilPageWidgetState
                                                         Padding(
                                                           padding:
                                                               EdgeInsetsDirectional
-                                                                  .fromSTEB(0, 10,
-                                                                      0, 0),
+                                                                  .fromSTEB(0,
+                                                                      10, 0, 0),
                                                           child: Text(
                                                             area.nombre,
                                                             style: FlutterFlowTheme
@@ -580,12 +584,12 @@ class _FuncionarioPerfilPageWidgetState
                                                         .primaryText,
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
-                                                useGoogleFonts:
-                                                    GoogleFonts.asMap()
-                                                        .containsKey(
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText2Family),
+                                                useGoogleFonts: GoogleFonts
+                                                        .asMap()
+                                                    .containsKey(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyText2Family),
                                               ),
                                         ),
                                       ),
@@ -604,22 +608,25 @@ class _FuncionarioPerfilPageWidgetState
                                                     0, 0, 24, 0),
                                             child: Text(
                                               funcionario.cedula,
-                                              style: FlutterFlowTheme.of(context)
-                                                  .bodyText1
-                                                  .override(
-                                                    fontFamily: 'Poppins',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .grayicon,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.normal,
-                                                    useGoogleFonts: GoogleFonts
-                                                            .asMap()
-                                                        .containsKey(
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText1
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyText1Family),
-                                                  ),
+                                                                .grayicon,
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText1Family),
+                                                      ),
                                             ),
                                           ),
                                         ),
@@ -638,28 +645,28 @@ class _FuncionarioPerfilPageWidgetState
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      24, 12, 0, 8),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(24, 12, 0, 8),
                                               child: Text(
                                                 'CORREO ELÉCTRONICO',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyText2
-                                                    .override(
-                                                      fontFamily: 'Poppins',
-                                                      color: FlutterFlowTheme.of(
-                                                              context)
-                                                          .primaryText,
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.bold,
-                                                      useGoogleFonts: GoogleFonts
-                                                              .asMap()
-                                                          .containsKey(
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText2Family),
-                                                    ),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText2
+                                                        .override(
+                                                          fontFamily: 'Poppins',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          useGoogleFonts: GoogleFonts
+                                                                  .asMap()
+                                                              .containsKey(
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyText2Family),
+                                                        ),
                                               ),
                                             ),
                                           ],
@@ -671,37 +678,37 @@ class _FuncionarioPerfilPageWidgetState
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(0, 0, 20, 0),
                                                 child: Row(
-                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
                                                   children: [
                                                     Expanded(
                                                       child: Padding(
                                                         padding:
                                                             EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    24, 0, 24, 0),
+                                                                .fromSTEB(24, 0,
+                                                                    24, 0),
                                                         child: Text(
                                                           funcionario.correo!,
                                                           maxLines: 2,
-                                                          style:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Poppins',
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .grayicon,
-                                                                    fontSize: 15,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                    useGoogleFonts: GoogleFonts
-                                                                            .asMap()
-                                                                        .containsKey(
-                                                                            FlutterFlowTheme.of(context)
-                                                                                .bodyText1Family),
-                                                                  ),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Poppins',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .grayicon,
+                                                                fontSize: 15,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                useGoogleFonts: GoogleFonts
+                                                                        .asMap()
+                                                                    .containsKey(
+                                                                        FlutterFlowTheme.of(context)
+                                                                            .bodyText1Family),
+                                                              ),
                                                         ),
                                                       ),
                                                     ),
@@ -709,7 +716,8 @@ class _FuncionarioPerfilPageWidgetState
                                                       mainAxisSize:
                                                           MainAxisSize.min,
                                                       mainAxisAlignment:
-                                                          MainAxisAlignment.start,
+                                                          MainAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Align(
                                                           alignment:
@@ -717,7 +725,8 @@ class _FuncionarioPerfilPageWidgetState
                                                                   0, 0),
                                                           child: Row(
                                                             mainAxisSize:
-                                                                MainAxisSize.max,
+                                                                MainAxisSize
+                                                                    .max,
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
                                                                     .end,
@@ -756,23 +765,23 @@ class _FuncionarioPerfilPageWidgetState
                                                                         BoxShadow(
                                                                           blurRadius:
                                                                               3,
-                                                                          color: Color(
-                                                                              0x33000000),
+                                                                          color:
+                                                                              Color(0x33000000),
                                                                           offset: Offset(
                                                                               0,
                                                                               2),
                                                                         )
                                                                       ],
                                                                       borderRadius:
-                                                                          BorderRadius
-                                                                              .circular(8),
+                                                                          BorderRadius.circular(
+                                                                              8),
                                                                       border:
                                                                           Border
                                                                               .all(
-                                                                        color: FlutterFlowTheme.of(
-                                                                                context)
+                                                                        color: FlutterFlowTheme.of(context)
                                                                             .secondaryText,
-                                                                        width: 1,
+                                                                        width:
+                                                                            1,
                                                                       ),
                                                                     ),
                                                                     child:
@@ -784,13 +793,14 @@ class _FuncionarioPerfilPageWidgetState
                                                                           30,
                                                                       buttonSize:
                                                                           46,
-                                                                      icon: Icon(
+                                                                      icon:
+                                                                          Icon(
                                                                         Icons
                                                                             .mail_outlined,
-                                                                        color: FlutterFlowTheme.of(
-                                                                                context)
+                                                                        color: FlutterFlowTheme.of(context)
                                                                             .primaryText,
-                                                                        size: 22,
+                                                                        size:
+                                                                            22,
                                                                       ),
                                                                       onPressed:
                                                                           () async {
@@ -798,10 +808,8 @@ class _FuncionarioPerfilPageWidgetState
                                                                             scheme: 'mailto',
                                                                             path: funcionario.correo,
                                                                             query: {
-                                                                              'subject':
-                                                                                  'Asunto',
-                                                                              'body':
-                                                                                  ' ',
+                                                                              'subject': 'Asunto',
+                                                                              'body': ' ',
                                                                             }.entries.map((MapEntry<String, String> e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}').join('&')));
                                                                       },
                                                                     ),
@@ -838,12 +846,12 @@ class _FuncionarioPerfilPageWidgetState
                                                         .primaryText,
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
-                                                useGoogleFonts:
-                                                    GoogleFonts.asMap()
-                                                        .containsKey(
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText2Family),
+                                                useGoogleFonts: GoogleFonts
+                                                        .asMap()
+                                                    .containsKey(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyText2Family),
                                               ),
                                         ),
                                       ),
@@ -862,22 +870,25 @@ class _FuncionarioPerfilPageWidgetState
                                           children: [
                                             Text(
                                               funcionario.telefono1,
-                                              style: FlutterFlowTheme.of(context)
-                                                  .bodyText1
-                                                  .override(
-                                                    fontFamily: 'Poppins',
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .grayicon,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.normal,
-                                                    useGoogleFonts: GoogleFonts
-                                                            .asMap()
-                                                        .containsKey(
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText1
+                                                      .override(
+                                                        fontFamily: 'Poppins',
+                                                        color:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyText1Family),
-                                                  ),
+                                                                .grayicon,
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText1Family),
+                                                      ),
                                             ),
                                           ],
                                         ),
@@ -895,8 +906,10 @@ class _FuncionarioPerfilPageWidgetState
                                                     MainAxisAlignment.end,
                                                 children: [
                                                   Padding(
-                                                    padding: EdgeInsetsDirectional
-                                                        .fromSTEB(0, 0, 20, 0),
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 0, 20, 0),
                                                     child: Container(
                                                       width: 40,
                                                       height: 40,
@@ -907,19 +920,19 @@ class _FuncionarioPerfilPageWidgetState
                                                         boxShadow: [
                                                           BoxShadow(
                                                             blurRadius: 3,
-                                                            color:
-                                                                Color(0x33000000),
-                                                            offset: Offset(0, 2),
+                                                            color: Color(
+                                                                0x33000000),
+                                                            offset:
+                                                                Offset(0, 2),
                                                           )
                                                         ],
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                8),
+                                                            BorderRadius
+                                                                .circular(8),
                                                         border: Border.all(
-                                                          color:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .secondaryText,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondaryText,
                                                           width: 1,
                                                         ),
                                                       ),
@@ -929,8 +942,8 @@ class _FuncionarioPerfilPageWidgetState
                                                                 0, 0.15),
                                                         child:
                                                             FlutterFlowIconButton(
-                                                          borderColor:
-                                                              Colors.transparent,
+                                                          borderColor: Colors
+                                                              .transparent,
                                                           borderRadius: 30,
                                                           buttonSize: 40,
                                                           fillColor:
@@ -952,8 +965,10 @@ class _FuncionarioPerfilPageWidgetState
                                                     ),
                                                   ),
                                                   Padding(
-                                                    padding: EdgeInsetsDirectional
-                                                        .fromSTEB(0, 0, 5, 0),
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 0, 5, 0),
                                                     child: InkWell(
                                                       onTap: () async {
                                                         await launchUrl(Uri(
@@ -965,7 +980,8 @@ class _FuncionarioPerfilPageWidgetState
                                                       child: Container(
                                                         width: 40,
                                                         height: 40,
-                                                        decoration: BoxDecoration(
+                                                        decoration:
+                                                            BoxDecoration(
                                                           color: FlutterFlowTheme
                                                                   .of(context)
                                                               .primaryBackground,
@@ -990,8 +1006,8 @@ class _FuncionarioPerfilPageWidgetState
                                                         ),
                                                         child:
                                                             FlutterFlowIconButton(
-                                                          borderColor:
-                                                              Colors.transparent,
+                                                          borderColor: Colors
+                                                              .transparent,
                                                           borderRadius: 30,
                                                           buttonSize: 46,
                                                           icon: Icon(
@@ -1031,17 +1047,18 @@ class _FuncionarioPerfilPageWidgetState
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                              24, 12, 0, 8),
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  24, 12, 0, 8),
                                           child: Text(
                                             'TELÉFONO ALTERNATIVO',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyText2
                                                 .override(
                                                   fontFamily: 'Poppins',
-                                                  color:
-                                                      FlutterFlowTheme.of(context)
-                                                          .primaryText,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.bold,
                                                   useGoogleFonts: GoogleFonts
@@ -1073,10 +1090,9 @@ class _FuncionarioPerfilPageWidgetState
                                                         .bodyText1
                                                         .override(
                                                           fontFamily: 'Poppins',
-                                                          color:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .grayicon,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .grayicon,
                                                           fontSize: 15,
                                                           fontWeight:
                                                               FontWeight.normal,
@@ -1099,7 +1115,8 @@ class _FuncionarioPerfilPageWidgetState
                                                 alignment:
                                                     AlignmentDirectional(0, 0),
                                                 child: Row(
-                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.end,
                                                   children: [
@@ -1111,7 +1128,8 @@ class _FuncionarioPerfilPageWidgetState
                                                       child: Container(
                                                         width: 40,
                                                         height: 40,
-                                                        decoration: BoxDecoration(
+                                                        decoration:
+                                                            BoxDecoration(
                                                           color: FlutterFlowTheme
                                                                   .of(context)
                                                               .primaryBackground,
@@ -1144,8 +1162,8 @@ class _FuncionarioPerfilPageWidgetState
                                                                 .transparent,
                                                             borderRadius: 30,
                                                             buttonSize: 40,
-                                                            fillColor:
-                                                                Color(0x00F1F4F8),
+                                                            fillColor: Color(
+                                                                0x00F1F4F8),
                                                             icon: FaIcon(
                                                               FontAwesomeIcons
                                                                   .whatsapp,
@@ -1154,7 +1172,8 @@ class _FuncionarioPerfilPageWidgetState
                                                                   .primaryText,
                                                               size: 22,
                                                             ),
-                                                            onPressed: () async {
+                                                            onPressed:
+                                                                () async {
                                                               await launchURL(
                                                                   'https://wa.me/${funcionario.telefono2}');
                                                             },
@@ -1188,13 +1207,14 @@ class _FuncionarioPerfilPageWidgetState
                                                                 blurRadius: 3,
                                                                 color: Color(
                                                                     0x33000000),
-                                                                offset:
-                                                                    Offset(0, 2),
+                                                                offset: Offset(
+                                                                    0, 2),
                                                               )
                                                             ],
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .circular(8),
+                                                                    .circular(
+                                                                        8),
                                                             border: Border.all(
                                                               color: FlutterFlowTheme
                                                                       .of(context)
@@ -1215,8 +1235,10 @@ class _FuncionarioPerfilPageWidgetState
                                                                   .primaryText,
                                                               size: 22,
                                                             ),
-                                                            onPressed: () async {
-                                                              await launchUrl(Uri(
+                                                            onPressed:
+                                                                () async {
+                                                              await launchUrl(
+                                                                  Uri(
                                                                 scheme: 'tel',
                                                                 path: funcionario
                                                                     .telefono2,
@@ -1245,9 +1267,8 @@ class _FuncionarioPerfilPageWidgetState
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      24, 12, 0, 8),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(24, 12, 0, 8),
                                               child: Text(
                                                 'ENLACE AL SIGEP',
                                                 style:
@@ -1255,10 +1276,9 @@ class _FuncionarioPerfilPageWidgetState
                                                         .bodyText2
                                                         .override(
                                                           fontFamily: 'Poppins',
-                                                          color:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .primaryText,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
                                                           fontSize: 12,
                                                           useGoogleFonts: GoogleFonts
                                                                   .asMap()
@@ -1272,8 +1292,9 @@ class _FuncionarioPerfilPageWidgetState
                                           ],
                                         ),
                                         Padding(
-                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                              20, 4, 20, 0),
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  20, 4, 20, 0),
                                           child: InkWell(
                                             onTap: () async {
                                               await launchURL(
@@ -1303,9 +1324,9 @@ class _FuncionarioPerfilPageWidgetState
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                                 border: Border.all(
-                                                  color:
-                                                      FlutterFlowTheme.of(context)
-                                                          .secondaryText,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryText,
                                                   width: 1,
                                                 ),
                                               ),
@@ -1313,8 +1334,10 @@ class _FuncionarioPerfilPageWidgetState
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: [
                                                   Padding(
-                                                    padding: EdgeInsetsDirectional
-                                                        .fromSTEB(0, 8, 0, 8),
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 8, 0, 8),
                                                     child: Column(
                                                       mainAxisSize:
                                                           MainAxisSize.max,
@@ -1328,11 +1351,12 @@ class _FuncionarioPerfilPageWidgetState
                                                         Padding(
                                                           padding:
                                                               EdgeInsetsDirectional
-                                                                  .fromSTEB(12, 0,
-                                                                      12, 0),
+                                                                  .fromSTEB(12,
+                                                                      0, 12, 0),
                                                           child: Row(
                                                             mainAxisSize:
-                                                                MainAxisSize.max,
+                                                                MainAxisSize
+                                                                    .max,
                                                             children: [
                                                               Padding(
                                                                 padding:
@@ -1343,8 +1367,8 @@ class _FuncionarioPerfilPageWidgetState
                                                                             8,
                                                                             0),
                                                                 child: Card(
-                                                                  clipBehavior: Clip
-                                                                      .antiAliasWithSaveLayer,
+                                                                  clipBehavior:
+                                                                      Clip.antiAliasWithSaveLayer,
                                                                   color: FlutterFlowTheme.of(
                                                                           context)
                                                                       .secondaryText,
@@ -1352,10 +1376,10 @@ class _FuncionarioPerfilPageWidgetState
                                                                       RoundedRectangleBorder(
                                                                     borderRadius:
                                                                         BorderRadius
-                                                                            .circular(
-                                                                                8),
+                                                                            .circular(8),
                                                                   ),
-                                                                  child: Padding(
+                                                                  child:
+                                                                      Padding(
                                                                     padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             2,
@@ -1365,12 +1389,13 @@ class _FuncionarioPerfilPageWidgetState
                                                                     child:
                                                                         ClipRRect(
                                                                       borderRadius:
-                                                                          BorderRadius
-                                                                              .circular(8),
+                                                                          BorderRadius.circular(
+                                                                              8),
                                                                       child: Image
                                                                           .asset(
                                                                         'assets/images/sigep.jpg',
-                                                                        width: 86,
+                                                                        width:
+                                                                            86,
                                                                         height:
                                                                             50,
                                                                         fit: BoxFit
@@ -1399,21 +1424,16 @@ class _FuncionarioPerfilPageWidgetState
                                                                               4,
                                                                               0,
                                                                               0),
-                                                                      child: Row(
+                                                                      child:
+                                                                          Row(
                                                                         mainAxisSize:
-                                                                            MainAxisSize
-                                                                                .max,
+                                                                            MainAxisSize.max,
                                                                         children: [
                                                                           Expanded(
                                                                             child:
                                                                                 Padding(
-                                                                              padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                  0,
-                                                                                  0,
-                                                                                  4,
-                                                                                  0),
-                                                                              child:
-                                                                                  Text(
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 4, 0),
+                                                                              child: Text(
                                                                                 funcionario.enlaceSIGEP!,
                                                                                 textAlign: TextAlign.justify,
                                                                                 maxLines: 3,
@@ -1464,29 +1484,31 @@ class _FuncionarioPerfilPageWidgetState
                             ],
                           ),
                           if (funcionario.tieneActivos)
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 24),
-                                child: FutureBuilder<List<Activo>>(
-                                  future:
-                                      cargarActivosAsignados(funcionario.cedula),
-                                  builder: (BuildContext context, snapshot) {
-                                    Logger().i('Estado de conexion: ' +
-                                        snapshot.connectionState.toString());
-                                    if (snapshot.connectionState ==
-                                            ConnectionState.done &&
-                                        snapshot.data!.length > 0) {
-                                      return _tarjetaActivo(snapshot, false, []);
-                                    } else {
-                                      return Container();
-                                    }
-                                  },
-                                ),
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 24),
+                              child: FutureBuilder<List<Activo>>(
+                                future:
+                                    cargarActivosAsignados(funcionario.cedula),
+                                builder: (BuildContext context, snapshot) {
+                                  Logger().i('Estado de conexion: ' +
+                                      snapshot.connectionState.toString());
+                                  if (snapshot.connectionState ==
+                                          ConnectionState.done &&
+                                      snapshot.data!.length > 0) {
+                                    return _tarjetaActivo(snapshot, false, []);
+                                  } else {
+                                    return Container();
+                                  }
+                                },
                               ),
+                            ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 24),
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 24),
                             child: FutureBuilder<List<Activo>>(
-                              future: cargarActivosPrestados(funcionario.cedula),
+                              future:
+                                  cargarActivosPrestados(funcionario.cedula),
                               builder: (BuildContext context, snapshot) {
                                 Logger().i('Estado de conexion: ' +
                                     snapshot.connectionState.toString());
@@ -1498,7 +1520,7 @@ class _FuncionarioPerfilPageWidgetState
                                       tienePrestamos = true;
                                     }
                                   }
-      
+
                                   return _tarjetaActivo(
                                       snapshot, true, listaFechasEntrega);
                                 } else {
@@ -1539,7 +1561,7 @@ class _FuncionarioPerfilPageWidgetState
                     children: [
                       Align(
                         alignment: AlignmentDirectional(0, 0),
-      
+
                         child: _cajaAdvertencia(
                           context,
                           '¿Esta realmente seguro que desea eliminar a este funcionario?',
@@ -1705,7 +1727,8 @@ class _FuncionarioPerfilPageWidgetState
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      snapshot.data![index].nombre.toString(),
+                                      snapshot.data![index].descripcion
+                                          .toString(),
                                       style: FlutterFlowTheme.of(context)
                                           .subtitle1
                                           .override(
@@ -1843,8 +1866,11 @@ class _FuncionarioPerfilPageWidgetState
                                   ],
                                 ),
                               ),
-                              (fechaEntrega.isNotEmpty&&prestamo) ? _iconoEliminarEntregar(fechaEntrega[index],
-                                  prestamo, snapshot.data![index].idSerial):_iconoEliminarEntregar('', prestamo, snapshot.data![index].idSerial)
+                              (fechaEntrega.isNotEmpty && prestamo)
+                                  ? _iconoEliminarEntregar(fechaEntrega[index],
+                                      prestamo, snapshot.data![index].idSerial)
+                                  : _iconoEliminarEntregar('', prestamo,
+                                      snapshot.data![index].idSerial)
                             ],
                           ),
                         ),

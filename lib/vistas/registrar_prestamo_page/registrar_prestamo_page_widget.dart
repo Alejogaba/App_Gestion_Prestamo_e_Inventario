@@ -69,6 +69,7 @@ class _RegistrarPrestamoPageWidgetState
             size: 30,
           ),
           onPressed: () async {
+            int contador = 0;
             if (funcionario != null && listActivos.isNotEmpty) {
               setState(() {
                 blur = true;
@@ -79,18 +80,28 @@ class _RegistrarPrestamoPageWidgetState
 
               PrestamosController prestamosController = PrestamosController();
               List<String> listaRespuesta = [];
+              int okCount = 0;
+              String result;
 
-              listActivos.forEach((activo) async {
-                String result = await prestamosController.registrarPrestamo(
+              for (var activo in listActivos) {
+                // ignore: use_build_context_synchronously
+                result = await prestamosController.registrarPrestamo(
                     context, activo.idSerial, funcionario!.cedula, fecha_inicio,
                     fechaHoraFinal: fecha_fin,
                     observacion: controladorObservacion.text);
-                listaRespuesta.add(result);
-              });
+                if (result.contains('ok')) {
+                  listaRespuesta.add(result);
+                  okCount = okCount + 1;
+                  log('sumando');
+                  contador++;
+                }
+                log('result:' + result);
+              }
+              log('okcount: ' + okCount.toString());
+              log('contador: ${listaRespuesta.length}');
+              log('listaactivos: ' + listActivos.length.toString());
 
-              String res = '';
-
-              if (listaRespuesta.every((element) => element == 'ok')) {
+              if (okCount == listActivos.length) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(
                     "Prestamos registrados con exitó",
@@ -107,6 +118,8 @@ class _RegistrarPrestamoPageWidgetState
                 setState(() {
                   guardadoExitosamente = true;
                 });
+              } else {
+                blur = false;
               }
             } else if (funcionario == null) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -165,7 +178,7 @@ class _RegistrarPrestamoPageWidgetState
             IconThemeData(color: FlutterFlowTheme.of(context).whiteColor),
         automaticallyImplyLeading: false,
         leading: InkWell(
-          onTap: () async {
+          onTap: () {
             context.pop();
           },
           child: Icon(
@@ -1120,8 +1133,8 @@ class _RegistrarPrestamoPageWidgetState
     );
   }
 
-  Widget _cajaAdvertencia(
-      context, List<Activo> listActivos, Funcionario funcionario) {
+  Widget _cajaAdvertencia(BuildContext contextPadre, List<Activo> listActivos,
+      Funcionario funcionario) {
     return Align(
       alignment: AlignmentDirectional(0, 0),
       child: Padding(
@@ -1133,7 +1146,7 @@ class _RegistrarPrestamoPageWidgetState
             maxHeight: 300,
           ),
           decoration: BoxDecoration(
-            color: FlutterFlowTheme.of(context).secondaryBackground,
+            color: FlutterFlowTheme.of(contextPadre).secondaryBackground,
             boxShadow: [
               BoxShadow(
                 blurRadius: 7,
@@ -1154,11 +1167,11 @@ class _RegistrarPrestamoPageWidgetState
                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                   child: Text(
                     'Orden de salida',
-                    style: FlutterFlowTheme.of(context).title2.override(
+                    style: FlutterFlowTheme.of(contextPadre).title2.override(
                           fontFamily: 'Poppins',
-                          color: FlutterFlowTheme.of(context).primaryText,
+                          color: FlutterFlowTheme.of(contextPadre).primaryText,
                           useGoogleFonts: GoogleFonts.asMap().containsKey(
-                              FlutterFlowTheme.of(context).title2Family),
+                              FlutterFlowTheme.of(contextPadre).title2Family),
                         ),
                   ),
                 ),
@@ -1166,43 +1179,48 @@ class _RegistrarPrestamoPageWidgetState
                   padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                   child: Text(
                     '¿Desea generar la orden de salida para estos activos?',
-                    style: FlutterFlowTheme.of(context).bodyText1.override(
+                    style: FlutterFlowTheme.of(contextPadre).bodyText1.override(
                           fontFamily: 'Poppins',
                           fontSize: 18,
                           useGoogleFonts: GoogleFonts.asMap().containsKey(
-                              FlutterFlowTheme.of(context).bodyText1Family),
+                              FlutterFlowTheme.of(contextPadre)
+                                  .bodyText1Family),
                         ),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                   child: FFButtonWidget(
-                    onPressed: () {
-                      Activo activoVacio = Activo(
-                          '',
-                          '',
-                          '',
-                          '',
-                          'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png',
-                          3,
-                          '',
-                          0,
-                          '');
-
-                      PdfApi().generarHojaSalida(listActivos, funcionario);
+                    onPressed: () async {
+                      String descripcion = '';
+                      for (var element in listActivos) {
+                        descripcion = '$descripcion ${element.nombre},';
+                      }
+                      String res = await PrestamosController()
+                          .registrarHojaSalida(contextPadre, descripcion);
+                      if (res.contains('GTI')) {
+                        bool guardado = await PdfApi().generarHojaSalida(
+                            listActivos, funcionario,
+                            numConsecutivo: res);
+                        if (guardado) {
+                          // ignore: use_build_context_synchronously
+                          contextPadre.pop();
+                        }
+                      }
                     },
                     text: 'Si, generar orden de salida',
                     options: FFButtonOptions(
                       width: double.infinity,
                       height: 50,
-                      color: Colors.greenAccent,
-                      textStyle: FlutterFlowTheme.of(context)
+                      color: FlutterFlowTheme.of(contextPadre).primaryColor,
+                      textStyle: FlutterFlowTheme.of(contextPadre)
                           .subtitle2
                           .override(
                             fontFamily: 'Poppins',
-                            color: FlutterFlowTheme.of(context).whiteColor,
+                            color: FlutterFlowTheme.of(contextPadre).whiteColor,
                             useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                FlutterFlowTheme.of(context).subtitle2Family),
+                                FlutterFlowTheme.of(contextPadre)
+                                    .subtitle2Family),
                           ),
                       elevation: 2,
                       borderSide: BorderSide(
@@ -1222,20 +1240,22 @@ class _RegistrarPrestamoPageWidgetState
                       padding: EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                       child: FFButtonWidget(
                         onPressed: () {
-                          context.pop();
+                          contextPadre.pop();
                         },
                         text: 'No, gracias',
                         options: FFButtonOptions(
                           width: 170,
                           height: 50,
-                          color: FlutterFlowTheme.of(context).primaryBackground,
-                          textStyle: FlutterFlowTheme.of(context)
+                          color: FlutterFlowTheme.of(contextPadre)
+                              .primaryBackground,
+                          textStyle: FlutterFlowTheme.of(contextPadre)
                               .subtitle2
                               .override(
                                 fontFamily: 'Poppins',
-                                color: FlutterFlowTheme.of(context).primaryText,
+                                color: FlutterFlowTheme.of(contextPadre)
+                                    .primaryText,
                                 useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                    FlutterFlowTheme.of(context)
+                                    FlutterFlowTheme.of(contextPadre)
                                         .subtitle2Family),
                               ),
                           elevation: 0,
