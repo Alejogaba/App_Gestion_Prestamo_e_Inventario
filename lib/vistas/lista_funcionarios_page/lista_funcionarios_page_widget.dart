@@ -59,57 +59,25 @@ class _ListaFuncionariosPageWidgetState
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: 50.0, right: 16),
-        child: SpeedDial(
-          //Speed dial menu
-          //margin bottom
-          icon: Icons.menu, //icon on Floating action button
-          activeIcon: Icons.close, //icon when menu is expanded on button
-          backgroundColor: FlutterFlowTheme.of(context)
-              .primaryColor, //background color of button
-          foregroundColor: Colors.white, //font color, icon color in button
-          activeBackgroundColor: FlutterFlowTheme.of(context)
-              .primaryColor, //background color when menu is expanded
-          activeForegroundColor: Colors.white,
-          buttonSize: const Size(56.0, 56), //button size
-          visible: true,
-          closeManually: false,
-          curve: Curves.bounceIn,
-          overlayColor: Colors.black,
-          overlayOpacity: 0.5,
-          onOpen: () => print('OPENING DIAL'), // action when menu opens
-          onClose: () => print('DIAL CLOSED'), //action when menu closes
-
-          elevation: 8.0, //shadow elevation of button
-          shape: CircleBorder(), //shape of button
-
-          children: [
-            SpeedDialChild(
-              //speed dial child
-              child: Icon(FontAwesomeIcons.barcode),
-              backgroundColor: Color.fromARGB(255, 7, 133, 36),
-              foregroundColor: Colors.white,
-              label: 'Buscar por código de barras',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () async {
-               /* var res = await scanCnic(ImageSource.camera);
-
-                log('https://pub.dev/packages/barcode_scan2/install');*/
-              },
+        padding: const EdgeInsets.only(bottom: 50.0, right: 16),
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+          elevation: 123,
+          child: FlutterFlowIconButton(
+            borderColor: Colors.transparent,
+            borderRadius: 30,
+            borderWidth: 1,
+            buttonSize: 60,
+            icon: Icon(
+              Icons.add,
+              color: FlutterFlowTheme.of(context).whiteColor,
+              size: 30,
             ),
-            SpeedDialChild(
-              child: Icon(Icons.add),
-              backgroundColor: Color.fromARGB(255, 7, 133, 107),
-              foregroundColor: Colors.white,
-              label: 'Registrar nuevo activo',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => context.pushNamed(
+            onPressed: () => context.pushNamed(
                 'registrarfuncionariopage',
               ),
-            ),
-
-            //add more menu item childs here
-          ],
+          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,

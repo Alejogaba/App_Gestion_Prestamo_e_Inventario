@@ -24,9 +24,7 @@ class RepositoryController {
   }
 
   Future<Version> buscarVersion() async {
-    Version activoVacio = Version(
-        '',
-        '',false);
+    Version activoVacio = Version();
     try {
       final data = (await supabase
               .from('versiones')

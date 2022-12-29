@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'dart:io';
+
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
@@ -17,6 +19,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 
 class ListaActivosPageWidget extends StatefulWidget {
   final String nombreCategoria;
@@ -94,6 +97,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
           shape: CircleBorder(), //shape of button
 
           children: [
+            if(Platform.isAndroid||Platform.isIOS) 
             SpeedDialChild(
               //speed dial child
               child: Icon(FontAwesomeIcons.barcode),

@@ -53,7 +53,7 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 50.0),
+        padding: const EdgeInsets.only(bottom: 50.0, right: 16),
         child: FloatingActionButton(
           onPressed: () {},
           backgroundColor: FlutterFlowTheme.of(context).primaryColor,

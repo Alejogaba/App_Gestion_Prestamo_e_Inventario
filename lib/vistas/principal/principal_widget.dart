@@ -47,7 +47,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   CategoriaController categoriaController = CategoriaController();
   List<Categoria> listCategoriasLocal = [];
   String busquedaCategoria = '';
-  Version version = Version('', '', false);
+  Version version = Version();
   late final listaCategoriasOnline = cargarCategorias();
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final prefs = SharedPreferences.getInstance();
@@ -59,7 +59,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   @override
   void initState() {
     super.initState();
-    validarVersion(context, logger);
+      validarVersion(context, logger);
     textControllerBusqueda = TextEditingController();
     _cargarlistaLocal();
   }
@@ -111,6 +111,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
           shape: CircleBorder(), //shape of button
 
           children: [
+            if(Platform.isAndroid||Platform.isIOS) 
             SpeedDialChild(
               //speed dial child
               child: Icon(FontAwesomeIcons.barcode),
@@ -797,7 +798,7 @@ Widget _loading(context) {
 }
 
 void validarVersion(BuildContext context, Logger logger) async {
-  Version nulo = Version('', '', false);
+  Version nulo = Version();
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   RepositoryController repositoryController = RepositoryController();
 
@@ -833,6 +834,9 @@ void validarVersion(BuildContext context, Logger logger) async {
         ),
       },
     );
+    }else{
+      await launchURL(
+                                                  ultima_version_servidor.urlWindows!);
     }
     
   }
