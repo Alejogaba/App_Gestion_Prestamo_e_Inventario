@@ -1727,7 +1727,7 @@ class _FuncionarioPerfilPageWidgetState
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      snapshot.data![index].descripcion
+                                      snapshot.data![index].nombre
                                           .toString(),
                                       style: FlutterFlowTheme.of(context)
                                           .subtitle1

@@ -462,17 +462,17 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 5, 10, 5),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: tamanio_padding,
-                                  child: TextFormFieldCustom(
+
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 10, 12),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: tamanio_padding,
+                                      child: TextFormFieldCustom(
                                       context,
                                       textControllerNombre,
                                       'Ej.Impresora mp203',
@@ -481,17 +481,27 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                       TextInputType.text,
                                       null,
                                       true,
-                                      null,
-                                      _focusNodeNombre),
-                                ),
+                                          Icon(
+                                            Icons.title,
+                                            color: FlutterFlowTheme.of(context)
+                                                  .primaryText,
+                                            size: 30,
+                                          ),
+                                          _focusNodeNombre),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Container(
-                                width: anchoColumnaWrap,
-                                child: Align(
-                                  alignment: AlignmentDirectional(0.05, 0),
-                                  child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 30, 0, 0),
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 10, 12),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: tamanio_padding,
                                       child: TextFormFieldCustom(
                                           context,
                                           textControllerDetalles,
@@ -502,12 +512,15 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                           null,
                                           true,
                                           null,
-                                          _focusNodeDetalles)),
-                                ),
+                                          _focusNodeDetalles)
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
+                        
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                           child: Wrap(

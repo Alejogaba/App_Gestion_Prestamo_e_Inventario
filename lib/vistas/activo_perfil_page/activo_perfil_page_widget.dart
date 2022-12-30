@@ -916,66 +916,70 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                 ),
                                 //TituloListafFuncionariosAsignados(animationsMap: animationsMap),
                                 //ListaFuncionariosAsignados(animationsMap: animationsMap),
-                               
-                                if (activo.estaAsignado != null && activo.estaAsignado!)
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 24),
-                            child: FutureBuilder<List<Funcionario>>(
-                              future:
-                                  cargarFuncionariosAsignados(activo.idSerial),
-                              builder: (BuildContext context, snapshot) {
-                                Logger().i('Estado de conexion: ' +
-                                    snapshot.connectionState.toString());
-                                if (snapshot.connectionState ==
-                                        ConnectionState.done &&
-                                    snapshot.data!.length > 0) {
-                                  return _tarjetaActivo(snapshot, false, []);
-                                } else {
-                                  return Container();
-                                }
-                              },
-                            ),
-                          ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 24),
-                          child: FutureBuilder<List<Funcionario>>(
-                            future:
-                                cargarFuncionariosPrestamos(activo.idSerial),
-                            builder: (BuildContext context, snapshot) {
-                              Logger().i('Estado de conexion: ' +
-                                  snapshot.connectionState.toString());
-                              if (snapshot.connectionState ==
-                                      ConnectionState.done &&
-                                  snapshot.data!.length > 0) {
-                                if (tienePrestamos == false) {
-                                  setState() {
-                                    tienePrestamos = true;
-                                  }
-                                }
 
-                                return _tarjetaActivo(
-                                    snapshot, true, listaFechasEntrega);
-                              } else {
-                                if (tienePrestamos) {
-                                  setState() {
-                                    tienePrestamos = false;
-                                  }
-                                }
-                                return Container();
-                              }
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(30),
-                          child: Container(),
-                        )
+                                if (activo.estaAsignado != null &&
+                                    activo.estaAsignado!)
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0, 0, 0, 24),
+                                    child: FutureBuilder<List<Funcionario>>(
+                                      future: cargarFuncionariosAsignados(
+                                          activo.idSerial),
+                                      builder:
+                                          (BuildContext context, snapshot) {
+                                        Logger().i('Estado de conexion: ' +
+                                            snapshot.connectionState
+                                                .toString());
+                                        if (snapshot.connectionState ==
+                                                ConnectionState.done &&
+                                            snapshot.data!.length > 0) {
+                                          return _tarjetaActivo(
+                                              snapshot, false, []);
+                                        } else {
+                                          return Container();
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 24),
+                                  child: FutureBuilder<List<Funcionario>>(
+                                    future: cargarFuncionariosPrestamos(
+                                        activo.idSerial),
+                                    builder: (BuildContext context, snapshot) {
+                                      Logger().i('Estado de conexion: ' +
+                                          snapshot.connectionState.toString());
+                                      if (snapshot.connectionState ==
+                                              ConnectionState.done &&
+                                          snapshot.data!.length > 0) {
+                                        if (tienePrestamos == false) {
+                                          setState() {
+                                            tienePrestamos = true;
+                                          }
+                                        }
+
+                                        return _tarjetaActivo(
+                                            snapshot, true, listaFechasEntrega);
+                                      } else {
+                                        if (tienePrestamos) {
+                                          setState() {
+                                            tienePrestamos = false;
+                                          }
+                                        }
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(30),
+                                  child: Container(),
+                                )
                               ],
                             ),
                           ),
                         ),
-                        
                       ],
                     ),
                   ),
@@ -1317,15 +1321,17 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                   ],
                                 ),
                               ),
-                              (fechaEntrega.isNotEmpty && prestamo) ? _iconoEliminarEntregar(
-                                  fechaEntrega[index],
-                                  prestamo,
-                                  activo.idSerial,
-                                  snapshot.data![index].cedula):_iconoEliminarEntregar(
-                                  '',
-                                  prestamo,
-                                  activo.idSerial,
-                                  snapshot.data![index].cedula)
+                              (fechaEntrega.isNotEmpty && prestamo)
+                                  ? _iconoEliminarEntregar(
+                                      fechaEntrega[index],
+                                      prestamo,
+                                      activo.idSerial,
+                                      snapshot.data![index].cedula)
+                                  : _iconoEliminarEntregar(
+                                      '',
+                                      prestamo,
+                                      activo.idSerial,
+                                      snapshot.data![index].cedula)
                             ],
                           ),
                         ),
@@ -1620,6 +1626,8 @@ class myFloatingButton extends StatelessWidget {
               contextPadre.pop(activo);
             }
           }
+        } else {
+          log('Asignar funcionario');
         }
       },
       backgroundColor: FlutterFlowTheme.of(context).primaryColor,

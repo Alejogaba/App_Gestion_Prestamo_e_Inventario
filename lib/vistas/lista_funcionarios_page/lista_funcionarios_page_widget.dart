@@ -357,7 +357,7 @@ class tarjetaFuncionario extends StatelessWidget {
   Widget build(BuildContext context) {
     Area area = Area(id: 1, nombre: 'Área', urlImagen: '');
     return GestureDetector(
-      onTap: () {
+      onTap: () async{
         log('push:${funcionario.tieneActivos}');
         context.pushNamed(
           'funcionarioPerfilPage',
@@ -367,7 +367,7 @@ class tarjetaFuncionario extends StatelessWidget {
               ParamType.Funcionario,
             ),
             'area': serializeParam(
-              Area(id: 1, nombre: 'Oficina de las TICs',urlImagen: ''),
+              await cargarArea(funcionario.idArea),
               ParamType.Area,
             )
           },
