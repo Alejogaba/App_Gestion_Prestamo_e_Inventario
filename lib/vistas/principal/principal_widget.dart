@@ -392,12 +392,12 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                                       context.replaceNamed(
                                                         'listaActivosPage',
                                                         queryParams: {
-                                                          'nombreCategoria':
+                                                          'idCategoria':
                                                               serializeParam(
                                                             snapshot
                                                                 .data![index]
-                                                                .nombre,
-                                                            ParamType.String,
+                                                                .id,
+                                                            ParamType.int,
                                                           ),
                                                           'selectMode':
                                                               serializeParam(
@@ -410,12 +410,12 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                                       context.pushNamed(
                                                         'listaActivosPage',
                                                         queryParams: {
-                                                          'nombreCategoria':
+                                                          'idCategoria':
                                                               serializeParam(
                                                             snapshot
                                                                 .data![index]
-                                                                .nombre,
-                                                            ParamType.String,
+                                                                .id,
+                                                            ParamType.int,
                                                           ),
                                                           'selectMode':
                                                               serializeParam(
@@ -592,7 +592,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   }
 }
 
-Widget itemCategoria(BuildContext context, String? nombre, String? url,
+Widget itemCategoria(BuildContext context, String? nombre, int? idCategoria, String? url,
     constraints, String descripcion, bool selectMode) {
   log("Dibujando item categoria");
 
@@ -602,9 +602,9 @@ Widget itemCategoria(BuildContext context, String? nombre, String? url,
         context.replaceNamed(
           'listaActivosPage',
           queryParams: {
-            'nombreCategoria': serializeParam(
-              nombre!,
-              ParamType.String,
+            'idCategoria': serializeParam(
+              idCategoria!,
+              ParamType.int,
             ),
             'selectMode': serializeParam(
               selectMode,
@@ -616,9 +616,9 @@ Widget itemCategoria(BuildContext context, String? nombre, String? url,
         context.pushNamed(
           'listaActivosPage',
           queryParams: {
-            'nombreCategoria': serializeParam(
-              id!,
-              ParamType.String,
+            'idCategoria': serializeParam(
+              idCategoria!,
+              ParamType.int,
             ),
             'selectMode': serializeParam(
               selectMode,
@@ -627,7 +627,7 @@ Widget itemCategoria(BuildContext context, String? nombre, String? url,
           }.withoutNulls,
         );
       }
-      log('Nombre Categoria: $nombre');
+   
     },
     child: Padding(
       padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),

@@ -29,7 +29,7 @@ class ActivoController {
       String? urlImagen,
       int estado,
       String categoria,
-      int id_categoria,
+      int idCategoria,
       int? cantidad,
       String? capacidad,
       String? fechaCreado) async {
@@ -40,10 +40,11 @@ class ActivoController {
         'ID_SERIAL': idSerial.toUpperCase(),
         'NUM_ACTIVO': numInventario,
         'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
-        'DETALLES': utilidades.mayusculaPrimeraLetra(detalles!),
+        'DETALLES': (detalles==null||detalles.trim().isEmpty) ? 'Genérico' : utilidades.mayusculaPrimeraLetra(detalles),
         'URL_IMAGEN': urlImagen,
         'ESTADO': estado,
         'NOMBRE_CATEGORIA': utilidades.mayusculaTodasPrimerasLetras(categoria),
+        'ID_CATEGORIA': idCategoria,
         'CANTIDAD': cantidad,
         'CAPACIDAD': capacidad,
       }).then((value) => log('Nueva activo registrado: $value'));
@@ -165,16 +166,15 @@ class ActivoController {
     }
   }
 
-  Future<List<Activo>> getActivosList(String? nombre, String? categoria) async {
+  Future<List<Activo>> getActivosList(String? nombre, int? idCategoria) async {
     try {
       if (nombre == null || nombre.trim().isEmpty) {
-        final data = (categoria != null &&
-                categoria.isNotEmpty &&
-                !(categoria.contains('Todos')))
+        final data = (idCategoria != null &&
+                !(idCategoria==2))
             ? await supabase
                 .from('ACTIVOS')
                 .select('*')
-                .eq('NOMBRE_CATEGORIA', categoria)
+                .eq('ID_CATEGORIA', idCategoria)
                 .order('FECHA_CREADO', ascending: false) as List<dynamic>
             : await supabase
                 .from('ACTIVOS')
@@ -183,15 +183,14 @@ class ActivoController {
         log('Datos: $data');
         return (data).map((e) => Activo.fromMap(e)).toList();
       } else {
-        final data = (categoria != null &&
-                categoria.isNotEmpty &&
-                !(categoria.contains('Todos')))
+        final data = (idCategoria != null &&
+                !(idCategoria==2))
             ? await supabase
                 .from('ACTIVOS')
                 .select('*')
                 .textSearch('NOMBRE',
                     "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'")
-                .eq('NOMBRE_CATEGORIA', categoria)
+                .eq('ID_CATEGORIA', idCategoria)
                 .order('FECHA_CREADO', ascending: false) as List<dynamic>
             : await supabase
                 .from('ACTIVOS')

@@ -79,7 +79,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'loginPage',
               builder: (context, params) => LoginPageWidget(),
             ),
-            
             FFRoute(
               name: 'AjustesPage',
               path: 'ajustesPage',
@@ -90,7 +89,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'ActualizarPage',
               path: 'actualizarPage',
-             builder: (context, params) => ActualizarPageWidget(url: params.getParam('url', ParamType.String)),
+              builder: (context, params) => ActualizarPageWidget(
+                  url: params.getParam('url', ParamType.String)),
             ),
             FFRoute(
               name: 'ListaFuncionariosPage',
@@ -102,7 +102,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'ListaSeleccionFuncionariosPage',
               path: 'listaSeleccionFuncionariosPage',
-              builder: (context, params) => ListaSeleccionFuncionariosPageWidget(),
+              builder: (context, params) =>
+                  ListaSeleccionFuncionariosPageWidget(),
             ),
             FFRoute(
               name: 'RegistrarCategoriaPage',
@@ -112,38 +113,33 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'RegistrarFuncionarioPage',
               path: 'registrarFuncionarioPage',
-              builder: (context, params) => RegistrarFuncionarioPageWidget(
-                
-              ),
+              builder: (context, params) => RegistrarFuncionarioPageWidget(),
             ),
             FFRoute(
               name: 'FuncionarioPerfilPage',
               path: 'funcionarioPerfilPage',
-              builder: (context, params) => FuncionarioPerfilPageWidget(funcionario: params.getParam('funcionario', ParamType.Funcionario),
-              area: params.getParam('area', ParamType.Area),selectMode: params.getParam('selectMode', ParamType.bool)),
+              builder: (context, params) => FuncionarioPerfilPageWidget(
+                  funcionario:
+                      params.getParam('funcionario', ParamType.Funcionario),
+                  area: params.getParam('area', ParamType.Area),
+                  selectMode: params.getParam('selectMode', ParamType.bool)),
             ),
             FFRoute(
               name: 'ActivoPerfilPage',
               path: 'activoPerfilPage',
               builder: (context, params) => ActivoPerfilPageWidget(
-                idActivo: params.getParam('idActivo', ParamType.String),
-                selectMode:
-                      params.getParam('selectMode', ParamType.bool),
-                      esPrestamo:
-                      params.getParam('esPrestamo', ParamType.bool)
-              ),
+                  idActivo: params.getParam('idActivo', ParamType.String),
+                  selectMode: params.getParam('selectMode', ParamType.bool),
+                  esPrestamo: params.getParam('esPrestamo', ParamType.bool)),
             ),
             FFRoute(
               name: 'ListaActivosPage',
               path: 'listaActivosPage',
               builder: (context, params) => ListaActivosPageWidget(
-                  nombreCategoria:
-                      params.getParam('nombreCategoria', ParamType.String),
-                      selectMode:
-                      params.getParam('selectMode', ParamType.bool),
-                       esPrestamo:
-                      params.getParam('esPrestamo', ParamType.bool)),
-                      
+                  idCategoria:
+                      params.getParam('idCategoria', ParamType.int),
+                  selectMode: params.getParam('selectMode', ParamType.bool),
+                  esPrestamo: params.getParam('esPrestamo', ParamType.bool)),
             ),
             FFRoute(
               name: 'ListaPrestamosPage',

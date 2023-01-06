@@ -517,7 +517,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                             150,
                                             TextInputType.multiline,
                                             null,
-                                            true,
+                                            false,
                                             null,
                                             _focusNodeDetalles)),
                                   ),

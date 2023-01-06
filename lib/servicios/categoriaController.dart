@@ -25,8 +25,10 @@ class CategoriaController {
     if (nombre == null || nombre.trim() == '') {
       try {
         List<Categoria> listaCategoria = [];
-        final data =
-            await client.from('CATEGORIAS').select('*').order('ORDEN', ascending: true) as List<dynamic>;
+        final data = await client
+            .from('CATEGORIAS')
+            .select('*')
+            .order('ORDEN', ascending: true) as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Categoria.fromMap(e)).toList();
       } on PostgrestException catch (error) {
@@ -39,10 +41,12 @@ class CategoriaController {
     } else {
       try {
         List<Categoria> listaCategoria = [];
-        final data = await client.from('CATEGORIAS').select('*').textSearch(
-                'NOMBRE',
-                "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'").order('ORDEN', ascending: true)
-            as List<dynamic>;
+        final data = await client
+            .from('CATEGORIAS')
+            .select('*')
+            .textSearch('NOMBRE',
+                "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'")
+            .order('ORDEN', ascending: true) as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Categoria.fromMap(e)).toList();
       } on PostgrestException catch (error) {
@@ -52,6 +56,24 @@ class CategoriaController {
         log('Error al cargar categorias: $error');
         return [];
       }
+    }
+  }
+
+  Future<Categoria> buscarCategoriaID(int id) async {
+    Categoria vacio = Categoria('','','');
+    try {
+      final data = (await client
+          .from('CATEGORIAS')
+          .select()
+          .match({'ID': id}).maybeSingle()) as Map<String, dynamic>?;
+      if (data == null) {
+        return vacio;
+      } else {
+        return Categoria.fromMap(data);
+      }
+    } catch (e) {
+      log(e.toString());
+      return vacio;
     }
   }
 
@@ -82,8 +104,8 @@ class CategoriaController {
       ));
     } on PostgrestException catch (errorPostgres) {
       StorageController storageController = StorageController();
-      var error = Utilidades().validarErroresInsertar(
-          errorPostgres.code!, 'Esta categoria');
+      var error = Utilidades()
+          .validarErroresInsertar(errorPostgres.code!, 'Esta categoria');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           error,
@@ -97,7 +119,7 @@ class CategoriaController {
         backgroundColor: Colors.redAccent,
       ));
       log(errorPostgres.toString());
-    }catch (e) {
+    } catch (e) {
       log(e.toString());
     }
   }

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -19,6 +20,21 @@ class Utilidades {
       }
     }
     return result;
+  }
+
+  mensajeWIP(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              'No disponible aún: Función en desarrollo',
+              style: FlutterFlowTheme.of(context).bodyText2.override(
+                    fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                    color: FlutterFlowTheme.of(context).primaryBackground,
+                    useGoogleFonts: GoogleFonts.asMap().containsKey(
+                        FlutterFlowTheme.of(context).bodyText2Family),
+                  ),
+            ),
+            backgroundColor: Colors.yellow,
+          ));
   }
 
   String mayusculaTodasPrimerasLetras(String value) {

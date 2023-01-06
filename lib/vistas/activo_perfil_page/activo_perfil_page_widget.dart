@@ -297,7 +297,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
       '',
       '',
       'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png',
-      0,  
+      0,
       3,
       '',
       0,
@@ -447,7 +447,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                         .primaryText,
                                                     size: 16,
                                                   ),
-                                                  onPressed: () async {},
+                                                  onPressed: () async {Utilidades().mensajeWIP(context);},
                                                 ),
                                               ),
                                             ),
@@ -1439,7 +1439,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
     return Future.value(listActivosAsignados);
   }
 
-  Widget _cajaAdvertencia(context, mensaje, objetoaEliminar, id) {
+  Widget _cajaAdvertencia(BuildContext context, mensaje, objetoaEliminar, id) {
     return Align(
       alignment: AlignmentDirectional(0, 0),
       child: Padding(
@@ -1495,9 +1495,9 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                   child: FFButtonWidget(
-                    onPressed: () {
-                      var res = eliminarObjeto(context, objetoaEliminar, id);
-                      if (res == 'ok') {
+                    onPressed: () async{
+                      var res = await eliminarObjeto(context, objetoaEliminar, id);
+                      if (res.contains('ok')) {
                         context.pop();
                       }
                     },
@@ -1575,7 +1575,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
       case 'activo':
         ActivoController activoController = ActivoController();
         final res = await activoController.eliminarActivo(context, id);
-        return 'ok';
+        return res;
 
       default:
         return 'error';
@@ -1628,7 +1628,7 @@ class myFloatingButton extends StatelessWidget {
             }
           }
         } else {
-          log('Asignar funcionario');
+          Utilidades().mensajeWIP(context);
         }
       },
       backgroundColor: FlutterFlowTheme.of(context).primaryColor,

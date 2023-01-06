@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
+import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
@@ -20,14 +21,13 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class ListaActivosPageWidget extends StatefulWidget {
-  final String nombreCategoria;
+  final int idCategoria;
   final bool selectMode;
   final bool? esPrestamo;
   const ListaActivosPageWidget(
       {Key? key,
-      required this.nombreCategoria,
+      required this.idCategoria,
       this.selectMode = false,
       this.esPrestamo})
       : super(key: key);
@@ -35,29 +35,29 @@ class ListaActivosPageWidget extends StatefulWidget {
   @override
   // ignore: library_private_types_in_public_api
   _ListaActivosPageWidgetState createState() => _ListaActivosPageWidgetState(
-      this.nombreCategoria, this.selectMode, this.esPrestamo);
+      this.idCategoria, this.selectMode, this.esPrestamo);
 }
 
 class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   TextEditingController? textControllerBusqueda;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final String nombreCategoria;
+  final int idCategoria;
   var id = '';
   var a;
   ActivoController activoController = ActivoController();
   List<Activo> listaActivos = [];
   bool selectMode;
   bool? esPrestamo;
+  Categoria categoria = Categoria('Activos', '', '');
 
   _ListaActivosPageWidgetState(
-      this.nombreCategoria, this.selectMode, this.esPrestamo);
+      this.idCategoria, this.selectMode, this.esPrestamo);
 
   @override
   void initState() {
     super.initState();
-    setState(() {});
+    cargarCategoria(idCategoria);
     textControllerBusqueda = TextEditingController();
-    log('CATEGORIA DE LA LISTA:$nombreCategoria');
   }
 
   @override
@@ -97,64 +97,64 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
           shape: CircleBorder(), //shape of button
 
           children: [
-            if(Platform.isAndroid||Platform.isIOS) 
-            SpeedDialChild(
-              //speed dial child
-              child: Icon(FontAwesomeIcons.barcode),
-              backgroundColor: Color.fromARGB(255, 7, 133, 36),
-              foregroundColor: Colors.white,
-              label: 'Buscar por código de barras',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () async {
-                await FlutterBarcodeScanner.scanBarcode(
-                        '#C62828', // scanning line color
-                        'Cancelar', // cancel button text
-                        true, // whether to show the flash icon
-                        ScanMode.BARCODE)
-                    .then((value) async {
-                  if (value != null) {
-                    ActivoController activoController = ActivoController();
-                    var res = await activoController.buscarActivo(value);
-                    if (res.idSerial.length < 4) {
-                      // ignore: use_build_context_synchronously
-                      context.pushNamed(
-                        'registraractivopage',
-                        queryParams: {
-                          'idSerial': serializeParam(
-                            value.trim().replaceAll(".", ""),
-                            ParamType.String,
-                          ),
-                          'selectMode': serializeParam(
-                            false,
-                            ParamType.bool,
-                          ),
-                        },
-                      );
-                    } else {
-                      // ignore: use_build_context_synchronously
-                      context.pushNamed(
-                        'activoPerfilPage',
-                        queryParams: {
-                          'idActivo': serializeParam(
-                            res.idSerial,
-                            ParamType.String,
-                          ),
-                          'selectMode': serializeParam(
-                            false,
-                            ParamType.bool,
-                          ),
-                          'esPrestamo': serializeParam(
-                            esPrestamo,
-                            ParamType.bool,
-                          ),
-                        },
-                      );
+            if (Platform.isAndroid || Platform.isIOS)
+              SpeedDialChild(
+                //speed dial child
+                child: Icon(FontAwesomeIcons.barcode),
+                backgroundColor: Color.fromARGB(255, 7, 133, 36),
+                foregroundColor: Colors.white,
+                label: 'Buscar por código de barras',
+                labelStyle: TextStyle(fontSize: 18.0),
+                onTap: () async {
+                  await FlutterBarcodeScanner.scanBarcode(
+                          '#C62828', // scanning line color
+                          'Cancelar', // cancel button text
+                          true, // whether to show the flash icon
+                          ScanMode.BARCODE)
+                      .then((value) async {
+                    if (value != null) {
+                      ActivoController activoController = ActivoController();
+                      var res = await activoController.buscarActivo(value);
+                      if (res.idSerial.length < 4) {
+                        // ignore: use_build_context_synchronously
+                        context.pushNamed(
+                          'registraractivopage',
+                          queryParams: {
+                            'idSerial': serializeParam(
+                              value.trim().replaceAll(".", ""),
+                              ParamType.String,
+                            ),
+                            'selectMode': serializeParam(
+                              false,
+                              ParamType.bool,
+                            ),
+                          },
+                        );
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        context.pushNamed(
+                          'activoPerfilPage',
+                          queryParams: {
+                            'idActivo': serializeParam(
+                              res.idSerial,
+                              ParamType.String,
+                            ),
+                            'selectMode': serializeParam(
+                              false,
+                              ParamType.bool,
+                            ),
+                            'esPrestamo': serializeParam(
+                              esPrestamo,
+                              ParamType.bool,
+                            ),
+                          },
+                        );
+                      }
+                      setState(() {});
                     }
-                    setState(() {});
-                  }
-                });
-              },
-            ),
+                  });
+                },
+              ),
             SpeedDialChild(
               child: Icon(Icons.add),
               backgroundColor: Color.fromARGB(255, 7, 133, 107),
@@ -204,7 +204,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                 IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
             automaticallyImplyLeading: false,
             title: AutoSizeText(
-              (nombreCategoria.isEmpty) ? 'Activos' : nombreCategoria,
+              categoria.nombre.toString(),
               style: FlutterFlowTheme.of(context).bodyText1.override(
                     fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
                     color: FlutterFlowTheme.of(context).whiteColor,
@@ -226,7 +226,9 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                   size: 30,
                 ),
                 onPressed: () async {
-                  await PdfApi().generarTablaActivo(listaActivos,tipoActivo: nombreCategoria); // PdfApi.generarTablaActivo(listaActivos, tipoActivo: nombreCategoria);
+                  await PdfApi().generarTablaActivo(listaActivos,
+                      tipoActivo: categoria.nombre
+                          .toString()); // PdfApi.generarTablaActivo(listaActivos, tipoActivo: nombreCategoria);
                 },
               ),
             ],
@@ -362,7 +364,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                 child: FutureBuilder<List<Activo>>(
                                     future: activoController.getActivosList(
                                         textControllerBusqueda!.text,
-                                        nombreCategoria),
+                                        idCategoria),
                                     builder: (context, snapshot) {
                                       if (!snapshot.hasData ||
                                           snapshot.hasError ||
@@ -490,6 +492,14 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
       ),
     );
   }
+
+  Future<void> cargarCategoria(id) async {
+    CategoriaController categoriaController = CategoriaController();
+    var res = await categoriaController.buscarCategoriaID(idCategoria);
+    setState(() {
+      categoria = res;
+    });
+  }
 }
 
 Widget tarjetaActivo(context, Activo activo) {
@@ -578,6 +588,7 @@ Widget tarjetaActivo(context, Activo activo) {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 1),
                 child: Text(
+                overflow: TextOverflow.ellipsis,
                   activo.idSerial,
                   style: FlutterFlowTheme.of(context).bodyText2.override(
                         fontFamily:
