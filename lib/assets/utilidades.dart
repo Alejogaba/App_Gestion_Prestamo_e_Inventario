@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 import '../flutter_flow/flutter_flow_theme.dart';
 
@@ -209,6 +210,93 @@ class Utilidades {
         break;
       default:
         return "Indefinido";
+    }
+  }
+
+  validarErroresInsertar(String codigo,String obejetoaGuardar, {String objetoLlaveForaneo='el item a asignar'}) {
+    switch (codigo) {
+      case '42P01':
+        Logger().e('Error: la tabla no existe');
+        return 'Error: La tabla no existe';
+      case '42P02':
+        Logger().e('Error: Error en uno o más parametros a guardar');
+        return 'Error: Error en uno o más parametros a guardar';
+      case '23505':
+        Logger().e('Error: $obejetoaGuardar ya existe en la base de datos');
+        return 'Error: $obejetoaGuardar ya existe en la base de datos';
+      case '23503':
+        Logger().e('Error: No existe $objetoLlaveForaneo');
+        return 'Error: No existe $objetoLlaveForaneo';
+      case '23502':
+        Logger().e('Error: No se debe dejar el número de identificación vacio');
+        return 'Error: No se debe dejar el número de identificación vacio';
+      case '22000':
+        Logger().e('Error: Hay uno o varios campos vacios sin rellenar');
+        return 'Error: Hay uno o más campos vacios';
+      case '2D000':
+        Logger().e('Error: Ocurrio un error a mitad de la operación');
+        return 'Error: Ocurrio un error a mitad de la operación';
+      
+      default:
+        Logger().e('Error desconocido: Código $codigo');
+        return 'Error desconocido: Código $codigo';
+    }
+  }
+
+  validarErroresEliminar(String codigo,String obejetoaEliminar, {String objetoLlaveForaneo='otros items asignados'}) {
+    switch (codigo) {
+      case '42P01':
+        Logger().e('Error: la tabla no existe');
+        return 'Error: La tabla no existe';
+      case '42P02':
+        Logger().e('Error: Error en uno o más parametros');
+        return 'Error: Error en uno o más parametros';
+      case '23503':
+        Logger().e('Error: no se puede eliminar $obejetoaEliminar porque tiene $objetoLlaveForaneo');
+        return 'Error: No se puede eliminar $obejetoaEliminar porque tiene $objetoLlaveForaneo';
+      case '23502':
+        Logger().e('Error: No se debe dejar el campos vacios');
+        return 'Error: No se debe dejar campos vacios';
+      case '22000':
+        Logger().e('Error: Hay uno o más campos vacios');
+        return 'Error: Hay uno o más campos vacios';
+      case '2D000':
+        Logger().e('Error: Ocurrio un error a mitad de la operación');
+        return 'Error: Ocurrio un error a mitad de la operación';
+      
+      default:
+        Logger().e('Error desconocido: Código $codigo');
+        return 'Error desconocido: Código $codigo';
+    }
+  }
+
+  validarErrorStorage(String codigo,String obejetoaGuardar, {String objetoLlaveForaneo='el item a asignar'}) {
+    switch (codigo) {
+      case '42P01':
+        Logger().e('Error: la tabla no existe');
+        return 'Error: La tabla no existe';
+      case '42P02':
+        Logger().e('Error: Error en uno o más parametros a guardar');
+        return 'Error: Error en uno o más parametros a guardar';
+      case '23505':
+        Logger().e('Error: $obejetoaGuardar ya existe en la base de datos');
+        return 'Error: $obejetoaGuardar ya existe en la base de datos';
+      case '23503':
+        Logger().e('Error: No existe $objetoLlaveForaneo');
+        return 'Error: No existe $objetoLlaveForaneo';
+      case '23502':
+        Logger().e('Error: No se debe dejar el número de identificación vacio');
+        return 'Error: No se debe dejar el número de identificación vacio';
+      case '22000':
+        Logger().e('Error: Hay uno o varios campos vacios sin rellenar');
+        return 'Error: Hay uno o más campos vacios';
+      case '2D000':
+        Logger().e('Error: Ocurrio un error a mitad de la operación');
+        return 'Error: Ocurrio un error a mitad de la operación';
+      
+      default:
+        Logger().e('Error desconocido: Código $codigo');
+        return 'Error desconocido: Código $codigo';
     }
   }
 }

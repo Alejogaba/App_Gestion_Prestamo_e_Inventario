@@ -50,12 +50,12 @@ class PrestamosController {
       log("Prestado con exito");
 
       return 'ok';
-    } on Exception catch (error) {
-      StorageController storageController = StorageController();
-      var errorTraducido = await storageController.traducir(error.toString());
+    } on PostgrestException catch (errorPostgres) {
+      var error = Utilidades().validarErroresInsertar(
+          errorPostgres.code!, 'Este prestamo');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          errorTraducido,
+          error,
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,
@@ -65,12 +65,12 @@ class PrestamosController {
         ),
         backgroundColor: Colors.redAccent,
       ));
-      log(error.toString());
+      log(errorPostgres.toString());
       return 'error';
-    } catch (e) {
+    }catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          'Ha ocurrido un error',
+          'Ha ocurrido un error, revise su conexión a internet',
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,

@@ -80,12 +80,13 @@ class CategoriaController {
         ),
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
       ));
-    } on Exception catch (error) {
+    } on PostgrestException catch (errorPostgres) {
       StorageController storageController = StorageController();
-      var errorTraducido = await storageController.traducir(error.toString());
+      var error = Utilidades().validarErroresInsertar(
+          errorPostgres.code!, 'Esta categoria');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          errorTraducido,
+          error,
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,
@@ -95,8 +96,8 @@ class CategoriaController {
         ),
         backgroundColor: Colors.redAccent,
       ));
-      log(error.toString());
-    } catch (e) {
+      log(errorPostgres.toString());
+    }catch (e) {
       log(e.toString());
     }
   }

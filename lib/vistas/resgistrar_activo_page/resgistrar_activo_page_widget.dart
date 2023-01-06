@@ -55,7 +55,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   TextEditingController textControllerNombre = TextEditingController();
   TextEditingController? textControllerDetalles = TextEditingController();
   TextEditingController? controladorimagenUrl = TextEditingController();
-  String? dropDownValueCategoria;
+  Categoria? dropDownValueCategoria;
   int? countControllerValue = 1;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List<Categoria> listCategorias = [];
@@ -115,7 +115,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
       textControllerN_inventario.text = activoEditar!.numActivo.toString();
       textControllerNombre.text = activoEditar!.nombre.toString();
       textControllerDetalles!.text = activoEditar!.detalles.toString();
-      dropDownValueCategoria = activoEditar!.categoria.toString();
+
       dropDownValueEstadoActivo!.id = activoEditar!.estado;
     } else {
       idSerial != null
@@ -198,6 +198,10 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                     Timer(Duration(seconds: 3), () {
                       context.pop();
                     });
+                  } else {
+                    setState(() {
+                      blur = false;
+                    });
                   }
                 } else {
                   setState(() {
@@ -217,6 +221,10 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                     });
                     Timer(Duration(seconds: 3), () {
                       context.pop();
+                    });
+                  } else {
+                    setState(() {
+                      blur = false;
                     });
                   }
                 } else {
@@ -462,7 +470,6 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                 ],
                               ),
                             ),
-
                             Padding(
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 5, 10, 12),
@@ -473,18 +480,18 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                     child: Padding(
                                       padding: tamanio_padding,
                                       child: TextFormFieldCustom(
-                                      context,
-                                      textControllerNombre,
-                                      'Ej.Impresora mp203',
-                                      'Nombre*',
-                                      30,
-                                      TextInputType.text,
-                                      null,
-                                      true,
+                                          context,
+                                          textControllerNombre,
+                                          'Ej.Impresora mp203',
+                                          'Nombre*',
+                                          30,
+                                          TextInputType.text,
+                                          null,
+                                          true,
                                           Icon(
                                             Icons.title,
                                             color: FlutterFlowTheme.of(context)
-                                                  .primaryText,
+                                                .primaryText,
                                             size: 30,
                                           ),
                                           _focusNodeNombre),
@@ -501,26 +508,24 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                 children: [
                                   Expanded(
                                     child: Padding(
-                                      padding: tamanio_padding,
-                                      child: TextFormFieldCustom(
-                                          context,
-                                          textControllerDetalles,
-                                          'Ej.HP',
-                                          'Marca',
-                                          150,
-                                          TextInputType.multiline,
-                                          null,
-                                          true,
-                                          null,
-                                          _focusNodeDetalles)
-                                    ),
+                                        padding: tamanio_padding,
+                                        child: TextFormFieldCustom(
+                                            context,
+                                            textControllerDetalles,
+                                            'Ej.HP',
+                                            'Marca',
+                                            150,
+                                            TextInputType.multiline,
+                                            null,
+                                            true,
+                                            null,
+                                            _focusNodeDetalles)),
                                   ),
                                 ],
                               ),
                             ),
                           ],
                         ),
-                        
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                           child: Wrap(
@@ -740,10 +745,11 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                       (BuildContext context,
                                                           snapshot) {
                                                     return FlutterFlowDropDown<
-                                                        String>(
+                                                        Categoria>(
                                                       value:
                                                           dropDownValueCategoria,
-                                                      options: (snapshot.connectionState ==
+                                                      options: (snapshot
+                                                                      .connectionState ==
                                                                   ConnectionState
                                                                       .done &&
                                                               listCategorias
@@ -754,9 +760,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                               (index) =>
                                                                   DropdownMenuItem(
                                                                       value: snapshot
-                                                                          .data![
-                                                                              index]
-                                                                          .nombre,
+                                                                              .data![
+                                                                          index],
                                                                       child:
                                                                           Text(
                                                                         snapshot
@@ -782,7 +787,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                       onChanged: (val) =>
                                                           setState(() =>
                                                               dropDownValueCategoria =
-                                                                  val),
+                                                                  val!),
                                                       height: 50,
                                                       textStyle:
                                                           FlutterFlowTheme.of(
@@ -1094,7 +1099,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         textControllerDetalles!.text,
         imagenUrl,
         estadoActivoOpcion,
-        dropDownValueCategoria!,
+        dropDownValueCategoria!.nombre.toString(),
+        dropDownValueCategoria!.id,
         countControllerValue,
         null,
         null);

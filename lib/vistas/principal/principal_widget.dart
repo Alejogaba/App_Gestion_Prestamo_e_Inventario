@@ -617,7 +617,7 @@ Widget itemCategoria(BuildContext context, String? nombre, String? url,
           'listaActivosPage',
           queryParams: {
             'nombreCategoria': serializeParam(
-              nombre!,
+              id!,
               ParamType.String,
             ),
             'selectMode': serializeParam(
@@ -818,7 +818,7 @@ void validarVersion(BuildContext context, Logger logger) async {
       final result = await showOkAlertDialog(
       context: context,
       title: 'Actualización disponible',
-      message: 'Hay una nueva versión disponible',
+      message: 'Hay una nueva versión con las siguientes nuevas funciones disponible: ${ultima_version_servidor.changelog}',
       okLabel: 'Actualizar',
       );
   logger.i(result.name.toString());

@@ -297,6 +297,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
       '',
       '',
       'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png',
+      0,  
       3,
       '',
       0,

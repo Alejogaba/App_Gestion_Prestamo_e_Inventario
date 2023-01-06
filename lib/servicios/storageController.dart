@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:supabase/supabase.dart';
 import '../../assets/constantes.dart' as constantes;
 import 'package:universal_io/io.dart';
@@ -42,50 +43,47 @@ class StorageController {
         output = await compressInQueue(ImageFileConfiguration(
             input: input,
             config: const Configuration(
-                pngCompression: PngCompression.noCompression,
-                jpgQuality: 90)));
+                pngCompression: PngCompression.noCompression, jpgQuality: 90)));
       } else if (input.sizeInBytes > 500000) {
         output = await compressInQueue(ImageFileConfiguration(
             input: input,
             config: const Configuration(
-                pngCompression: PngCompression.bestSpeed,
-                jpgQuality: 80)));
-      }else if (input.sizeInBytes > 700000) {
+                pngCompression: PngCompression.bestSpeed, jpgQuality: 80)));
+      } else if (input.sizeInBytes > 700000) {
         output = await compressInQueue(ImageFileConfiguration(
             input: input,
             config: const Configuration(
                 pngCompression: PngCompression.defaultCompression,
                 jpgQuality: 70)));
-      }else if (input.sizeInBytes > 1000000) {
+      } else if (input.sizeInBytes > 1000000) {
         output = await compressInQueue(ImageFileConfiguration(
             input: input,
             config: const Configuration(
                 pngCompression: PngCompression.bestCompression,
                 jpgQuality: 50)));
-      }else if (input.sizeInBytes > 1500000) {
+      } else if (input.sizeInBytes > 1500000) {
         output = await compressInQueue(ImageFileConfiguration(
             input: input,
             config: const Configuration(
                 pngCompression: PngCompression.bestCompression,
                 jpgQuality: 30)));
-      }else if (input.sizeInBytes > 2000000) {
+      } else if (input.sizeInBytes > 2000000) {
         output = await compressInQueue(ImageFileConfiguration(
             input: input,
             config: const Configuration(
                 pngCompression: PngCompression.bestCompression,
                 jpgQuality: 10)));
-      }else if (input.sizeInBytes > 3000000) {
+      } else if (input.sizeInBytes > 3000000) {
         output = await compressInQueue(ImageFileConfiguration(
             input: input,
             config: const Configuration(
                 pngCompression: PngCompression.bestCompression,
                 jpgQuality: 5)));
-      }else{
+      } else {
         output = await compressInQueue(ImageFileConfiguration(
             input: input,
             config: const Configuration(
-                pngCompression: PngCompression.noCompression,
-                jpgQuality: 95)));
+                pngCompression: PngCompression.noCompression, jpgQuality: 95)));
       }
 
       log('FileName: ${output.fileName}');
@@ -128,7 +126,7 @@ class StorageController {
 
       return 'https://ujftfjxhobllfwadrwqj.supabase.co/storage/v1/object/public/$bucketName/$fileName';
     } on StorageException catch (error) {
-      var errorTraducido = await traducir(error.message);
+      var errorTraducido = 'Código ${error.statusCode}';
       log(error.message);
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -143,15 +141,14 @@ class StorageController {
         ),
         backgroundColor: Colors.redAccent,
       ));
-      final fileExt = imageFile.path.split('.').last;
-      final fileName = '$id.$fileExt';
+
       return 'error';
     } catch (error) {
       log(error.toString());
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         duration: Duration(seconds: 10),
         content: Text(
-          "Ha ocurrido un error inesperado al momento de subir la imagen",
+          "Ha ocurrido un error inesperado al momento de subir la imagen, verifique su conexión a internet",
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,
@@ -161,10 +158,9 @@ class StorageController {
         ),
         backgroundColor: Colors.redAccent,
       ));
-
-      log(error.toString());
+      Logger().e(error);
+      return 'error';
     }
-    return 'error';
   }
 
   Future<String> traducir(String input) async {

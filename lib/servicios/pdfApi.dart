@@ -29,11 +29,9 @@ class PdfApi {
   Future<void> generarTablaActivo(List<Activo> listaActivo,
       {String tipoActivo = ''}) async {
     final pdf = Document();
-    if (!(tipoActivo.contains('Todos')) && tipoActivo.isNotEmpty) {
-      tipoActivo = ' - $tipoActivo';
-    } else {
-      tipoActivo = '';
-    }
+    tipoActivo = ' - $tipoActivo';
+      
+    
 
     pdf.addPage(MultiPage(
       build: (context) => [

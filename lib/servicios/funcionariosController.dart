@@ -80,12 +80,14 @@ class FuncionariosController {
         return 'ok';
       });
       return 'ok';
-    } on Exception catch (error) {
+    } on PostgrestException catch (errorPostgres) {
       StorageController storageController = StorageController();
-      var errorTraducido = await storageController.traducir(error.toString());
+      var error = Utilidades().validarErroresInsertar(
+          errorPostgres.code!, 'Este funcionario',
+          objetoLlaveForaneo: 'esa area');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          errorTraducido,
+          error,
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,
@@ -95,13 +97,13 @@ class FuncionariosController {
         ),
         backgroundColor: Colors.redAccent,
       ));
-      log(error.toString());
+      log(errorPostgres.toString());
       return 'error';
-    } catch (e) {
+    }catch (e) {
       log(e.toString());
       return 'error';
     }
-    return 'error';
+  
   }
 
   Future<List<Area>> getAreas() async {
@@ -169,6 +171,8 @@ class FuncionariosController {
       return vacio;
     }
   }
+
+ 
 
   Future<List<Funcionario>> getFuncionarios(String? terminoBusqueda) async {
     try {
@@ -257,12 +261,13 @@ class FuncionariosController {
           (await supabase.from('FUNCIONARIOS').delete().eq('CEDULA', id));
       log('Eliminando:$data');
       return 'ok';
-    } on Exception catch (error) {
-      StorageController storageController = StorageController();
-      var errorTraducido = await storageController.traducir(error.toString());
+    } on PostgrestException catch (errorPostgres) {
+      var error = Utilidades().validarErroresEliminar(
+          errorPostgres.code!, 'Este funcionario',
+          objetoLlaveForaneo: 'activos asignados');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          errorTraducido,
+          error,
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,
@@ -272,9 +277,9 @@ class FuncionariosController {
         ),
         backgroundColor: Colors.redAccent,
       ));
-      log(error.toString());
+      log(errorPostgres.toString());
       return 'error';
-    } catch (e) {
+    }catch (e) {
       log(e.toString());
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(

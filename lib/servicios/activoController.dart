@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:app_gestion_prestamo_inventario/assets/utilidades.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
+import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,6 +29,7 @@ class ActivoController {
       String? urlImagen,
       int estado,
       String categoria,
+      int id_categoria,
       int? cantidad,
       String? capacidad,
       String? fechaCreado) async {
@@ -60,12 +62,14 @@ class ActivoController {
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
       ));
       return 'ok';
-    } on Exception catch (error) {
+    } on PostgrestException catch (errorPostgres) {
       StorageController storageController = StorageController();
-      var errorTraducido = await storageController.traducir(error.toString());
+      var error = Utilidades().validarErroresInsertar(
+          errorPostgres.code!, 'Este activo',
+          objetoLlaveForaneo: 'esa categoria');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          errorTraducido,
+          error,
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,
@@ -75,7 +79,7 @@ class ActivoController {
         ),
         backgroundColor: Colors.redAccent,
       ));
-      log(error.toString());
+      log(errorPostgres.toString());
       return 'error';
     } catch (e) {
       log(e.toString());
@@ -115,12 +119,12 @@ class ActivoController {
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
       ));
       return 'ok';
-    } on Exception catch (error) {
-      StorageController storageController = StorageController();
-      var errorTraducido = await storageController.traducir(error.toString());
+    } on PostgrestException catch (errorPostgres) {
+      var error = Utilidades().validarErroresInsertar(
+          errorPostgres.code!, 'Este activo',);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          errorTraducido,
+          error,
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,
@@ -130,7 +134,7 @@ class ActivoController {
         ),
         backgroundColor: Colors.redAccent,
       ));
-      log(error.toString());
+      log(errorPostgres.toString());
       return 'error';
     } catch (e) {
       log(e.toString());
@@ -207,6 +211,26 @@ class ActivoController {
     }
   }
 
+  Future<Categoria> buscarCategoria(int id) async {
+    Categoria vacio = Categoria('','','');
+    try {
+      final data = (await supabase
+          .from('CATEGORIAS')
+          .select()
+          .match({'ID': id}).maybeSingle()) as Map<String, dynamic>?;
+      if (data == null) {
+        return vacio;
+      } else {
+        return Categoria.fromMap(data);
+      }
+    } catch (e) {
+      log(e.toString());
+      return vacio;
+    }
+  }
+
+   
+
   Future<Activo> buscarActivo(String idSerial) async {
     Activo activoVacio = Activo(
         '',
@@ -214,6 +238,7 @@ class ActivoController {
         '',
         '',
         'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png',
+        0,
         3,
         '',
         0,
@@ -253,12 +278,13 @@ class ActivoController {
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
       ));
       return 'ok';
-    } on Exception catch (error) {
-      StorageController storageController = StorageController();
-      var errorTraducido = await storageController.traducir(error.toString());
+    }  on PostgrestException catch (errorPostgres) {
+      var error = Utilidades().validarErroresEliminar(
+          errorPostgres.code!, 'Este activos',
+          objetoLlaveForaneo: 'funcionario asignados');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          errorTraducido,
+          error,
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,
@@ -268,13 +294,13 @@ class ActivoController {
         ),
         backgroundColor: Colors.redAccent,
       ));
-      log(error.toString());
+      log(errorPostgres.toString());
       return 'error';
-    } catch (e) {
+    }catch (e) {
       log(e.toString());
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          'Ha ocurrido un error inesperado al intentar eliminar el activo',
+          'Ha ocurrido un error inesperado al intentar eliminar el activo, verfique su conexión a internet',
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,

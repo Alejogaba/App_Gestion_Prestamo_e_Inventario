@@ -5,6 +5,7 @@ class Activo {
   String? detalles;
   String urlImagen;
   int estado = 0;
+  int idCategoria = 0;
   String categoria;
   int cantidad = 1;
   String? capacidad;
@@ -17,6 +18,7 @@ class Activo {
     this.detalles,
     this.urlImagen,
     this.estado,
+    this.idCategoria,
     this.categoria,
     this.cantidad,
     this.capacidad,
@@ -31,6 +33,7 @@ class Activo {
       map['DETALLES'] ?? '',
       map['URL_IMAGEN'] ?? '',
       map['ESTADO'] ?? 0,
+      map['ID_CATEGORIA'],
       map['NOMBRE_CATEGORIA'] ?? '',
       map['CANTIDAD'] ?? '',
       map['CAPACIDAD'] ?? '',

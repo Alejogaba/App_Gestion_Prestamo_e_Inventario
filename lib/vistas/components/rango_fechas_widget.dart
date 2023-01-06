@@ -25,6 +25,7 @@ class _RangoFechasWidgetState extends State<RangoFechasWidget> {
   DateTime? datePicked2;
   ColombiaHolidays holidays = ColombiaHolidays();
   List<DateTime> _listadiasFestivos = [];
+  final DateRangePickerController _controller = DateRangePickerController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,15 @@ class _RangoFechasWidgetState extends State<RangoFechasWidget> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
           child: SfDateRangePicker(
-            onSelectionChanged: (args) async {
+            onSelectionChanged:
+                (DateRangePickerSelectionChangedArgs args) async {
+              final PickerDateRange dateRanges = (args.value);
+
+              if (_controller.selectedRange != null) {
+                log('rango fecha seleccionado');
+                _controller.selectedRange = PickerDateRange(
+                    DateTime.now(), _controller.selectedRange!.endDate);
+              }
               if (args.value is PickerDateRange && args.value != null) {
                 final DateTime rangeStartDate = args.value.startDate;
                 DateTime rangeEndDate = rangeStartDate;
@@ -59,7 +68,9 @@ class _RangoFechasWidgetState extends State<RangoFechasWidget> {
               }
             },
             initialDisplayDate: DateTime.now(),
+            controller: _controller,
             minDate: DateTime.now(),
+            initialSelectedDate: DateTime.now(),
             todayHighlightColor: FlutterFlowTheme.of(context).primaryColor,
             selectionColor: FlutterFlowTheme.of(context).primaryColor,
             rangeSelectionColor:
@@ -83,7 +94,7 @@ class _RangoFechasWidgetState extends State<RangoFechasWidget> {
               return true;
             },
             enablePastDates: false,
-            toggleDaySelection: true,
+            toggleDaySelection: false,
             showNavigationArrow: true,
             rangeTextStyle: FlutterFlowTheme.of(context).bodyText1.override(
                   fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
@@ -145,7 +156,7 @@ class _RangoFechasWidgetState extends State<RangoFechasWidget> {
             view: DateRangePickerView.month,
             selectionMode: DateRangePickerSelectionMode.range,
             initialSelectedRange: PickerDateRange(
-                DateTime.now(), DateTime.now().add(Duration(days: 1))),
+                DateTime.now(), DateTime.now()),
           ),
         ),
       ),
