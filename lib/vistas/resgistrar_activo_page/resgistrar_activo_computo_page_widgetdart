@@ -3,12 +3,10 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:app_gestion_prestamo_inventario/entidades/activo_impresora.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/estadoActivo.dart';
-import 'package:app_gestion_prestamo_inventario/entidades/funcionario.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
-import 'package:app_gestion_prestamo_inventario/servicios/funcionariosController.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
-import 'package:app_gestion_prestamo_inventario/vistas/lista_funcionarios_page/lista_funcionarios_page_widget.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/registrar_funcionario_page/registrar_funcionario_page_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -16,7 +14,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../entidades/activo.dart';
-import '../../entidades/area.dart';
 import '../../entidades/categoria.dart';
 import '../../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/flutter_flow_count_controller.dart';
@@ -31,38 +28,37 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'package:dotted_border/dotted_border.dart';
 
-class RegistrarFuncionarioPageWidget extends StatefulWidget {
+class ResgistrarActivoComputoPageWidget extends StatefulWidget {
   final String? operacionaRealizar;
-  final String? id;
-  final Funcionario? funcionarioEditar;
-
-  const RegistrarFuncionarioPageWidget(
-      {Key? key, this.operacionaRealizar, this.id, this.funcionarioEditar})
+  final String? idSerial;
+  final String? categoria;
+  final Activo? activoEditar;
+  const ResgistrarActivoPageWidget(
+      {Key? key,
+      this.operacionaRealizar,
+      this.idSerial,
+      this.categoria,
+      this.activoEditar})
       : super(key: key);
 
   @override
-  _RegistrarFuncionarioPageWidgetState createState() =>
-      _RegistrarFuncionarioPageWidgetState(
-          this.operacionaRealizar, this.id, this.funcionarioEditar);
+  _ResgistrarActivoComputoPageWidgetState createState() =>
+      _ResgistrarActivoComputoPageWidgetState(this.operacionaRealizar, this.idSerial,
+          this.categoria, this.activoEditar);
 }
 
-class _RegistrarFuncionarioPageWidgetState
-    extends State<RegistrarFuncionarioPageWidget>
+class _ResgistrarActivoComputoPageWidgetState extends State<ResgistrarActivoPageWidget>
     with SingleTickerProviderStateMixin {
   EstadoActivo? dropDownValueEstadoActivo;
-  TextEditingController textControllerApellidos = TextEditingController();
-  TextEditingController textControllerCedula = TextEditingController();
-  TextEditingController textControllerNombres = TextEditingController();
-  TextEditingController? textControllerCorreo = TextEditingController();
+  TextEditingController textControllerSerial = TextEditingController();
+  TextEditingController textControllerN_inventario = TextEditingController();
+  TextEditingController textControllerNombre = TextEditingController();
+  TextEditingController? textControllerDetalles = TextEditingController();
   TextEditingController? controladorimagenUrl = TextEditingController();
-  TextEditingController textControllerTelefono_1 = TextEditingController();
-  TextEditingController textControllerTelefono_2 = TextEditingController();
-  TextEditingController textControllerEnlaceSIGEP = TextEditingController();
-  TextEditingController textControllerCargo = TextEditingController();
-  Area? dropDownValueArea;
+  Categoria? dropDownValueCategoria;
   int? countControllerValue = 1;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  List<Area> listAreas = [];
+  List<Categoria> listCategorias = [];
   List<EstadoActivo> listEstados = [
     EstadoActivo(0, 'Bueno: Activo en buen estado'),
     EstadoActivo(1,
@@ -70,6 +66,8 @@ class _RegistrarFuncionarioPageWidgetState
     EstadoActivo(2, 'Malo: Activo en mal estado o dañado'),
   ];
   File? imageFile;
+  String? imageEdit;
+  int anchominimo = 640;
   bool blur = false;
 
   String? urlImagen;
@@ -79,76 +77,63 @@ class _RegistrarFuncionarioPageWidgetState
   bool _loading = false;
   bool _errorColor = false;
   bool _dropdownErrorColor = false;
-
   CategoriaController categoriaController = CategoriaController();
-  late final _listaAreas = cargarAreas();
+  late final _listaCategorias = cargarCategorias();
   int? numInventario;
   int estadoActivoOpcion = 0;
-  Funcionario? activo;
+  Activo? activo;
   final String? operacionaRealizar;
-  final String? id;
-  int idArea = 0;
-  int anchominimo = 640;
-
-  final Funcionario? funcionarioEditar;
-  FocusNode _focusNodeCorreo = FocusNode();
-  FocusNode _focusNodeCedula = FocusNode();
+  final String? idSerial;
+  final String? categoria;
+  final Activo? activoEditar;
+  FocusNode _focusNodeIdSerial = FocusNode();
+  FocusNode _focusNodeNinventario = FocusNode();
   FocusNode _focusNodeNombre = FocusNode();
-  FocusNode _focusNodeApellidos = FocusNode();
-  FocusNode _focusNodeTelefono_1 = FocusNode();
-  FocusNode _focusNodeTelefono_2 = FocusNode();
-  FocusNode _focusNodeEnlaceSIGEP = FocusNode();
-  FocusNode _focusNodeCargo = FocusNode();
+  FocusNode _focusNodeDetalles = FocusNode();
   Color color = Colors.red;
   List<TextInputFormatter> inputNumero = <TextInputFormatter>[
     // for below version 2 use this
     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
 // for version 2 and greater youcan also use this
     FilteringTextInputFormatter.digitsOnly,
-    LengthLimitingTextInputFormatter(10),
+    LengthLimitingTextInputFormatter(4),
   ];
 
   List<TextInputFormatter> inputFormater = <TextInputFormatter>[
     LengthLimitingTextInputFormatter(10),
   ];
 
-  _RegistrarFuncionarioPageWidgetState(
-      this.operacionaRealizar, this.id, this.funcionarioEditar);
+  _ResgistrarActivoPageWidgetState(this.operacionaRealizar, this.idSerial,
+      this.categoria, this.activoEditar);
 
   // ignore: prefer_final_fields5
 
   @override
   void initState() {
     super.initState();
-    if (funcionarioEditar != null) {
-      textControllerApellidos.text = funcionarioEditar!.apellidos.toString();
-      textControllerCedula.text = funcionarioEditar!.cedula.toString();
-      textControllerNombres.text = funcionarioEditar!.nombres.toString();
-      textControllerCorreo!.text = funcionarioEditar!.correo.toString();
-      textControllerTelefono_1.text = funcionarioEditar!.telefono1.toString();
-      (funcionarioEditar!.telefono2 != null)
-          ? textControllerTelefono_2.text =
-              funcionarioEditar!.telefono2.toString()
-          : textControllerTelefono_2.text = "";
-      textControllerCargo.text = funcionarioEditar!.cargo.toString();
-      dropDownValueArea!.id = funcionarioEditar!.idArea;
+    if (activoEditar != null) {
+      textControllerSerial.text = activoEditar!.idSerial.toString();
+      textControllerN_inventario.text = activoEditar!.numActivo.toString();
+      textControllerNombre.text = activoEditar!.nombre.toString();
+      textControllerDetalles!.text = activoEditar!.detalles.toString();
+      imageEdit = activoEditar!.urlImagen.toString();
     } else {
-      id != null
-          ? textControllerApellidos.text = id.toString()
-          : textControllerApellidos.text = '';
+      idSerial != null
+          ? textControllerSerial.text = idSerial.toString()
+          : textControllerSerial.text = '';
 
-      textControllerCedula.text = '';
+      textControllerN_inventario.text = '';
+      textControllerNombre.text = '';
     }
   }
 
   @override
   void dispose() {
+    textControllerSerial.dispose();
+    textControllerN_inventario.dispose();
+    textControllerNombre.dispose();
+    textControllerDetalles?.dispose();
     super.dispose();
-    textControllerApellidos.dispose();
-    textControllerCedula.dispose();
-    textControllerNombres.dispose();
-    textControllerCorreo?.dispose();
-    textControllerCargo.dispose();
   }
 
   @override
@@ -160,6 +145,7 @@ class _RegistrarFuncionarioPageWidgetState
     dynamic anchoColumnaWrap = (MediaQuery.of(context).size.width < anchominimo)
         ? MediaQuery.of(context).size.width * 0.9
         : MediaQuery.of(context).size.width * 0.4;
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -183,12 +169,12 @@ class _RegistrarFuncionarioPageWidgetState
           ),
           onPressed: () async {
             if (_formKey.currentState!.validate() &&
-                dropDownValueArea != null) {
+                dropDownValueCategoria != null) {
               setState(() {
                 blur = true;
               });
               String? imagenUrl;
-              log('serial: ${textControllerApellidos.text.toString()}');
+              log('serial: ${textControllerSerial.text.toString()}');
 
               if (imageFile != null) {
                 StorageController storageController = StorageController();
@@ -196,28 +182,25 @@ class _RegistrarFuncionarioPageWidgetState
                     context,
                     imageFile!.path.toString(),
                     imageFile!,
-                    textControllerCedula.text,
-                    'funcionarios');
-                FuncionariosController funcionarioController =
-                    FuncionariosController();
+                    textControllerSerial.text,
+                    'activos');
+                ActivoController activoController = ActivoController();
                 String res = '';
                 // ignore: use_build_context_synchronously
                 if (imagenUrl != 'error') {
-                   if(funcionarioEditar!=null){
-                    res = await registrarFuncionario(
-                      funcionarioController, context, imagenUrl,editar:true);
-                   }else{
-                    res = await registrarFuncionario(
-                      funcionarioController, context, imagenUrl);
+                  res = await registrarActivo(
+                      activoController, context, imagenUrl);
 
-                   }
-                  
                   if (res == 'ok') {
                     setState(() {
                       blur = false;
                     });
                     Timer(Duration(seconds: 3), () {
-                      context.pop();
+                      Navigator.pop(context);
+                    });
+                  } else {
+                    setState(() {
+                      blur = false;
                     });
                   }
                 } else {
@@ -226,34 +209,40 @@ class _RegistrarFuncionarioPageWidgetState
                   });
                 }
               } else {
-                FuncionariosController funcionarioController =
-                    FuncionariosController();
-                    String res = 'error';
-                    if(funcionarioEditar!=null){
-                      res = await registrarFuncionario(
-                    funcionarioController,
-                    context,
-                    funcionarioEditar!.urlImagen,editar: true);
-                    }else{
-                      res = await registrarFuncionario(
-                    funcionarioController,
-                    context,
-                    'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png');
-                    }
-                
-                if (res == 'ok') {
+                ActivoController activoController = ActivoController();
+                String res = '';
+                if (imagenUrl != 'error') {
+                  if(activoEditar!=null){
+                     res = await registrarActivo(activoController, context,
+                      activoEditar!.urlImagen,editar: true);
+                  }else{
+                    res = await registrarActivo(activoController, context,
+                      'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png');
+                  }
+                  
+
+                  if (res == 'ok') {
+                    setState(() {
+                      blur = false;
+                    });
+                    Timer(Duration(seconds: 3), () {
+                      context.pop();
+                    });
+                  } else {
+                    setState(() {
+                      blur = false;
+                    });
+                  }
+                } else {
                   setState(() {
                     blur = false;
                   });
-                  Timer(Duration(seconds: 3), () {
-                    context.pop();
-                  });
                 }
               }
-            } else if (dropDownValueArea == null) {
+            } else if (dropDownValueCategoria == null) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
-                  "Seleccione el área donde se encuentra el funcionario",
+                  "Seleccione una categoria",
                   style: FlutterFlowTheme.of(context).bodyText2.override(
                         fontFamily:
                             FlutterFlowTheme.of(context).bodyText2Family,
@@ -265,8 +254,8 @@ class _RegistrarFuncionarioPageWidgetState
                 backgroundColor: Colors.redAccent,
               ));
               setState(() {
-                blur = false;
                 _errorColor = true;
+                blur = false;
               });
               Future.delayed(const Duration(milliseconds: 6000), () {
                 setState(() {
@@ -276,7 +265,7 @@ class _RegistrarFuncionarioPageWidgetState
             } else {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
-                  "No deje campos obligatorios (*) vacios",
+                  "No deje campos vacios",
                   style: FlutterFlowTheme.of(context).bodyText2.override(
                         fontFamily:
                             FlutterFlowTheme.of(context).bodyText2Family,
@@ -289,8 +278,8 @@ class _RegistrarFuncionarioPageWidgetState
               ));
               log('rojo');
               setState(() {
-                blur = false;
                 _errorColor = true;
+                blur = false;
               });
               Future.delayed(const Duration(milliseconds: 6000), () {
                 setState(() {
@@ -308,7 +297,7 @@ class _RegistrarFuncionarioPageWidgetState
         automaticallyImplyLeading: false,
         leading: InkWell(
           onTap: () async {
-            context.pop();
+            Navigator.pop(context);
           },
           child: Icon(
             Icons.chevron_left_rounded,
@@ -348,29 +337,193 @@ class _RegistrarFuncionarioPageWidgetState
                 borderRadius: (MediaQuery.of(context).size.width < anchominimo)
                     ? null
                     : BorderRadius.circular(30), //border corner radius
-                /*boxShadow: [
-                  BoxShadow(
-                    color: FlutterFlowTheme.of(context).boxShadow, //color of shadow
-                    spreadRadius: 5, //spread radius
-                    blurRadius: 7, // blur radius
-                    offset: Offset(0, 2), // changes position of shadow
-                    //first paramerter of offset is left-right
-                    //second parameter is top to down
-                  ),
-                  //you can set more BoxShadow() here
-                ],*/
               ),
               child: Form(
                 key: _formKey,
                 child: Padding(
                   padding: (MediaQuery.of(context).size.width < anchominimo)
-                      ? EdgeInsetsDirectional.all(10)
+                      ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
                       : EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        Column(
+                          children: [
+                            Padding(
+                              padding: tamanio_padding,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: TextFormFieldCustom(
+                                        context,
+                                        textControllerSerial,
+                                        'S/N',
+                                        'Número de serial*',
+                                        20,
+                                        TextInputType.text,
+                                        null,
+                                        true,
+                                        null,
+                                        _focusNodeIdSerial,soloLectura: (activoEditar!=null) ? true : false),
+                                  ),
+                                  Container(
+                                    width: 50,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          (Platform.isAndroid || Platform.isIOS)
+                                              ? FlutterFlowTheme.of(context)
+                                                  .secondaryBackground
+                                              : Colors.transparent,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: (Platform.isAndroid ||
+                                                Platform.isIOS)
+                                            ? FlutterFlowTheme.of(context)
+                                                .secondaryBackground
+                                            : Colors.transparent,
+                                        width: 0,
+                                      ),
+                                    ),
+                                    child: FlutterFlowIconButton(
+                                      fillColor:
+                                          (Platform.isAndroid || Platform.isIOS)
+                                              ? Color(0x00F1F4F8)
+                                              : FlutterFlowTheme.of(context)
+                                                  .secondaryBackground,
+                                      borderColor: Colors.transparent,
+                                      borderRadius: 30,
+                                      borderWidth: 1,
+                                      buttonSize: 60,
+                                      icon: FaIcon(
+                                        FontAwesomeIcons.barcode,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        size: 30,
+                                      ),
+                                      onPressed: () async {
+                                        if(activoEditar==null){
+                                          if (Platform.isAndroid ||
+                                            Platform.isIOS  ) {
+                                          String res = await FlutterBarcodeScanner
+                                              .scanBarcode(
+                                                  '#C62828', // scanning line color
+                                                  'Cancel', // cancel button text
+                                                  true, // whether to show the flash icon
+                                                  ScanMode.BARCODE);
+                                          textControllerSerial.text =
+                                              res.trim().replaceAll(".", "");
+                                        } else {
+                                          Clipboard.getData(
+                                                  Clipboard.kTextPlain)
+                                              .then((value) {
+                                            if (value != null) {
+                                              if (value.text!
+                                                  .trim()
+                                                  .isNotEmpty) {
+                                                textControllerSerial.text =
+                                                    value.text!
+                                                        .trim()
+                                                        .replaceAll(".", "");
+                                              }
+                                            }
+                                          });
+                                        }
+                                        }
+                                        
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 10, 12),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: tamanio_padding,
+                                      child: TextFormFieldCustom(
+                                          context,
+                                          textControllerN_inventario,
+                                          'Ej.0134',
+                                          'Número de inventario',
+                                          4,
+                                          TextInputType.number,
+                                          inputNumero,
+                                          false,
+                                          const FaIcon(
+                                            FontAwesomeIcons.boxOpen,
+                                            color: Color(0xFFAD8762),
+                                            size: 30,
+                                          ),
+                                          _focusNodeNinventario),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 10, 12),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: tamanio_padding,
+                                      child: TextFormFieldCustom(
+                                          context,
+                                          textControllerNombre,
+                                          'Ej.Impresora mp203',
+                                          'Nombre*',
+                                          30,
+                                          TextInputType.text,
+                                          null,
+                                          true,
+                                          Icon(
+                                            Icons.title,
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
+                                            size: 30,
+                                          ),
+                                          _focusNodeNombre),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 5, 10, 12),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                        padding: tamanio_padding,
+                                        child: TextFormFieldCustom(
+                                            context,
+                                            textControllerDetalles,
+                                            'Ej.HP',
+                                            'Marca',
+                                            150,
+                                            TextInputType.multiline,
+                                            null,
+                                            false,
+                                            null,
+                                            _focusNodeDetalles)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
                           child: Wrap(
@@ -389,7 +542,7 @@ class _RegistrarFuncionarioPageWidgetState
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 10, 20, 0),
                                     child: Text(
-                                      'Seleccione una imagen',
+                                      'Seleccione una imagen del activo',
                                       style:
                                           FlutterFlowTheme.of(context).title3,
                                     ),
@@ -404,7 +557,7 @@ class _RegistrarFuncionarioPageWidgetState
                                     child: Center(
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 16, 10, 14),
+                                            0, 16, 0, 14),
                                         child: Center(
                                           child: ClipRRect(
                                             borderRadius:
@@ -419,7 +572,7 @@ class _RegistrarFuncionarioPageWidgetState
                                   FFButtonWidget(
                                     onPressed: () async {
                                       var url = Uri.parse(
-                                          'http://www.lajaguadeibirico-cesar.gov.co/tema/directorio-de-funcionarios');
+                                          'https://www.google.com/search?tbm=isch&q=${textControllerNombre.text.toString()}');
                                       if (!await launchUrl(
                                         url,
                                         mode: LaunchMode.externalApplication,
@@ -427,7 +580,7 @@ class _RegistrarFuncionarioPageWidgetState
                                         throw 'No se puede abrir $url';
                                       }
                                     },
-                                    text: 'Buscar imagen en la web',
+                                    text: 'Buscar en la web',
                                     icon: FaIcon(
                                       FontAwesomeIcons.externalLinkAlt,
                                       color: FlutterFlowTheme.of(context)
@@ -435,8 +588,8 @@ class _RegistrarFuncionarioPageWidgetState
                                       size: 20,
                                     ),
                                     options: FFButtonOptions(
-                                      width: 230,
-                                      height: 55,
+                                      width: 160,
+                                      height: 50,
                                       color: FlutterFlowTheme.of(context)
                                           .primaryColor,
                                       textStyle: FlutterFlowTheme.of(context)
@@ -466,120 +619,102 @@ class _RegistrarFuncionarioPageWidgetState
                                 children: [
                                   Container(
                                     width: anchoColumnaWrap,
-                                    child: Align(
-                                      alignment: AlignmentDirectional(0, 0),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 12, 0, 0),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 50, 5, 0),
-                                            child: FaIcon(
-                                              FontAwesomeIcons.solidIdCard,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .grayicon,
-                                              size: 28,
+                                          Expanded(
+                                            child: Align(
+                                              alignment:
+                                                  AlignmentDirectional(0, 0),
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 16, 0, 10),
+                                                child: FlutterFlowDropDown<
+                                                    EstadoActivo>(
+                                                  initialOption: (activoEditar!=null) ? listEstados[activoEditar!.estado] : listEstados[0],
+                                                  value:
+                                                      dropDownValueEstadoActivo,
+                                                  options: List.generate(
+                                                      listEstados.length,
+                                                      (index) =>
+                                                          DropdownMenuItem(
+                                                              value:
+                                                                  listEstados[
+                                                                      index],
+                                                              child: Text(
+                                                                listEstados[
+                                                                        index]
+                                                                    .descripcion
+                                                                    .toString(),
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText1
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          FlutterFlowTheme.of(context)
+                                                                              .bodyText2Family,
+                                                                      fontSize:
+                                                                          18,
+                                                                      useGoogleFonts: GoogleFonts
+                                                                              .asMap()
+                                                                          .containsKey(
+                                                                              FlutterFlowTheme.of(context).bodyText1Family),
+                                                                    ),
+                                                              ))),
+                                                            
+                                                  onChanged: (val) =>
+                                                      setState(() {
+                                                    dropDownValueEstadoActivo =
+                                                        val!;
+                                                    estadoActivoOpcion =
+                                                        val.id!;
+                                                      
+                                                  }),
+                                                  height: 50,
+                                                  textStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyText1
+                                                          .override(
+                                                            fontFamily:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText1Family,
+                                                            fontSize: 18,
+                                                            useGoogleFonts: GoogleFonts
+                                                                    .asMap()
+                                                                .containsKey(
+                                                                    FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyText1Family),
+                                                          ),
+                                                  hintText: listEstados[0]
+                                                      .descripcion,
+                                                  fillColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .primaryBackground,
+                                                  elevation: 2,
+                                                  borderColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .secondaryText,
+                                                  borderWidth: 2,
+                                                  borderRadius: 8,
+                                                  margin: EdgeInsetsDirectional
+                                                      .fromSTEB(12, 4, 12, 4),
+                                                  hidesUnderline: true,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 30, 0, 0),
-                                              child: TextFormFieldCustom(
-                                                  context,
-                                                  textControllerCedula,
-                                                  'Ej. 1065324298',
-                                                  'Número de cédula*',
-                                                  10,
-                                                  TextInputType.number,
-                                                  inputNumero,
-                                                  true,
-                                                  null,
-                                                  _focusNodeCedula, esSoloLectura: (funcionarioEditar!=null) ? true : false),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: anchoColumnaWrap,
-                                    child: Align(
-                                      alignment: AlignmentDirectional(0.05, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 50, 5, 0),
-                                            child: FaIcon(
-                                              FontAwesomeIcons.solidUser,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .grayicon,
-                                              size: 28,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 30, 0, 0),
-                                              child: TextFormFieldCustom(
-                                                  context,
-                                                  textControllerNombres,
-                                                  'Ej. Luis Carlos',
-                                                  'Nombres*',
-                                                  30,
-                                                  TextInputType.name,
-                                                  null,
-                                                  true,
-                                                  null,
-                                                  _focusNodeNombre),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    width: anchoColumnaWrap,
-                                    child: Align(
-                                      alignment: AlignmentDirectional(0.05, 0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 50, 5, 0),
-                                            child: FaIcon(
-                                              FontAwesomeIcons.solidUser,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .grayicon,
-                                              size: 28,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 30, 0, 0),
-                                              child: TextFormFieldCustom(
-                                                  context,
-                                                  textControllerApellidos,
-                                                  'Ej. Calderon Gutierrez',
-                                                  'Apellidos',
-                                                  30,
-                                                  TextInputType.name,
-                                                  null,
-                                                  false,
-                                                  null,
-                                                  _focusNodeApellidos),
-                                            ),
-                                          )
                                         ],
                                       ),
                                     ),
@@ -603,20 +738,21 @@ class _RegistrarFuncionarioPageWidgetState
                                               child: Padding(
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(0, 16, 0, 20),
-                                                child:
-                                                    FutureBuilder<List<Area>>(
-                                                  future: _listaAreas,
+                                                child: FutureBuilder<
+                                                    List<Categoria>>(
+                                                  future: _listaCategorias,
                                                   builder:
                                                       (BuildContext context,
                                                           snapshot) {
                                                     return FlutterFlowDropDown<
-                                                        Area>(
-                                                      value: dropDownValueArea,
+                                                        Categoria>(
+                                                      value:
+                                                          dropDownValueCategoria,
                                                       options: (snapshot
                                                                       .connectionState ==
                                                                   ConnectionState
                                                                       .done &&
-                                                              listAreas
+                                                              listCategorias
                                                                   .isNotEmpty)
                                                           ? List.generate(
                                                               snapshot
@@ -650,8 +786,14 @@ class _RegistrarFuncionarioPageWidgetState
                                                                           ''))),
                                                       onChanged: (val) =>
                                                           setState(() =>
-                                                              dropDownValueArea =
-                                                                  val),
+                                                              dropDownValueCategoria =
+                                                                  val!),
+                                                      initialOption: Categoria(
+                                                          activoEditar!.nombre,
+                                                          '',
+                                                          '',
+                                                          id: activoEditar!
+                                                              .idCategoria),
                                                       height: 50,
                                                       textStyle:
                                                           FlutterFlowTheme.of(
@@ -668,9 +810,11 @@ class _RegistrarFuncionarioPageWidgetState
                                                                         FlutterFlowTheme.of(context)
                                                                             .bodyText1Family),
                                                               ),
-                                                      hintText: 'Área*',
-                                                      initialOption: (funcionarioEditar!=null) ? snapshot
-                                                                  .data![funcionarioEditar!.idArea] : null,
+                                                      hintText:
+                                                          (activoEditar != null)
+                                                              ? activoEditar!
+                                                                  .categoria
+                                                              : 'Categoria*',
                                                       fillColor:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -704,201 +848,114 @@ class _RegistrarFuncionarioPageWidgetState
                             ],
                           ),
                         ),
-                        (MediaQuery.of(context).size.width < anchominimo)
-                            ? Container()
-                            : Padding(
-                                padding: tamanio_padding,
-                                child: Divider(
-                                  height: 2,
-                                  thickness: 1,
-                                  color: Color(0x94ABB3BA),
+                        Padding(
+                          padding: tamanio_padding,
+                          child: Divider(
+                            height: 2,
+                            thickness: 1,
+                            color: Color(0x94ABB3BA),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 12, 0, 0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      'Cantidad: ',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1
+                                          .override(
+                                            fontFamily:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyText1Family,
+                                            fontSize: 18,
+                                            useGoogleFonts: GoogleFonts.asMap()
+                                                .containsKey(
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1Family),
+                                          ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 12, 0, 0),
+                                      child: Container(
+                                        width: 160,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          shape: BoxShape.rectangle,
+                                          border: Border.all(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                            width: 1,
+                                          ),
+                                        ),
+                                        child: FlutterFlowCountController(
+                                          decrementIconBuilder: (enabled) =>
+                                              FaIcon(
+                                            FontAwesomeIcons.minus,
+                                            color: enabled
+                                                ? Color(0xA9D43538)
+                                                : FlutterFlowTheme.of(context)
+                                                    .boxShadow,
+                                            size: 20,
+                                          ),
+                                          incrementIconBuilder: (enabled) =>
+                                              FaIcon(
+                                            FontAwesomeIcons.plus,
+                                            color: enabled
+                                                ? FlutterFlowTheme.of(context)
+                                                    .primaryColor
+                                                : FlutterFlowTheme.of(context)
+                                                    .boxShadow,
+                                            size: 20,
+                                          ),
+                                          countBuilder: (count) => Text(
+                                            count.toString(),
+                                            style: FlutterFlowTheme.of(context)
+                                                .title2
+                                                .override(
+                                                  fontFamily:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .title2Family,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                  useGoogleFonts: GoogleFonts
+                                                          .asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .title2Family),
+                                                ),
+                                          ),
+                                          count: countControllerValue ??= 1,
+                                          updateCount: (count) => setState(() =>
+                                              countControllerValue = count),
+                                          stepSize: 1,
+                                          minimum: 1,
+                                          maximum: 99,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: tamanio_padding,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 30, 15, 0),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.suitcase,
-                                      color:
-                                          FlutterFlowTheme.of(context).grayicon,
-                                      size: 25,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: TextFormFieldCustom(
-                                        context,
-                                        textControllerCargo,
-                                        '',
-                                        'Cargo*',
-                                        30,
-                                        TextInputType.name,
-                                        null,
-                                        true,
-                                        null,
-                                        _focusNodeCargo),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: tamanio_padding,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 30, 15, 0),
-                                    child: Icon(
-                                      Icons.mail,
-                                      color:
-                                          FlutterFlowTheme.of(context).grayicon,
-                                      size: 28,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: TextFormFieldCustom(
-                                        context,
-                                        textControllerCorreo,
-                                        'Ej. Sistemas@lajaguadeIbirico-Cesar.gov.co',
-                                        'Correo eléctronico',
-                                        100,
-                                        TextInputType.emailAddress,
-                                        null,
-                                        false,
-                                        null,
-                                        _focusNodeCorreo),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: tamanio_padding,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 30, 15, 0),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.phone,
-                                      color:
-                                          FlutterFlowTheme.of(context).grayicon,
-                                      size: 25,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: TextFormFieldCustom(
-                                        context,
-                                        textControllerTelefono_1,
-                                        'Ej.3104562222',
-                                        'Número de teléfono*',
-                                        10,
-                                        TextInputType.phone,
-                                        inputNumero,
-                                        true,
-                                        null,
-                                        _focusNodeTelefono_1),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: tamanio_padding,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 30, 15, 0),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.phone,
-                                      color:
-                                          FlutterFlowTheme.of(context).grayicon,
-                                      size: 25,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: TextFormFieldCustom(
-                                        context,
-                                        textControllerTelefono_2,
-                                        '',
-                                        'Número de teléfono alternativo',
-                                        10,
-                                        TextInputType.phone,
-                                        inputNumero,
-                                        false,
-                                        null,
-                                        _focusNodeTelefono_2),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: (MediaQuery.of(context).size.width <
-                                      anchominimo)
-                                  ? EdgeInsetsDirectional.fromSTEB(
-                                      10, 10, 10, 65)
-                                  : tamanio_padding,
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 30, 16, 0),
-                                    child: FaIcon(
-                                      FontAwesomeIcons.globe,
-                                      color:
-                                          FlutterFlowTheme.of(context).grayicon,
-                                      size: 25,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: TextFormFieldCustom(
-                                        context,
-                                        textControllerEnlaceSIGEP,
-                                        'Ej. https://www.funcionpublica.gov.co/web/sigep/hdv/-/directorio/S2138649-0690-4/view',
-                                        'Enlace al SIGEP',
-                                        150,
-                                        TextInputType.url,
-                                        null,
-                                        false,
-                                        null,
-                                        _focusNodeEnlaceSIGEP),
-                                  ),
-                                  FlutterFlowIconButton(
-                                    borderColor: Colors.transparent,
-                                    borderRadius: 30,
-                                    borderWidth: 1,
-                                    buttonSize: 45,
-                                    icon: Icon(
-                                      Icons.content_paste,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      size: 30,
-                                    ),
-                                    onPressed: () {
-                                      Clipboard.getData(Clipboard.kTextPlain)
-                                          .then((value) {
-                                        if (value != null) {
-                                          if (value.text!.trim().isNotEmpty) {
-                                            textControllerEnlaceSIGEP.text =
-                                                value.text!.trim();
-                                          }
-                                        }
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -950,9 +1007,9 @@ class _RegistrarFuncionarioPageWidgetState
       esNumero,
       bool _esObligatorio,
       sufix,
-      _focusNode, {bool esSoloLectura=false}) {
+      _focusNode,{bool soloLectura=false}) {
     return TextFormField(
-      readOnly: esSoloLectura,
+      readOnly: soloLectura,
       validator: (_esObligatorio)
           ? (value) {
               if (value == null || value.isEmpty) {
@@ -977,7 +1034,7 @@ class _RegistrarFuncionarioPageWidgetState
         labelStyle: FlutterFlowTheme.of(context).title3.override(
               fontFamily: FlutterFlowTheme.of(context).title3Family,
               fontSize: 22,
-              color: _focusNodeCorreo.hasFocus
+              color: _focusNodeIdSerial.hasFocus
                   ? FlutterFlowTheme.of(context).primaryText
                   : FlutterFlowTheme.of(context).grayicon,
               useGoogleFonts: GoogleFonts.asMap()
@@ -1043,29 +1100,36 @@ class _RegistrarFuncionarioPageWidgetState
     );
   }
 
-  Future<String> registrarFuncionario(
-      FuncionariosController funcionarioController,
-      BuildContext context,
-      String? imagenUrl, {bool editar=false}) async {
-    var res = await funcionarioController.addFuncionario(
-        context: context,
-        apellidos: textControllerApellidos.text,
-        cedula: textControllerCedula.text,
-        nombres: textControllerNombres.text,
-        correo: textControllerCorreo!.text,
-        urlImagen: imagenUrl,
-        cargo: textControllerCargo.text,
-        idArea: dropDownValueArea!.id,
-        telefono1: textControllerTelefono_1.text,
-        telefono2: textControllerTelefono_2.text,
-        enlaceSIGEP: textControllerEnlaceSIGEP.text,editar: editar);
+  Future<String> registrarActivo(ActivoController activoController,
+      BuildContext context, String? imagenUrl,{bool editar=false}) async {
+    
+    String res = await activoController.addActivo(
+        context,
+        textControllerSerial.text,
+        textControllerN_inventario.text,
+        textControllerNombre.text,
+        textControllerDetalles!.text,
+        imagenUrl,
+        estadoActivoOpcion,
+        dropDownValueCategoria!.nombre.toString(),
+        dropDownValueCategoria!.id,
+        countControllerValue,
+        null,
+        null,editar: editar);
     return res;
   }
 
-  Future<List<Area>> cargarAreas() async {
-    FuncionariosController funcionarioController = FuncionariosController();
-    listAreas = await funcionarioController.getAreas();
-    return Future.value(listAreas);
+  Future<List<Categoria>> cargarCategorias() async {
+    CategoriaController categoriaController = CategoriaController();
+    listCategorias = await categoriaController.getCategorias(null);
+    for (var element in listCategorias) {
+      print('Lista categoria nombre: + ${element.nombre}');
+      print('Lista categoria url: ${element.urlImagen}');
+    }
+    if (listCategorias != null && listCategorias.length > 0) {
+      listCategorias.removeWhere((item) => item.nombre == 'Todos los activos');
+    }
+    return Future.value(listCategorias);
   }
 
   Future pickImageFromGallery() async {
@@ -1143,11 +1207,8 @@ class _RegistrarFuncionarioPageWidgetState
 
   Future pickImageDesktop() async {
     print("starting get image");
-    final FilePickerResult? pickedFile = await FilePicker.platform.pickFiles(
-      dialogTitle: 'Seleccionar imagen',
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'png', 'gif', 'gif', 'bmp', 'webp'],
-    );
+    final FilePickerResult? pickedFile =
+        await FilePicker.platform.pickFiles(type: FileType.image);
     //final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     print("getting image Desktop.....");
     setState(() {
@@ -1178,49 +1239,37 @@ class _RegistrarFuncionarioPageWidgetState
           });
         }
       },
-      child: (imageFile == null || imageFile.toString().isEmpty)
-          ? DottedBorder(
-              color: FlutterFlowTheme.of(context).grayicon,
-              strokeWidth: 2,
-              dashPattern: [10, 10],
-              child: Container(
-                  width: 250,
-                  height: 200,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: urlImagen != null && imageFile == null
-                          ? DecorationImage(
-                              fit: BoxFit.cover, image: NetworkImage(urlImagen))
-                          : null),
-                  child: _decideImageView(imageFile)))
-          : Container(
-              width: 250,
-              height: 200,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  border: Border.all(
-                    color: FlutterFlowTheme.of(context).primaryText,
-                    width: 2,
-                  ),
-                  shape: BoxShape.rectangle,
-                  image: urlImagen != null && imageFile == null
-                      ? DecorationImage(
-                          fit: BoxFit.cover, image: NetworkImage(urlImagen))
-                      : null),
-              child: _decideImageView(imageFile)),
+      child: DottedBorder(
+        color: FlutterFlowTheme.of(context).grayicon,
+        strokeWidth: 2,
+        dashPattern: [10, 10],
+        child: Container(
+            width: 250,
+            height: 200,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: urlImagen != null && imageFile == null
+                    ? DecorationImage(
+                        fit: BoxFit.cover, image: NetworkImage(urlImagen))
+                    : null),
+            child: urlImagen == null || imageFile != null
+                ? _decideImageView(imageFile)
+                : null),
+      ),
     );
   }
 
   Widget _decideImageView(imageFile) {
-   if (funcionarioEditar!=null) {
+    if (imageEdit!=null) {
+      
       return Image.network(
-        funcionarioEditar!.urlImagen,
+        imageEdit!,
         width: 250,
         height: 200,
         fit: BoxFit.cover,
       );
     } else if(imageFile == null){
-      return const Center(
+      return Center(
         child: Icon(
           FontAwesomeIcons.camera,
           size: 40,

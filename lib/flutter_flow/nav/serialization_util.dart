@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/funcionario.dart';
 import 'package:flutter/material.dart';
 import 'package:from_css_color/from_css_color.dart';
@@ -65,9 +66,11 @@ String? serializeParam(
       case ParamType.JSON:
         return json.encode(param);
       case ParamType.Funcionario:
-      return Funcionario.encodeToString(param);
+        return Funcionario.encodeToString(param);
+      case ParamType.Activo:
+        return Activo.encodeToString(param);
       case ParamType.Area:
-      return Area.encodeToString(param);
+        return Area.encodeToString(param);
       default:
         return null;
     }
@@ -138,9 +141,9 @@ enum ParamType {
   Color,
   FFPlace,
   JSON,
-  Activo,
   Area,
   Funcionario,
+  Activo,
 }
 
 dynamic deserializeParam<T>(
@@ -191,6 +194,8 @@ dynamic deserializeParam<T>(
         return json.decode(param);
       case ParamType.Funcionario:
         return Funcionario.decodificarString(param);
+      case ParamType.Activo:
+        return Activo.decodificarString(param);
       case ParamType.Area:
         return Area.decodificarString(param);
 

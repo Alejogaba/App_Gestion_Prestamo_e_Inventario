@@ -32,11 +32,25 @@ class ActivoController {
       int idCategoria,
       int? cantidad,
       String? capacidad,
-      String? fechaCreado) async {
+      String? fechaCreado,{bool editar=false}) async {
     try {
       log('Inserando nuevo activo...');
       Utilidades utilidades = Utilidades();
-      await supabase.from('ACTIVOS').insert({
+      if(editar){
+        await supabase.from('ACTIVOS').update({
+        'NUM_ACTIVO': numInventario,
+        'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
+        'DETALLES': (detalles==null||detalles.trim().isEmpty) ? 'Genérico' : utilidades.mayusculaPrimeraLetra(detalles),
+        'URL_IMAGEN': urlImagen,
+        'ESTADO': estado,
+        'NOMBRE_CATEGORIA': utilidades.mayusculaTodasPrimerasLetras(categoria),
+        'ID_CATEGORIA': idCategoria,
+        'CANTIDAD': cantidad,
+        'CAPACIDAD': capacidad,
+      }).eq('ID_SERIAL', idSerial.toUpperCase()).then((value) => log('Nueva activo registrado: $value'));
+
+      }else{
+        await supabase.from('ACTIVOS').insert({
         'ID_SERIAL': idSerial.toUpperCase(),
         'NUM_ACTIVO': numInventario,
         'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
@@ -48,6 +62,8 @@ class ActivoController {
         'CANTIDAD': cantidad,
         'CAPACIDAD': capacidad,
       }).then((value) => log('Nueva activo registrado: $value'));
+      }
+      
       log("Registrado con exito");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         duration: const Duration(seconds: 1),
@@ -143,6 +159,8 @@ class ActivoController {
     }
   }
 
+  
+
   Stream<SupabaseStreamEvent> getActivoStream(String? categoria) {
     if (categoria!.contains('Todos')) {
       final response = (categoria != null && categoria.length > 3)
@@ -231,17 +249,7 @@ class ActivoController {
    
 
   Future<Activo> buscarActivo(String idSerial) async {
-    Activo activoVacio = Activo(
-        '',
-        '',
-        '',
-        '',
-        'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png',
-        0,
-        3,
-        '',
-        0,
-        '');
+    Activo activoVacio = Activo();
     try {
       final data = (await supabase
               .from('ACTIVOS')

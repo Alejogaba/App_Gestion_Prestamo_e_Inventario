@@ -128,7 +128,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'ActivoPerfilPage',
               path: 'activoPerfilPage',
               builder: (context, params) => ActivoPerfilPageWidget(
-                  idActivo: params.getParam('idActivo', ParamType.String),
+                  activo: params.getParam('miActivo', ParamType.Activo),
                   selectMode: params.getParam('selectMode', ParamType.bool),
                   esPrestamo: params.getParam('esPrestamo', ParamType.bool)),
             ),
@@ -136,8 +136,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'ListaActivosPage',
               path: 'listaActivosPage',
               builder: (context, params) => ListaActivosPageWidget(
-                  idCategoria:
-                      params.getParam('idCategoria', ParamType.int),
+                  idCategoria: params.getParam('idCategoria', ParamType.int),
                   selectMode: params.getParam('selectMode', ParamType.bool),
                   esPrestamo: params.getParam('esPrestamo', ParamType.bool)),
             ),

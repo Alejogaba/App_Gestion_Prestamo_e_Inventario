@@ -13,16 +13,6 @@ class Activo_Impresora extends Activo {
     cantidad,
     capacidad,
   ) : super(
-          idSerial,
-          numActivo,
-          nombre,
-          detalles,
-          urlImagen,
-          estado,
-          idCategoria,
-          categoria,
-          cantidad,
-          capacidad,
         );
 
   factory Activo_Impresora.fromMap(Map<String, dynamic> map) {

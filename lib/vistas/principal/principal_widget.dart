@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:app_gestion_prestamo_inventario/entidades/version.dart';
+import 'package:app_gestion_prestamo_inventario/index.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/repositoryController.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
@@ -387,43 +388,32 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                                   snapshot.data!.length,
                                                   (index) {
                                                 return GestureDetector(
-                                                  onTap: () {
+                                                  onTap: () async {
                                                     if (selectMode) {
-                                                      context.replaceNamed(
-                                                        'listaActivosPage',
-                                                        queryParams: {
-                                                          'idCategoria':
-                                                              serializeParam(
-                                                            snapshot
-                                                                .data![index]
-                                                                .id,
-                                                            ParamType.int,
-                                                          ),
-                                                          'selectMode':
-                                                              serializeParam(
-                                                            selectMode,
-                                                            ParamType.bool,
-                                                          ),
-                                                        }.withoutNulls,
-                                                      );
+                                                      await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ListaActivosPageWidget(
+                                                      idCategoria:
+                                                          snapshot.data![index].id,
+                                                      selectMode: selectMode,
+                                                      esPrestamo: false,
+                                                    ),
+                                                  ));
                                                     } else {
-                                                      context.pushNamed(
-                                                        'listaActivosPage',
-                                                        queryParams: {
-                                                          'idCategoria':
-                                                              serializeParam(
-                                                            snapshot
-                                                                .data![index]
-                                                                .id,
-                                                            ParamType.int,
-                                                          ),
-                                                          'selectMode':
-                                                              serializeParam(
-                                                            selectMode,
-                                                            ParamType.bool,
-                                                          ),
-                                                        }.withoutNulls,
-                                                      );
+                                                     await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ListaActivosPageWidget(
+                                                      idCategoria:
+                                                          snapshot.data![index].id,
+                                                      selectMode: selectMode,
+                                                      esPrestamo: false,
+                                                    ),
+                                                  ),
+                                                );
                                                     }
                                                   },
                                                   child: tarjetaCategoria(
@@ -597,35 +587,33 @@ Widget itemCategoria(BuildContext context, String? nombre, int? idCategoria, Str
   log("Dibujando item categoria");
 
   return GestureDetector(
-    onTap: () {
+    onTap: () async {
       if (selectMode) {
-        context.replaceNamed(
-          'listaActivosPage',
-          queryParams: {
-            'idCategoria': serializeParam(
-              idCategoria!,
-              ParamType.int,
-            ),
-            'selectMode': serializeParam(
-              selectMode,
-              ParamType.bool,
-            ),
-          }.withoutNulls,
-        );
+        await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ListaActivosPageWidget(
+                                                      idCategoria:
+                                                          idCategoria!,
+                                                      selectMode: selectMode,
+                                                      esPrestamo: false,
+                                                    ),
+                                                  ),
+                                                );
       } else {
-        context.pushNamed(
-          'listaActivosPage',
-          queryParams: {
-            'idCategoria': serializeParam(
-              idCategoria!,
-              ParamType.int,
-            ),
-            'selectMode': serializeParam(
-              selectMode,
-              ParamType.bool,
-            ),
-          }.withoutNulls,
-        );
+        await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ListaActivosPageWidget(
+                                                      idCategoria:
+                                                          idCategoria!,
+                                                      selectMode: selectMode,
+                                                      esPrestamo: false,
+                                                    ),
+                                                  ),
+                                                );
       }
    
     },

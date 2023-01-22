@@ -66,6 +66,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
     EstadoActivo(2, 'Malo: Activo en mal estado o dañado'),
   ];
   File? imageFile;
+  String? imageEdit;
   int anchominimo = 640;
   bool blur = false;
 
@@ -115,8 +116,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
       textControllerN_inventario.text = activoEditar!.numActivo.toString();
       textControllerNombre.text = activoEditar!.nombre.toString();
       textControllerDetalles!.text = activoEditar!.detalles.toString();
-
-      dropDownValueEstadoActivo!.id = activoEditar!.estado;
+      imageEdit = activoEditar!.urlImagen.toString();
     } else {
       idSerial != null
           ? textControllerSerial.text = idSerial.toString()
@@ -188,15 +188,22 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                 String res = '';
                 // ignore: use_build_context_synchronously
                 if (imagenUrl != 'error') {
-                  res = await registrarActivo(
+                  if(activoEditar!=null){
+                    res = await registrarActivo(
+                      activoController, context, imagenUrl,editar: true);
+
+                  }else{
+                    res = await registrarActivo(
                       activoController, context, imagenUrl);
 
+                  }
+                  
                   if (res == 'ok') {
                     setState(() {
                       blur = false;
                     });
                     Timer(Duration(seconds: 3), () {
-                      context.pop();
+                      Navigator.pop(context);
                     });
                   } else {
                     setState(() {
@@ -212,8 +219,14 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                 ActivoController activoController = ActivoController();
                 String res = '';
                 if (imagenUrl != 'error') {
-                  res = await registrarActivo(activoController, context,
+                  if(activoEditar!=null){
+                     res = await registrarActivo(activoController, context,
+                      activoEditar!.urlImagen,editar: true);
+                  }else{
+                    res = await registrarActivo(activoController, context,
                       'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png');
+                  }
+                  
 
                   if (res == 'ok') {
                     setState(() {
@@ -291,7 +304,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         automaticallyImplyLeading: false,
         leading: InkWell(
           onTap: () async {
-            context.pop();
+            Navigator.pop(context);
           },
           child: Icon(
             Icons.chevron_left_rounded,
@@ -372,7 +385,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                         null,
                                         true,
                                         null,
-                                        _focusNodeIdSerial),
+                                        _focusNodeIdSerial,soloLectura: (activoEditar!=null) ? true : false),
                                   ),
                                   Container(
                                     width: 50,
@@ -409,8 +422,9 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                         size: 30,
                                       ),
                                       onPressed: () async {
-                                        if (Platform.isAndroid ||
-                                            Platform.isIOS) {
+                                        if(activoEditar==null){
+                                          if (Platform.isAndroid ||
+                                            Platform.isIOS  ) {
                                           String res = await FlutterBarcodeScanner
                                               .scanBarcode(
                                                   '#C62828', // scanning line color
@@ -435,6 +449,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                             }
                                           });
                                         }
+                                        }
+                                        
                                       },
                                     ),
                                   ),
@@ -640,7 +656,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                     .fromSTEB(0, 16, 0, 10),
                                                 child: FlutterFlowDropDown<
                                                     EstadoActivo>(
-                                                  initialOption: listEstados[0],
+                                                  initialOption: (activoEditar!=null) ? listEstados[activoEditar!.estado] : listEstados[0],
                                                   value:
                                                       dropDownValueEstadoActivo,
                                                   options: List.generate(
@@ -670,12 +686,14 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                                               FlutterFlowTheme.of(context).bodyText1Family),
                                                                     ),
                                                               ))),
+                                                            
                                                   onChanged: (val) =>
                                                       setState(() {
                                                     dropDownValueEstadoActivo =
-                                                        val;
+                                                        val!;
                                                     estadoActivoOpcion =
-                                                        val!.id!;
+                                                        val.id!;
+                                                      
                                                   }),
                                                   height: 50,
                                                   textStyle:
@@ -788,6 +806,12 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                           setState(() =>
                                                               dropDownValueCategoria =
                                                                   val!),
+                                                      initialOption: Categoria(
+                                                          activoEditar!.nombre,
+                                                          '',
+                                                          '',
+                                                          id: activoEditar!
+                                                              .idCategoria),
                                                       height: 50,
                                                       textStyle:
                                                           FlutterFlowTheme.of(
@@ -804,7 +828,11 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                                         FlutterFlowTheme.of(context)
                                                                             .bodyText1Family),
                                                               ),
-                                                      hintText: 'Categoria*',
+                                                      hintText:
+                                                          (activoEditar != null)
+                                                              ? activoEditar!
+                                                                  .categoria
+                                                              : 'Categoria*',
                                                       fillColor:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -997,8 +1025,9 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
       esNumero,
       bool _esObligatorio,
       sufix,
-      _focusNode) {
+      _focusNode,{bool soloLectura=false}) {
     return TextFormField(
+      readOnly: soloLectura,
       validator: (_esObligatorio)
           ? (value) {
               if (value == null || value.isEmpty) {
@@ -1090,7 +1119,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   }
 
   Future<String> registrarActivo(ActivoController activoController,
-      BuildContext context, String? imagenUrl) async {
+      BuildContext context, String? imagenUrl,{bool editar=false}) async {
+    
     String res = await activoController.addActivo(
         context,
         textControllerSerial.text,
@@ -1103,7 +1133,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         dropDownValueCategoria!.id,
         countControllerValue,
         null,
-        null);
+        null,editar: editar);
     return res;
   }
 
@@ -1248,14 +1278,21 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   }
 
   Widget _decideImageView(imageFile) {
-    if (imageFile == null) {
+    if (imageEdit!=null) {
+      return Image.network(
+        imageEdit!,
+        width: 250,
+        height: 200,
+        fit: BoxFit.cover,
+      );
+    } else if(imageFile == null){
       return Center(
         child: Icon(
           FontAwesomeIcons.camera,
           size: 40,
         ),
       );
-    } else {
+    }else{
       return Image.file(
         imageFile,
         width: 250,

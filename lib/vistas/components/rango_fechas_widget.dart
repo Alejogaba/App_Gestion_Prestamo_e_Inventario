@@ -184,7 +184,7 @@ class _RangoFechasWidgetState extends State<RangoFechasWidget> {
           break;
         }
       }
-      setState(() {});
+    
     }
   }
 }

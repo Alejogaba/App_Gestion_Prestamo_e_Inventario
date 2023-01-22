@@ -32,7 +32,7 @@ class FuncionariosController {
       int idArea = 0,
       String? telefono1,
       String? telefono2,
-      String? enlaceSIGEP}) async {
+      String? enlaceSIGEP,bool editar = false}) async {
     try {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
@@ -48,7 +48,40 @@ class FuncionariosController {
       ));
       log('Registrando nuevo funcionario...');
       Utilidades utilidades = Utilidades();
-      await supabase.from('FUNCIONARIOS').insert({
+      if(editar){
+        await supabase.from('FUNCIONARIOS').update({
+        'NOMBRES': utilidades.mayusculaTodasPrimerasLetras(nombres!),
+        'APELLIDOS': (apellidos == null)
+            ? ''
+            : utilidades.mayusculaTodasPrimerasLetras(apellidos),
+        'CARGO': utilidades.mayusculaPrimeraLetraFrase(cargo!),
+        'CORREO': (correo == null)
+            ? ''
+            : utilidades.mayusculaPrimeraLetraFrase(correo),
+        'URL_IMAGEN': urlImagen,
+        'ID_AREA': idArea,
+        'TELEFONO_1': telefono1,
+        'TELEFONO_2': (telefono2 == null) ? '' : telefono2,
+        'ENLACE_SIGEP': enlaceSIGEP,
+      }).eq('CEDULA',cedula).then((value) {
+        log("Registrado con exito");
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            "Funcionario actualizado con exitó",
+            style: FlutterFlowTheme.of(context).bodyText2.override(
+                  fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                  color: FlutterFlowTheme.of(context).tertiaryColor,
+                  useGoogleFonts: GoogleFonts.asMap().containsKey(
+                      FlutterFlowTheme.of(context).bodyText2Family),
+                ),
+          ),
+          backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+        ));
+        return 'ok';
+      });
+
+      }else{
+        await supabase.from('FUNCIONARIOS').insert({
         'CEDULA': cedula,
         'NOMBRES': utilidades.mayusculaTodasPrimerasLetras(nombres!),
         'APELLIDOS': (apellidos == null)
@@ -79,6 +112,9 @@ class FuncionariosController {
         ));
         return 'ok';
       });
+
+      }
+      
       return 'ok';
     } on PostgrestException catch (errorPostgres) {
       StorageController storageController = StorageController();

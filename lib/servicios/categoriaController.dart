@@ -78,17 +78,29 @@ class CategoriaController {
   }
 
   Future<void> addCategoria(
-      context, String nombre, String urlImagen, String? descripcion) async {
+      context, String nombre, String urlImagen, String? descripcion, {bool editar=false, int? idCategoria}) async {
     try {
       log('Inserando nuevo activo...');
       Utilidades utilidades = Utilidades();
-      await client.from('CATEGORIAS').insert({
+      if(editar){
+        await client.from('CATEGORIAS').update({
+        'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
+        'URL_IMAGEN': urlImagen,
+        'DESCRIPCION': (descripcion == null)
+            ? null
+            : utilidades.mayusculaPrimeraLetraFrase(descripcion),
+      }).eq('ID', idCategoria).then((value) => log('Nueva categoria registrada: $value'));
+
+      }else{
+        await client.from('CATEGORIAS').insert({
         'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
         'URL_IMAGEN': urlImagen,
         'DESCRIPCION': (descripcion == null)
             ? null
             : utilidades.mayusculaPrimeraLetraFrase(descripcion),
       }).then((value) => log('Nueva categoria registrada: $value'));
+      }
+      
       log("Registrado con exito");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(

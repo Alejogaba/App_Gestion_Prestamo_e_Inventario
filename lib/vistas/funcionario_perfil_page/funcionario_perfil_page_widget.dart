@@ -16,6 +16,7 @@ import '../../entidades/area.dart';
 import '../../flutter_flow/flutter_flow_widgets.dart';
 import '../../flutter_flow/nav/serialization_util.dart';
 import '../../servicios/prestamosController.dart';
+import '../activo_perfil_page/activo_perfil_page_widget.dart';
 import '../flutter_flow/flutter_flow_animations.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
@@ -31,6 +32,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../lista_activos_page/lista_activos_page_widget.dart';
 
 class FuncionarioPerfilPageWidget extends StatefulWidget {
   final Funcionario funcionario;
@@ -117,19 +120,14 @@ class _FuncionarioPerfilPageWidgetState
             prefs.setString('id_funcionario', funcionario.cedula);
             Logger().i('Antes del push');
             // ignore: use_build_context_synchronously
-            context.pushNamed(
-              'listaActivosPage',
-              queryParams: {
-                'nombreCategoria': serializeParam(
-                  'Todos los activos',
-                  ParamType.String,
-                ),
-                'selectMode': serializeParam(
-                  true,
-                  ParamType.bool,
-                ),
-              }.withoutNulls,
-            );
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ListaActivosPageWidget(
+                          idCategoria: 2,
+                          selectMode: true,
+                          esPrestamo: false,
+                        )));
           }
         },
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
@@ -321,7 +319,9 @@ class _FuncionarioPerfilPageWidgetState
                                                                 size: 16,
                                                               ),
                                                               onPressed: () {
-                                                                Utilidades().mensajeWIP(context);
+                                                                Utilidades()
+                                                                    .mensajeAdvertencia(
+                                                                        context);
                                                               },
                                                             ),
                                                           ),
@@ -1578,7 +1578,8 @@ class _FuncionarioPerfilPageWidgetState
     );
   }
 
-  Widget _tarjetaActivo(snapshot, bool prestamo, List<String> fechaEntrega) {
+  Widget _tarjetaActivo(AsyncSnapshot<List<Activo>> snapshot, bool prestamo,
+      List<String> fechaEntrega) {
     Utilidades utilidades = Utilidades();
     return Column(
       children: [
@@ -1633,18 +1634,18 @@ class _FuncionarioPerfilPageWidgetState
                   ),
                   child: InkWell(
                     onTap: () async {
-                      context.pushNamed(
-                        'activoPerfilPage',
-                        queryParams: {
-                          'idActivo': serializeParam(
-                            snapshot.data![index].idSerial,
-                            ParamType.String,
+                      Activo activoBuscado = await ActivoController()
+                          .buscarActivo(snapshot.data![index].idSerial);
+                     // ignore: use_build_context_synchronously
+                     await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ActivoPerfilPageWidget(
+                            activo: activoBuscado,
+                            selectMode: false,
+                            esPrestamo: false,
                           ),
-                          'selectMode': serializeParam(
-                            false,
-                            ParamType.bool,
-                          ),
-                        }.withoutNulls,
+                        ),
                       );
                     },
                     child: Column(
@@ -1726,8 +1727,7 @@ class _FuncionarioPerfilPageWidgetState
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      snapshot.data![index].nombre
-                                          .toString(),
+                                      snapshot.data![index].nombre.toString(),
                                       style: FlutterFlowTheme.of(context)
                                           .subtitle1
                                           .override(

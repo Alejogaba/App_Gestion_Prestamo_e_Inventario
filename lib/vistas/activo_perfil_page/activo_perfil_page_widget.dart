@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
+import 'package:app_gestion_prestamo_inventario/index.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
 import 'package:app_gestion_prestamo_inventario/vistas/lista_funcionarios_page/lista_funcionarios_page_widget.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -38,19 +39,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 
 class ActivoPerfilPageWidget extends StatefulWidget {
-  final String idActivo;
+  final Activo activo;
   final bool selectMode;
-  final bool? esPrestamo;
+  final bool esPrestamo;
   const ActivoPerfilPageWidget(
       {Key? key,
-      required this.idActivo,
+      required this.activo,
       this.selectMode = false,
-      this.esPrestamo})
+      this.esPrestamo= false})
       : super(key: key);
 
   @override
   _ActivoPerfilPageWidgetState createState() => _ActivoPerfilPageWidgetState(
-      this.idActivo, this.selectMode, this.esPrestamo);
+      this.activo, this.selectMode, this.esPrestamo);
 }
 
 class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
@@ -291,33 +292,21 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
     ),
   };
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  Activo activo = Activo(
-      '',
-      '',
-      '',
-      '',
-      'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png',
-      0,
-      3,
-      '',
-      0,
-      '');
-  late String idActivo;
+  Activo activo;
   bool blur = false;
   ActivoController activoController = ActivoController();
   bool selectMode;
-  bool? esPrestamo;
+  bool esPrestamo;
 
   PrestamosController prestamosController = PrestamosController();
 
   bool tienePrestamos = false;
   List<String> listaFechasEntrega = [];
 
-  _ActivoPerfilPageWidgetState(this.idActivo, this.selectMode, this.esPrestamo);
+  _ActivoPerfilPageWidgetState(this.activo, this.selectMode, this.esPrestamo);
 
   @override
   void initState() {
-    cargarActivo(idActivo);
     super.initState();
     setupAnimations(
       animationsMap.values.where((anim) =>
@@ -447,7 +436,16 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                         .primaryText,
                                                     size: 16,
                                                   ),
-                                                  onPressed: () async {Utilidades().mensajeWIP(context);},
+                                                  onPressed: () async {await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ResgistrarActivoPageWidget(
+                              categoria: activo.categoria,
+                              activoEditar: activo,
+                            ),
+                          ),
+                        );
+                                                  },
                                                 ),
                                               ),
                                             ),
@@ -483,7 +481,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                     size: 20,
                                                   ),
                                                   onPressed: () {
-                                                    context.pop();
+                                                    Navigator.pop(context);
                                                   },
                                                 ),
                                               ),
@@ -918,8 +916,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                 //TituloListafFuncionariosAsignados(animationsMap: animationsMap),
                                 //ListaFuncionariosAsignados(animationsMap: animationsMap),
 
-                                if (activo.estaAsignado != null &&
-                                    activo.estaAsignado!)
+                                if (activo.estaAsignado)
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 0, 0, 24),
@@ -1430,7 +1427,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
     FuncionariosController funcionariosController = FuncionariosController();
     ActivoController activoController = ActivoController();
     List<ActivoFuncionario> listFuncionariosActvos =
-        await activoController.getFuncionarioAsignado(idActivo);
+        await activoController.getFuncionarioAsignado(activo.idSerial);
     await Future.forEach(listFuncionariosActvos,
         (ActivoFuncionario value) async {
       listActivosAsignados.add(await funcionariosController
@@ -1441,18 +1438,18 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
 
   Widget _cajaAdvertencia(BuildContext context, mensaje, objetoaEliminar, id) {
     return Align(
-      alignment: AlignmentDirectional(0, 0),
+      alignment: const AlignmentDirectional(0, 0),
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(16, 24, 16, 5),
+        padding: const EdgeInsetsDirectional.fromSTEB(16, 24, 16, 5),
         child: Container(
           width: 450,
-          constraints: BoxConstraints(
+          constraints: const BoxConstraints(
             maxWidth: 500,
             maxHeight: 300,
           ),
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 blurRadius: 7,
                 color: Color(0x4D000000),
@@ -1495,8 +1492,9 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                   child: FFButtonWidget(
-                    onPressed: () async{
-                      var res = await eliminarObjeto(context, objetoaEliminar, id);
+                    onPressed: () async {
+                      var res =
+                          await eliminarObjeto(context, objetoaEliminar, id);
                       if (res.contains('ok')) {
                         context.pop();
                       }
@@ -1595,20 +1593,23 @@ class myFloatingButton extends StatelessWidget {
   final bool selectMode;
   final String idActivo;
   final BuildContext contextPadre;
-  final Activo? activo;
-  final bool? esPrestamo;
+  final Activo activo;
+  final bool esPrestamo;
   const myFloatingButton(
       {Key? key,
       this.selectMode = false,
       this.idActivo = '',
       required this.contextPadre,
-      this.activo,
-      this.esPrestamo})
+      required this.activo,
+      this.esPrestamo = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.extended(
+    if (!selectMode && !esPrestamo && activo.estaAsignado) {
+      return Container();
+    }else{
+      return FloatingActionButton.extended(
       onPressed: () async {
         if (selectMode) {
           if (esPrestamo == null) {
@@ -1622,13 +1623,19 @@ class myFloatingButton extends StatelessWidget {
             // ignore: use_build_context_synchronously
             if (res.contains('ok')) contextPadre.pop();
           } else {
-            if (esPrestamo!) {
+            if (esPrestamo) {
               log('retornando activo');
-              contextPadre.pop(activo);
+              Navigator.pop(contextPadre, activo);
             }
           }
         } else {
-          Utilidades().mensajeWIP(context);
+          final Funcionario? result = await context.pushNamed<Funcionario>(
+            'listaSeleccionFuncionariosPage',
+          );
+          if (result != null) {
+            // ignore: use_build_context_synchronously
+            ActivoController().asignarActivo(context, result.cedula, idActivo);
+          }
         }
       },
       backgroundColor: FlutterFlowTheme.of(context).primaryColor,
@@ -1648,6 +1655,8 @@ class myFloatingButton extends StatelessWidget {
             ),
       ),
     );
+    }
+    
   }
 }
 
@@ -1662,13 +1671,13 @@ class ListaFuncionariosAsignados extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(20, 5, 20, 4),
+      padding: const EdgeInsetsDirectional.fromSTEB(20, 5, 20, 4),
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: 88,
         decoration: BoxDecoration(
           color: FlutterFlowTheme.of(context).primaryBackground,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               blurRadius: 2,
               color: Color(0x3E000000),
@@ -1805,12 +1814,12 @@ class TituloListafFuncionariosAsignados extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(24, 8, 24, 0),
+      padding: const EdgeInsetsDirectional.fromSTEB(24, 8, 24, 0),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
           Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+            padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
             child: Text(
               'FUNCIONARIO ASIGNADO',
               style: FlutterFlowTheme.of(context).bodyText2.override(

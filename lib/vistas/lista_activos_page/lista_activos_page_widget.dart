@@ -4,10 +4,12 @@ import 'dart:io';
 
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
+import 'package:app_gestion_prestamo_inventario/index.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/categoriaController.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:logger/logger.dart';
 
 import '../../servicios/pdfApi.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
@@ -24,12 +26,12 @@ import 'package:google_fonts/google_fonts.dart';
 class ListaActivosPageWidget extends StatefulWidget {
   final int idCategoria;
   final bool selectMode;
-  final bool? esPrestamo;
+  final bool esPrestamo;
   const ListaActivosPageWidget(
       {Key? key,
       required this.idCategoria,
       this.selectMode = false,
-      this.esPrestamo})
+      this.esPrestamo = false})
       : super(key: key);
 
   @override
@@ -47,7 +49,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   ActivoController activoController = ActivoController();
   List<Activo> listaActivos = [];
   bool selectMode;
-  bool? esPrestamo;
+  bool esPrestamo;
   Categoria categoria = Categoria('Activos', '', '');
 
   _ListaActivosPageWidgetState(
@@ -132,22 +134,15 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                         );
                       } else {
                         // ignore: use_build_context_synchronously
-                        context.pushNamed(
-                          'activoPerfilPage',
-                          queryParams: {
-                            'idActivo': serializeParam(
-                              res.idSerial,
-                              ParamType.String,
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ActivoPerfilPageWidget(
+                              activo: res,
+                              selectMode: selectMode,
+                              esPrestamo: esPrestamo,
                             ),
-                            'selectMode': serializeParam(
-                              false,
-                              ParamType.bool,
-                            ),
-                            'esPrestamo': serializeParam(
-                              esPrestamo,
-                              ParamType.bool,
-                            ),
-                          },
+                          ),
                         );
                       }
                       setState(() {});
@@ -191,7 +186,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
             floating: false,
             leading: InkWell(
               onTap: () async {
-                context.pop();
+                Navigator.pop(context);
               },
               child: Icon(
                 Icons.chevron_left_rounded,
@@ -396,15 +391,16 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                           return GestureDetector(
                                             onTap: () async {
                                               if (selectMode) {
-                                                if (esPrestamo == null) {
+                                                if (esPrestamo == false &&
+                                                    snapshot.data![index]
+                                                            .estaAsignado ==
+                                                        false) {
                                                   context.replaceNamed(
                                                     'activoPerfilPage',
                                                     queryParams: {
-                                                      'idActivo':
-                                                          serializeParam(
-                                                        snapshot.data![index]
-                                                            .idSerial,
-                                                        ParamType.String,
+                                                      'activo': serializeParam(
+                                                        snapshot.data![index],
+                                                        ParamType.Activo,
                                                       ),
                                                       'selectMode':
                                                           serializeParam(
@@ -418,61 +414,66 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                       ),
                                                     },
                                                   );
-                                                } else if (esPrestamo!) {
+                                                } else if (esPrestamo == true &&
+                                                    snapshot.data![index]
+                                                            .estaPrestado ==
+                                                        false) {
                                                   final Activo? result =
-                                                      await context
-                                                          .pushNamed<Activo>(
-                                                    'activoPerfilPage',
-                                                    queryParams: {
-                                                      'idActivo':
-                                                          serializeParam(
-                                                        snapshot.data![index]
-                                                            .idSerial,
-                                                        ParamType.String,
+                                                      await Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ActivoPerfilPageWidget(
+                                                        activo: snapshot
+                                                            .data![index],
+                                                        selectMode: selectMode,
+                                                        esPrestamo: selectMode,
                                                       ),
-                                                      'selectMode':
-                                                          serializeParam(
-                                                        selectMode,
-                                                        ParamType.bool,
-                                                      ),
-                                                      'esPrestamo':
-                                                          serializeParam(
-                                                        esPrestamo,
-                                                        ParamType.bool,
-                                                      ),
-                                                    },
+                                                    ),
                                                   );
+
                                                   if (result != null) {
                                                     // ignore: use_build_context_synchronously
-                                                    context.pop(result);
+                                                    Navigator.pop(
+                                                        context, result);
                                                   }
                                                 }
                                               } else {
-                                                context.pushNamed(
-                                                  'activoPerfilPage',
-                                                  queryParams: {
-                                                    'idActivo': serializeParam(
-                                                      snapshot.data![index]
-                                                          .idSerial,
-                                                      ParamType.String,
+                                                await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ActivoPerfilPageWidget(
+                                                      activo:
+                                                          snapshot.data![index],
+                                                      selectMode: selectMode,
+                                                      esPrestamo: esPrestamo,
                                                     ),
-                                                    'selectMode':
-                                                        serializeParam(
-                                                      selectMode,
-                                                      ParamType.bool,
-                                                    ),
-                                                    'esPrestamo':
-                                                        serializeParam(
-                                                      esPrestamo,
-                                                      ParamType.bool,
-                                                    ),
-                                                  },
+                                                  ),
                                                 );
                                               }
-                                              setState(() {});
                                             },
-                                            child: tarjetaActivo(
-                                                context, snapshot.data![index]),
+                                            child: Opacity(
+                                              opacity: ((esPrestamo &&
+                                                          selectMode &&
+                                                          snapshot.data![index]
+                                                              .estaPrestado) ||
+                                                      (selectMode &&
+                                                          snapshot.data![index]
+                                                              .estaAsignado))
+                                                  ? 0.4
+                                                  : 1.0,
+                                              child: tarjetaActivo(context,
+                                                  snapshot.data![index],
+                                                  selectMode: selectMode,
+                                                  esPrestamos: esPrestamo,
+                                                  estaAsignado: snapshot
+                                                      .data![index]
+                                                      .estaAsignado,
+                                                  estaPrestado: snapshot
+                                                      .data![index]
+                                                      .estaPrestado),
+                                            ),
                                           );
                                         }),
                                       );
@@ -502,7 +503,11 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   }
 }
 
-Widget tarjetaActivo(context, Activo activo) {
+Widget tarjetaActivo(context, Activo activo,
+    {bool selectMode = false,
+    bool esPrestamos = false,
+    bool estaPrestado = false,
+    bool estaAsignado = false}) {
   return Container(
     width: 185,
     height: 213,
@@ -588,7 +593,7 @@ Widget tarjetaActivo(context, Activo activo) {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 1),
                 child: Text(
-                overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.ellipsis,
                   activo.idSerial,
                   style: FlutterFlowTheme.of(context).bodyText2.override(
                         fontFamily:
@@ -608,14 +613,22 @@ Widget tarjetaActivo(context, Activo activo) {
                 padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                 child: FaIcon(
                   FontAwesomeIcons.solidCircle,
-                  color: definirColorEstado(activo.estado),
+                  color: definirColorEstado(activo.estado,selectMode: selectMode,
+                          esPrestamos: esPrestamos,
+                          estaAsignado: estaAsignado,
+                          estaPrestado: estaPrestado),
                   size: 10,
                 ),
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 5),
                 child: Text(
-                  definirEstadoActivo(activo.estado).toString(),
+                  definirEstadoActivo(activo.estado,
+                          selectMode: selectMode,
+                          esPrestamos: esPrestamos,
+                          estaAsignado: estaAsignado,
+                          estaPrestado: estaPrestado)
+                      .toString(),
                   style: FlutterFlowTheme.of(context).bodyText2.override(
                         fontFamily:
                             FlutterFlowTheme.of(context).bodyText2Family,
@@ -651,7 +664,18 @@ double? defTamanoImagen(screenSize) {
   }
 }
 
-Color? definirColorEstado(int? estado) {
+Color? definirColorEstado(int? estado,
+    {bool selectMode = false,
+    bool esPrestamos = false,
+    bool estaPrestado = false,
+    bool estaAsignado = false}) {
+  if ((selectMode && !esPrestamos && !estaAsignado) ||
+      (selectMode && esPrestamos && !estaPrestado)) {
+    estado = 0;
+  } else if ((selectMode && !esPrestamos && estaAsignado) ||
+      (selectMode && esPrestamos && estaPrestado)) {
+    estado = 2;
+  }
   switch (estado) {
     case 0:
       return Colors.green;
@@ -667,7 +691,18 @@ Color? definirColorEstado(int? estado) {
   }
 }
 
-String? definirEstadoActivo(int? estado) {
+String? definirEstadoActivo(int? estado,
+    {bool selectMode = false,
+    bool esPrestamos = false,
+    bool estaPrestado = false,
+    bool estaAsignado = false}) {
+  if ((selectMode && !esPrestamos && !estaAsignado) ||
+      (selectMode && esPrestamos && !estaPrestado)) {
+    estado = 3;
+  } else if ((selectMode && !esPrestamos && estaAsignado) ||
+      (selectMode && esPrestamos && estaPrestado)) {
+    estado = 4;
+  }
   switch (estado) {
     case 0:
       return 'Bueno';
@@ -677,6 +712,12 @@ String? definirEstadoActivo(int? estado) {
 
     case 2:
       return 'Malo';
+
+    case 3:
+      return 'Disponible';
+
+    case 4:
+      return 'Ocupado';
 
     default:
       return 'No definido';

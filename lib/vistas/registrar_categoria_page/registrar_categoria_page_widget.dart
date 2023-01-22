@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
@@ -143,24 +145,44 @@ class _RegistrarCategoriaPageWidgetState
                 if (imagenUrl.contains('https')) {
                   CategoriaController categoriaController =
                       CategoriaController();
-                  await registrarCategoria(
+                  if(categoriaEditar!=null){
+                    await registrarCategoria(
+                      categoriaController,
+                      context,
+                      textControllerNombre.text,
+                      imagenUrl,
+                      textControllerDetalles!.text,editar: true,idCategoria: categoriaEditar!.id);
+                  }else{
+                    await registrarCategoria(
                       categoriaController,
                       context,
                       textControllerNombre.text,
                       imagenUrl,
                       textControllerDetalles!.text);
+                  }
+                  
                   Timer(Duration(seconds: 3), () {
                     context.pop();
                   });
                 }
               } else {
                 CategoriaController categoriaController = CategoriaController();
-                await registrarCategoria(
+                if(categoriaEditar!=null){
+                  await registrarCategoria(
+                    categoriaController,
+                    context,
+                    textControllerNombre.text,
+                    categoriaEditar!.urlImagen.toString(),
+                    textControllerDetalles!.text);
+                }else{
+                  await registrarCategoria(
                     categoriaController,
                     context,
                     textControllerNombre.text,
                     'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png',
                     textControllerDetalles!.text);
+                }
+                
                 Timer(Duration(seconds: 3), () {
                   context.pop();
                 });
@@ -472,8 +494,8 @@ class _RegistrarCategoriaPageWidgetState
       BuildContext context,
       String nombre,
       String imagenUrl,
-      String descripcion) async {
-    await activoCategoria.addCategoria(context, nombre, imagenUrl, descripcion);
+      String descripcion,{bool editar = false, int? idCategoria}) async {
+    await activoCategoria.addCategoria(context, nombre, imagenUrl, descripcion,editar: editar,idCategoria: idCategoria);
     _loading = false;
   }
 
@@ -616,14 +638,21 @@ class _RegistrarCategoriaPageWidgetState
   }
 
   Widget _decideImageView(imageFile) {
-    if (imageFile == null) {
+     if (categoriaEditar!=null) {
+      return Image.network(
+        categoriaEditar!.urlImagen.toString(),
+        width: 250,
+        height: 200,
+        fit: BoxFit.cover,
+      );
+    } else if(imageFile == null){
       return Center(
         child: Icon(
           FontAwesomeIcons.camera,
           size: 40,
         ),
       );
-    } else {
+    }else{
       return Image.file(
         imageFile,
         width: 250,

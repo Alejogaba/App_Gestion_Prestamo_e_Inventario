@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/funcionario.dart';
+import 'package:app_gestion_prestamo_inventario/index.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/pdfApi.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/prestamosController.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
@@ -345,24 +346,18 @@ class _RegistrarPrestamoPageWidgetState
                           Expanded(
                             child: GestureDetector(
                               onTap: () async {
-                                final Activo? result =
-                                    await context.pushNamed<Activo>(
-                                  'listaActivosPage',
-                                  queryParams: {
-                                    'nombreCategoria': serializeParam(
-                                      'Todos los activos',
-                                      ParamType.String,
-                                    ),
-                                    'selectMode': serializeParam(
-                                      true,
-                                      ParamType.bool,
-                                    ),
-                                    'esPrestamo': serializeParam(
-                                      true,
-                                      ParamType.bool,
-                                    ),
-                                  },
-                                );
+                               final Activo? result = await Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ListaActivosPageWidget(
+                                                          idCategoria: 2,
+                                                              selectMode: true,
+                                                              esPrestamo: true,
+                                                        ),
+                                                      ),
+                                                    );
+                               
                                 if (result != null) {
                                   Logger()
                                       .i('Activo devuelto:${result.nombre}');

@@ -22,10 +22,10 @@ class Utilidades {
     return result;
   }
 
-  mensajeWIP(BuildContext context) {
+  mensajeAdvertencia(BuildContext context,{String msj = 'No disponible aún: Función en desarrollo' }) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
-              'No disponible aún: Función en desarrollo',
+              msj,
               style: FlutterFlowTheme.of(context).bodyText2.override(
                     fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                     color: FlutterFlowTheme.of(context).primaryBackground,
