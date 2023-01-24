@@ -1,31 +1,50 @@
+import 'package:flutter/material.dart';
+
 class Software {
-   String id;
+  int id;
+  String urlImagen;
+  String titulo;
   String idEquipoComputo;
-  String idFuncionario;
-  String nombreSoftware;
+  String nombre;
+  String fabricante;
   String version;
   String tipoLicencia;
-  String claveActivacion;
+  String licenciaClave;
+  String? dropdownvalue;
+
+  TextEditingController nombreController = TextEditingController();
+  FocusNode nombreFocus = FocusNode();
+  TextEditingController fabricanteController = TextEditingController();
+  FocusNode fabricanteFocus = FocusNode();
+  TextEditingController versionController = TextEditingController();
+  FocusNode versionFocus = FocusNode();
+  TextEditingController tipoLicenciaController = TextEditingController();
+  FocusNode tipoLicenciaFocus = FocusNode();
+  TextEditingController licenciaClaveController = TextEditingController();
+  FocusNode licenciaClaveFocus = FocusNode();
 
   Software({
-    this.id = '',
+    this.titulo = 'Software',
+    this.urlImagen = 'https://cdn-icons-png.flaticon.com/512/2828/2828879.png',
+    this.id = 0,
     this.idEquipoComputo = '',
-    this.idFuncionario = '',
-    this.nombreSoftware = '',
+    this.nombre = '',
+    this.fabricante = '',
     this.version = '',
-    this.tipoLicencia = '',
-    this.claveActivacion = '',
+    this.tipoLicencia = 'Mono Usuario',
+    this.licenciaClave = '',
+    this.dropdownvalue='Mono Usuario'
   });
 
   factory Software.fromMap(Map<String, dynamic> map) {
     return Software(
-      id: map['ID'] ?? '',
-      idEquipoComputo: map['ID_EQUIPO_COMPUTO'] ?? '',
-      idFuncionario: map['ID_FUNCIONARIO'] ?? '',
-      nombreSoftware: map['NOMBRE_SOFTWARE'] ?? '',
-      version: map['VERSION'] ?? '',
-      tipoLicencia: map['TIPO_LICENCIA'] ?? '',
-      claveActivacion: map['CLAVE_ACTIVACION'] ?? '',
+      id: map['ID']?? 0,
+      idEquipoComputo: map['ID_EQUIPO_COMPUTO']??'',
+      nombre: map['NOMBRE']??'',
+      fabricante: map['FABRICANTE']??'',
+      version: map['VERSION_SOFTWARE']??'',
+      tipoLicencia: map['TIPO_LICENCIA']??'',
+      licenciaClave: map['LICENCIA_CLAVE']??'',
     );
   }
 }

@@ -3,7 +3,7 @@ import 'dart:developer';
 
 class Funcionario{
   String cedula;
-  String? apellidos;
+  String apellidos;
   String nombres;
   String cargo;
   String? correo;
@@ -17,7 +17,7 @@ class Funcionario{
   Funcionario(
       {this.cedula = '',
       this.nombres = '',
-      this.apellidos,
+      this.apellidos='',
       this.cargo = '',
       this.urlImagen = '',
       this.correo,

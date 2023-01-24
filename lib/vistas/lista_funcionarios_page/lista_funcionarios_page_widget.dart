@@ -449,8 +449,8 @@ class tarjetaFuncionario extends StatelessWidget {
                       children: [
                         Text(
                           (funcionario.apellidos != null &&
-                                  funcionario.apellidos!.isNotEmpty)
-                              ? '${funcionario.nombres.split(' ')[0]} ${funcionario.apellidos!.split(' ')[0]}'
+                                  funcionario.apellidos.isNotEmpty)
+                              ? '${funcionario.nombres.split(' ')[0]} ${funcionario.apellidos.split(' ')[0]}'
                               : funcionario.nombres,
                           style: FlutterFlowTheme.of(context).title3.override(
                                 fontFamily: 'Poppins',

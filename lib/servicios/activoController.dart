@@ -13,6 +13,7 @@ import 'package:supabase/src/supabase_stream_builder.dart';
 import 'package:supabase/supabase.dart';
 import '../../assets/constantes.dart' as constantes;
 import '../entidades/activo_funcionario.dart';
+import '../entidades/funcionario.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 
 class ActivoController {
@@ -28,43 +29,52 @@ class ActivoController {
       String? detalles,
       String? urlImagen,
       int estado,
-      String categoria,
-      int idCategoria,
+      String? categoria,
+      int? idCategoria,
       int? cantidad,
       String? capacidad,
-      String? fechaCreado,{bool editar=false}) async {
+      String? fechaCreado,
+      {bool editar = false}) async {
     try {
-      log('Inserando nuevo activo...');
+      log('Insertando nuevo activo......');
       Utilidades utilidades = Utilidades();
-      if(editar){
-        await supabase.from('ACTIVOS').update({
-        'NUM_ACTIVO': numInventario,
-        'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
-        'DETALLES': (detalles==null||detalles.trim().isEmpty) ? 'Genérico' : utilidades.mayusculaPrimeraLetra(detalles),
-        'URL_IMAGEN': urlImagen,
-        'ESTADO': estado,
-        'NOMBRE_CATEGORIA': utilidades.mayusculaTodasPrimerasLetras(categoria),
-        'ID_CATEGORIA': idCategoria,
-        'CANTIDAD': cantidad,
-        'CAPACIDAD': capacidad,
-      }).eq('ID_SERIAL', idSerial.toUpperCase()).then((value) => log('Nueva activo registrado: $value'));
-
-      }else{
+      if (editar) {
+        await supabase
+            .from('ACTIVOS')
+            .update({
+              'NUM_ACTIVO': numInventario,
+              'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
+              'DETALLES': (detalles == null || detalles.trim().isEmpty)
+                  ? 'Genérico'
+                  : utilidades.mayusculaPrimeraLetra(detalles),
+              'URL_IMAGEN': urlImagen,
+              'ESTADO': estado,
+              'NOMBRE_CATEGORIA': (categoria!=null) ?
+                  utilidades.mayusculaTodasPrimerasLetras(categoria):'Proyectores',
+              'ID_CATEGORIA': (idCategoria!=null) ? idCategoria:3,
+              'CANTIDAD': cantidad,
+              'CAPACIDAD': capacidad,
+            })
+            .eq('ID_SERIAL', idSerial.toUpperCase())
+            .then((value) => log('Nueva activo registrado: $value'));
+      } else {
         await supabase.from('ACTIVOS').insert({
-        'ID_SERIAL': idSerial.toUpperCase(),
-        'NUM_ACTIVO': numInventario,
-        'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
-        'DETALLES': (detalles==null||detalles.trim().isEmpty) ? 'Genérico' : utilidades.mayusculaPrimeraLetra(detalles),
-        'URL_IMAGEN': urlImagen,
-        'ESTADO': estado,
-        'NOMBRE_CATEGORIA': utilidades.mayusculaTodasPrimerasLetras(categoria),
-        'ID_CATEGORIA': idCategoria,
-        'CANTIDAD': cantidad,
-        'CAPACIDAD': capacidad,
-      }).then((value) => log('Nueva activo registrado: $value'));
+          'ID_SERIAL': idSerial.toUpperCase(),
+          'NUM_ACTIVO': numInventario,
+          'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
+          'DETALLES': (detalles == null || detalles.trim().isEmpty)
+              ? 'Genérico'
+              : utilidades.mayusculaPrimeraLetra(detalles),
+          'URL_IMAGEN': urlImagen,
+          'ESTADO': estado,
+          'NOMBRE_CATEGORIA':(categoria!=null) ?
+                  utilidades.mayusculaTodasPrimerasLetras(categoria):'Proyectores',
+          'ID_CATEGORIA': idCategoria,
+          'CANTIDAD': cantidad,
+          'CAPACIDAD': capacidad,
+        }).then((value) => log('Nueva activo registrado: $value'));
       }
-      
-      log("Registrado con exito");
+
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         duration: const Duration(seconds: 1),
         content: Text(
@@ -138,7 +148,9 @@ class ActivoController {
       return 'ok';
     } on PostgrestException catch (errorPostgres) {
       var error = Utilidades().validarErroresInsertar(
-          errorPostgres.code!, 'Este activo',);
+        errorPostgres.code!,
+        'Este activo',
+      );
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           error,
@@ -159,7 +171,35 @@ class ActivoController {
     }
   }
 
-  
+  Future<Funcionario> buscarFuncionarioAsignado(String idActivo) async {
+    Funcionario funcionarioVacio = Funcionario(tieneActivos: false);
+    try {
+      final data = (await supabase
+              .from('FUNCIONARIOS_ACTIVOS')
+              .select()
+              .match({'ID_SERIAL': idActivo}).maybeSingle())
+          as Map<String, dynamic>?;
+      if (data == null) {
+        return funcionarioVacio;
+      } else {
+        ActivoFuncionario activoFuncionario = ActivoFuncionario.fromMap(data);
+        final dataFuncionario = (await supabase
+                .from('FUNCIONARIOS')
+                .select()
+                .match(
+                    {'CEDULA': activoFuncionario.idFuncionaro}).maybeSingle())
+            as Map<String, dynamic>?;
+        if (dataFuncionario == null) {
+          return funcionarioVacio;
+        }else{
+          return Funcionario.fromMap(dataFuncionario);
+        }
+      }
+    } catch (e) {
+      log(e.toString());
+      return funcionarioVacio;
+    }
+  }
 
   Stream<SupabaseStreamEvent> getActivoStream(String? categoria) {
     if (categoria!.contains('Todos')) {
@@ -187,8 +227,7 @@ class ActivoController {
   Future<List<Activo>> getActivosList(String? nombre, int? idCategoria) async {
     try {
       if (nombre == null || nombre.trim().isEmpty) {
-        final data = (idCategoria != null &&
-                !(idCategoria==2))
+        final data = (idCategoria != null && !(idCategoria == 2))
             ? await supabase
                 .from('ACTIVOS')
                 .select('*')
@@ -201,8 +240,7 @@ class ActivoController {
         log('Datos: $data');
         return (data).map((e) => Activo.fromMap(e)).toList();
       } else {
-        final data = (idCategoria != null &&
-                !(idCategoria==2))
+        final data = (idCategoria != null && !(idCategoria == 2))
             ? await supabase
                 .from('ACTIVOS')
                 .select('*')
@@ -229,7 +267,7 @@ class ActivoController {
   }
 
   Future<Categoria> buscarCategoria(int id) async {
-    Categoria vacio = Categoria('','','');
+    Categoria vacio = Categoria('', '', '');
     try {
       final data = (await supabase
           .from('CATEGORIAS')
@@ -245,8 +283,6 @@ class ActivoController {
       return vacio;
     }
   }
-
-   
 
   Future<Activo> buscarActivo(String idSerial) async {
     Activo activoVacio = Activo();
@@ -285,10 +321,10 @@ class ActivoController {
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
       ));
       return 'ok';
-    }  on PostgrestException catch (errorPostgres) {
+    } on PostgrestException catch (errorPostgres) {
       var error = Utilidades().validarErroresEliminar(
-          errorPostgres.code!, 'Este activos',
-          objetoLlaveForaneo: 'funcionario asignados');
+          errorPostgres.code!, 'este activos',
+          objetoLlaveForaneo: 'un funcionario asignado o esta prestado');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           error,
@@ -303,7 +339,7 @@ class ActivoController {
       ));
       log(errorPostgres.toString());
       return 'error';
-    }catch (e) {
+    } catch (e) {
       log(e.toString());
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
@@ -352,7 +388,7 @@ class ActivoController {
       log('Eliminando:$data');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
-            'Se ha quitado el activo',
+            'Se ha desasignado el activo',
             style: FlutterFlowTheme.of(context).bodyText2.override(
                   fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                   color: FlutterFlowTheme.of(context).tertiaryColor,

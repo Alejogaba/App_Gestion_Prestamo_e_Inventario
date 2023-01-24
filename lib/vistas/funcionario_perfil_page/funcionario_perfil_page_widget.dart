@@ -4,9 +4,11 @@ import 'dart:ui';
 import 'package:app_gestion_prestamo_inventario/entidades/activo_funcionario.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/funcionario.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/prestamo.dart';
+import 'package:app_gestion_prestamo_inventario/index.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/funcionariosController.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,19 +39,14 @@ import '../lista_activos_page/lista_activos_page_widget.dart';
 
 class FuncionarioPerfilPageWidget extends StatefulWidget {
   final Funcionario funcionario;
-  final Area area;
-  final bool? selectMode;
+  final bool selectMode;
   const FuncionarioPerfilPageWidget(
-      {Key? key,
-      required this.funcionario,
-      required this.area,
-      this.selectMode})
+      {Key? key, required this.funcionario, this.selectMode = false})
       : super(key: key);
 
   @override
   _FuncionarioPerfilPageWidgetState createState() =>
-      _FuncionarioPerfilPageWidgetState(
-          this.funcionario, this.area, this.selectMode);
+      _FuncionarioPerfilPageWidgetState(this.funcionario, this.selectMode);
 }
 
 class _FuncionarioPerfilPageWidgetState
@@ -83,16 +80,14 @@ class _FuncionarioPerfilPageWidgetState
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   Funcionario funcionario;
-  Area area;
   bool blur = false;
   ActivoController activoController = ActivoController();
   PrestamosController prestamosController = PrestamosController();
-  bool? selectMode;
+  bool selectMode;
   bool tienePrestamos = false;
   List<String> listaFechasEntrega = [];
 
-  _FuncionarioPerfilPageWidgetState(
-      this.funcionario, this.area, this.selectMode);
+  _FuncionarioPerfilPageWidgetState(this.funcionario, this.selectMode);
 
   @override
   void initState() {
@@ -109,9 +104,9 @@ class _FuncionarioPerfilPageWidgetState
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           // ignore: use_build_context_synchronously
-          if (selectMode != null && selectMode == true) {
+          if (selectMode == true) {
             try {
-              context.pop(funcionario);
+              Navigator.pop(context, funcionario);
             } catch (e) {
               Logger().e('Error en context.pop');
             }
@@ -138,9 +133,7 @@ class _FuncionarioPerfilPageWidgetState
         ),
         elevation: 8,
         label: Text(
-          (selectMode != null && selectMode!)
-              ? 'Seleccionar funcionario'
-              : 'Asignar activo',
+          (selectMode) ? 'Seleccionar funcionario' : 'Asignar activo',
           style: FlutterFlowTheme.of(context).bodyText1.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
                 color: FlutterFlowTheme.of(context).whiteColor,
@@ -227,16 +220,17 @@ class _FuncionarioPerfilPageWidgetState
                                                             Colors.transparent,
                                                         borderRadius: 30,
                                                         buttonSize: 46,
-                                                        fillColor:
-                                                            Color(0x00F1F4F8),
                                                         icon: Icon(
-                                                          Icons.delete_outlined,
+                                                          Icons.close_rounded,
                                                           color: FlutterFlowTheme
                                                                   .of(context)
                                                               .primaryText,
-                                                          size: 22,
+                                                          size: 20,
                                                         ),
-                                                        onPressed: () {},
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
                                                       ),
                                                     ),
                                                   ),
@@ -253,7 +247,7 @@ class _FuncionarioPerfilPageWidgetState
                                                           onTap: () async {
                                                             (selectMode !=
                                                                         null &&
-                                                                    selectMode!)
+                                                                    selectMode)
                                                                 ? log(
                                                                     'asignar button')
                                                                 : context
@@ -318,10 +312,47 @@ class _FuncionarioPerfilPageWidgetState
                                                                     .primaryText,
                                                                 size: 16,
                                                               ),
-                                                              onPressed: () {
-                                                                Utilidades()
-                                                                    .mensajeAdvertencia(
-                                                                        context);
+                                                              onPressed:
+                                                                  () async {
+                                                                Logger().v(
+                                                                    funcionario
+                                                                        .idArea
+                                                                        .toString());
+                                                                final value =
+                                                                    await Navigator
+                                                                        .push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            RegistrarFuncionarioPageWidget(
+                                                                      id: funcionario
+                                                                          .cedula,
+                                                                      funcionarioEditar:
+                                                                          funcionario,
+                                                                      idArea: funcionario
+                                                                          .idArea,
+                                                                    ),
+                                                                  ),
+                                                                ).then((_) async {
+                                                                  funcionario =
+                                                                      await FuncionariosController()
+                                                                          .buscarFuncionarioIndividual(
+                                                                              funcionario.cedula);
+
+                                                                  Future.delayed(
+                                                                      const Duration(
+                                                                          milliseconds:
+                                                                              500),
+                                                                      () {
+// Here you can write your code
+
+                                                                    setState(
+                                                                        () {
+                                                                      // Here you can write your code for open new view
+                                                                    });
+                                                                  });
+                                                                });
                                                               },
                                                             ),
                                                           ),
@@ -334,7 +365,8 @@ class _FuncionarioPerfilPageWidgetState
                                                                     24, 0),
                                                         child: InkWell(
                                                           onTap: () async {
-                                                            context.pop();
+                                                            Navigator.pop(
+                                                                context);
                                                           },
                                                           child: Container(
                                                             width: 40,
@@ -362,16 +394,20 @@ class _FuncionarioPerfilPageWidgetState
                                                                   .transparent,
                                                               borderRadius: 30,
                                                               buttonSize: 46,
+                                                              fillColor: Color(
+                                                                  0x00F1F4F8),
                                                               icon: Icon(
                                                                 Icons
-                                                                    .close_rounded,
+                                                                    .delete_outlined,
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
                                                                     .primaryText,
-                                                                size: 20,
+                                                                size: 22,
                                                               ),
                                                               onPressed: () {
-                                                                context.pop();
+                                                                setState(() {
+                                                                  blur = true;
+                                                                });
                                                               },
                                                             ),
                                                           ),
@@ -525,30 +561,75 @@ class _FuncionarioPerfilPageWidgetState
                                                                 ),
                                                           ),
                                                         ),
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsetsDirectional
-                                                                  .fromSTEB(0,
-                                                                      10, 0, 0),
-                                                          child: Text(
-                                                            area.nombre,
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyText1
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Poppins',
-                                                                  color: FlutterFlowTheme.of(
+                                                        FutureBuilder(
+                                                          future: FuncionariosController()
+                                                              .buscarArea(
+                                                                  funcionario
+                                                                      .idArea
+                                                                      .toString()),
+                                                          builder: (BuildContext
+                                                                  context,
+                                                              AsyncSnapshot<
+                                                                      dynamic>
+                                                                  snapshot) {
+                                                            if (snapshot
+                                                                    .connectionState ==
+                                                                ConnectionState
+                                                                    .done) {
+                                                              return Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0,
+                                                                            10,
+                                                                            0,
+                                                                            0),
+                                                                child: Text(
+                                                                  snapshot.data
+                                                                      .toString(),
+                                                                  style: FlutterFlowTheme.of(
                                                                           context)
-                                                                      .secondaryText,
-                                                                  fontSize: 16,
-                                                                  useGoogleFonts: GoogleFonts
-                                                                          .asMap()
-                                                                      .containsKey(
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .bodyText1Family),
+                                                                      .bodyText1
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Poppins',
+                                                                        color: FlutterFlowTheme.of(context)
+                                                                            .secondaryText,
+                                                                        fontSize:
+                                                                            16,
+                                                                        useGoogleFonts:
+                                                                            GoogleFonts.asMap().containsKey(FlutterFlowTheme.of(context).bodyText1Family),
+                                                                      ),
                                                                 ),
-                                                          ),
+                                                              );
+                                                            } else {
+                                                              return Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0,
+                                                                            10,
+                                                                            0,
+                                                                            0),
+                                                                child: Text(
+                                                                  ' ',
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyText1
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Poppins',
+                                                                        color: FlutterFlowTheme.of(context)
+                                                                            .secondaryText,
+                                                                        fontSize:
+                                                                            16,
+                                                                        useGoogleFonts:
+                                                                            GoogleFonts.asMap().containsKey(FlutterFlowTheme.of(context).bodyText1Family),
+                                                                      ),
+                                                                ),
+                                                              );
+                                                            }
+                                                          },
                                                         ),
                                                       ],
                                                     ),
@@ -1636,8 +1717,8 @@ class _FuncionarioPerfilPageWidgetState
                     onTap: () async {
                       Activo activoBuscado = await ActivoController()
                           .buscarActivo(snapshot.data![index].idSerial);
-                     // ignore: use_build_context_synchronously
-                     await Navigator.push(
+                      // ignore: use_build_context_synchronously
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => ActivoPerfilPageWidget(
@@ -1790,11 +1871,11 @@ class _FuncionarioPerfilPageWidgetState
                                             padding: const EdgeInsetsDirectional
                                                 .fromSTEB(3, 0, 0, 1),
                                             child: Text(
-                                              (snapshot.data![index].numActivo!
+                                              (snapshot.data![index].numActivo
                                                       .isEmpty)
                                                   ? 'No registrado'
                                                   : snapshot
-                                                      .data![index].numActivo!,
+                                                      .data![index].numActivo,
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText2
@@ -1948,7 +2029,7 @@ class _FuncionarioPerfilPageWidgetState
                       var res = funcionarioController.eliminarFuncionario(
                           context, id);
                       if (res == 'ok') {
-                        context.pop();
+                        Navigator.pop(context);
                       }
                     },
                     text: 'Sí, deseo eliminar a este funcionario',

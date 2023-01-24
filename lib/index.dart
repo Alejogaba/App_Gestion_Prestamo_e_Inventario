@@ -18,7 +18,8 @@ export 'vistas/lista_activos_page/lista_activos_page_widget.dart'
     show ListaActivosPageWidget;
 export 'vistas/lista_prestamos_page/lista_prestamos_page_widget.dart'
     show ListaPrestamosPageWidget;
-export 'vistas/resgistrar_activo_page/resgistrar_activo_page_widget.dart'
+export 'vistas/resgistrar_activo_page/resgistrar_activo_computo_page_widget.dart'
     show ResgistrarActivoPageWidget;
 export 'vistas/registrar_prestamo_page/registrar_prestamo_page_widget.dart'
     show RegistrarPrestamoPageWidget;
+    

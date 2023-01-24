@@ -8,6 +8,7 @@ import 'package:app_gestion_prestamo_inventario/entidades/funcionario.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/hoja_salida.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/prestamo.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,7 +29,7 @@ class PrestamosController {
       context, String idActivo, String idFuncionario, String? fechaHoraInicio,
       {bool entregado = false,
       String? observacion,
-      String? fechaHoraFinal}) async {
+      DateTime? fechaHoraFinal}) async {
     try {
       await supabase.from('PRESTAMOS').insert({
         'ID_FUNCIONARIO': idFuncionario,
@@ -39,8 +40,8 @@ class PrestamosController {
         'ENTREGADO': entregado,
         'OBSERVACION': observacion,
         'FECHA_HORA_FINAL': (fechaHoraFinal == null)
-            ? DateTime.now().toString()
-            : fechaHoraFinal.toString(),
+            ? DateFormat.yMd('es_CO').format(DateTime.now())
+            : DateFormat.yMd('es_CO').format(fechaHoraFinal),
       }).then((value) async {
         log('Nuevo activo prestado: $value');
         await supabase
@@ -202,7 +203,7 @@ class PrestamosController {
     }
   }
 
-  Future<List<Prestamo>> getActivosPrestados(
+  Future<List<Prestamo>> getActivosPrestados( 
       {String? idFuncionario,
       String? idActivo,
       bool? soloMostarSinEntregar}) async {

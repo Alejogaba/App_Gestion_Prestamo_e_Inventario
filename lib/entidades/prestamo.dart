@@ -1,3 +1,5 @@
+import '../flutter_flow/flutter_flow_util.dart';
+
 class Prestamo {
   int id;
   String idActivo;
@@ -15,10 +17,10 @@ class Prestamo {
       map['ID'] ?? 0,
       map['ID_ACTIVO'] ?? '',
       map['ID_FUNCIONARIO'] ?? '',
-      DateTime.parse(map['FECHA_HORA_INICIO'].toString()),
+      DateTime.parse((map['FECHA_HORA_INICIO'].toString())),
       map['ENTREGADO'] ?? false,
       observacion: map['OBSERVACION'] ?? '',
-      fechaHoraEntrega:DateTime.parse(map['FECHA_HORA_FINAL'].toString()),
+      fechaHoraEntrega:DateFormat.yMd('es_CO').parse((map['FECHA_HORA_FINAL'].toString())),
     );
   }
 }

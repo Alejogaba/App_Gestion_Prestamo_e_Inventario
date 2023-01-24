@@ -93,9 +93,11 @@ class _MyAppState extends State<MyApp> {
       localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
+             GlobalCupertinoLocalizations.delegate,
+
       ],
      supportedLocales: [
-          const Locale('es'),
+          const Locale('es','CO'),
       ],
       locale: const Locale('es'),
       title: 'InventariadoApp',

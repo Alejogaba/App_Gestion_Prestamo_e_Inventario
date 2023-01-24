@@ -27,17 +27,22 @@ class ListaActivosPageWidget extends StatefulWidget {
   final int idCategoria;
   final bool selectMode;
   final bool esPrestamo;
+  final bool escogerComponente;
   const ListaActivosPageWidget(
       {Key? key,
       required this.idCategoria,
       this.selectMode = false,
-      this.esPrestamo = false})
+      this.esPrestamo = false,
+      this.escogerComponente = false})
       : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
   _ListaActivosPageWidgetState createState() => _ListaActivosPageWidgetState(
-      this.idCategoria, this.selectMode, this.esPrestamo);
+      this.idCategoria,
+      this.selectMode,
+      this.esPrestamo,
+      this.escogerComponente);
 }
 
 class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
@@ -51,9 +56,9 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
   bool selectMode;
   bool esPrestamo;
   Categoria categoria = Categoria('Activos', '', '');
-
-  _ListaActivosPageWidgetState(
-      this.idCategoria, this.selectMode, this.esPrestamo);
+  bool escogerComponente;
+  _ListaActivosPageWidgetState(this.idCategoria, this.selectMode,
+      this.esPrestamo, this.escogerComponente);
 
   @override
   void initState() {
@@ -114,58 +119,72 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                           true, // whether to show the flash icon
                           ScanMode.BARCODE)
                       .then((value) async {
-                    if (value != null) {
+                    if (value.length<3) {
                       ActivoController activoController = ActivoController();
                       var res = await activoController.buscarActivo(value);
                       if (res.idSerial.length < 4) {
                         // ignore: use_build_context_synchronously
-                        context.pushNamed(
-                          'registraractivopage',
-                          queryParams: {
-                            'idSerial': serializeParam(
-                              value.trim().replaceAll(".", ""),
-                              ParamType.String,
+                         final e =await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ResgistrarActivoPageWidget(
+                              idSerial: value.trim().replaceAll(".", ""),
+            
                             ),
-                            'selectMode': serializeParam(
-                              false,
-                              ParamType.bool,
-                            ),
-                          },
-                        );
+                          ),
+                        ).then((value) {
+                          Future.delayed(Duration(milliseconds: 500), () {
+                            setState(() {});
+                          });
+                        });
+                        
+                        
                       } else {
                         // ignore: use_build_context_synchronously
-                        await Navigator.push(
+                        final e =await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ActivoPerfilPageWidget(
                               activo: res,
                               selectMode: selectMode,
                               esPrestamo: esPrestamo,
+                              escogerComponente: escogerComponente,
                             ),
                           ),
-                        );
+                        ).then((value) {
+                          Future.delayed(Duration(milliseconds: 500), () {
+                            setState(() {});
+                          });
+                        });
                       }
-                      setState(() {});
+                      
                     }
                   });
                 },
               ),
             SpeedDialChild(
-              child: Icon(Icons.add),
-              backgroundColor: Color.fromARGB(255, 7, 133, 107),
-              foregroundColor: Colors.white,
-              label: 'Registrar nuevo activo',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => context.pushNamed(
-                'registraractivopage',
-                queryParams: {
-                  'idSerial': serializeParam(
-                    null,
-                    ParamType.String,
-                  )
-                },
-              ),
-            ),
+                child: Icon(Icons.add),
+                backgroundColor: Color.fromARGB(255, 7, 133, 107),
+                foregroundColor: Colors.white,
+                label: 'Registrar nuevo activo',
+                labelStyle: TextStyle(fontSize: 18.0),
+                onTap: () async {
+                    final e =await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ResgistrarActivoPageWidget(
+                              
+            
+                            ),
+                          ),
+                        ).then((value) {
+                          Future.delayed(Duration(milliseconds: 500), () {
+                            
+                            setState(() {});
+                          });
+                        });
+                        
+                }),
             SpeedDialChild(
               child: Icon(Icons.category_rounded),
               foregroundColor: Colors.white,
@@ -428,6 +447,8 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                             .data![index],
                                                         selectMode: selectMode,
                                                         esPrestamo: selectMode,
+                                                        escogerComponente:
+                                                            escogerComponente,
                                                       ),
                                                     ),
                                                   );
@@ -439,7 +460,8 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                   }
                                                 }
                                               } else {
-                                                await Navigator.push(
+                                                final Activo? result =
+                                                    await Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) =>
@@ -448,9 +470,18 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                           snapshot.data![index],
                                                       selectMode: selectMode,
                                                       esPrestamo: esPrestamo,
+                                                      escogerComponente:
+                                                          escogerComponente,
                                                     ),
                                                   ),
                                                 );
+                                                if (result != null) {
+                                                  // ignore: use_build_context_synchronously
+                                                  Navigator.pop(
+                                                      context, result);
+                                                } else {
+                                                  setState(() {});
+                                                }
                                               }
                                             },
                                             child: Opacity(
@@ -458,7 +489,7 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                           selectMode &&
                                                           snapshot.data![index]
                                                               .estaPrestado) ||
-                                                      (selectMode &&
+                                                      (selectMode && !esPrestamo &&
                                                           snapshot.data![index]
                                                               .estaAsignado))
                                                   ? 0.4
@@ -534,12 +565,12 @@ Widget tarjetaActivo(context, Activo activo,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: FastCachedImage(
+            child: Image.network(activo.urlImagen,
               width: double.infinity,
               height: 125,
-              url: activo.urlImagen,
+              
               fit: BoxFit.cover,
-              fadeInDuration: const Duration(seconds: 1),
+              
               errorBuilder: (context, exception, stacktrace) {
                 log(stacktrace.toString());
                 return Image.asset(
@@ -549,26 +580,7 @@ Widget tarjetaActivo(context, Activo activo,
                   fit: BoxFit.cover,
                 );
               },
-              loadingBuilder: (context, progress) {
-                return Container(
-                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      if (progress.isDownloading && progress.totalBytes != null)
-                        Text(
-                            '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
-                            style: const TextStyle(color: Color(0xFF006D38))),
-                      SizedBox(
-                          width: 120,
-                          height: 120,
-                          child: CircularProgressIndicator(
-                              color: const Color(0xFF006D38),
-                              value: progress.progressPercentage.value)),
-                    ],
-                  ),
-                );
-              },
+              
             ),
           ),
           Padding(
@@ -613,10 +625,11 @@ Widget tarjetaActivo(context, Activo activo,
                 padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                 child: FaIcon(
                   FontAwesomeIcons.solidCircle,
-                  color: definirColorEstado(activo.estado,selectMode: selectMode,
-                          esPrestamos: esPrestamos,
-                          estaAsignado: estaAsignado,
-                          estaPrestado: estaPrestado),
+                  color: definirColorEstado(activo.estado,
+                      selectMode: selectMode,
+                      esPrestamos: esPrestamos,
+                      estaAsignado: estaAsignado,
+                      estaPrestado: estaPrestado),
                   size: 10,
                 ),
               ),

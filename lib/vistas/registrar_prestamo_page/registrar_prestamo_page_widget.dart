@@ -88,7 +88,7 @@ class _RegistrarPrestamoPageWidgetState
                 // ignore: use_build_context_synchronously
                 result = await prestamosController.registrarPrestamo(
                     context, activo.idSerial, funcionario!.cedula, fecha_inicio,
-                    fechaHoraFinal: fecha_fin,
+                    fechaHoraFinal: (fecha_fin!=null)?DateTime.parse(fecha_fin):null,
                     observacion: controladorObservacion.text);
                 if (result.contains('ok')) {
                   listaRespuesta.add(result);
@@ -561,20 +561,21 @@ class _RegistrarPrestamoPageWidgetState
                     (funcionario != null)
                         ? GestureDetector(
                             onTap: () async {
-                              final Funcionario? result =
-                                  await context.pushNamed<Funcionario>(
-                                'listaSeleccionFuncionariosPage',
-                              );
-                              if (result != null) {
-                                Logger().i('Activo devuelto:${result.nombres}');
-                                await FastCachedImageConfig.deleteCachedImage(
-                                    imageUrl: funcionario!.urlImagen);
-                                setState(() {
+                              
+                                              final Funcionario? result =
+                                                    await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ListaSeleccionFuncionariosPageWidget(
+                                                    ),
+                                                  ),
+                                                );
+                                                if (result != null) {
+                                                   setState(() {
                                   funcionario = result;
                                 });
-                                await Future.delayed(const Duration(seconds: 2),
-                                    () => setState(() {}));
-                              }
+                                                }
                             },
                             child: Padding(
                               padding:
@@ -694,9 +695,9 @@ class _RegistrarPrestamoPageWidgetState
                                                         (funcionario!.apellidos !=
                                                                     null &&
                                                                 funcionario!
-                                                                    .apellidos!
+                                                                    .apellidos
                                                                     .isNotEmpty)
-                                                            ? '${funcionario!.nombres.split(' ')[0]} ${funcionario!.apellidos!.split(' ')[0]}'
+                                                            ? '${funcionario!.nombres.split(' ')[0]} ${funcionario!.apellidos.split(' ')[0]}'
                                                             : funcionario!
                                                                 .nombres,
                                                         style:
@@ -839,18 +840,23 @@ class _RegistrarPrestamoPageWidgetState
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () async {
-                                      final Funcionario? result =
-                                          await context.pushNamed<Funcionario>(
-                                        'listaSeleccionFuncionariosPage',
-                                      );
-                                      if (result != null) {
-                                        Logger().i(
-                                            'Activo devuelto:${result.nombres}');
-
-                                        setState(() {
-                                          funcionario = result;
-                                        });
-                                      }
+                              
+                                              final Funcionario? result =
+                                                    await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ListaSeleccionFuncionariosPageWidget(
+                    
+                                                      
+                                                    ),
+                                                  ),
+                                                );
+                                                if (result != null) {
+                                                   setState(() {
+                                  funcionario = result;
+                                });
+                                                }
                                     },
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
@@ -1196,7 +1202,7 @@ class _RegistrarPrestamoPageWidgetState
                       if (res.contains('GTI')) {
                         bool guardado = await PdfApi().generarHojaSalida(
                             listActivos, funcionario,
-                            numConsecutivo: res);
+                            numConsecutivo: res,controladorObservacion.text);
                         if (guardado) {
                           // ignore: use_build_context_synchronously
                           contextPadre.pop();
@@ -1426,7 +1432,7 @@ class _RegistrarPrestamoPageWidgetState
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       5, 3, 8, 1),
                                   child: AutoSizeText(
-                                    'N° inventario: ${(activo.numActivo!.isEmpty) ? 'No registrado' : activo.numActivo}',
+                                    'N° inventario: ${(activo.numActivo.isEmpty) ? 'No registrado' : activo.numActivo}',
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.ellipsis,
                                     style: FlutterFlowTheme.of(context)

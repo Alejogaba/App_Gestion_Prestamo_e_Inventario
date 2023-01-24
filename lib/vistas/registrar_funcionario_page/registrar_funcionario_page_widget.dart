@@ -13,6 +13,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../entidades/activo.dart';
@@ -35,15 +36,20 @@ class RegistrarFuncionarioPageWidget extends StatefulWidget {
   final String? operacionaRealizar;
   final String? id;
   final Funcionario? funcionarioEditar;
+  final int idArea;
 
   const RegistrarFuncionarioPageWidget(
-      {Key? key, this.operacionaRealizar, this.id, this.funcionarioEditar})
+      {Key? key,
+      this.operacionaRealizar,
+      this.id,
+      this.funcionarioEditar,
+      this.idArea = 0})
       : super(key: key);
 
   @override
   _RegistrarFuncionarioPageWidgetState createState() =>
-      _RegistrarFuncionarioPageWidgetState(
-          this.operacionaRealizar, this.id, this.funcionarioEditar);
+      _RegistrarFuncionarioPageWidgetState(this.operacionaRealizar, this.id,
+          this.funcionarioEditar, this.idArea);
 }
 
 class _RegistrarFuncionarioPageWidgetState
@@ -60,6 +66,17 @@ class _RegistrarFuncionarioPageWidgetState
   TextEditingController textControllerEnlaceSIGEP = TextEditingController();
   TextEditingController textControllerCargo = TextEditingController();
   Area? dropDownValueArea;
+  List<Area> dropDownList = [
+    Area(
+        id: 1,
+        nombre: 'Oficina de las TICs',
+        urlImagen:
+            'https://sp-ao.shortpixel.ai/client/q_glossy,ret_img,w_800/https://www.tecnoroute.com/wp-content/uploads/2020/04/servicio-tecnico-1.png'),
+    Area(
+        id: 2,
+        nombre: 'Ambiente',
+        urlImagen: 'https://cdn-icons-png.flaticon.com/512/892/892917.png')
+  ];
   int? countControllerValue = 1;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List<Area> listAreas = [];
@@ -113,13 +130,14 @@ class _RegistrarFuncionarioPageWidgetState
   ];
 
   _RegistrarFuncionarioPageWidgetState(
-      this.operacionaRealizar, this.id, this.funcionarioEditar);
+      this.operacionaRealizar, this.id, this.funcionarioEditar, this.idArea);
 
   // ignore: prefer_final_fields5
 
   @override
   void initState() {
     super.initState();
+    Logger().v(idArea);
     if (funcionarioEditar != null) {
       textControllerApellidos.text = funcionarioEditar!.apellidos.toString();
       textControllerCedula.text = funcionarioEditar!.cedula.toString();
@@ -130,8 +148,13 @@ class _RegistrarFuncionarioPageWidgetState
           ? textControllerTelefono_2.text =
               funcionarioEditar!.telefono2.toString()
           : textControllerTelefono_2.text = "";
+      (funcionarioEditar!.enlaceSIGEP != null)
+          ? textControllerEnlaceSIGEP.text =
+              funcionarioEditar!.enlaceSIGEP.toString()
+          : textControllerEnlaceSIGEP.text = "";
       textControllerCargo.text = funcionarioEditar!.cargo.toString();
-      dropDownValueArea!.id = funcionarioEditar!.idArea;
+
+      
     } else {
       id != null
           ? textControllerApellidos.text = id.toString()
@@ -203,21 +226,21 @@ class _RegistrarFuncionarioPageWidgetState
                 String res = '';
                 // ignore: use_build_context_synchronously
                 if (imagenUrl != 'error') {
-                   if(funcionarioEditar!=null){
+                  if (funcionarioEditar != null) {
                     res = await registrarFuncionario(
-                      funcionarioController, context, imagenUrl,editar:true);
-                   }else{
+                        funcionarioController, context, imagenUrl,
+                        editar: true);
+                  } else {
                     res = await registrarFuncionario(
-                      funcionarioController, context, imagenUrl);
+                        funcionarioController, context, imagenUrl);
+                  }
 
-                   }
-                  
                   if (res == 'ok') {
                     setState(() {
                       blur = false;
                     });
                     Timer(Duration(seconds: 3), () {
-                      context.pop();
+                      Navigator.pop(context);
                     });
                   }
                 } else {
@@ -228,25 +251,24 @@ class _RegistrarFuncionarioPageWidgetState
               } else {
                 FuncionariosController funcionarioController =
                     FuncionariosController();
-                    String res = 'error';
-                    if(funcionarioEditar!=null){
-                      res = await registrarFuncionario(
-                    funcionarioController,
-                    context,
-                    funcionarioEditar!.urlImagen,editar: true);
-                    }else{
-                      res = await registrarFuncionario(
-                    funcionarioController,
-                    context,
-                    'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png');
-                    }
-                
+                String res = 'error';
+                if (funcionarioEditar != null) {
+                  res = await registrarFuncionario(funcionarioController,
+                      context, funcionarioEditar!.urlImagen,
+                      editar: true);
+                } else {
+                  res = await registrarFuncionario(
+                      funcionarioController,
+                      context,
+                      'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png');
+                }
+
                 if (res == 'ok') {
                   setState(() {
                     blur = false;
                   });
                   Timer(Duration(seconds: 3), () {
-                    context.pop();
+                    Navigator.pop(context);
                   });
                 }
               }
@@ -308,7 +330,7 @@ class _RegistrarFuncionarioPageWidgetState
         automaticallyImplyLeading: false,
         leading: InkWell(
           onTap: () async {
-            context.pop();
+            Navigator.pop(context);
           },
           child: Icon(
             Icons.chevron_left_rounded,
@@ -497,7 +519,12 @@ class _RegistrarFuncionarioPageWidgetState
                                                   inputNumero,
                                                   true,
                                                   null,
-                                                  _focusNodeCedula, esSoloLectura: (funcionarioEditar!=null) ? true : false),
+                                                  _focusNodeCedula,
+                                                  esSoloLectura:
+                                                      (funcionarioEditar !=
+                                                              null)
+                                                          ? true
+                                                          : false),
                                             ),
                                           )
                                         ],
@@ -641,17 +668,22 @@ class _RegistrarFuncionarioPageWidgetState
                                                                             ),
                                                                       )))
                                                           : List.generate(
-                                                              0,
-                                                              (index) =>
-                                                                  DropdownMenuItem(
-                                                                      value:
-                                                                          null,
-                                                                      child: Text(
-                                                                          ''))),
-                                                      onChanged: (val) =>
+                                                              dropDownList
+                                                                  .length,
+                                                              (index) => DropdownMenuItem(
+                                                                  value:
+                                                                      dropDownList[
+                                                                          index],
+                                                                  child: Text(dropDownList[
+                                                                          index]
+                                                                      .nombre))),
+                                                      onChanged: (val) {
+                                                        if (val != null) {
                                                           setState(() =>
                                                               dropDownValueArea =
-                                                                  val),
+                                                                  val);
+                                                        }
+                                                      },
                                                       height: 50,
                                                       textStyle:
                                                           FlutterFlowTheme.of(
@@ -669,8 +701,17 @@ class _RegistrarFuncionarioPageWidgetState
                                                                             .bodyText1Family),
                                                               ),
                                                       hintText: 'Área*',
-                                                      initialOption: (funcionarioEditar!=null) ? snapshot
-                                                                  .data![funcionarioEditar!.idArea] : null,
+                                                      initialOption:
+                                                          (funcionarioEditar !=
+                                                                      null &&
+                                                                  snapshot
+                                                                      .hasData &&
+                                                                  snapshot.connectionState ==
+                                                                      ConnectionState
+                                                                          .done)
+                                                              ? snapshot.data![
+                                                                  idArea - 1]
+                                                              : dropDownList[0],
                                                       fillColor:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -950,7 +991,8 @@ class _RegistrarFuncionarioPageWidgetState
       esNumero,
       bool _esObligatorio,
       sufix,
-      _focusNode, {bool esSoloLectura=false}) {
+      _focusNode,
+      {bool esSoloLectura = false}) {
     return TextFormField(
       readOnly: esSoloLectura,
       validator: (_esObligatorio)
@@ -1046,7 +1088,8 @@ class _RegistrarFuncionarioPageWidgetState
   Future<String> registrarFuncionario(
       FuncionariosController funcionarioController,
       BuildContext context,
-      String? imagenUrl, {bool editar=false}) async {
+      String? imagenUrl,
+      {bool editar = false}) async {
     var res = await funcionarioController.addFuncionario(
         context: context,
         apellidos: textControllerApellidos.text,
@@ -1058,7 +1101,8 @@ class _RegistrarFuncionarioPageWidgetState
         idArea: dropDownValueArea!.id,
         telefono1: textControllerTelefono_1.text,
         telefono2: textControllerTelefono_2.text,
-        enlaceSIGEP: textControllerEnlaceSIGEP.text,editar: editar);
+        enlaceSIGEP: textControllerEnlaceSIGEP.text,
+        editar: editar);
     return res;
   }
 
@@ -1212,27 +1256,40 @@ class _RegistrarFuncionarioPageWidgetState
   }
 
   Widget _decideImageView(imageFile) {
-   if (funcionarioEditar!=null) {
+    if (funcionarioEditar != null) {
       return Image.network(
         funcionarioEditar!.urlImagen,
         width: 250,
         height: 200,
         fit: BoxFit.cover,
       );
-    } else if(imageFile == null){
+    } else if (imageFile == null) {
       return const Center(
         child: Icon(
           FontAwesomeIcons.camera,
           size: 40,
         ),
       );
-    }else{
+    } else {
       return Image.file(
         imageFile,
         width: 250,
         height: 200,
         fit: BoxFit.cover,
       );
+    }
+  }
+
+  Future<void> cargarFuncionarioDropdown(int idArea) async {
+    Logger().v('idAre: $idArea');
+    Area? res;
+    Logger().v('Cargando area...');
+    res = await FuncionariosController().buscarArea(idArea.toString());
+    Logger().v(res.nombre.toString());
+    if (res.nombre.isNotEmpty) {
+      setState(() {
+        dropDownValueArea = res!;
+      });
     }
   }
 }

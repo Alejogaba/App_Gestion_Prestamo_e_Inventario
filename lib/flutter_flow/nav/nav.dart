@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router_flow/go_router_flow.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../../vistas/resgistrar_activo_page/resgistrar_activo_computo_page_widget.dart';
 import '../flutter_flow_theme.dart';
 
 import '../../index.dart';
@@ -120,9 +121,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'funcionarioPerfilPage',
               builder: (context, params) => FuncionarioPerfilPageWidget(
                   funcionario:
-                      params.getParam('funcionario', ParamType.Funcionario),
-                  area: params.getParam('area', ParamType.Area),
-                  selectMode: params.getParam('selectMode', ParamType.bool)),
+                      params.getParam('funcionario', ParamType.Funcionario)),
             ),
             FFRoute(
               name: 'ActivoPerfilPage',
@@ -159,10 +158,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 operacionaRealizar:
                     params.getParam('operacionaRealizar', ParamType.String),
                 idSerial: params.getParam('idSerial', ParamType.String),
-                categoria: params.getParam('categoria', ParamType.String),
+                idCategoria: params.getParam('idCategoria', ParamType.int),
                 activoEditar: params.getParam('activoEditar', ParamType.Activo),
               ),
             ),
+            
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ).toRoute(appStateNotifier),
       ],

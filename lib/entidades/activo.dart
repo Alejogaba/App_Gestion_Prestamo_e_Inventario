@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
+
 class Activo {
   String idSerial;
-  String? numActivo;
+  String numActivo;
   String nombre;
-  String? detalles;
+  String detalles;
   String urlImagen;
   int estado;
   int idCategoria;
@@ -14,12 +16,14 @@ class Activo {
   String? capacidad;
   bool estaAsignado;
   bool estaPrestado;
+  String detallesExtra;
+  TextEditingController controlador = TextEditingController();
 
   Activo(
       {this.idSerial = '',
-      this.numActivo,
+      this.numActivo = '',
       this.nombre = '',
-      this.detalles,
+      this.detalles = 'Genérico',
       this.urlImagen = '',
       this.estado = 0,
       this.idCategoria = 0,
@@ -27,7 +31,8 @@ class Activo {
       this.cantidad = 1,
       this.capacidad,
       this.estaAsignado = false,
-      this.estaPrestado = false});
+      this.estaPrestado = false,
+      this.detallesExtra = ''});
 
   factory Activo.fromMap(Map<String, dynamic> map) {
     return Activo(

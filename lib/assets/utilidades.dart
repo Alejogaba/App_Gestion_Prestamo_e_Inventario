@@ -142,7 +142,7 @@ class Utilidades {
       }
     } else {
       rango = DateTimeRange(start: now, end: fin);
-      duracion = rango.duration.inDays;
+      duracion = rango.duration.inDays+1;
       if (duracion < 8) {
         switch (duracion) {
           case 0:

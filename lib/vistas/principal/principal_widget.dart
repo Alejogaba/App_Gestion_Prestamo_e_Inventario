@@ -121,44 +121,47 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
               label: 'Buscar por código de barras',
               labelStyle: TextStyle(fontSize: 18.0),
               onTap: () async {
-                await FlutterBarcodeScanner.scanBarcode(
-                        '#C62828', // scanning line color
-                        'Cancelar', // cancel button text
-                        true, // whether to show the flash icon
-                        ScanMode.BARCODE)
-                    .then((value) async {
-                  if (value != null && value.length > 4) {
-                    ActivoController activoController = ActivoController();
-                    var res = await activoController.buscarActivo(value);
-                    if (res.idSerial.length < 4) {
-                      // ignore: use_build_context_synchronously
-                      context.pushNamed(
-                        'registraractivopage',
-                        queryParams: {
-                          'idSerial': serializeParam(
-                            value.trim().replaceAll(".", ""),
-                            ParamType.String,
-                          )
-                        },
-                      );
-                    } else {
-                      // ignore: use_build_context_synchronously
-                      context.pushNamed(
-                        'activoPerfilPage',
-                        queryParams: {
-                          'idActivo': serializeParam(
-                            res.idSerial,
-                            ParamType.String,
+                  await FlutterBarcodeScanner.scanBarcode(
+                          '#C62828', // scanning line color
+                          'Cancelar', // cancel button text
+                          true, // whether to show the flash icon
+                          ScanMode.BARCODE)
+                      .then((value) async {
+                    if (value != null) {
+                      ActivoController activoController = ActivoController();
+                      var res = await activoController.buscarActivo(value);
+                      if (res.idSerial.length < 4) {
+                        // ignore: use_build_context_synchronously
+                        context.pushNamed(
+                          'registraractivopage',
+                          queryParams: {
+                            'idSerial': serializeParam(
+                              value.trim().replaceAll(".", ""),
+                              ParamType.String,
+                            ),
+                            'selectMode': serializeParam(
+                              false,
+                              ParamType.bool,
+                            ),
+                          },
+                        );
+                      } else {
+                        // ignore: use_build_context_synchronously
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ActivoPerfilPageWidget(
+                              activo: res,
+                              selectMode: false,
+                              esPrestamo: false,
+                              escogerComponente: false,
+                            ),
                           ),
-                          'selectMode': serializeParam(
-                            false,
-                            ParamType.bool,
-                          ),
-                        },
-                      );
+                        );
+                      }
+                      setState(() {});
                     }
-                  }
-                });
+                  });
               },
             ),
             SpeedDialChild(
@@ -202,7 +205,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                   color: FlutterFlowTheme.of(context).primaryText),
               automaticallyImplyLeading: false,
               title: AutoSizeText(
-                'Activos',
+                'Inventario',
                 style: FlutterFlowTheme.of(context).bodyText1.override(
                       fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
                       color: FlutterFlowTheme.of(context).whiteColor,
@@ -240,111 +243,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 12, 0, 0),
-                                            child: TextFormField(
-                                              controller:
-                                                  textControllerBusqueda,
-                                              onChanged: (_) =>
-                                                  EasyDebounce.debounce(
-                                                'textController',
-                                                Duration(milliseconds: 2000),
-                                                () => setState(() {}),
-                                              ),
-                                              obscureText: false,
-                                              decoration: InputDecoration(
-                                                labelText: 'Buscar activo...',
-                                                labelStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyText2
-                                                        .override(
-                                                          fontFamily: 'Poppins',
-                                                          color:
-                                                              Color(0xFF57636C),
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                          useGoogleFonts: GoogleFonts
-                                                                  .asMap()
-                                                              .containsKey(
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyText2Family),
-                                                        ),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .secondaryText,
-                                                    width: 1,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .secondaryText,
-                                                    width: 1,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                                errorBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: Color(0x00000000),
-                                                    width: 1,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                                focusedErrorBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: Color(0x00000000),
-                                                    width: 1,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                ),
-                                                filled: true,
-                                                fillColor:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                                prefixIcon: Icon(
-                                                  Icons.search_rounded,
-                                                  color: Color(0xFF57636C),
-                                                ),
-                                              ),
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText1
-                                                      .override(
-                                                        fontFamily: 'Poppins',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryText,
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                        useGoogleFonts: GoogleFonts
-                                                                .asMap()
-                                                            .containsKey(
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyText1Family),
-                                                      ),
-                                              maxLines: null,
-                                            ),
-                                          ),
-                                        ),
+                                        
                                       ],
                                     ),
                                   ),

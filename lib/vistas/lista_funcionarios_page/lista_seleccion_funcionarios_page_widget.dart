@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/categoria.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/funcionario.dart';
+import 'package:app_gestion_prestamo_inventario/index.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
 import 'package:app_gestion_prestamo_inventario/vistas/lista_funcionarios_page/lista_funcionarios_page_widget.dart';
 import 'package:fast_cached_network_image/fast_cached_network_image.dart';
@@ -377,34 +378,23 @@ class _ListaSeleccionFuncionariosPageWidgetState
                                           return GestureDetector(
                                             onTap: () async {
                                               final Funcionario? result =
-                                                  await context
-                                                      .pushNamed<Funcionario>(
-                                                'funcionarioPerfilPage',
-                                                queryParams: {
-                                                  'funcionario': serializeParam(
-                                                    snapshot.data![index],
-                                                    ParamType.Funcionario,
+                                                    await Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        FuncionarioPerfilPageWidget(
+                                                      funcionario:
+                                                          snapshot.data![index],
+                                                      selectMode: true,
+                                                      
+                                                    ),
                                                   ),
-                                                  'area': serializeParam(
-                                                    Area(
-                                                        id: 1,
-                                                        nombre:
-                                                            'Oficina de las TICs',
-                                                        urlImagen: ''),
-                                                    ParamType.Area,
-                                                  ),
-                                                  'selectMode': serializeParam(
-                                                    true,
-                                                    ParamType.bool,
-                                                  ),
-                                                },
-                                              );
-                                              if (result != null) {
-                                                // ignore: use_build_context_synchronously
-                                                context.pop(result);
-                                              }
-
-                                              setState(() {});
+                                                );
+                                                if (result != null) {
+                                                  // ignore: use_build_context_synchronously
+                                                  Navigator.pop(
+                                                      context, result);
+                                                } 
                                             },
                                             child: tarjetaActivo(
                                                 context, snapshot.data![index]),
@@ -508,8 +498,8 @@ Widget tarjetaActivo(context, Funcionario funcionario) {
                     children: [
                       Text(
                         (funcionario.apellidos != null &&
-                                funcionario.apellidos!.isNotEmpty)
-                            ? '${funcionario.nombres.split(' ')[0]} ${funcionario.apellidos!.split(' ')[0]}'
+                                funcionario.apellidos.isNotEmpty)
+                            ? '${funcionario.nombres.split(' ')[0]} ${funcionario.apellidos.split(' ')[0]}'
                             : funcionario.nombres,
                         style: FlutterFlowTheme.of(context).title3.override(
                               fontFamily: 'Poppins',
