@@ -207,6 +207,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
       textControllerNombre.text = activoEditar!.nombre.toString();
       textControllerDetalles!.text = activoEditar!.detalles.toString();
       imageEdit = activoEditar!.urlImagen.toString();
+      dropDownValueCategoria.nombre = activoEditar!.categoria.toString();
       idCategoriaValue = activoEditar!.idCategoria;
     } else {
       idSerial != null
