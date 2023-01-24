@@ -561,7 +561,7 @@ class _FuncionarioPerfilPageWidgetState
                                                                 ),
                                                           ),
                                                         ),
-                                                        FutureBuilder(
+                                                        FutureBuilder<Area>(
                                                           future: FuncionariosController()
                                                               .buscarArea(
                                                                   funcionario
@@ -585,7 +585,7 @@ class _FuncionarioPerfilPageWidgetState
                                                                             0,
                                                                             0),
                                                                 child: Text(
-                                                                  snapshot.data
+                                                                  snapshot.data.nombre
                                                                       .toString(),
                                                                   style: FlutterFlowTheme.of(
                                                                           context)

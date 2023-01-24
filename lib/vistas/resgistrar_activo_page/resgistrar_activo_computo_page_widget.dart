@@ -48,7 +48,7 @@ import '../lista_activos_page/lista_activos_page_widget.dart';
 class ResgistrarActivoPageWidget extends StatefulWidget {
   final String? operacionaRealizar;
   final String? idSerial;
-  final int? idCategoria;
+  final int idCategoria;
   final Activo? activoEditar;
   final List<Activo>? listComponentesExActivos;
   final List<ComponenteInterno>? listComponentesInternos;
@@ -57,7 +57,7 @@ class ResgistrarActivoPageWidget extends StatefulWidget {
       {Key? key,
       this.operacionaRealizar,
       this.idSerial,
-      this.idCategoria,
+      this.idCategoria = 0,
       this.activoEditar,
       this.listComponentesInternos,
       this.listComponentesExActivos,
@@ -84,7 +84,11 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   TextEditingController textControllerNombre = TextEditingController();
   TextEditingController? textControllerDetalles = TextEditingController();
   TextEditingController? controladorimagenUrl = TextEditingController();
-  Categoria? dropDownValueCategoria;
+  Categoria dropDownValueCategoria = Categoria(
+      id: 3,
+      'Proyectores',
+      'https://mainframeltda.com/wp-content/uploads/2019/04/Que_es_un_proyector_de_video-1100x825.jpg',
+      'Proyectores y video beams utilizados para presentaciones');
   int? idCategoriaValue;
   String? dropDownvalueTipoLicencia;
   int? countControllerValue = 1;
@@ -118,7 +122,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   Activo? activo;
   final String? operacionaRealizar;
   final String? idSerial;
-  final int? idCategoria;
+  int idCategoria = 0;
   final Activo? activoEditar;
 
   List<Activo> listComponentesExActivos = [];
@@ -308,7 +312,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
             Logger().v(
                 _formKey.currentState!.validate() && idCategoriaValue != null);
             if (_formKey.currentState!.validate() &&
-                dropDownValueCategoria != null) {
+                idCategoria > 0) {
               setState(() {
                 blur = true;
               });
@@ -350,7 +354,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
 
                   if (res == 'ok') {
                     Future.delayed(const Duration(seconds: 1), () {
-                      if (dropDownValueCategoria!.id != 8) {
+                      if (idCategoria != 8) {
                         setState(() {
                           blur = false;
                         });
@@ -396,7 +400,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
 
                   if (res == 'ok') {
                     Future.delayed(const Duration(seconds: 1), () {
-                      if (dropDownValueCategoria!.id != 8) {
+                      if (idCategoria != 8) {
                         setState(() {
                           blur = false;
                         });
@@ -418,7 +422,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                   });
                 }
               }
-            } else if (dropDownValueCategoria == null) {
+            } else if (idCategoria<=0) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                   "Seleccione una categoria",
@@ -930,140 +934,168 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                           ),
                                         ),
                                       ),
-                                      Container(
-                                        width: anchoColumnaWrap,
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 12, 0, 0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Expanded(
-                                                child: Align(
-                                                  alignment:
-                                                      AlignmentDirectional(
-                                                          0, 0),
-                                                  child: Padding(
+                                      FutureBuilder<List<Categoria>>(
+                                        future: _listaCategorias,
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<dynamic> snapshot) {
+                                          if (snapshot.connectionState ==
+                                                  ConnectionState.done &&
+                                              snapshot.hasData) {
+                                            return Container(
+                                              width: anchoColumnaWrap,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
                                                     padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 16, 0, 20),
-                                                    child: FutureBuilder<
-                                                        List<Categoria>>(
-                                                      future: _listaCategorias,
-                                                      builder:
-                                                          (BuildContext context,
-                                                              snapshot) {
-                                                        return FlutterFlowDropDown<
-                                                            Categoria>(
-                                                          value:
-                                                              dropDownValueCategoria,
-                                                          options: (snapshot.connectionState ==
-                                                                      ConnectionState
-                                                                          .done &&
-                                                                  listCategorias
-                                                                      .isNotEmpty)
-                                                              ? List.generate(
-                                                                  snapshot.data!
-                                                                      .length,
-                                                                  (index) =>
-                                                                      DropdownMenuItem(
-                                                                          value: snapshot.data![
-                                                                              index],
-                                                                          child:
-                                                                              Text(
+                                                        const EdgeInsets.only(
+                                                            top: 20),
+                                                    child: Text(
+                                                      'Categoria',
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText1Family,
+                                                                fontSize: 20,
+                                                                useGoogleFonts: GoogleFonts
+                                                                        .asMap()
+                                                                    .containsKey(
+                                                                        FlutterFlowTheme.of(context)
+                                                                            .bodyText1Family),
+                                                              ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 12, 0, 0),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Align(
+                                                              alignment:
+                                                                  AlignmentDirectional(
+                                                                      0, 0),
+                                                              child: Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0,
+                                                                            5,
+                                                                            0,
+                                                                            20),
+                                                                child: FlutterFlowDropDown<
+                                                                    Categoria>(
+                                                                  value: (idCategoria >
+                                                                          0)
+                                                                      ? snapshot
+                                                                              .data![
+                                                                          idCategoria -
+                                                                              2]
+                                                                      : snapshot
+                                                                          .data![0],
+                                                                  options: List.generate(
+                                                                      snapshot.data!.length,
+                                                                      (index) => DropdownMenuItem(
+                                                                          value: snapshot.data![index],
+                                                                          child: Text(
                                                                             snapshot.data![index].nombre.toString(),
                                                                             style: FlutterFlowTheme.of(context).bodyText1.override(
                                                                                   fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                                                                                   fontSize: 18,
                                                                                   useGoogleFonts: GoogleFonts.asMap().containsKey(FlutterFlowTheme.of(context).bodyText1Family),
                                                                                 ),
-                                                                          )))
-                                                              : List.generate(
-                                                                  0,
-                                                                  (index) => DropdownMenuItem(
-                                                                      value:
-                                                                          null,
-                                                                      child: Text(
-                                                                          ''))),
-                                                          onChanged: (val) {
-                                                            idCategoriaValue =
-                                                                val!.id;
-                                                            setState(() =>
-                                                                dropDownValueCategoria =
-                                                                    val);
-                                                          },
-                                                          /* initialOption: (activoEditar !=
-                                                                    null)
-                                                                ? Categoria(
-                                                                    activoEditar!
-                                                                        .nombre,
-                                                                    '',
-                                                                    '',
-                                                                    id: activoEditar!
-                                                                        .idCategoria)
-                                                                : (idCategoria !=
-                                                                            null &&
-                                                                        snapshot.connectionState ==
-                                                                            ConnectionState
-                                                                                .done)
-                                                                    ? snapshot
-                                                                            .data![
-                                                                        idCategoria! -
-                                                                            1]
-                                                                    : null,*/
-                                                          height: 50,
-                                                          textStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyText1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        FlutterFlowTheme.of(context)
-                                                                            .bodyText2Family,
-                                                                    fontSize:
-                                                                        18,
-                                                                    useGoogleFonts: GoogleFonts
-                                                                            .asMap()
-                                                                        .containsKey(
-                                                                            FlutterFlowTheme.of(context).bodyText1Family),
-                                                                  ),
-                                                          hintText:
-                                                              (activoEditar !=
-                                                                      null)
-                                                                  ? activoEditar!
-                                                                      .categoria
-                                                                  : 'Categoria*',
-                                                          fillColor: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryBackground,
-                                                          elevation: 2,
-                                                          borderColor: _dropdownErrorColor
-                                                              ? Colors.redAccent
-                                                              : FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .secondaryText,
-                                                          borderWidth: 2,
-                                                          borderRadius: 8,
-                                                          margin:
-                                                              EdgeInsetsDirectional
-                                                                  .fromSTEB(12,
-                                                                      4, 12, 4),
-                                                          hidesUnderline: true,
-                                                        );
-                                                      },
-                                                    ),
-                                                  ),
-                                                ),
+                                                                          ))),
+                                                                  onChanged:
+                                                                      (val) {
+                                                                    if (val !=
+                                                                        null) {
+                                                                      idCategoria =
+                                                                          val.id;
+                                                                      setState(
+                                                                          () {
+                                                                        idCategoria =
+                                                                            val.id;
+                                                                        dropDownValueCategoria.nombre =
+                                                                            val.nombre;
+                                                                      });
+                                                                    }
+                                                                  },
+                                                                  height: 50,
+                                                                  textStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyText1
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            FlutterFlowTheme.of(context).bodyText2Family,
+                                                                        fontSize:
+                                                                            18,
+                                                                        useGoogleFonts:
+                                                                            GoogleFonts.asMap().containsKey(FlutterFlowTheme.of(context).bodyText1Family),
+                                                                      ),
+                                                                  hintText:
+                                                                      'Área*',
+                                                                  initialOption: (activoEditar !=
+                                                                              null &&
+                                                                          snapshot
+                                                                              .hasData &&
+                                                                          snapshot.connectionState ==
+                                                                              ConnectionState
+                                                                                  .done)
+                                                                      ? snapshot
+                                                                              .data![
+                                                                          idCategoria -
+                                                                              1]
+                                                                      : Categoria(
+                                                                          id: 3,
+                                                                          'Proyectores',
+                                                                          'https://mainframeltda.com/wp-content/uploads/2019/04/Que_es_un_proyector_de_video-1100x825.jpg',
+                                                                          'Proyectores y video beams utilizados para presentaciones'),
+                                                                  fillColor: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryBackground,
+                                                                  elevation: 2,
+                                                                  borderColor: _dropdownErrorColor
+                                                                      ? Colors
+                                                                          .redAccent
+                                                                      : FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .secondaryText,
+                                                                  borderWidth:
+                                                                      2,
+                                                                  borderRadius:
+                                                                      8,
+                                                                  margin: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          12,
+                                                                          4,
+                                                                          12,
+                                                                          4),
+                                                                  hidesUnderline:
+                                                                      true,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        ),
+                                            );
+                                          } else {
+                                            return Container();
+                                          }
+                                        },
                                       ),
                                     ],
                                   ),
@@ -1197,11 +1229,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                   ),
                 ),
                 //primer bloque
-                if ((dropDownValueCategoria != null &&
-                        dropDownValueCategoria!.id == 8) ||
-                    (dropDownValueCategoria == null &&
-                        idCategoria != null &&
-                        idCategoria == 8))
+                if (idCategoria == 8)
                   Padding(
                     padding: defTamanoAnchoSecundario(
                         MediaQuery.of(context).size.width),
@@ -1453,11 +1481,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                   ),
                 //segundo bloque
 
-                if ((dropDownValueCategoria != null &&
-                        dropDownValueCategoria!.id == 8) ||
-                    (dropDownValueCategoria == null &&
-                        idCategoria != null &&
-                        idCategoria == 8))
+                if (idCategoria == 8)
                   Padding(
                       padding: defTamanoAnchoSecundario(
                           MediaQuery.of(context).size.width),
@@ -1743,11 +1767,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                         ),
                       )),
                 //tercer bloque
-                if ((dropDownValueCategoria != null &&
-                        dropDownValueCategoria!.id == 8) ||
-                    (dropDownValueCategoria == null &&
-                        idCategoria != null &&
-                        idCategoria == 8))
+                if (idCategoria == 8)
                   Padding(
                     padding: defTamanoAnchoSecundario(
                         MediaQuery.of(context).size.width),
@@ -2252,13 +2272,16 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                             size: 24,
                           ),
                           onPressed: () {
-                      if (activoEditar!=null) {
-                        ComponenteExternoController()
-                            .eliminarbyidComponente(context,textControllerSerial.text,activo.idSerial);
-                      }
-                      setState(() {
-                        listComponentesExActivos.remove(activo);
-                      });
+                            if (activoEditar != null) {
+                              ComponenteExternoController()
+                                  .eliminarbyidComponente(
+                                      context,
+                                      textControllerSerial.text,
+                                      activo.idSerial);
+                            }
+                            setState(() {
+                              listComponentesExActivos.remove(activo);
+                            });
                           },
                         ),
                       ),
@@ -2529,7 +2552,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                 value: activo.dropdownvalue,
                                 initialOption: 'Mono Usuario',
                                 options: List.generate(
-                                    listEstados.length,
+                                    listTipoLicencia.length,
                                     (index) => DropdownMenuItem(
                                         value: listTipoLicencia[index],
                                         child: Text(
@@ -2784,12 +2807,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         textControllerDetalles!.text,
         imagenUrl,
         estadoActivoOpcion,
-        (dropDownValueCategoria != null)
-            ? dropDownValueCategoria!.nombre.toString()
-            : ' ',
-        (dropDownValueCategoria != null)
-            ? dropDownValueCategoria!.id
-            : idCategoria!,
+        dropDownValueCategoria.nombre,
+        idCategoria,
         countControllerValue,
         null,
         null,
@@ -2843,7 +2862,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
 
   Future<List<Categoria>> cargarCategorias() async {
     CategoriaController categoriaController = CategoriaController();
-    listCategorias = await categoriaController.getCategorias(null);
+    listCategorias = await categoriaController.getCategoriasOrderById(null);
     for (var element in listCategorias) {
       print('Lista categoria nombre: + ${element.nombre}');
       print('Lista categoria url: ${element.urlImagen}');
@@ -2944,8 +2963,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                         numActivo: textControllerN_inventario.text,
                         nombre: textControllerNombre.text,
                         detalles: textControllerDetalles!.text,
-                        idCategoria: dropDownValueCategoria!.id,
-                        categoria: dropDownValueCategoria!.nombre!,
+                        idCategoria: idCategoria,
+                        categoria: dropDownValueCategoria.nombre!,
                       );
                       await PdfApi().generarHojadeVidaComputo(
                           activo,

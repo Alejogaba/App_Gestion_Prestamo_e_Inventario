@@ -59,6 +59,44 @@ class CategoriaController {
     }
   }
 
+  Future<List<Categoria>> getCategoriasOrderById(String? nombre) async {
+    if (nombre == null || nombre.trim() == '') {
+      try {
+        List<Categoria> listaCategoria = [];
+        final data = await client
+            .from('CATEGORIAS')
+            .select('*')
+            .order('ID', ascending: true) as List<dynamic>;
+        log('Datos: $data');
+        return (data).map((e) => Categoria.fromMap(e)).toList();
+      } on PostgrestException catch (error) {
+        log(error.message);
+        return [];
+      } catch (error) {
+        log('Error al cargar categorias: $error');
+        return [];
+      }
+    } else {
+      try {
+        List<Categoria> listaCategoria = [];
+        final data = await client
+            .from('CATEGORIAS')
+            .select('*')
+            .textSearch('NOMBRE',
+                "'${Utilidades().mayusculaPrimeraLetraFrase(nombre)}'")
+            .order('ORDEN', ascending: true) as List<dynamic>;
+        log('Datos: $data');
+        return (data).map((e) => Categoria.fromMap(e)).toList();
+      } on PostgrestException catch (error) {
+        log(error.message);
+        return [];
+      } catch (error) {
+        log('Error al cargar categorias: $error');
+        return [];
+      }
+    }
+  }
+
   Future<Categoria> buscarCategoriaID(int id) async {
     Categoria vacio = Categoria('','','');
     try {

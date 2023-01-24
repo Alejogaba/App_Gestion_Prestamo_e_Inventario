@@ -147,7 +147,7 @@ class FuncionariosController {
       final data = await supabase
           .from('AREAS')
           .select('*')
-          .order('NOMBRE', ascending: true) as List<dynamic>;
+          .order('ID', ascending: true) as List<dynamic>;
       log('Datos de areas: $data');
       return (data).map((e) => Area.fromMap(e)).toList();
     } on PostgrestException catch (error) {
