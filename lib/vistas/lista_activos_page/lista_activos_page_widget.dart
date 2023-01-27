@@ -119,17 +119,17 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                           true, // whether to show the flash icon
                           ScanMode.BARCODE)
                       .then((value) async {
-                    if (value.length<3) {
+                    if (value.length > 3) {
                       ActivoController activoController = ActivoController();
                       var res = await activoController.buscarActivo(value);
                       if (res.idSerial.length < 4) {
                         // ignore: use_build_context_synchronously
-                         final e =await Navigator.push(
+                        final e = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ResgistrarActivoPageWidget(
                               idSerial: value.trim().replaceAll(".", ""),
-            
+                              idCategoria: 2,
                             ),
                           ),
                         ).then((value) {
@@ -137,11 +137,9 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                             setState(() {});
                           });
                         });
-                        
-                        
                       } else {
                         // ignore: use_build_context_synchronously
-                        final e =await Navigator.push(
+                        final e = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ActivoPerfilPageWidget(
@@ -157,7 +155,6 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                           });
                         });
                       }
-                      
                     }
                   });
                 },
@@ -169,21 +166,16 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                 label: 'Registrar nuevo activo',
                 labelStyle: TextStyle(fontSize: 18.0),
                 onTap: () async {
-                    final e =await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ResgistrarActivoPageWidget(
-                              
-            
-                            ),
-                          ),
-                        ).then((value) {
-                          Future.delayed(Duration(milliseconds: 500), () {
-                            
-                            setState(() {});
-                          });
-                        });
-                        
+                  final e = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ResgistrarActivoPageWidget(idCategoria: idCategoria),
+                    ),
+                  ).then((value) {
+                    Future.delayed(Duration(milliseconds: 500), () {
+                      setState(() {});
+                    });
+                  });
                 }),
             SpeedDialChild(
               child: Icon(Icons.category_rounded),
@@ -191,7 +183,17 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
               backgroundColor: Color.fromARGB(255, 6, 113, 122),
               label: 'Crear nueva categoria',
               labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => context.pushNamed('registrarcategoriapage'),
+              onTap: () async => await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegistrarCategoriaPageWidget(
+                        ),
+                      ),
+                    ).then((value) {
+                          Future.delayed(Duration(milliseconds: 500), () {
+                            setState(() {});
+                          });
+                        }),
             ),
 
             //add more menu item childs here
@@ -245,6 +247,32 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                           .toString()); // PdfApi.generarTablaActivo(listaActivos, tipoActivo: nombreCategoria);
                 },
               ),
+              if (idCategoria > 9 && listaActivos.length == 0)
+                FlutterFlowIconButton(
+                  borderColor: Colors.transparent,
+                  borderRadius: 30,
+                  borderWidth: 1,
+                  buttonSize: 60,
+                  icon: FaIcon(
+                    FontAwesomeIcons.penToSquare,
+                    color: FlutterFlowTheme.of(context).whiteColor,
+                    size: 30,
+                  ),
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegistrarCategoriaPageWidget(
+                          categoriaEditar: categoria,
+                        ),
+                      ),
+                    ).then((value) {
+                          Future.delayed(Duration(milliseconds: 500), () {
+                            setState(() {});
+                          });
+                        }); // PdfApi.generarTablaActivo(listaActivos, tipoActivo: nombreCategoria);
+                  },
+                ),
             ],
             centerTitle: false,
             elevation: 4,
@@ -489,7 +517,8 @@ class _ListaActivosPageWidgetState extends State<ListaActivosPageWidget> {
                                                           selectMode &&
                                                           snapshot.data![index]
                                                               .estaPrestado) ||
-                                                      (selectMode && !esPrestamo &&
+                                                      (selectMode &&
+                                                          !esPrestamo &&
                                                           snapshot.data![index]
                                                               .estaAsignado))
                                                   ? 0.4
@@ -565,12 +594,11 @@ Widget tarjetaActivo(context, Activo activo,
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.network(activo.urlImagen,
+            child: Image.network(
+              activo.urlImagen,
               width: double.infinity,
               height: 125,
-              
               fit: BoxFit.cover,
-              
               errorBuilder: (context, exception, stacktrace) {
                 log(stacktrace.toString());
                 return Image.asset(
@@ -580,7 +608,6 @@ Widget tarjetaActivo(context, Activo activo,
                   fit: BoxFit.cover,
                 );
               },
-              
             ),
           ),
           Padding(

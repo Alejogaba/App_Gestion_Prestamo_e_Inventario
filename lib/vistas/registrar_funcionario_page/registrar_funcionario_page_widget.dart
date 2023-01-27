@@ -397,7 +397,7 @@ class _RegistrarFuncionarioPageWidgetState
                             spacing: 0,
                             runSpacing: 2,
                             alignment: WrapAlignment.center,
-                            crossAxisAlignment: WrapCrossAlignment.start,
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             direction: Axis.horizontal,
                             runAlignment: WrapAlignment.center,
                             verticalDirection: VerticalDirection.down,
@@ -1259,7 +1259,7 @@ class _RegistrarFuncionarioPageWidgetState
                   width: 250,
                   height: 200,
                   decoration: BoxDecoration(
-                      shape: BoxShape.circle,
+                      shape: BoxShape.rectangle,
                       image: urlImagen != null && imageFile == null
                           ? DecorationImage(
                               fit: BoxFit.cover, image: NetworkImage(urlImagen))
@@ -1284,7 +1284,7 @@ class _RegistrarFuncionarioPageWidgetState
   }
 
   Widget _decideImageView(imageFile) {
-    if (funcionarioEditar != null) {
+    if (funcionarioEditar != null&&imageFile==null) {
       return Image.network(
         funcionarioEditar!.urlImagen,
         width: 250,

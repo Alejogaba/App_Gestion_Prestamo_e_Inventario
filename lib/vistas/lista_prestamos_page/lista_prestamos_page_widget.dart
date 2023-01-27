@@ -16,6 +16,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,7 +33,9 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
   TextEditingController? textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List<Activo> listActivos = [];
+  List<String> _listadiasSalidas = [];
   List<String> _listadiasPendientes = [];
+  List<String> _listadiasEntregado = [];
   List<String> _listaEstado = [];
   Utilidades utilidades = Utilidades();
 
@@ -157,8 +160,8 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
                                       itemBuilder:
                                           (BuildContext context, int index) {
                                         return Opacity(
-                                          opacity: (_listadiasPendientes[index]
-                                                  .contains('Entregado'))
+                                          opacity: (snapshot.data![index]
+                                                  .estaPrestado==false)
                                               ? 0.4
                                               : 1.0,
                                           child: GestureDetector(
@@ -185,7 +188,7 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
                                             },
                                             child: tarjetaItem(
                                                 snapshot.data![index],
-                                                _listadiasPendientes[index]),
+                                                _listadiasPendientes[index],_listadiasSalidas[index],_listadiasEntregado[index]),
                                           ),
                                         );
                                       },
@@ -229,8 +232,10 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
   }
 
   Future<List<Activo>> cargarActivosPrestados() async {
-    List<Activo> _listActivos = [];
+    late List<Activo> _listActivos= [];
     _listadiasPendientes = [];
+    _listadiasEntregado = [];
+    _listadiasSalidas = [];
     PrestamosController prestamosController = PrestamosController();
     ActivoController activoController = ActivoController();
     List<Prestamo> listFuncionariosActvos =
@@ -239,11 +244,18 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
         .i('Cantidad de activos asignados:${listFuncionariosActvos.length}');
     await Future.forEach(listFuncionariosActvos, (Prestamo value) async {
       _listActivos.add(await activoController.buscarActivo(value.idActivo));
+     
+      _listadiasSalidas.add(
+          'Fecha salida: ${DateFormat.MMMMd('es_US').format(value.fechaHoraInicio)}');
       if (value.entregado) {
-        _listadiasPendientes.add('Entregado el ${DateFormat.MMMMd('es_US').format(value.fechaHoraEntrega!)}');
+        _listadiasPendientes.add(
+            'Fecha entrega: ${DateFormat.MMMMd('es_US').format(value.fechaHoraFin!)}');
+        _listadiasEntregado.add(
+            'Se entrego el ${DateFormat.MMMMd('es_US').format(value.fechaHoraEntregado!)}');
       } else {
-        _listadiasPendientes.add(Utilidades.definirDias(
-            value.fechaHoraInicio, value.fechaHoraEntrega!));
+         _listadiasPendientes.add(
+          Utilidades.definirDias(value.fechaHoraInicio, value.fechaHoraFin!));
+        _listadiasEntregado.add('');
       }
     });
 
@@ -253,9 +265,11 @@ class _ListaPrestamosPageWidgetState extends State<ListaPrestamosPageWidget> {
 
 class tarjetaItem extends StatelessWidget {
   final Activo activo;
-  final String diasPendientes;
+  final String diaPendiente;
+  final String diaSalida;
+  final String diaEntregado;
   Utilidades utilidades = Utilidades();
-  tarjetaItem(this.activo, this.diasPendientes, {Key? key}) : super(key: key);
+  tarjetaItem(this.activo, this.diaPendiente, this.diaSalida,this.diaEntregado, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -287,8 +301,8 @@ class tarjetaItem extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: FastCachedImage(
-                    width: 80,
-                    height: 80,
+                    width: 100,
+                    height: 100,
                     url: activo.urlImagen,
                     fit: BoxFit.cover,
                     fadeInDuration: const Duration(seconds: 1),
@@ -386,29 +400,111 @@ class tarjetaItem extends StatelessWidget {
                             padding: EdgeInsetsDirectional.fromSTEB(3, 0, 0, 0),
                             child: FaIcon(
                               FontAwesomeIcons.calendar,
-                              color: utilidades.defColorCalendario(
-                                  context, diasPendientes),
+                              color: FlutterFlowTheme.of(context).grayicon,
                               size: 18,
                             ),
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(5, 3, 8, 1),
-                            child: AutoSizeText(
-                              diasPendientes,
-                              textAlign: TextAlign.start,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyText2
-                                  .override(
-                                    fontFamily: 'Poppins',
-                                    color: utilidades.defColorCalendario(
-                                        context, diasPendientes),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    useGoogleFonts: GoogleFonts.asMap()
-                                        .containsKey(
-                                            FlutterFlowTheme.of(context)
-                                                .bodyText2Family),
-                                  ),
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.49,
+                              child: AutoSizeText(
+                                diaSalida,
+                                maxFontSize: 15,
+                                minFontSize: 10,
+                                maxLines: 2,
+                                textAlign: TextAlign.start,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText2
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color:  FlutterFlowTheme.of(context).grayicon,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      useGoogleFonts: GoogleFonts.asMap()
+                                          .containsKey(
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyText2Family),
+                                    ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      if(activo.estaPrestado)
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(3, 0, 0, 0),
+                            child: FaIcon(
+                              FontAwesomeIcons.calendar,
+                              color: (diaEntregado.isNotEmpty) ? FlutterFlowTheme.of(context).grayicon : utilidades.defColorCalendario(
+                                  context, diaPendiente),
+                              size: 18,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(5, 3, 8, 1),
+                            child: SizedBox(
+                               width: MediaQuery.of(context).size.width * 0.49,
+                              child: AutoSizeText(
+                                diaPendiente,
+                                 maxFontSize: 15,
+                                minFontSize: 10,
+                                textAlign: TextAlign.start,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText2
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: utilidades.defColorCalendario(
+                                          context, diaPendiente),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      useGoogleFonts: GoogleFonts.asMap()
+                                          .containsKey(
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyText2Family),
+                                    ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      if(!activo.estaPrestado)
+                       Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(3, 0, 0, 0),
+                            child: FaIcon(
+                              FontAwesomeIcons.calendar,
+                              color: (diaEntregado.isNotEmpty) ? FlutterFlowTheme.of(context).grayicon : const Color.fromARGB(255, 6, 113, 122),
+                              size: 18,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(5, 3, 8, 1),
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.49,
+                              child: AutoSizeText(
+                                diaEntregado,
+                                maxFontSize: 15,
+                                minFontSize: 10,
+                                textAlign: TextAlign.start,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyText2
+                                    .override(
+                                      fontFamily: 'Poppins',
+                                      color: (diaEntregado.isNotEmpty) ? FlutterFlowTheme.of(context).grayicon : const Color.fromARGB(255, 6, 113, 122),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      useGoogleFonts: GoogleFonts.asMap()
+                                          .containsKey(
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyText2Family),
+                                    ),
+                              ),
                             ),
                           ),
                         ],

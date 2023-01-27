@@ -6,11 +6,13 @@ class Prestamo {
   String idFuncionario;
   String? observacion;
   DateTime fechaHoraInicio = DateTime.now();
-  DateTime? fechaHoraEntrega;
+  DateTime? fechaHoraFin;
+  DateTime? fechaHoraEntregado;
   bool entregado = false;
 
-  Prestamo(this.id, this.idActivo, this.idFuncionario, this.fechaHoraInicio,this.entregado,
-      {this.observacion, this.fechaHoraEntrega});
+  Prestamo(this.id, this.idActivo, this.idFuncionario, this.fechaHoraInicio,
+      this.entregado,
+      {this.observacion, this.fechaHoraFin,this.fechaHoraEntregado});
 
   factory Prestamo.fromMap(Map<String, dynamic> map) {
     return Prestamo(
@@ -20,7 +22,9 @@ class Prestamo {
       DateTime.parse((map['FECHA_HORA_INICIO'].toString())),
       map['ENTREGADO'] ?? false,
       observacion: map['OBSERVACION'] ?? '',
-      fechaHoraEntrega:DateFormat.yMd('es_CO').parse((map['FECHA_HORA_FINAL'].toString())),
+      fechaHoraFin:
+          DateFormat.yMd('es_CO').parse((map['FECHA_HORA_FINAL'].toString())),
+      fechaHoraEntregado:  DateFormat.yMd('es_CO').parse((map['FECHA_HORA_ENTREGA'].toString())),
     );
   }
 }

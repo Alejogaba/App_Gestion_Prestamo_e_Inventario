@@ -32,7 +32,8 @@ class FuncionariosController {
       int idArea = 0,
       String? telefono1,
       String? telefono2,
-      String? enlaceSIGEP,bool editar = false}) async {
+      String? enlaceSIGEP,
+      bool editar = false}) async {
     try {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
@@ -48,73 +49,76 @@ class FuncionariosController {
       ));
       log('Registrando nuevo funcionario...');
       Utilidades utilidades = Utilidades();
-      if(editar){
-        await supabase.from('FUNCIONARIOS').update({
-        'NOMBRES': utilidades.mayusculaTodasPrimerasLetras(nombres!),
-        'APELLIDOS': (apellidos == null)
-            ? ''
-            : utilidades.mayusculaTodasPrimerasLetras(apellidos),
-        'CARGO': utilidades.mayusculaPrimeraLetraFrase(cargo!),
-        'CORREO': (correo == null)
-            ? ''
-            : utilidades.mayusculaPrimeraLetraFrase(correo),
-        'URL_IMAGEN': urlImagen,
-        'ID_AREA': idArea,
-        'TELEFONO_1': telefono1,
-        'TELEFONO_2': (telefono2 == null) ? '' : telefono2,
-        'ENLACE_SIGEP': enlaceSIGEP,
-      }).eq('CEDULA',cedula).then((value) {
-        log("Registrado con exito");
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            "Funcionario actualizado con exitó",
-            style: FlutterFlowTheme.of(context).bodyText2.override(
-                  fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
-                  color: FlutterFlowTheme.of(context).tertiaryColor,
-                  useGoogleFonts: GoogleFonts.asMap().containsKey(
-                      FlutterFlowTheme.of(context).bodyText2Family),
+      if (editar) {
+        await supabase
+            .from('FUNCIONARIOS')
+            .update({
+              'NOMBRES': utilidades.mayusculaTodasPrimerasLetras(nombres!),
+              'APELLIDOS': (apellidos == null)
+                  ? ''
+                  : utilidades.mayusculaTodasPrimerasLetras(apellidos),
+              'CARGO': utilidades.mayusculaPrimeraLetraFrase(cargo!),
+              'CORREO': (correo == null)
+                  ? ''
+                  : utilidades.mayusculaPrimeraLetraFrase(correo),
+              'URL_IMAGEN': urlImagen,
+              'ID_AREA': idArea,
+              'TELEFONO_1': telefono1,
+              'TELEFONO_2': (telefono2 == null) ? '' : telefono2,
+              'ENLACE_SIGEP': enlaceSIGEP,
+            })
+            .eq('CEDULA', cedula)
+            .then((value) {
+              log("Registrado con exito");
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                  "Funcionario actualizado con exitó",
+                  style: FlutterFlowTheme.of(context).bodyText2.override(
+                        fontFamily:
+                            FlutterFlowTheme.of(context).bodyText2Family,
+                        color: FlutterFlowTheme.of(context).tertiaryColor,
+                        useGoogleFonts: GoogleFonts.asMap().containsKey(
+                            FlutterFlowTheme.of(context).bodyText2Family),
+                      ),
                 ),
-          ),
-          backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-        ));
-        return 'ok';
-      });
-
-      }else{
+                backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+              ));
+              return 'ok';
+            });
+      } else {
         await supabase.from('FUNCIONARIOS').insert({
-        'CEDULA': cedula,
-        'NOMBRES': utilidades.mayusculaTodasPrimerasLetras(nombres!),
-        'APELLIDOS': (apellidos == null)
-            ? ''
-            : utilidades.mayusculaTodasPrimerasLetras(apellidos),
-        'CARGO': utilidades.mayusculaPrimeraLetraFrase(cargo!),
-        'CORREO': (correo == null)
-            ? ''
-            : utilidades.mayusculaPrimeraLetraFrase(correo),
-        'URL_IMAGEN': urlImagen,
-        'ID_AREA': idArea,
-        'TELEFONO_1': telefono1,
-        'TELEFONO_2': (telefono2 == null) ? '' : telefono2,
-        'ENLACE_SIGEP': enlaceSIGEP,
-      }).then((value) {
-        log("Registrado con exito");
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            "Funcionario registrado con exitó",
-            style: FlutterFlowTheme.of(context).bodyText2.override(
-                  fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
-                  color: FlutterFlowTheme.of(context).tertiaryColor,
-                  useGoogleFonts: GoogleFonts.asMap().containsKey(
-                      FlutterFlowTheme.of(context).bodyText2Family),
-                ),
-          ),
-          backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-        ));
-        return 'ok';
-      });
-
+          'CEDULA': cedula,
+          'NOMBRES': utilidades.mayusculaTodasPrimerasLetras(nombres!),
+          'APELLIDOS': (apellidos == null)
+              ? ''
+              : utilidades.mayusculaTodasPrimerasLetras(apellidos),
+          'CARGO': utilidades.mayusculaPrimeraLetraFrase(cargo!),
+          'CORREO': (correo == null)
+              ? ''
+              : utilidades.mayusculaPrimeraLetraFrase(correo),
+          'URL_IMAGEN': urlImagen,
+          'ID_AREA': idArea,
+          'TELEFONO_1': telefono1,
+          'TELEFONO_2': (telefono2 == null) ? '' : telefono2,
+          'ENLACE_SIGEP': enlaceSIGEP,
+        }).then((value) {
+          log("Registrado con exito");
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              "Funcionario registrado con exitó",
+              style: FlutterFlowTheme.of(context).bodyText2.override(
+                    fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                    color: FlutterFlowTheme.of(context).tertiaryColor,
+                    useGoogleFonts: GoogleFonts.asMap().containsKey(
+                        FlutterFlowTheme.of(context).bodyText2Family),
+                  ),
+            ),
+            backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+          ));
+          return 'ok';
+        });
       }
-      
+
       return 'ok';
     } on PostgrestException catch (errorPostgres) {
       StorageController storageController = StorageController();
@@ -135,11 +139,10 @@ class FuncionariosController {
       ));
       log(errorPostgres.toString());
       return 'error';
-    }catch (e) {
+    } catch (e) {
       log(e.toString());
       return 'error';
     }
-  
   }
 
   Future<List<Area>> getAreas() async {
@@ -208,8 +211,6 @@ class FuncionariosController {
     }
   }
 
- 
-
   Future<List<Funcionario>> getFuncionarios(String? terminoBusqueda) async {
     try {
       if (terminoBusqueda != null && terminoBusqueda.length > 2) {
@@ -238,7 +239,8 @@ class FuncionariosController {
     try {
       final data = await supabase
           .from('FUNCIONARIOS_ACTIVOS')
-          .select('*').eq('ID_FUNCIONARIO', cedula) as List<dynamic>;
+          .select('*')
+          .eq('ID_FUNCIONARIO', cedula) as List<dynamic>;
       Logger().d('Datos funcionarios activos: $data');
       return (data).map((e) => ActivoFuncionario.fromMap(e)).toList();
     } on PostgrestException catch (error) {
@@ -250,18 +252,36 @@ class FuncionariosController {
     }
   }
 
-  Future<String> eliminarActivo(context, String idSerial) async {
+  Future<String> eliminar(context, String id) async {
     try {
-      final data =
-          (await supabase.from('ACTIVOS').delete().eq('ID_SERIAL', idSerial));
-      log('Eliminando:$data');
-      return 'ok';
-    } on Exception catch (error) {
-      StorageController storageController = StorageController();
-      var errorTraducido = await storageController.traducir(error.toString());
+      late String response;
+      (await supabase.from('PRESTAMOS').delete().match(
+          {'ID_FUNCIONARIO': id, 'ENTREGADO': true}).then((value) async {
+        final data =
+            (await supabase.from('FUNCIONARIOS').delete().eq('CEDULA', id));
+        log('Eliminando:$data');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            'Eliminado con exitó',
+            style: FlutterFlowTheme.of(context).bodyText2.override(
+                  fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                  color: FlutterFlowTheme.of(context).tertiaryColor,
+                  useGoogleFonts: GoogleFonts.asMap().containsKey(
+                      FlutterFlowTheme.of(context).bodyText2Family),
+                ),
+          ),
+          backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+        ));
+        response = 'ok';
+      }));
+      return response;
+    } on PostgrestException catch (errorPostgres) {
+      var error = Utilidades().validarErroresEliminar(
+          errorPostgres.code!, 'este funcionario',
+          objetoLlaveForaneo: 'uno o más activos asignados o prestados');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          errorTraducido,
+          error,
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,
@@ -271,7 +291,7 @@ class FuncionariosController {
         ),
         backgroundColor: Colors.redAccent,
       ));
-      log(error.toString());
+      log(errorPostgres.toString());
       return 'error';
     } catch (e) {
       log(e.toString());
@@ -315,7 +335,7 @@ class FuncionariosController {
       ));
       log(errorPostgres.toString());
       return 'error';
-    }catch (e) {
+    } catch (e) {
       log(e.toString());
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(

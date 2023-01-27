@@ -304,8 +304,10 @@ class ActivoController {
   }
 
   Future<String> eliminarActivo(context, String idSerial) async {
+    late String response;
     try {
-      final data =
+      (await supabase.from('PRESTAMOS').delete().match({'ID_ACTIVO': idSerial,'ENTREGADO':true}).then((value) async {
+        final data =
           (await supabase.from('ACTIVOS').delete().eq('ID_SERIAL', idSerial));
       log('Eliminando:$data');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -320,7 +322,9 @@ class ActivoController {
         ),
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
       ));
-      return 'ok';
+      response='ok';
+      }));
+      return response;
     } on PostgrestException catch (errorPostgres) {
       var error = Utilidades().validarErroresEliminar(
           errorPostgres.code!, 'este activos',

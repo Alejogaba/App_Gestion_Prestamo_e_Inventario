@@ -42,6 +42,9 @@ class PrestamosController {
         'FECHA_HORA_FINAL': (fechaHoraFinal == null)
             ? DateFormat.yMd('es_CO').format(DateTime.now())
             : DateFormat.yMd('es_CO').format(fechaHoraFinal),
+        'FECHA_HORA_ENTREGA': (fechaHoraFinal == null)
+            ? DateFormat.yMd('es_CO').format(DateTime.now())
+            : DateFormat.yMd('es_CO').format(fechaHoraFinal),
       }).then((value) async {
         log('Nuevo activo prestado: $value');
         await supabase
@@ -147,13 +150,15 @@ class PrestamosController {
     try {
       final data = (await supabase
           .from('PRESTAMOS')
-          .update({'ENTREGADO': true}).match({
+          .update({'ENTREGADO': true,'FECHA_HORA_ENTREGA': DateFormat.yMd('es_CO').format(DateTime.now())}).match({
         'ID_FUNCIONARIO': idFuncionario,
-        'ID_ACTIVO': idActivo
+        'ID_ACTIVO': idActivo,
+        
       }).then((value) async {
         await supabase
             .from('ACTIVOS')
-            .update({'ESTA_PRESTADO': false}).match({'ID_SERIAL': idActivo});
+            .update({'ESTA_PRESTADO': false,
+            }).match({'ID_SERIAL': idActivo});
       }));
       log('Entregado:$data');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

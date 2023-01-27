@@ -98,8 +98,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
         VisibilityEffect(duration: 1500.ms),
         MoveEffect(
           curve: Curves.easeOut,
-          delay: 300.ms,
-          duration: 2000.ms,
+          delay: 200.ms,
+          duration: 1400.ms,
           begin: Offset(0, 1000),
           end: Offset(0, 0),
         ),
@@ -538,8 +538,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                     size: 16,
                                                   ),
                                                   onPressed: () async {
-                                                    
-                                                    final value = await Navigator.push(
+                                                    final value =
+                                                        await Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                         builder: (context) =>
@@ -556,14 +556,21 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                         ),
                                                       ),
                                                     ).then((_) async {
-                                                      activo = await ActivoController().buscarActivo(activo.idSerial);
-            Future.delayed(const Duration(milliseconds: 500), () {
+                                                      activo =
+                                                          await ActivoController()
+                                                              .buscarActivo(
+                                                                  activo
+                                                                      .idSerial);
+                                                      Future.delayed(
+                                                          const Duration(
+                                                              milliseconds:
+                                                                  500), () {
 // Here you can write your code
 
-              setState(() {
-                // Here you can write your code for open new view
-              });
-            });
+                                                        setState(() {
+                                                          // Here you can write your code for open new view
+                                                        });
+                                                      });
                                                     });
                                                   },
                                                 ),
@@ -1296,13 +1303,14 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(8, 0, 12, 0),
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(8, 0, 12, 0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
-                                  padding:
-                                      EdgeInsetsDirectional.fromSTEB(0, 0, 8, 2),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 8, 2),
                                   child: Card(
                                     clipBehavior: Clip.antiAliasWithSaveLayer,
                                     color:
@@ -1342,18 +1350,17 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   Text(
                                                       '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
                                                       style: const TextStyle(
-                                                          color:
-                                                              Color(0xFF006D38))),
+                                                          color: Color(
+                                                              0xFF006D38))),
                                                 SizedBox(
                                                     width: 65,
                                                     height: 65,
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                            color: const Color(
-                                                                0xFF006D38),
-                                                            value: progress
-                                                                .progressPercentage
-                                                                .value)),
+                                                    child: CircularProgressIndicator(
+                                                        color: const Color(
+                                                            0xFF006D38),
+                                                        value: progress
+                                                            .progressPercentage
+                                                            .value)),
                                               ],
                                             ),
                                           );
@@ -1366,10 +1373,12 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        snapshot.data![index].nombres.toString(),
+                                        snapshot.data![index].nombres
+                                            .toString(),
                                         style: FlutterFlowTheme.of(context)
                                             .subtitle1
                                             .override(
@@ -1377,10 +1386,12 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   FlutterFlowTheme.of(context)
                                                       .subtitle1Family,
                                               fontSize: 15,
-                                              useGoogleFonts: GoogleFonts.asMap()
-                                                  .containsKey(
-                                                      FlutterFlowTheme.of(context)
-                                                          .subtitle1Family),
+                                              useGoogleFonts:
+                                                  GoogleFonts.asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .subtitle1Family),
                                             ),
                                       ),
                                       Row(
@@ -1397,29 +1408,29 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                 .fromSTEB(3, 1.4, 0, 1),
                                             child: Text(
                                               '${snapshot.data![index].cargo}',
-                                              style: FlutterFlowTheme.of(context)
-                                                  .bodyText2
-                                                  .override(
-                                                    fontFamily:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyText2Family,
-                                                    fontSize: 13,
-                                                    useGoogleFonts: GoogleFonts
-                                                            .asMap()
-                                                        .containsKey(
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText2
+                                                      .override(
+                                                        fontFamily:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyText2Family),
-                                                  ),
+                                                                .bodyText2Family,
+                                                        fontSize: 13,
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText2Family),
+                                                      ),
                                             ),
                                           ),
                                         ],
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 0, 0, 1),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 0, 0, 1),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
@@ -1429,12 +1440,11 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                               size: 9,
                                             ),
                                             Padding(
-                                              padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      0, 4, 8, 0),
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 4, 8, 0),
                                               child: FutureBuilder<Area>(
-                                                future: cargarArea(
-                                                    snapshot.data![index].idArea),
+                                                future: cargarArea(snapshot
+                                                    .data![index].idArea),
                                                 initialData: area,
                                                 builder: ((context, snapshot) {
                                                   area = snapshot.data!;
@@ -1446,10 +1456,9 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                         .bodyText2
                                                         .override(
                                                           fontFamily: 'Poppins',
-                                                          color:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .grayicon,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .grayicon,
                                                           fontSize: 14,
                                                           fontWeight:
                                                               FontWeight.normal,
@@ -1472,20 +1481,21 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(0, 0, 0, 1),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 0, 1),
                                               child: FaIcon(
                                                 FontAwesomeIcons.calendar,
-                                                color:
-                                                    utilidades.defColorCalendario(
-                                                        context,
+                                                color: utilidades
+                                                    .defColorCalendario(context,
                                                         fechaEntrega[index]),
                                                 size: 10,
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(3, 0, 0, 1),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(3, 0, 0, 1),
                                               child: AutoSizeText(
                                                 fechaEntrega[index],
                                                 textAlign: TextAlign.start,
@@ -1622,13 +1632,14 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(8, 0, 12, 0),
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(8, 0, 12, 0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
-                                  padding:
-                                      EdgeInsetsDirectional.fromSTEB(0, 0, 8, 2),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 8, 2),
                                   child: Card(
                                     clipBehavior: Clip.antiAliasWithSaveLayer,
                                     color:
@@ -1668,18 +1679,17 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   Text(
                                                       '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
                                                       style: const TextStyle(
-                                                          color:
-                                                              Color(0xFF006D38))),
+                                                          color: Color(
+                                                              0xFF006D38))),
                                                 SizedBox(
                                                     width: 65,
                                                     height: 65,
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                            color: const Color(
-                                                                0xFF006D38),
-                                                            value: progress
-                                                                .progressPercentage
-                                                                .value)),
+                                                    child: CircularProgressIndicator(
+                                                        color: const Color(
+                                                            0xFF006D38),
+                                                        value: progress
+                                                            .progressPercentage
+                                                            .value)),
                                               ],
                                             ),
                                           );
@@ -1692,7 +1702,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         snapshot.data![index].nombre.toString(),
@@ -1703,10 +1714,12 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   FlutterFlowTheme.of(context)
                                                       .subtitle1Family,
                                               fontSize: 15,
-                                              useGoogleFonts: GoogleFonts.asMap()
-                                                  .containsKey(
-                                                      FlutterFlowTheme.of(context)
-                                                          .subtitle1Family),
+                                              useGoogleFonts:
+                                                  GoogleFonts.asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .subtitle1Family),
                                             ),
                                       ),
                                       Row(
@@ -1723,29 +1736,29 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                 .fromSTEB(3, 1.4, 0, 1),
                                             child: Text(
                                               'S/N: ${snapshot.data![index].idSerial}',
-                                              style: FlutterFlowTheme.of(context)
-                                                  .bodyText2
-                                                  .override(
-                                                    fontFamily:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyText2Family,
-                                                    fontSize: 13,
-                                                    useGoogleFonts: GoogleFonts
-                                                            .asMap()
-                                                        .containsKey(
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText2
+                                                      .override(
+                                                        fontFamily:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyText2Family),
-                                                  ),
+                                                                .bodyText2Family,
+                                                        fontSize: 13,
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText2Family),
+                                                      ),
                                             ),
                                           ),
                                         ],
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 0, 0, 1),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 0, 0, 1),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
@@ -1755,8 +1768,9 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                               size: 9,
                                             ),
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(3, 0, 0, 1),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(3, 0, 0, 1),
                                               child: Text(
                                                 (snapshot.data![index].numActivo
                                                         .isEmpty)
@@ -1789,20 +1803,21 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(0, 0, 0, 1),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 0, 1),
                                               child: FaIcon(
                                                 FontAwesomeIcons.calendar,
-                                                color:
-                                                    utilidades.defColorCalendario(
-                                                        context,
+                                                color: utilidades
+                                                    .defColorCalendario(context,
                                                         fechaEntrega[index]),
                                                 size: 10,
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(3, 0, 0, 1),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(3, 0, 0, 1),
                                               child: AutoSizeText(
                                                 fechaEntrega[index],
                                                 textAlign: TextAlign.start,
@@ -1916,13 +1931,14 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(8, 0, 12, 0),
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(8, 0, 12, 0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
-                                  padding:
-                                      EdgeInsetsDirectional.fromSTEB(0, 0, 8, 2),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 8, 2),
                                   child: Card(
                                     clipBehavior: Clip.antiAliasWithSaveLayer,
                                     color:
@@ -1962,18 +1978,17 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   Text(
                                                       '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
                                                       style: const TextStyle(
-                                                          color:
-                                                              Color(0xFF006D38))),
+                                                          color: Color(
+                                                              0xFF006D38))),
                                                 SizedBox(
                                                     width: 65,
                                                     height: 65,
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                            color: const Color(
-                                                                0xFF006D38),
-                                                            value: progress
-                                                                .progressPercentage
-                                                                .value)),
+                                                    child: CircularProgressIndicator(
+                                                        color: const Color(
+                                                            0xFF006D38),
+                                                        value: progress
+                                                            .progressPercentage
+                                                            .value)),
                                               ],
                                             ),
                                           );
@@ -1986,7 +2001,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '${snapshot.data![index].nombre} ${snapshot.data![index].marca}',
@@ -1997,10 +2013,12 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   FlutterFlowTheme.of(context)
                                                       .subtitle1Family,
                                               fontSize: 15,
-                                              useGoogleFonts: GoogleFonts.asMap()
-                                                  .containsKey(
-                                                      FlutterFlowTheme.of(context)
-                                                          .subtitle1Family),
+                                              useGoogleFonts:
+                                                  GoogleFonts.asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .subtitle1Family),
                                             ),
                                       ),
                                       Row(
@@ -2011,35 +2029,36 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                 .fromSTEB(3, 1.4, 0, 1),
                                             child: Text(
                                               '${snapshot.data![index].velocidad}',
-                                              style: FlutterFlowTheme.of(context)
-                                                  .bodyText2
-                                                  .override(
-                                                    fontFamily:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyText2Family,
-                                                    fontSize: 13,
-                                                    useGoogleFonts: GoogleFonts
-                                                            .asMap()
-                                                        .containsKey(
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText2
+                                                      .override(
+                                                        fontFamily:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyText2Family),
-                                                  ),
+                                                                .bodyText2Family,
+                                                        fontSize: 13,
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText2Family),
+                                                      ),
                                             ),
                                           ),
                                         ],
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 0, 0, 1),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 0, 0, 1),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(3, 0, 0, 1),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(3, 0, 0, 1),
                                               child: Text(
                                                 snapshot.data![index]
                                                     .otrasCaracteristicas,
@@ -2069,20 +2088,21 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(0, 0, 0, 1),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 0, 1),
                                               child: FaIcon(
                                                 FontAwesomeIcons.calendar,
-                                                color:
-                                                    utilidades.defColorCalendario(
-                                                        context,
+                                                color: utilidades
+                                                    .defColorCalendario(context,
                                                         fechaEntrega[index]),
                                                 size: 10,
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(3, 0, 0, 1),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(3, 0, 0, 1),
                                               child: AutoSizeText(
                                                 fechaEntrega[index],
                                                 textAlign: TextAlign.start,
@@ -2194,13 +2214,14 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(8, 0, 12, 0),
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(8, 0, 12, 0),
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Padding(
-                                  padding:
-                                      EdgeInsetsDirectional.fromSTEB(0, 0, 8, 2),
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 8, 2),
                                   child: Card(
                                     clipBehavior: Clip.antiAliasWithSaveLayer,
                                     color:
@@ -2240,18 +2261,17 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   Text(
                                                       '${progress.downloadedBytes ~/ 1024} / ${progress.totalBytes! ~/ 1024} kb',
                                                       style: const TextStyle(
-                                                          color:
-                                                              Color(0xFF006D38))),
+                                                          color: Color(
+                                                              0xFF006D38))),
                                                 SizedBox(
                                                     width: 65,
                                                     height: 65,
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                            color: const Color(
-                                                                0xFF006D38),
-                                                            value: progress
-                                                                .progressPercentage
-                                                                .value)),
+                                                    child: CircularProgressIndicator(
+                                                        color: const Color(
+                                                            0xFF006D38),
+                                                        value: progress
+                                                            .progressPercentage
+                                                            .value)),
                                               ],
                                             ),
                                           );
@@ -2264,7 +2284,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                   child: Column(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '${snapshot.data![index].fabricante} ${snapshot.data![index].nombre.replaceAll(snapshot.data![index].fabricante, '')}',
@@ -2275,10 +2296,12 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                   FlutterFlowTheme.of(context)
                                                       .subtitle1Family,
                                               fontSize: 15,
-                                              useGoogleFonts: GoogleFonts.asMap()
-                                                  .containsKey(
-                                                      FlutterFlowTheme.of(context)
-                                                          .subtitle1Family),
+                                              useGoogleFonts:
+                                                  GoogleFonts.asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .subtitle1Family),
                                             ),
                                       ),
                                       Row(
@@ -2289,35 +2312,36 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                 .fromSTEB(3, 1.4, 0, 1),
                                             child: Text(
                                               'Versión: ${snapshot.data![index].version}',
-                                              style: FlutterFlowTheme.of(context)
-                                                  .bodyText2
-                                                  .override(
-                                                    fontFamily:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyText2Family,
-                                                    fontSize: 13,
-                                                    useGoogleFonts: GoogleFonts
-                                                            .asMap()
-                                                        .containsKey(
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyText2
+                                                      .override(
+                                                        fontFamily:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .bodyText2Family),
-                                                  ),
+                                                                .bodyText2Family,
+                                                        fontSize: 13,
+                                                        useGoogleFonts: GoogleFonts
+                                                                .asMap()
+                                                            .containsKey(
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText2Family),
+                                                      ),
                                             ),
                                           ),
                                         ],
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 0, 0, 1),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 0, 0, 1),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(3, 0, 0, 1),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(3, 0, 0, 1),
                                               child: Text(
                                                 'Licencia ${snapshot.data![index].tipoLicencia}',
                                                 style:
@@ -2342,15 +2366,15 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                         ),
                                       ),
                                       Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.fromSTEB(
-                                                0, 0, 0, 1),
+                                        padding: const EdgeInsetsDirectional
+                                            .fromSTEB(0, 0, 0, 1),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(3, 0, 0, 1),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(3, 0, 0, 1),
                                               child: Text(
                                                 '${snapshot.data![index].licenciaClave}',
                                                 overflow: TextOverflow.ellipsis,
@@ -2380,20 +2404,21 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(0, 0, 0, 1),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 0, 1),
                                               child: FaIcon(
                                                 FontAwesomeIcons.calendar,
-                                                color:
-                                                    utilidades.defColorCalendario(
-                                                        context,
+                                                color: utilidades
+                                                    .defColorCalendario(context,
                                                         fechaEntrega[index]),
                                                 size: 10,
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(3, 0, 0, 1),
+                                              padding:
+                                                  const EdgeInsetsDirectional
+                                                      .fromSTEB(3, 0, 0, 1),
                                               child: AutoSizeText(
                                                 fechaEntrega[index],
                                                 textAlign: TextAlign.start,
@@ -2516,8 +2541,8 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
     await Future.forEach(listFuncionariosActvos, (Prestamo value) async {
       listaFuncionarios.add(await funcionariosController
           .buscarFuncionarioIndividual(value.idFuncionario));
-      listaFechasEntrega.add(Utilidades.definirDias(
-          value.fechaHoraInicio, value.fechaHoraEntrega!));
+      listaFechasEntrega.add(
+          Utilidades.definirDias(value.fechaHoraInicio, value.fechaHoraFin!));
     });
     Logger().i('Cantidad de activos asignados devueltos:' +
         listaFuncionarios.length.toString());

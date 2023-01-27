@@ -229,7 +229,7 @@ class Utilidades {
     }
   }
 
-  validarErroresInsertar(String codigo,String obejetoaGuardar, {String objetoLlaveForaneo='el item a asignar'}) {
+  validarErroresInsertar(String codigo,String obejetoaGuardar, {String objetoLlaveForaneo='el item a asignar',String error=''}) {
     switch (codigo) {
       case '42P01':
         Logger().e('Error: la tabla no existe');
@@ -255,11 +255,12 @@ class Utilidades {
       
       default:
         Logger().e('Error desconocido: Código $codigo');
+        Logger().e('Error desconocido: Código $codigo');
         return 'Error desconocido: Código $codigo';
     }
   }
 
-  validarErroresEliminar(String codigo,String obejetoaEliminar, {String objetoLlaveForaneo='otros items asignados'}) {
+  validarErroresEliminar(String codigo,String obejetoaEliminar, {String objetoLlaveForaneo='otros items asignados',String error=''}) {
     switch (codigo) {
       case '42P01':
         Logger().e('Error: la tabla no existe');
@@ -281,7 +282,7 @@ class Utilidades {
         return 'Error: Ocurrio un error a mitad de la operación';
       
       default:
-        Logger().e('Error desconocido: Código $codigo');
+        Logger().e('Error: $error \n\n Error desconocido: Código $codigo');
         return 'Error desconocido: Código $codigo';
     }
   }

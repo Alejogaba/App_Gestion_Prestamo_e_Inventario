@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:app_gestion_prestamo_inventario/main.dart';
+import 'package:app_gestion_prestamo_inventario/vistas/principal/principal_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
@@ -81,9 +83,7 @@ class _RegistrarCategoriaPageWidgetState
     LengthLimitingTextInputFormatter(10),
   ];
 
-  dynamic tamanio_padding = (Platform.isAndroid || Platform.isIOS)
-      ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
-      : EdgeInsetsDirectional.fromSTEB(80, 10, 80, 10);
+  dynamic tamanio_padding = EdgeInsetsDirectional.fromSTEB(25, 15, 25, 15);
 
   _RegistrarCategoriaPageWidgetState(this.categoriaEditar);
 
@@ -95,6 +95,7 @@ class _RegistrarCategoriaPageWidgetState
     if (categoriaEditar != null) {
       textControllerNombre.text = categoriaEditar!.nombre.toString();
       urlImagen = categoriaEditar!.urlImagen.toString();
+      textControllerDetalles!.text = categoriaEditar!.descripcion.toString();
     } else {}
   }
 
@@ -145,47 +146,69 @@ class _RegistrarCategoriaPageWidgetState
                 if (imagenUrl.contains('https')) {
                   CategoriaController categoriaController =
                       CategoriaController();
-                  if(categoriaEditar!=null){
+                  if (categoriaEditar != null) {
                     await registrarCategoria(
-                      categoriaController,
-                      context,
-                      textControllerNombre.text,
-                      imagenUrl,
-                      textControllerDetalles!.text,editar: true,idCategoria: categoriaEditar!.id);
-                  }else{
-                    await registrarCategoria(
-                      categoriaController,
-                      context,
-                      textControllerNombre.text,
-                      imagenUrl,
-                      textControllerDetalles!.text);
-                  }
-                  
-                  Timer(Duration(seconds: 3), () {
-                    context.pop();
+                        categoriaController,
+                        context,
+                        textControllerNombre.text,
+                        imagenUrl,
+                        textControllerDetalles!.text,
+                        editar: true,
+                        idCategoria: categoriaEditar!.id);
+                    
+                   Timer(Duration(seconds: 3), () {
+                    Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyApp(),
+                    ),
+                  );
                   });
+                  } else {
+                    await registrarCategoria(
+                        categoriaController,
+                        context,
+                        textControllerNombre.text,
+                        imagenUrl,
+                        textControllerDetalles!.text);
+                         Timer(Duration(seconds: 3), () {
+                    Navigator.pop(context);
+                  });
+                  }
+
+                 
                 }
               } else {
                 CategoriaController categoriaController = CategoriaController();
-                if(categoriaEditar!=null){
+                if (categoriaEditar != null) {
                   await registrarCategoria(
-                    categoriaController,
+                      categoriaController,
+                      context,
+                      textControllerNombre.text,
+                      categoriaEditar!.urlImagen.toString(),
+                      textControllerDetalles!.text,
+                      idCategoria: categoriaEditar!.id);
+                      Timer(Duration(seconds: 3), () {
+                    Navigator.pushReplacement(
                     context,
-                    textControllerNombre.text,
-                    categoriaEditar!.urlImagen.toString(),
-                    textControllerDetalles!.text);
-                }else{
+                    MaterialPageRoute(
+                      builder: (context) => MyApp(),
+                    ),
+                  );
+                  });
+                } else {
                   await registrarCategoria(
-                    categoriaController,
-                    context,
-                    textControllerNombre.text,
-                    'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png',
-                    textControllerDetalles!.text);
-                }
-                
-                Timer(Duration(seconds: 3), () {
-                  context.pop();
+                      categoriaController,
+                      context,
+                      textControllerNombre.text,
+                      'https://www.giulianisgrupo.com/wp-content/uploads/2018/05/nodisponible.png',
+                      textControllerDetalles!.text);
+                        Timer(Duration(seconds: 3), () {
+                  Navigator.pop(context);
                 });
+                }
+
+              
               }
             } else {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -215,13 +238,39 @@ class _RegistrarCategoriaPageWidgetState
         ),
       ),
       appBar: AppBar(
+        actions: [
+          if (categoriaEditar != null)
+            FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 30,
+                borderWidth: 1,
+                buttonSize: 60,
+                icon: const FaIcon(
+                  Icons.delete_forever_outlined,
+                  color: Colors.red,
+                  size: 30,
+                ),
+                onPressed: () async {
+                  await CategoriaController()
+                      .eliminar(context, categoriaEditar!.id.toString());
+                  Timer(Duration(seconds: 3), () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyApp(),
+                    ),
+                  );
+                });
+                  
+                }),
+        ],
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
         iconTheme:
             IconThemeData(color: FlutterFlowTheme.of(context).whiteColor),
         automaticallyImplyLeading: false,
         leading: InkWell(
           onTap: () async {
-            context.pop();
+            Navigator.pop(context);
           },
           child: Icon(
             Icons.chevron_left_rounded,
@@ -230,35 +279,28 @@ class _RegistrarCategoriaPageWidgetState
           ),
         ),
         title: Text(
-          'Resgistrar activo',
+          'Registrar categoria',
           textAlign: TextAlign.start,
-          style: FlutterFlowTheme.of(context).subtitle1.override(
-                fontFamily: FlutterFlowTheme.of(context).subtitle1Family,
+          style: FlutterFlowTheme.of(context).title1.override(
+                fontFamily: FlutterFlowTheme.of(context).title1Family,
                 color: FlutterFlowTheme.of(context).whiteColor,
                 useGoogleFonts: GoogleFonts.asMap()
                     .containsKey(FlutterFlowTheme.of(context).subtitle1Family),
               ),
         ),
-        actions: [],
         centerTitle: false,
         elevation: 0,
       ),
       body: Padding(
-        padding: (Platform.isAndroid || Platform.isIOS)
-            ? EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0)
-            : EdgeInsetsDirectional.fromSTEB(60, 16, 60, 16),
+        padding: EdgeInsetsDirectional.fromSTEB(10, 18, 10, 16),
         child: Container(
           alignment: Alignment.topCenter,
-          margin: (Platform.isAndroid || Platform.isIOS)
-              ? null
-              : EdgeInsets.all(10),
-          height: (Platform.isAndroid || Platform.isIOS) ? null : 1000,
+          margin: null,
+          height: 1000,
           width: double.infinity,
           decoration: BoxDecoration(
             color: FlutterFlowTheme.of(context).secondaryBackground,
-            borderRadius: (Platform.isAndroid || Platform.isIOS)
-                ? null
-                : BorderRadius.circular(30), //border corner radius
+            borderRadius: BorderRadius.circular(30), //border corner radius
             /*boxShadow: [
               BoxShadow(
                 color: FlutterFlowTheme.of(context).boxShadow, //color of shadow
@@ -274,18 +316,16 @@ class _RegistrarCategoriaPageWidgetState
           child: Form(
             key: _formKey,
             child: Padding(
-              padding: (Platform.isAndroid || Platform.isIOS)
-                  ? EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10)
-                  : EdgeInsetsDirectional.fromSTEB(20, 20, 20, 20),
+              padding: EdgeInsets.all(0),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 10, 5),
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 5),
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisSize: MainAxisSize.max,
                         children: [
                           Expanded(
                             child: Padding(
@@ -324,7 +364,7 @@ class _RegistrarCategoriaPageWidgetState
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                 child: Text(
-                                  'Seleccione o suba una imagen',
+                                  'Toca en la camara para subir una imagen',
                                   style: FlutterFlowTheme.of(context).title3,
                                 ),
                               ),
@@ -353,7 +393,7 @@ class _RegistrarCategoriaPageWidgetState
                               Container(
                                 width: (Platform.isAndroid || Platform.isIOS)
                                     ? MediaQuery.of(context).size.width * 0.9
-                                    : MediaQuery.of(context).size.width * 0.6,
+                                    : MediaQuery.of(context).size.width * 0.9,
                                 child: Align(
                                   alignment: AlignmentDirectional(0.05, 0),
                                   child: Padding(
@@ -364,10 +404,10 @@ class _RegistrarCategoriaPageWidgetState
                                           textControllerDetalles,
                                           'Ej.Impresoras laser y de inyencción de tinta multifuncionales',
                                           'Descripción',
-                                          150,
+                                          90,
                                           TextInputType.multiline,
                                           null,
-                                          false,
+                                          true,
                                           null,
                                           _focusNodeDetalles)),
                                 ),
@@ -489,13 +529,11 @@ class _RegistrarCategoriaPageWidgetState
     );
   }
 
-  Future<void> registrarCategoria(
-      CategoriaController activoCategoria,
-      BuildContext context,
-      String nombre,
-      String imagenUrl,
-      String descripcion,{bool editar = false, int? idCategoria}) async {
-    await activoCategoria.addCategoria(context, nombre, imagenUrl, descripcion,editar: editar,idCategoria: idCategoria);
+  Future<void> registrarCategoria(CategoriaController activoCategoria,
+      BuildContext context, String nombre, String imagenUrl, String descripcion,
+      {bool editar = false, int idCategoria = 0}) async {
+    await activoCategoria.addCategoria(context, nombre, imagenUrl, descripcion,
+        idCategoria: idCategoria);
     _loading = false;
   }
 
@@ -625,7 +663,7 @@ class _RegistrarCategoriaPageWidgetState
             width: 250,
             height: 200,
             decoration: BoxDecoration(
-                shape: BoxShape.circle,
+                shape: BoxShape.rectangle,
                 image: urlImagen != null && imageFile == null
                     ? DecorationImage(
                         fit: BoxFit.cover, image: NetworkImage(urlImagen))
@@ -638,21 +676,21 @@ class _RegistrarCategoriaPageWidgetState
   }
 
   Widget _decideImageView(imageFile) {
-     if (categoriaEditar!=null) {
+    if (categoriaEditar != null && imageFile == null) {
       return Image.network(
         categoriaEditar!.urlImagen.toString(),
         width: 250,
         height: 200,
         fit: BoxFit.cover,
       );
-    } else if(imageFile == null){
+    } else if (imageFile == null) {
       return Center(
         child: Icon(
           FontAwesomeIcons.camera,
           size: 40,
         ),
       );
-    }else{
+    } else {
       return Image.file(
         imageFile,
         width: 250,

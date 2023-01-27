@@ -585,7 +585,8 @@ class _FuncionarioPerfilPageWidgetState
                                                                             0,
                                                                             0),
                                                                 child: Text(
-                                                                  snapshot.data.nombre
+                                                                  snapshot.data
+                                                                      .nombre
                                                                       .toString(),
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
@@ -2171,8 +2172,8 @@ class _FuncionarioPerfilPageWidgetState
         .i('Cantidad de activos asignados:${listFuncionariosActvos.length}');
     await Future.forEach(listFuncionariosActvos, (Prestamo value) async {
       listActivos.add(await activoController.buscarActivo(value.idActivo));
-      listaFechasEntrega.add(Utilidades.definirDias(
-          value.fechaHoraInicio, value.fechaHoraEntrega!));
+      listaFechasEntrega.add(
+          Utilidades.definirDias(value.fechaHoraInicio, value.fechaHoraFin!));
     });
     Logger().i('Cantidad de activos asignados devueltos:' +
         listActivos.length.toString());

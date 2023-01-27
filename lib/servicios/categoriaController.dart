@@ -98,7 +98,7 @@ class CategoriaController {
   }
 
   Future<Categoria> buscarCategoriaID(int id) async {
-    Categoria vacio = Categoria('','','');
+    Categoria vacio = Categoria('', '', '');
     try {
       final data = (await client
           .from('CATEGORIAS')
@@ -116,33 +116,30 @@ class CategoriaController {
   }
 
   Future<void> addCategoria(
-      context, String nombre, String urlImagen, String? descripcion, {bool editar=false, int? idCategoria}) async {
+      context, String nombre, String urlImagen, String? descripcion,
+      {int idCategoria = 0}) async {
     try {
-      log('Inserando nuevo activo...');
-      Utilidades utilidades = Utilidades();
-      if(editar){
-        await client.from('CATEGORIAS').update({
-        'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
-        'URL_IMAGEN': urlImagen,
-        'DESCRIPCION': (descripcion == null)
-            ? null
-            : utilidades.mayusculaPrimeraLetraFrase(descripcion),
-      }).eq('ID', idCategoria).then((value) => log('Nueva categoria registrada: $value'));
-
-      }else{
-        await client.from('CATEGORIAS').insert({
-        'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
-        'URL_IMAGEN': urlImagen,
-        'DESCRIPCION': (descripcion == null)
-            ? null
-            : utilidades.mayusculaPrimeraLetraFrase(descripcion),
-      }).then((value) => log('Nueva categoria registrada: $value'));
-      }
       
-      log("Registrado con exito");
+      Utilidades utilidades = Utilidades();
+      if (idCategoria>0) {
+        log('Editando categoria...');
+        await client
+            .from('CATEGORIAS')
+            .update({
+              'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
+              'URL_IMAGEN': urlImagen,
+              'DESCRIPCION': (descripcion == null)
+                  ? null
+                  : utilidades.mayusculaPrimeraLetraFrase(descripcion),
+            })
+            .eq('ID', idCategoria)
+            .then((value) {
+              log('categoria registrada: $value');
+            
+            log("Editado con exito");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          "CAtegoria registrada con exitó",
+          "Categoria registrada con exitó",
           style: FlutterFlowTheme.of(context).bodyText2.override(
                 fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                 color: FlutterFlowTheme.of(context).tertiaryColor,
@@ -151,11 +148,37 @@ class CategoriaController {
               ),
         ),
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-      ));
+      ));});
+      } else {
+        log('Registrando categoria...');
+        await client.from('CATEGORIAS').insert({
+          'NOMBRE': utilidades.mayusculaTodasPrimerasLetras(nombre),
+          'URL_IMAGEN': urlImagen,
+          'DESCRIPCION': (descripcion == null)
+              ? null
+              : utilidades.mayusculaPrimeraLetraFrase(descripcion),
+        }).then((value){
+              log('Nueva categoria registrada: $value');
+            
+            log("Registrado con exito");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "Categoria registrada con exitó",
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+      ));});
+      }
     } on PostgrestException catch (errorPostgres) {
       StorageController storageController = StorageController();
-      var error = Utilidades()
-          .validarErroresInsertar(errorPostgres.code!, 'Esta categoria');
+      var error = Utilidades().validarErroresInsertar(
+          errorPostgres.code!, 'Esta categoria',
+          error: errorPostgres.message);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           error,
@@ -171,6 +194,60 @@ class CategoriaController {
       log(errorPostgres.toString());
     } catch (e) {
       log(e.toString());
+    }
+  }
+
+  Future<String> eliminar(context, String id) async {
+    try {
+      final data = (await client.from('CATEGORIAS').delete().eq('ID', id));
+      log('Eliminando:$data');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Eliminado con exitó',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+      ));
+      return 'ok';
+    } on PostgrestException catch (errorPostgres) {
+      var error = Utilidades().validarErroresEliminar(
+          errorPostgres.code!, 'esta categoria',
+          objetoLlaveForaneo:
+              'activos asignados, debe estar vacio para poder ser eliminado');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          error,
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      log(errorPostgres.toString());
+      return 'error';
+    } catch (e) {
+      log(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Ha ocurrido un error inesperado al intentar eliminar, verifique su conexión a internet',
+          style: FlutterFlowTheme.of(context).bodyText2.override(
+                fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                color: FlutterFlowTheme.of(context).tertiaryColor,
+                useGoogleFonts: GoogleFonts.asMap()
+                    .containsKey(FlutterFlowTheme.of(context).bodyText2Family),
+              ),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+      return 'error';
     }
   }
 

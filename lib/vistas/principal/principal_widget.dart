@@ -53,7 +53,7 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final prefs = SharedPreferences.getInstance();
   bool local = false;
-  bool selectMode;
+  bool selectMode= false;
 
   _PrincipalWidgetState(this.selectMode);
 
@@ -127,37 +127,44 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
                           true, // whether to show the flash icon
                           ScanMode.BARCODE)
                       .then((value) async {
-                    if (value != null) {
+                    if (value != null&&value!='-1') {
                       ActivoController activoController = ActivoController();
                       var res = await activoController.buscarActivo(value);
                       if (res.idSerial.length < 4) {
                         // ignore: use_build_context_synchronously
-                        context.pushNamed(
-                          'registraractivopage',
-                          queryParams: {
-                            'idSerial': serializeParam(
-                              value.trim().replaceAll(".", ""),
-                              ParamType.String,
+                         final e =await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ResgistrarActivoPageWidget(
+                              idSerial: value.trim().replaceAll(".", ""),
+                              idCategoria: 2,
+            
                             ),
-                            'selectMode': serializeParam(
-                              false,
-                              ParamType.bool,
-                            ),
-                          },
-                        );
+                          ),
+                        ).then((value) {
+                          Future.delayed(Duration(milliseconds: 500), () {
+                            setState(() {});
+                          });
+                        });
+                        
+                        
                       } else {
                         // ignore: use_build_context_synchronously
-                        await Navigator.push(
+                        final e =await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ActivoPerfilPageWidget(
                               activo: res,
-                              selectMode: false,
+                              selectMode: selectMode,
                               esPrestamo: false,
                               escogerComponente: false,
                             ),
                           ),
-                        );
+                        ).then((value) {
+                          Future.delayed(Duration(milliseconds: 500), () {
+                            setState(() {});
+                          });
+                        });
                       }
                       setState(() {});
                     }
@@ -170,15 +177,16 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
               foregroundColor: Colors.white,
               label: 'Registrar nuevo activo',
               labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => context.pushNamed(
-                'registraractivopage',
-                queryParams: {
-                  'idSerial': serializeParam(
-                    null,
-                    ParamType.String,
-                  )
-                },
-              ),
+              onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ResgistrarActivoPageWidget(
+                              idCategoria: 2,
+                              
+            
+                            ),
+                          ),
+                        )
             ),
             SpeedDialChild(
               child: Icon(Icons.category_rounded),
@@ -186,7 +194,18 @@ class _PrincipalWidgetState extends State<PrincipalWidget> {
               backgroundColor: Color.fromARGB(255, 6, 113, 122),
               label: 'Crear nueva categoria',
               labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () => context.pushNamed('registrarcategoriapage'),
+              onTap: () async => await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegistrarCategoriaPageWidget(
+                          
+                        ),
+                      ),
+                    ).then((value) {
+                          Future.delayed(Duration(milliseconds: 500), () {
+                            setState(() {});
+                          });
+                        }), //,
             ),
 
             //add more menu item childs here

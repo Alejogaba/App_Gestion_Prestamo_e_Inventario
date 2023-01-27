@@ -102,20 +102,7 @@ class _ListaFuncionariosPageWidgetState
                   ),
             ),
             actions: [
-              FlutterFlowIconButton(
-                borderColor: Colors.transparent,
-                borderRadius: 30,
-                borderWidth: 1,
-                buttonSize: 60,
-                icon: Icon(
-                  Icons.notifications_none,
-                  color: FlutterFlowTheme.of(context).whiteColor,
-                  size: 30,
-                ),
-                onPressed: () {
-                  print('IconButton pressed ...');
-                },
-              ),
+              
             ],
             centerTitle: false,
             elevation: 4,

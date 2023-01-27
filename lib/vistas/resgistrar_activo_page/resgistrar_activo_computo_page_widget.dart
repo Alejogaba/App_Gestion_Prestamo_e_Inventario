@@ -312,8 +312,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
             }
             Logger().v(
                 _formKey.currentState!.validate() && idCategoriaValue != null);
-            if (_formKey.currentState!.validate() &&
-                idCategoria > 0) {
+            if (_formKey.currentState!.validate() && idCategoria > 0) {
               setState(() {
                 blur = true;
               });
@@ -423,7 +422,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                   });
                 }
               }
-            } else if (idCategoria<=0) {
+            } else if (idCategoria <= 0) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text(
                   "Seleccione una categoria",
@@ -937,8 +936,8 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                       ),
                                       FutureBuilder<List<Categoria>>(
                                         future: _listaCategorias,
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<dynamic> snapshot) {
+                                        builder:
+                                            (BuildContext context, snapshot) {
                                           if (snapshot.connectionState ==
                                                   ConnectionState.done &&
                                               snapshot.hasData) {
@@ -998,13 +997,17 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                                 child: FlutterFlowDropDown<
                                                                     Categoria>(
                                                                   value: (idCategoria >
-                                                                          0)
+                                                                              0 &&
+                                                                          snapshot
+                                                                              .hasData &&
+                                                                          snapshot.data!.length >=
+                                                                              idCategoria)
                                                                       ? snapshot
                                                                               .data![
                                                                           idCategoria -
-                                                                              2]
+                                                                              1]
                                                                       : snapshot
-                                                                          .data![0],
+                                                                          .data![1],
                                                                   options: List.generate(
                                                                       snapshot.data!.length,
                                                                       (index) => DropdownMenuItem(
@@ -2411,7 +2414,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.88,
+                width: MediaQuery.of(context).size.width * 0.75,
                 child: TextFormFieldCustom(
                     context,
                     activo.otrasCaracteristicasTextEditingController,
@@ -2815,7 +2818,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         null,
         editar: editar);
 
-    if (res == 'ok') {
+    if (res == 'ok' && idCategoria == 8) {
       if (listSoftware.isNotEmpty) {
         for (var element in listSoftware) {
           // ignore: use_build_context_synchronously
@@ -2869,7 +2872,11 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
       print('Lista categoria url: ${element.urlImagen}');
     }
     if (listCategorias != null && listCategorias.length > 0) {
-      listCategorias.removeWhere((item) => item.nombre == 'Todos los activos');
+      for (var element in listCategorias) {
+        if (element.nombre!.contains('Todos los activos')) {
+          element.nombre = 'Todos los activos (Sin Categoria)';
+        }
+      }
     }
     return Future.value(listCategorias);
   }
@@ -3133,7 +3140,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
             width: 250,
             height: 200,
             decoration: BoxDecoration(
-                shape: BoxShape.circle,
+                shape: BoxShape.rectangle,
                 image: urlImagen != null && imageFile == null
                     ? DecorationImage(
                         fit: BoxFit.cover, image: NetworkImage(urlImagen))
