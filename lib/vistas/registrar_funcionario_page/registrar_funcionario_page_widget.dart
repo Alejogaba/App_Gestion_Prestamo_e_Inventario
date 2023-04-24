@@ -234,10 +234,11 @@ class _RegistrarFuncionarioPageWidgetState
                   }
 
                   if (res == 'ok') {
-                    setState(() {
+                    
+                    Timer(Duration(seconds: 3), () {
+                      setState(() {
                       blur = false;
                     });
-                    Timer(Duration(seconds: 3), () {
                       Navigator.pop(context);
                     });
                   }
@@ -262,10 +263,11 @@ class _RegistrarFuncionarioPageWidgetState
                 }
 
                 if (res == 'ok') {
-                  setState(() {
+                  
+                  Timer(Duration(seconds: 3), () {
+                    setState(() {
                     blur = false;
                   });
-                  Timer(Duration(seconds: 3), () {
                     Navigator.pop(context);
                   });
                 }

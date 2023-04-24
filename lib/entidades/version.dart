@@ -10,7 +10,7 @@ class Version {
       this.urlAndroid,
       this.urlWindows,
       this.esUltimaVersion = false,
-      this.changelog =' -Correción de fallas y errores'});
+      this.changelog =' '});
 
   factory Version.fromMap(Map<String, dynamic> map) {
     return Version(
@@ -18,7 +18,7 @@ class Version {
       urlAndroid: map['url_android'] ?? '',
       urlWindows: map['url_windows'] ?? '',
       esUltimaVersion: map['es_ultima_version'] ?? false,
-      changelog: map['changelog'] ?? ' -Correción de fallas y errores',
+      changelog: map['changelog'] ?? '',
     );
   }
 }

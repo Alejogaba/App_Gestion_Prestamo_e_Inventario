@@ -101,47 +101,119 @@ class _FuncionarioPerfilPageWidgetState
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          // ignore: use_build_context_synchronously
-          if (selectMode == true) {
-            try {
-              Navigator.pop(context, funcionario);
-            } catch (e) {
-              Logger().e('Error en context.pop');
-            }
-          } else {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            prefs.setString('id_funcionario', funcionario.cedula);
-            Logger().i('Antes del push');
-            // ignore: use_build_context_synchronously
-            await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ListaActivosPageWidget(
-                          idCategoria: 2,
-                          selectMode: true,
-                          esPrestamo: false,
-                        )));
-          }
-        },
-        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-        icon: Icon(
-          Icons.add_rounded,
-          color: FlutterFlowTheme.of(context).whiteColor,
-          size: 24,
-        ),
-        elevation: 8,
-        label: Text(
-          (selectMode) ? 'Seleccionar funcionario' : 'Asignar activo',
-          style: FlutterFlowTheme.of(context).bodyText1.override(
-                fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
+      floatingActionButton: (!tienePrestamos || selectMode)
+          ? FloatingActionButton.extended(
+              onPressed: () async {
+                // ignore: use_build_context_synchronously
+                if (selectMode == true) {
+                  try {
+                    Navigator.pop(context, funcionario);
+                  } catch (e) {
+                    Logger().e('Error en context.pop');
+                  }
+                } else {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.setString('id_funcionario', funcionario.cedula);
+                  Logger().i('Antes del push');
+                  // ignore: use_build_context_synchronously
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ListaActivosPageWidget(
+                                idCategoria: 2,
+                                selectMode: true,
+                                esPrestamo: false,
+                              )));
+                }
+              },
+              backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+              icon: Icon(
+                Icons.add_rounded,
                 color: FlutterFlowTheme.of(context).whiteColor,
-                useGoogleFonts: GoogleFonts.asMap()
-                    .containsKey(FlutterFlowTheme.of(context).bodyText1Family),
+                size: 24,
               ),
-        ),
-      ),
+              elevation: 8,
+              label: Text(
+                (selectMode) ? 'Seleccionar funcionario' : 'Asignar activo',
+                style: FlutterFlowTheme.of(context).bodyText1.override(
+                      fontFamily: FlutterFlowTheme.of(context).bodyText1Family,
+                      color: FlutterFlowTheme.of(context).whiteColor,
+                      useGoogleFonts: GoogleFonts.asMap().containsKey(
+                          FlutterFlowTheme.of(context).bodyText1Family),
+                    ),
+              ),
+            )
+          : Padding(
+              padding: EdgeInsets.only(bottom: 50.0, right: 16),
+              child: SpeedDial(
+                //Speed dial menu
+                //margin bottom
+                icon: Icons.menu, //icon on Floating action button
+                activeIcon: Icons.close, //icon when menu is expanded on button
+                backgroundColor: FlutterFlowTheme.of(context)
+                    .primaryColor, //background color of button
+                foregroundColor:
+                    Colors.white, //font color, icon color in button
+                activeBackgroundColor: FlutterFlowTheme.of(context)
+                    .primaryColor, //background color when menu is expanded
+                activeForegroundColor: Colors.white,
+                buttonSize: const Size(56.0, 56), //button size
+                visible: true,
+                closeManually: false,
+                curve: Curves.bounceIn,
+                overlayColor: Colors.black,
+                overlayOpacity: 0.5,
+                onOpen: () => print('OPENING DIAL'), // action when menu opens
+                onClose: () => print('DIAL CLOSED'), //action when menu closes
+
+                elevation: 8.0, //shadow elevation of button
+                shape: CircleBorder(), //shape of button
+
+                children: [
+                  SpeedDialChild(
+                      child: Icon(
+                        Icons.picture_as_pdf_outlined,
+                        color: FlutterFlowTheme.of(context).whiteColor,
+                        size: 24,
+                      ),
+                      backgroundColor: Color.fromARGB(255, 7, 133, 107),
+                      foregroundColor: Colors.white,
+                      label: 'Generar Hoja de salida',
+                      labelStyle: TextStyle(fontSize: 18.0),
+                      onTap: () async {}),
+
+                  SpeedDialChild(
+                    child: Icon(
+                      Icons.add_rounded,
+                      color: FlutterFlowTheme.of(context).whiteColor,
+                      size: 24,
+                    ),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Color.fromARGB(255, 6, 113, 122),
+                    label: 'Asignar activo',
+                    labelStyle: TextStyle(fontSize: 18.0),
+                    onTap: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      prefs.setString('id_funcionario', funcionario.cedula);
+                      Logger().i('Antes del push');
+                      // ignore: use_build_context_synchronously
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ListaActivosPageWidget(
+                                    idCategoria: 2,
+                                    selectMode: true,
+                                    esPrestamo: false,
+                                  )));
+                    },
+                  ),
+
+                  //add more menu item childs here
+                ],
+              ),
+            ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -1628,7 +1700,7 @@ class _FuncionarioPerfilPageWidgetState
             ),
             if (blur)
               ClipRRect(
-                borderRadius: BorderRadius.circular(0),
+                borderRadius: BorderRadius.circular(0)      ,
                 child: BackdropFilter(
                   filter: ImageFilter.blur(
                     sigmaX: 4,
@@ -1682,8 +1754,56 @@ class _FuncionarioPerfilPageWidgetState
                     ),
               ),
             ),
+            if(false)
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(24, 0, 0, 8),
+              child: Container(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  icon: Icon(Icons.check, color: Colors.white),
+                  label: Text("Marcar todos los activos como entregado",
+                      style: TextStyle(color: Colors.white)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                  ),
+                  onPressed: () async {
+                    var res = await prestamosController.entregarPrestamo(
+              context, funcionario.cedula, '');
+              if (res == 'ok') {
+                setState(() {});
+                }
+                  },  
+                ),
+              ),
+            ),
           ],
         ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
+        if(prestamo)
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(24, 4, 0, 8),
+              child: Row(
+                children: [
+                  const Icon(
+          FontAwesomeIcons.check,
+          color: Color.fromARGB(255, 7, 133, 36),
+          size: 15,
+        ),
+                  Text(':  Marcar activo como entregado',
+                    style: FlutterFlowTheme.of(context).bodyText2.override(
+                          fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          fontSize: 12,
+                          fontWeight: FontWeight.normal,
+                          useGoogleFonts: GoogleFonts.asMap().containsKey(
+                              FlutterFlowTheme.of(context).bodyText2Family),
+                        ),
+                  ),
+                ],
+              ),
+            ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
         ListView.builder(
           padding: EdgeInsets.zero,
           shrinkWrap: true,

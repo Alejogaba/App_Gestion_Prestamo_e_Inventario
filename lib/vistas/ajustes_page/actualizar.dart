@@ -126,7 +126,7 @@ class _ActualizarPageWidgetState extends State<ActualizarPageWidget> {
         timer.cancel();
         if (process.status == ProcessState.STATUS_SUCCESSFUL) {
           // ignore: use_build_context_synchronously
-          context.pop();
+          // context.pop();
         }
       }
     });

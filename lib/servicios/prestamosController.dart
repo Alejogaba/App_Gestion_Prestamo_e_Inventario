@@ -55,8 +55,8 @@ class PrestamosController {
 
       return 'ok';
     } on PostgrestException catch (errorPostgres) {
-      var error = Utilidades().validarErroresInsertar(
-          errorPostgres.code!, 'Este prestamo');
+      var error = Utilidades()
+          .validarErroresInsertar(errorPostgres.code!, 'Este prestamo');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           error,
@@ -71,7 +71,7 @@ class PrestamosController {
       ));
       log(errorPostgres.toString());
       return 'error';
-    }catch (e) {
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           'Ha ocurrido un error, revise su conexión a internet',
@@ -89,25 +89,29 @@ class PrestamosController {
     }
   }
 
-  Future<String> registrarHojaSalida(context, String descripcion) async {
+  Future<String> registrarHojaSalida(
+      context, String descripcion, String seriales, String funcionario) async {
     try {
       final data = await supabase
-          .from('hojas_salidas')
+          .from('HOJAS_SALIDAS')
           .select('*')
-          .order('consecutivo', ascending: false).limit(1)
+          .order('consecutivo', ascending: false)
+          .limit(1)
           .maybeSingle() as Map<String, dynamic>;
       final HojaSalida ultimahojaSalida = HojaSalida.fromMap(data);
       final int consecutivo = ultimahojaSalida.id + 1;
-      await supabase.from('hojas_salidas').insert({
+      await supabase.from('HOJAS_SALIDAS').insert({
         'consecutivo': consecutivo,
         'descripcion': descripcion,
+        'seriales': seriales,
+        'funcionario': funcionario
       });
       log("Hoja de salida registrada con exito");
-      if (consecutivo>99) {
-         return 'GTI-$consecutivo';
-      } else if(consecutivo>9){
-         return 'GTI-0$consecutivo';
-      }else{
+      if (consecutivo > 99) {
+        return 'GTI-$consecutivo';
+      } else if (consecutivo > 9) {
+        return 'GTI-0$consecutivo';
+      } else {
         return 'GTI-00$consecutivo';
       }
     } on Exception catch (error) {
@@ -145,22 +149,55 @@ class PrestamosController {
     }
   }
 
+  Future<List<HojaSalida>> getHojaSalida(String? terminoBusqueda) async {
+    try {
+      if (terminoBusqueda != null && terminoBusqueda.length > 2) {
+        final data = await supabase
+            .from('HOJAS_SALIDAS')
+            .select('*')
+            .ilike('descripcion', '%$terminoBusqueda%') as List<dynamic>;
+        log('Datos: $data');
+        return (data).map((e) => HojaSalida.fromMap(e)).toList();
+      } else {
+        final data =
+            await supabase.from('HOJAS_SALIDAS').select('*') as List<dynamic>;
+        log('Datos: $data');
+        return (data).map((e) => HojaSalida.fromMap(e)).toList();
+      }
+    } on PostgrestException catch (error) {
+      log(error.message);
+      return [];
+    } catch (error) {
+      log('Error al cargar categorias: $error');
+      return [];
+    }
+  }
+
   Future<String> entregarPrestamo(
       context, String idFuncionario, String idActivo) async {
     try {
-      final data = (await supabase
-          .from('PRESTAMOS')
-          .update({'ENTREGADO': true,'FECHA_HORA_ENTREGA': DateFormat.yMd('es_CO').format(DateTime.now())}).match({
-        'ID_FUNCIONARIO': idFuncionario,
-        'ID_ACTIVO': idActivo,
-        
-      }).then((value) async {
-        await supabase
-            .from('ACTIVOS')
-            .update({'ESTA_PRESTADO': false,
-            }).match({'ID_SERIAL': idActivo});
-      }));
-      log('Entregado:$data');
+      if (idActivo.isNotEmpty) {
+        final data = (await supabase.from('PRESTAMOS').update({
+          'ENTREGADO': true,
+          'FECHA_HORA_ENTREGA': DateFormat.yMd('es_CO').format(DateTime.now())
+        }).match({
+          'ID_FUNCIONARIO': idFuncionario,
+          'ID_ACTIVO': idActivo,
+        }).then((value) async {
+          await supabase.from('ACTIVOS').update({
+            'ESTA_PRESTADO': false,
+          }).match({'ID_SERIAL': idActivo});
+        }));
+        log('Entregado:$data');
+      } else {
+        final data = (await supabase.from('PRESTAMOS').update({
+          'ENTREGADO': true,
+          'FECHA_HORA_ENTREGA': DateFormat.yMd('es_CO').format(DateTime.now())
+        }).match({
+          'ID_FUNCIONARIO': idFuncionario,
+        }));
+        log('Entregado:$data');
+      }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             'Marcado como entregado',
@@ -208,31 +245,33 @@ class PrestamosController {
     }
   }
 
-  Future<List<Prestamo>> getActivosPrestados( 
+  Future<List<Prestamo>> getActivosPrestados(
       {String? idFuncionario,
       String? idActivo,
       bool? soloMostarSinEntregar}) async {
     try {
       if (soloMostarSinEntregar != null && soloMostarSinEntregar) {
         if (idFuncionario != null) {
-          final data = await supabase
-                  .from('PRESTAMOS')
-                  .select('*')
-                  .match({'ID_FUNCIONARIO': idFuncionario, 'ENTREGADO': false}).order('FECHA_HORA_FINAL',ascending:true)
-              as List<dynamic>;
+          final data = await supabase.from('PRESTAMOS').select('*').match({
+            'ID_FUNCIONARIO': idFuncionario,
+            'ENTREGADO': false
+          }).order('FECHA_HORA_FINAL', ascending: true) as List<dynamic>;
           return (data).map((e) => Prestamo.fromMap(e)).toList();
         } else if (idActivo != null) {
           final data = await supabase
-                  .from('PRESTAMOS')
-                  .select('*')
-                  .match({'ID_ACTIVO': idActivo, 'ENTREGADO': false}).order('FECHA_HORA_FINAL',ascending:true)
-              as List<dynamic>;
+              .from('PRESTAMOS')
+              .select('*')
+              .match({'ID_ACTIVO': idActivo, 'ENTREGADO': false}).order(
+                  'FECHA_HORA_FINAL',
+                  ascending: true) as List<dynamic>;
           return (data).map((e) => Prestamo.fromMap(e)).toList();
         } else {
           final data = await supabase
               .from('PRESTAMOS')
               .select('*')
-              .match({'ENTREGADO': false}).order('ENTREGADO',ascending: true).order('FECHA_HORA_FINAL',ascending:true) as List<dynamic>;
+              .match({'ENTREGADO': false})
+              .order('ENTREGADO', ascending: true)
+              .order('FECHA_HORA_FINAL', ascending: true) as List<dynamic>;
           return (data).map((e) => Prestamo.fromMap(e)).toList();
         }
       } else {
@@ -240,17 +279,24 @@ class PrestamosController {
           final data = await supabase
               .from('PRESTAMOS')
               .select('*')
-              .eq('ID_FUNCIONARIO', idFuncionario).order('ENTREGADO',ascending: true).order('FECHA_HORA_FINAL',ascending:true) as List<dynamic>;
+              .eq('ID_FUNCIONARIO', idFuncionario)
+              .order('ENTREGADO', ascending: true)
+              .order('FECHA_HORA_FINAL', ascending: true) as List<dynamic>;
           return (data).map((e) => Prestamo.fromMap(e)).toList();
         } else if (idActivo != null) {
           final data = await supabase
               .from('PRESTAMOS')
               .select('*')
-              .eq('ID_ACTIVO', idActivo).order('ENTREGADO',ascending: true).order('FECHA_HORA_FINAL',ascending:true) as List<dynamic>;
+              .eq('ID_ACTIVO', idActivo)
+              .order('ENTREGADO', ascending: true)
+              .order('FECHA_HORA_FINAL', ascending: true) as List<dynamic>;
           return (data).map((e) => Prestamo.fromMap(e)).toList();
         } else {
-          final data =
-              await supabase.from('PRESTAMOS').select('*').order('ENTREGADO',ascending: true).order('FECHA_HORA_FINAL',ascending:true) as List<dynamic>;
+          final data = await supabase
+              .from('PRESTAMOS')
+              .select('*')
+              .order('ENTREGADO', ascending: true)
+              .order('FECHA_HORA_FINAL', ascending: true) as List<dynamic>;
           return (data).map((e) => Prestamo.fromMap(e)).toList();
         }
       }

@@ -327,8 +327,8 @@ class ActivoController {
       return response;
     } on PostgrestException catch (errorPostgres) {
       var error = Utilidades().validarErroresEliminar(
-          errorPostgres.code!, 'este activos',
-          objetoLlaveForaneo: 'un funcionario asignado o esta prestado');
+          errorPostgres.code!, 'este activo,',
+          objetoLlaveForaneo: 'un funcionario asignado o se prestó a un funcionario');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           error,

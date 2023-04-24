@@ -76,7 +76,6 @@ class _MyAppState extends State<MyApp> {
     Future.delayed(Duration(seconds: 1),
         () => setState(() => _appStateNotifier.stopShowingSplashImage()));
   }
-  
 
   void setLocale(String language) {
     setState(() => _locale = createLocale(language));
@@ -91,13 +90,12 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       localizationsDelegates: [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-             GlobalCupertinoLocalizations.delegate,
-
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
-     supportedLocales: [
-          const Locale('es','CO'),
+      supportedLocales: [
+        const Locale('es', 'CO'),
       ],
       locale: const Locale('es'),
       title: 'InventariadoApp',
@@ -116,31 +114,131 @@ class NavBarPage extends StatefulWidget {
   final String? initialPage;
   final Widget? page;
 
+
   @override
   _NavBarPageState createState() => _NavBarPageState();
 }
 
-/// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
   String _currentPageName = 'principal';
   late Widget? _currentPage;
+  int _selectedIndex = 0;
+
+  final tabs = {
+    'principal': PrincipalWidget(),
+    'ListaFuncionariosPage': ListaFuncionariosPageWidget(),
+    //'AjustesPage': AjustesPageWidget(),
+    'ListaPrestamosPage': ListaPrestamosPageWidget(),
+  };
+
+  List<FloatingNavbarItem> _buildBottomNavigationBar(BuildContext context) {
+    return tabs.keys.map((key) {
+      return FloatingNavbarItem(
+        customWidget: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              _getIcon(key),
+              color: _selectedIndex == tabs.keys.toList().indexOf(key)
+                  ? FlutterFlowTheme.of(context).tertiaryColor
+                  : FlutterFlowTheme.of(context).secondaryText,
+              size: 30,
+            ),
+          ],
+        ),
+      );
+    }).toList();
+  }
+
+  IconData _getIcon(String key) {
+    switch (key) {
+      case 'principal':
+        return FontAwesomeIcons.handHolding;
+      case 'ListaFuncionariosPage':
+        return FontAwesomeIcons.userTie;
+      case 'ListaPrestamosPage':
+        return FontAwesomeIcons.boxOpen;
+      //case 'AjustesPage':
+      //  return FontAwesomeIcons.gear;
+      default:
+        return Icons.error_outline;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _currentPageName = widget.initialPage ?? _currentPageName;
     _currentPage = widget.page;
+    _selectedIndex = tabs.keys.toList().indexOf(_currentPageName);
   }
 
   @override
   Widget build(BuildContext context) {
-    final tabs = {
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth > 600) {
+        return Scaffold(
+      extendBody: true,
+      bottomNavigationBar: null, // Cambio
+      
+      body: Row(
+        // Nuevo
+        children: [
+          NavigationRail(
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: (int index) {
+              setState(() {
+                _selectedIndex = index;
+                _currentPageName = tabs.keys.toList()[index];
+                _currentPage = null;
+              });
+            },
+            labelType: NavigationRailLabelType.all,
+            backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+            selectedIconTheme: IconThemeData(
+                color: FlutterFlowTheme.of(context).tertiaryColor),
+            unselectedIconTheme: IconThemeData(
+                color: FlutterFlowTheme.of(context).secondaryText),
+            selectedLabelTextStyle: FlutterFlowTheme.of(context).bodyText1,
+            unselectedLabelTextStyle: FlutterFlowTheme.of(context).bodyText1,
+            destinations: [
+              NavigationRailDestination(
+                icon: Icon(FontAwesomeIcons.house,
+                size: 25),
+                label: Text('Inventario'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(Icons.people,
+                size: 28,),
+                label: Text('Funcionarios'),
+              ),
+              NavigationRailDestination(
+                icon: Icon(
+                  Icons.swap_horiz,
+                size: 40,),
+                label: Text('Préstamos'),
+              ),
+            ],
+          ),
+          VerticalDivider(thickness: 1, width: 1),
+          Expanded(
+            child: Center(
+              child: _currentPage ?? tabs[_currentPageName],
+            ),
+          ),
+        ],
+      ),
+    );
+      } else {
+        // Si el ancho es menor o igual a 600, mostrar FloatingNavbar
+        final tabs = {
       'ListaPrestamosPage': ListaPrestamosPageWidget(),
       'principal': PrincipalWidget(),
       'ListaFuncionariosPage': ListaFuncionariosPageWidget(),
       //'AjustesPage': AjustesPageWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
-    return Scaffold(
+        return Scaffold(
       body: _currentPage ?? tabs[_currentPageName],
       extendBody: true,
       bottomNavigationBar: Visibility(
@@ -168,12 +266,12 @@ class _NavBarPageState extends State<NavBarPage> {
                 children: [
                   Icon(
                     currentIndex == 0
-                        ? FontAwesomeIcons.handHolding
-                        : FontAwesomeIcons.handHolding,
+                        ? Icons.swap_horiz
+                        : Icons.swap_horiz,
                     color: currentIndex == 0
                         ? FlutterFlowTheme.of(context).tertiaryColor
                         : FlutterFlowTheme.of(context).secondaryText,
-                    size: 30,
+                    size: 40,
                   ),
                 ],
               ),
@@ -228,5 +326,6 @@ class _NavBarPageState extends State<NavBarPage> {
         ),
       ),
     );
-  }
+      }
+    });  }
 }

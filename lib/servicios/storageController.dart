@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -13,14 +12,16 @@ import 'package:path/path.dart' as p;
 import 'package:image_compression/image_compression.dart';
 
 import '../flutter_flow/flutter_flow_theme.dart';
+import 'package:mime_type/mime_type.dart';
 
 class StorageController {
   final supabase =
       SupabaseClient(constantes.SUPABASE_URL, constantes.SUPABASE_ANNON_KEY);
   Future<String> subirImagen(BuildContext context, String? filePath,
-      File imageFile, String? id, String bucketName) async {
+      File imageFile, String? id, String bucketName,
+      {bool esImagen = true}) async {
     try {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      /*ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           "Subiendo imagen....",
           style: FlutterFlowTheme.of(context).bodyText2.override(
@@ -31,63 +32,76 @@ class StorageController {
               ),
         ),
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-      ));
+      ));*/
       final input = ImageFile(
         rawBytes: imageFile.readAsBytesSync(),
         filePath: imageFile.path,
       );
       final output;
-      if (input.sizeInBytes > 300000) {
-        output = await compressInQueue(ImageFileConfiguration(
-            input: input,
-            config: const Configuration(
-                pngCompression: PngCompression.noCompression, jpgQuality: 90)));
-      } else if (input.sizeInBytes > 500000) {
-        output = await compressInQueue(ImageFileConfiguration(
-            input: input,
-            config: const Configuration(
-                pngCompression: PngCompression.bestSpeed, jpgQuality: 80)));
-      } else if (input.sizeInBytes > 700000) {
-        output = await compressInQueue(ImageFileConfiguration(
-            input: input,
-            config: const Configuration(
-                pngCompression: PngCompression.defaultCompression,
-                jpgQuality: 70)));
-      } else if (input.sizeInBytes > 1000000) {
-        output = await compressInQueue(ImageFileConfiguration(
-            input: input,
-            config: const Configuration(
-                pngCompression: PngCompression.bestCompression,
-                jpgQuality: 50)));
-      } else if (input.sizeInBytes > 1500000) {
-        output = await compressInQueue(ImageFileConfiguration(
-            input: input,
-            config: const Configuration(
-                pngCompression: PngCompression.bestCompression,
-                jpgQuality: 30)));
-      } else if (input.sizeInBytes > 2000000) {
-        output = await compressInQueue(ImageFileConfiguration(
-            input: input,
-            config: const Configuration(
-                pngCompression: PngCompression.bestCompression,
-                jpgQuality: 10)));
-      } else if (input.sizeInBytes > 3000000) {
-        output = await compressInQueue(ImageFileConfiguration(
-            input: input,
-            config: const Configuration(
-                pngCompression: PngCompression.bestCompression,
-                jpgQuality: 5)));
+      String? fileType = mime(imageFile.path); // Obtener el tipo de archivo
+
+      if (esImagen) {
+        if (input.sizeInBytes > 300000) {
+          output = await compressInQueue(ImageFileConfiguration(
+              input: input,
+              config: const Configuration(
+                  pngCompression: PngCompression.noCompression,
+                  jpgQuality: 90)));
+        } else if (input.sizeInBytes > 500000) {
+          output = await compressInQueue(ImageFileConfiguration(
+              input: input,
+              config: const Configuration(
+                  pngCompression: PngCompression.bestSpeed, jpgQuality: 80)));
+        } else if (input.sizeInBytes > 700000) {
+          output = await compressInQueue(ImageFileConfiguration(
+              input: input,
+              config: const Configuration(
+                  pngCompression: PngCompression.defaultCompression,
+                  jpgQuality: 70)));
+        } else if (input.sizeInBytes > 1000000) {
+          output = await compressInQueue(ImageFileConfiguration(
+              input: input,
+              config: const Configuration(
+                  pngCompression: PngCompression.bestCompression,
+                  jpgQuality: 50)));
+        } else if (input.sizeInBytes > 1500000) {
+          output = await compressInQueue(ImageFileConfiguration(
+              input: input,
+              config: const Configuration(
+                  pngCompression: PngCompression.bestCompression,
+                  jpgQuality: 30)));
+        } else if (input.sizeInBytes > 2000000) {
+          output = await compressInQueue(ImageFileConfiguration(
+              input: input,
+              config: const Configuration(
+                  pngCompression: PngCompression.bestCompression,
+                  jpgQuality: 10)));
+        } else if (input.sizeInBytes > 3000000) {
+          output = await compressInQueue(ImageFileConfiguration(
+              input: input,
+              config: const Configuration(
+                  pngCompression: PngCompression.bestCompression,
+                  jpgQuality: 5)));
+        } else {
+          output = await compressInQueue(ImageFileConfiguration(
+              input: input,
+              config: const Configuration(
+                  pngCompression: PngCompression.noCompression,
+                  jpgQuality: 95)));
+        }
       } else {
-        output = await compressInQueue(ImageFileConfiguration(
-            input: input,
-            config: const Configuration(
-                pngCompression: PngCompression.noCompression, jpgQuality: 95)));
+        output = input;
       }
 
       log('FileName: ${output.fileName}');
       log('FilePath: ${output.filePath}');
       final bytes = output.rawBytes;
-      const fileExt = 'jpg'; //output.filePath.split('.').last;
+      String fileExt;
+      if (esImagen) {
+        fileExt = 'jpg';
+      } else {
+        fileExt = 'pdf';
+      }
       final fileName = '$id.$fileExt';
       final filePath = fileName;
       final storageResponse = await supabase.storage
@@ -101,6 +115,7 @@ class StorageController {
             ),
           )
           .then((value) => {});
+          /*
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         duration: const Duration(milliseconds: 800),
         content: Text(
@@ -114,6 +129,7 @@ class StorageController {
         ),
         backgroundColor: FlutterFlowTheme.of(context).primaryColor,
       ));
+      */
       log('Resultado subida imagen: $storageResponse');
 
       final imageUrlResponse = await supabase.storage

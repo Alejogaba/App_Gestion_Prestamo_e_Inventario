@@ -5,6 +5,7 @@ import 'package:app_gestion_prestamo_inventario/entidades/activo.dart';
 import 'package:app_gestion_prestamo_inventario/entidades/componenteExterno.dart';
 import 'package:app_gestion_prestamo_inventario/flutter_flow/flutter_flow_util.dart';
 import 'package:app_gestion_prestamo_inventario/servicios/activoController.dart';
+import 'package:app_gestion_prestamo_inventario/servicios/storageController.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -40,8 +41,7 @@ class PdfApi {
     pdf.addPage(MultiPage(
       build: (context) => [
         SizedBox(height: 0.1 * PdfPageFormat.cm),
-        buildTextLeft(
-            "Reporte de activos$tipoActivo", 24, FontWeight.bold),
+        buildTextLeft("Reporte de activos$tipoActivo", 24, FontWeight.bold),
         buildTitle(
             "Fecha y hora en que se genero este reporte: " +
                 DateFormat.yMd().add_jm().format(DateTime.now()),
@@ -58,9 +58,9 @@ class PdfApi {
     }
   }
 
-  Future<bool> generarHojaSalida(
+  Future<String> generarHojaSalida(
       List<Activo> listaActivo, Funcionario funcionario, String observacion,
-      {String numConsecutivo = 'GTI - 000'}) async {
+      {String numConsecutivo = 'GTI - 000', bcontext}) async {
     final pdf = Document();
     double separacionAltura = (listaActivo.length > 3) ? 0.5 : 1;
     String funcionarioArea = await cargarArea(funcionario.idArea);
@@ -142,19 +142,23 @@ class PdfApi {
               "_________________________________", 11, FontWeight.bold),
           buildTextJustificado(
               "ALBA PATRICIA AMADOR OROZCO", 11, FontWeight.bold),
-          buildTextJustificado(
-              "Jefe oficina de las Tic", 11, FontWeight.bold),
+          buildTextJustificado("Jefe oficina de las Tic", 11, FontWeight.bold),
         ]),
       ],
     ));
 
     if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
-      bool res =
+      File? res =
           await saveDocumentDesktop(name: 'Salida de activos.pdf', pdf: pdf);
-      return res;
+      String url = await StorageController().subirImagen(
+          bcontext, res!.path.toString(), res, numConsecutivo, 'hojas-salida',esImagen: false);
+      return url;
     } else {
-      saveDocumentMobile(name: 'Salida de activos.pdf', pdf: pdf);
-      return false;
+      File? res =
+          await saveDocumentMobile(name: 'Salida de activos.pdf', pdf: pdf);
+      String url = await StorageController().subirImagen(
+          bcontext, res!.path.toString(), res, numConsecutivo, 'hojas-salida',esImagen: false);
+      return url;
     }
   }
 
@@ -354,18 +358,12 @@ class PdfApi {
         buildTable4Columnas([
           'NOMBRE USUARIO RESPONSABLE',
           '${funcionario.nombres} ${funcionario.apellidos}',
-          'DOMINIO O GRUPO DE TRABAJO',
-          ''
-        ]),
-        buildTable4Columnas([
-          'CARGO USUARIO RESPONSABLE',
-          funcionario.cargo,
           'FECHA ASIGNACIÓN',
           DateFormat.yMMMMd('es_US').format(DateTime.now())
         ]),
         buildTable4Columnas([
-          'NOMBRE USUARIO DEL EQUIPO',
-          '',
+          'CARGO USUARIO RESPONSABLE',
+          funcionario.cargo,
           'BÚZON CORREO INTERNO',
           (funcionario.correo != null) ? funcionario.correo! : '',
         ]),
@@ -447,9 +445,8 @@ class PdfApi {
     ));
 
     if (Platform.isWindows || Platform.isMacOS || Platform.isLinux) {
-      bool res =
-          await saveDocumentDesktop(name: 'Hoja de vida equipo.pdf', pdf: pdf);
-      return res;
+      await saveDocumentDesktop(name: 'Hoja de vida equipo.pdf', pdf: pdf);
+      return true;
     } else {
       saveDocumentMobile(name: 'Hoja de vida equipo.pdf', pdf: pdf);
       return false;
@@ -1062,9 +1059,8 @@ class PdfApi {
               textAlign: TextAlign.justify),
         ],
       );
-  
-  static Widget buildTextLeft(
-          String texto, double tamano, FontWeight fuente) =>
+
+  static Widget buildTextLeft(String texto, double tamano, FontWeight fuente) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1085,7 +1081,7 @@ class PdfApi {
         ],
       );
 
-  static Future<void> saveDocumentMobile({
+  static Future<File?> saveDocumentMobile({
     required String name,
     required Document pdf,
   }) async {
@@ -1107,9 +1103,10 @@ class PdfApi {
     var _openResult = 'Desconocido';
     _openResult = "type=${result.type}  message=${result.message}";
     log('Resultado OpenResult: $_openResult');
+    return file;
   }
 
-  static Future<bool> saveDocumentDesktop({
+  static Future<File?> saveDocumentDesktop({
     String? name,
     Document? pdf,
   }) async {
@@ -1140,9 +1137,9 @@ class PdfApi {
       if (!await launchUrl(uri)) {
         throw 'Could not launch $uri';
       }
-      return true;
+      return file;
     } else {
-      return false;
+      return null;
     }
   }
 

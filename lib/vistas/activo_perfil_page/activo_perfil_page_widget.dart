@@ -804,12 +804,12 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                     : Row(),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 12, 24, 0),
+                                      24, 12, 24, 12),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
                                       Text(
-                                        'MARCA',
+                                        'MARCA:',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText2
                                             .override(
@@ -827,46 +827,37 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                                               .bodyText2Family),
                                             ),
                                       ),
+                                      Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      16, 0, 24, 0),
+                                  child: Expanded(
+                                    child: Text(
+                                      (activo.detalles != null)
+                                          ? activo.detalles
+                                          : '',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText2
+                                          .override(
+                                            fontFamily: 'Poppins',
+                                            color: Color(0xFF8B97A2),
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                            useGoogleFonts: GoogleFonts
+                                                    .asMap()
+                                                .containsKey(
+                                                    FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyText2Family),
+                                          ),
+                                    ).animateOnPageLoad(animationsMap[
+                                        'textOnPageLoadAnimation2']!),
+                                  ),
+                                ),
                                     ],
                                   ).animateOnPageLoad(animationsMap[
                                       'rowOnPageLoadAnimation3']!),
                                 ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 4, 24, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 0, 24),
-                                          child: Text(
-                                            (activo.detalles != null)
-                                                ? activo.detalles
-                                                : 'Sin detalles...',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText2
-                                                .override(
-                                                  fontFamily: 'Poppins',
-                                                  color: Color(0xFF8B97A2),
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.normal,
-                                                  useGoogleFonts: GoogleFonts
-                                                          .asMap()
-                                                      .containsKey(
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyText2Family),
-                                                ),
-                                          ).animateOnPageLoad(animationsMap[
-                                              'textOnPageLoadAnimation2']!),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       24, 0, 24, 0),
@@ -1231,9 +1222,9 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
           mainAxisSize: MainAxisSize.max,
           children: [
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(24, 12, 0, 8),
+              padding: const EdgeInsetsDirectional.fromSTEB(24, 12, 0, 8),
               child: Text(
-                (prestamo) ? 'ESTE ACTIVO SE PRESTO A' : 'ACTIVO ASIGNADO A',
+                (prestamo) ? 'ESTE ACTIVO SE PRESTÓ A' : 'ACTIVO ASIGNADO A',
                 style: FlutterFlowTheme.of(context).bodyText2.override(
                       fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
                       color: FlutterFlowTheme.of(context).primaryText,
@@ -1244,8 +1235,32 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                     ),
               ),
             ),
+            
           ],
         ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
+        if(prestamo)
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(24, 4, 0, 8),
+              child: Row(
+                children: [
+                  const Icon(
+          FontAwesomeIcons.check,
+          color: Color.fromARGB(255, 7, 133, 36),
+          size: 15,
+        ),
+                  Text(':  Marcar este activo como entregado',
+                    style: FlutterFlowTheme.of(context).bodyText2.override(
+                          fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          fontSize: 12,
+                          fontWeight: FontWeight.normal,
+                          useGoogleFonts: GoogleFonts.asMap().containsKey(
+                              FlutterFlowTheme.of(context).bodyText2Family),
+                        ),
+                  ),
+                ],
+              ),
+            ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
         SingleChildScrollView(
           child: ListView.builder(
             padding: EdgeInsets.zero,
@@ -1407,7 +1422,7 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                             padding: const EdgeInsetsDirectional
                                                 .fromSTEB(3, 1.4, 0, 1),
                                             child: Text(
-                                              '${snapshot.data![index].cargo}',
+                                              snapshot.data![index].cargo,
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText2

@@ -145,7 +145,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
   List<Software> listSoftware = [
     Software(
       titulo: 'Sistemas operativo',
-      urlImagen: 'https://cdn-icons-png.flaticon.com/512/732/732225.png',
+      urlImagen: 'https://ujftfjxhobllfwadrwqj.supabase.co/storage/v1/object/public/activos/windows-icon-png-5802.png?t=2023-04-23T22%3A01%3A15.520Z',
       nombre: 'Windows',
       fabricante: 'Microsoft',
       version: '10 Pro',
@@ -1216,7 +1216,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                       count),
                                               stepSize: 1,
                                               minimum: 1,
-                                              maximum: 99,
+                                              maximum: (idCategoria!=8)?99:1,
                                             ),
                                           ),
                                         ),
@@ -1361,7 +1361,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                             .start,
                                                     children: [
                                                       Text(
-                                                        'Añadir activo',
+                                                        'Añadir otro software',
                                                         style:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -1415,7 +1415,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                                           0),
                                                               child:
                                                                   AutoSizeText(
-                                                                'Toca para seleccionar',
+                                                                'Haz clic aquí',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .start,
@@ -1650,7 +1650,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          'Añadir activo',
+                                                          'Añadir otro componente',
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .title3
@@ -1705,7 +1705,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                                             0),
                                                                 child:
                                                                     AutoSizeText(
-                                                                  'Toca para seleccionar',
+                                                                  'Haz clic aquí para seleccionar',
                                                                   textAlign:
                                                                       TextAlign
                                                                           .start,
@@ -1902,7 +1902,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                             .start,
                                                     children: [
                                                       Text(
-                                                        'Añadir activo',
+                                                        'Añadir otro componente',
                                                         style:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -1956,7 +1956,7 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
                                                                           0),
                                                               child:
                                                                   AutoSizeText(
-                                                                'Toca para seleccionar',
+                                                                'Haz clic aquí',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .start,

@@ -88,7 +88,8 @@ class _RegistrarPrestamoPageWidgetState
                 // ignore: use_build_context_synchronously
                 result = await prestamosController.registrarPrestamo(
                     context, activo.idSerial, funcionario!.cedula, fecha_inicio,
-                    fechaHoraFinal: (fecha_fin!=null)?DateTime.parse(fecha_fin):null,
+                    fechaHoraFinal:
+                        (fecha_fin != null) ? DateTime.parse(fecha_fin) : null,
                     observacion: controladorObservacion.text);
                 if (result.contains('ok')) {
                   listaRespuesta.add(result);
@@ -346,18 +347,18 @@ class _RegistrarPrestamoPageWidgetState
                           Expanded(
                             child: GestureDetector(
                               onTap: () async {
-                               final Activo? result = await Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ListaActivosPageWidget(
-                                                          idCategoria: 2,
-                                                              selectMode: true,
-                                                              esPrestamo: true,
-                                                        ),
-                                                      ),
-                                                    );
-                               
+                                final Activo? result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ListaActivosPageWidget(
+                                      idCategoria: 2,
+                                      selectMode: true,
+                                      esPrestamo: true,
+                                    ),
+                                  ),
+                                );
+
                                 if (result != null) {
                                   Logger()
                                       .i('Activo devuelto:${result.nombre}');
@@ -561,21 +562,18 @@ class _RegistrarPrestamoPageWidgetState
                     (funcionario != null)
                         ? GestureDetector(
                             onTap: () async {
-                              
-                                              final Funcionario? result =
-                                                    await Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ListaSeleccionFuncionariosPageWidget(
-                                                    ),
-                                                  ),
-                                                );
-                                                if (result != null) {
-                                                   setState(() {
+                              final Funcionario? result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ListaSeleccionFuncionariosPageWidget(),
+                                ),
+                              );
+                              if (result != null) {
+                                setState(() {
                                   funcionario = result;
                                 });
-                                                }
+                              }
                             },
                             child: Padding(
                               padding:
@@ -840,23 +838,19 @@ class _RegistrarPrestamoPageWidgetState
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () async {
-                              
-                                              final Funcionario? result =
-                                                    await Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ListaSeleccionFuncionariosPageWidget(
-                    
-                                                      
-                                                    ),
-                                                  ),
-                                                );
-                                                if (result != null) {
-                                                   setState(() {
-                                  funcionario = result;
-                                });
-                                                }
+                                      final Funcionario? result =
+                                          await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ListaSeleccionFuncionariosPageWidget(),
+                                        ),
+                                      );
+                                      if (result != null) {
+                                        setState(() {
+                                          funcionario = result;
+                                        });
+                                      }
                                     },
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
@@ -1194,16 +1188,31 @@ class _RegistrarPrestamoPageWidgetState
                   child: FFButtonWidget(
                     onPressed: () async {
                       String descripcion = '';
+                      String seriales = '';
                       for (var element in listActivos) {
                         descripcion = '$descripcion ${element.nombre},';
                       }
-                      String res = await PrestamosController()
-                          .registrarHojaSalida(contextPadre, descripcion);
+                      for (var element in listActivos) {
+                        seriales = '$seriales ${element.idSerial},';
+                      }
+                      String res =
+                          await PrestamosController().registrarHojaSalida(
+                        contextPadre,
+                        descripcion,
+                        seriales,
+                        (funcionario.apellidos.isNotEmpty)
+                            ? '${funcionario.nombres.split(' ')[0]} ${funcionario.apellidos.split(' ')[0]}'
+                            : funcionario.nombres,
+                      );
                       if (res.contains('GTI')) {
-                        bool guardado = await PdfApi().generarHojaSalida(
-                            listActivos, funcionario,
-                            numConsecutivo: res,controladorObservacion.text);
-                        if (guardado) {
+                        String guardado = await PdfApi().generarHojaSalida(
+                            listActivos,
+                            funcionario,
+                            numConsecutivo: res,
+                            bcontext: contextPadre,
+                            controladorObservacion.text);
+                        if (guardado.isNotEmpty) {
+                          log(guardado);
                           // ignore: use_build_context_synchronously
                           contextPadre.pop();
                         }
