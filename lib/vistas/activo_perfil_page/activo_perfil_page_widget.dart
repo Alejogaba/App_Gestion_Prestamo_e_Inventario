@@ -828,36 +828,36 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                                             ),
                                       ),
                                       Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      16, 0, 24, 0),
-                                  child: Expanded(
-                                    child: Text(
-                                      (activo.detalles != null)
-                                          ? activo.detalles
-                                          : '',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText2
-                                          .override(
-                                            fontFamily: 'Poppins',
-                                            color: Color(0xFF8B97A2),
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.normal,
-                                            useGoogleFonts: GoogleFonts
-                                                    .asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyText2Family),
-                                          ),
-                                    ).animateOnPageLoad(animationsMap[
-                                        'textOnPageLoadAnimation2']!),
-                                  ),
-                                ),
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            16, 0, 24, 0),
+                                        child: Expanded(
+                                          child: Text(
+                                            (activo.detalles != null)
+                                                ? activo.detalles
+                                                : '',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText2
+                                                .override(
+                                                  fontFamily: 'Poppins',
+                                                  color: Color(0xFF8B97A2),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.normal,
+                                                  useGoogleFonts: GoogleFonts
+                                                          .asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText2Family),
+                                                ),
+                                          ).animateOnPageLoad(animationsMap[
+                                              'textOnPageLoadAnimation2']!),
+                                        ),
+                                      ),
                                     ],
                                   ).animateOnPageLoad(animationsMap[
                                       'rowOnPageLoadAnimation3']!),
                                 ),
-                                
+
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       24, 0, 24, 0),
@@ -1235,32 +1235,33 @@ class _ActivoPerfilPageWidgetState extends State<ActivoPerfilPageWidget>
                     ),
               ),
             ),
-            
           ],
         ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
-        if(prestamo)
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(24, 4, 0, 8),
-              child: Row(
-                children: [
-                  const Icon(
-          FontAwesomeIcons.check,
-          color: Color.fromARGB(255, 7, 133, 36),
-          size: 15,
-        ),
-                  Text(':  Marcar este activo como entregado',
-                    style: FlutterFlowTheme.of(context).bodyText2.override(
-                          fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
-                          color: FlutterFlowTheme.of(context).primaryText,
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal,
-                          useGoogleFonts: GoogleFonts.asMap().containsKey(
-                              FlutterFlowTheme.of(context).bodyText2Family),
-                        ),
-                  ),
-                ],
-              ),
-            ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
+        if (prestamo)
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(24, 4, 0, 8),
+            child: Row(
+              children: [
+                const Icon(
+                  FontAwesomeIcons.check,
+                  color: Color.fromARGB(255, 7, 133, 36),
+                  size: 15,
+                ),
+                Text(
+                  ':  Marcar este activo como entregado',
+                  style: FlutterFlowTheme.of(context).bodyText2.override(
+                        fontFamily:
+                            FlutterFlowTheme.of(context).bodyText2Family,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        fontSize: 12,
+                        fontWeight: FontWeight.normal,
+                        useGoogleFonts: GoogleFonts.asMap().containsKey(
+                            FlutterFlowTheme.of(context).bodyText2Family),
+                      ),
+                ),
+              ],
+            ),
+          ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
         SingleChildScrollView(
           child: ListView.builder(
             padding: EdgeInsets.zero,
@@ -2782,9 +2783,10 @@ class myFloatingButton extends StatelessWidget {
               final Funcionario? result = await context.pushNamed<Funcionario>(
                 'listaSeleccionFuncionariosPage',
               );
+              log('Result:' + result.toString());
               if (result != null) {
                 // ignore: use_build_context_synchronously
-                ActivoController()
+                await ActivoController()
                     .asignarActivo(context, result.cedula, idActivo);
               }
             }

@@ -109,7 +109,7 @@ class _FuncionarioPerfilPageWidgetState
                   try {
                     Navigator.pop(context, funcionario);
                   } catch (e) {
-                    Logger().e('Error en context.pop');
+                    Logger().e('Error en context.pop: ' + e.toString());
                   }
                 } else {
                   SharedPreferences prefs =

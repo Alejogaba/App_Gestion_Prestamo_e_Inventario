@@ -390,6 +390,7 @@ class _ListaSeleccionFuncionariosPageWidgetState
                                                     ),
                                                   ),
                                                 );
+                                                log('Result lista funcionariops:' + result.toString());
                                                 if (result != null) {
                                                   // ignore: use_build_context_synchronously
                                                   Navigator.pop(
