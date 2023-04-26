@@ -2836,12 +2836,14 @@ class _ResgistrarActivoPageWidgetState extends State<ResgistrarActivoPageWidget>
         }
       }
 
+      
+
       if (listaComponenteExterno.isNotEmpty) {
         for (var element in listaComponenteExterno) {
           // ignore: use_build_context_synchronously
           await ComponenteExternoController().registrar(
               context, textControllerSerial.text, element.idComponente,
-              editar: editar, id: element.id);
+              editar: editar);
         }
       }
 

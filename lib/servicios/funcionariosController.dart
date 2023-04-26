@@ -217,12 +217,12 @@ class FuncionariosController {
         final data = await supabase
             .from('FUNCIONARIOS')
             .select('*')
-            .ilike('NOMBRES', '%$terminoBusqueda%') as List<dynamic>;
+            .ilike('NOMBRES', '%$terminoBusqueda%').order('NOMBRES', ascending: true) as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Funcionario.fromMap(e)).toList();
       } else {
         final data =
-            await supabase.from('FUNCIONARIOS').select('*') as List<dynamic>;
+            await supabase.from('FUNCIONARIOS').select('*').order('NOMBRES', ascending: true) as List<dynamic>;
         log('Datos: $data');
         return (data).map((e) => Funcionario.fromMap(e)).toList();
       }

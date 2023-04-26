@@ -1754,52 +1754,35 @@ class _FuncionarioPerfilPageWidgetState
                     ),
               ),
             ),
-            if(false)
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(24, 0, 0, 8),
-              child: Container(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  icon: Icon(Icons.check, color: Colors.white),
-                  label: Text("Marcar todos los activos como entregado",
-                      style: TextStyle(color: Colors.white)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: FlutterFlowTheme.of(context).primaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                  ),
-                  onPressed: () async {
-                    var res = await prestamosController.entregarPrestamo(
-              context, funcionario.cedula, '');
-              if (res == 'ok') {
-                setState(() {});
-                }
-                  },  
-                ),
-              ),
-            ),
           ],
         ).animateOnPageLoad(animationsMap['containerOnPageLoadAnimation1']!),
         if(prestamo)
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(24, 4, 0, 8),
               child: Row(
+                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const Icon(
-          FontAwesomeIcons.check,
-          color: Color.fromARGB(255, 7, 133, 36),
-          size: 15,
-        ),
-                  Text(':  Marcar activo como entregado',
-                    style: FlutterFlowTheme.of(context).bodyText2.override(
-                          fontFamily: FlutterFlowTheme.of(context).bodyText2Family,
-                          color: FlutterFlowTheme.of(context).primaryText,
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal,
-                          useGoogleFonts: GoogleFonts.asMap().containsKey(
-                              FlutterFlowTheme.of(context).bodyText2Family),
+                  Container(
+                    width: 330,
+                    child: ElevatedButton.icon(
+                      icon: Icon(Icons.check, color: Colors.white),
+                      label: Text("Marcar todos los activos como entregados",
+                          style: TextStyle(color: Colors.white)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
                         ),
+                      ),
+                      onPressed: () async {
+                        
+                        var res = await prestamosController.entregarPrestamo(
+                  context, funcionario.cedula, '');
+                  if (res == 'ok') {
+                    setState(() {});
+                    }
+                      },  
+                    ),
                   ),
                 ],
               ),

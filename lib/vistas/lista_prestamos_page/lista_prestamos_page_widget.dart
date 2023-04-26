@@ -370,7 +370,7 @@ class tarjetaItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${activo.nombre} ${activo.detalles}',
+                        activo.nombre,
                         overflow: TextOverflow.ellipsis,
                         style: FlutterFlowTheme.of(context).title3.override(
                               fontFamily: 'Poppins',
