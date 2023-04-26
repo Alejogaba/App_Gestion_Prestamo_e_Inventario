@@ -1111,7 +1111,7 @@ class _FuncionarioPerfilPageWidgetState
                                                           ),
                                                           onPressed: () async {
                                                             await launchURL(
-                                                                'https://wa.me/${funcionario.telefono1}');
+                                                                'https://wa.me/57${funcionario.telefono1}');
                                                           },
                                                         ),
                                                       ),
@@ -1328,7 +1328,7 @@ class _FuncionarioPerfilPageWidgetState
                                                             onPressed:
                                                                 () async {
                                                               await launchURL(
-                                                                  'https://wa.me/${funcionario.telefono2}');
+                                                                  'https://wa.me/57${funcionario.telefono2}');
                                                             },
                                                           ),
                                                         ),
