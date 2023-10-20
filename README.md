@@ -1,4 +1,8 @@
-# InventariadoApp
+# App para la Gestión de Préstamos e Inventarios
+
+![Imagen 1](https://i.ibb.co/c29mjJZ/Manual-de-usuario-pages-to-jpg-0001-GPe-Rc-Phs.jpg)
+
+
 
 A new Flutter project.
 
