@@ -28,3 +28,4 @@
 
 ![Imagen 14](https://i.postimg.cc/brbdVjhd/Manual-de-usuario-pages-to-jpg-0014-8-Jd-Rc-Phs.jpg)
 
+En caso que las imagenes no carguen correctamente, todo se puede encontrar en el último lanzamiento, en el archivo "manual.de.usuario.pdf"
